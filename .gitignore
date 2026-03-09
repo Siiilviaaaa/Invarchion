@@ -41,3 +41,15 @@
 *.dwo
 /.vs
 /Archon1/.vs/Archon1.slnx
+
+
+# Archivos de configuración de usuario de Visual Studio
+*.vcxproj.user
+*.sqlproj.user
+*.layou.json
+
+# Carpetas de salida de compilación
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
