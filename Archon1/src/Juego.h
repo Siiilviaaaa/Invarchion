@@ -8,7 +8,26 @@ class Juego
 		EstadoFinDePartida
 	};
 
-	bool TurnoJugador1{ 1 };
+	enum Turno : int {
+		TurnoHumanos,
+		TurnoAliens
+	};
+
+	void IniciarJuego();
+
+	
+	void procesarEntradas(); //teclas y tal
+
+	void actualizar();
+
+	
+	void dibujarTablero();
+
+	void dibujarCapoBatalla();
+
+	void dibujarMenu();
+
+	void ejecutar();
 
 
 };
