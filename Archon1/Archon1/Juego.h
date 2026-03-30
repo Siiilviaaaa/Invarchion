@@ -7,5 +7,10 @@ class Juego
 		EstadoBatalla,
 		EstadoFinDePartida
 	};
+
+
+	bool TurnoJugador1{ 1 };
+
+	Pieza* PiezaSeleccionada;
 };
 
