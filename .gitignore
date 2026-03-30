@@ -1,56 +1,48 @@
-# Prerequisites
-*.d
+# --- Basura de Visual Studio ---
+.vs/
+*.user
+*.userossc
+*.sln.docuser
+*.suo
+*.db
+*.opendb
+/Archon1/Archon1/
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# debug information files
-*.dwo
-/.vs
-/Archon1/.vs/Archon1.slnx
-
-
-# Archivos de configuración de usuario de Visual Studio
-*.vcxproj.user
-*.sqlproj.user
-*.layou.json
-
-# Carpetas de salida de compilación
-[Dd]ebug/
-[Rr]elease/
+# --- Carpetas de Compilación (Regla General) ---
+obj/
 x64/
 x86/
-/Archon1/Archon1/.vs/Archon1
+[Dd]ebug/
+[Rr]elease/
+
+# --- Archivos temporales de C++ ---
+*.pdb
+*.obj
+*.ilk
+*.exp
+*.log
+*.tlog
+*.lastbuildstate
+*.idb
+*.recipe
+
+# --- EXCEPCIÓN PARA LIBRERÍAS Y ASSETS (PARA TUS AMIGAS) ---
+# Paso 1: Permitimos que Git entre en las carpetas padre
+!/Archon1/lib/
+!/Archon1/bin/
+!/Archon1/bin/Debug/
+
+# Paso 2: Ignoramos todo en Debug por defecto EXCEPTO las DLLs y la carpeta extra
+/Archon1/bin/Debug/*
+!/Archon1/bin/Debug/*.dll
+
+# Paso 3: Forzamos la entrada en la carpeta extra y todo su contenido
+!/Archon1/bin/Debug/extra/
+!/Archon1/bin/Debug/extra/**
+
+# --- EXCEPCIÓN PARA EL PROYECTO ---
+!*.vcxproj
+!*.vcxproj.filters
+!*.slnx
+!/Archon1/lib/*.lib
+!/Archon1/lib/*.h
