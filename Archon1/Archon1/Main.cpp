@@ -7,6 +7,3 @@
 
 //SOY SILVIA, HE CONSEGUIDO SINCRONIZAR EL GITHUB CON MI VISUALSTUDIO Y SOY CAPAZ DE ACCEDER
 
-using namespace std;
-
-cout << "soy juli";
