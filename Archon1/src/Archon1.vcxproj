@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Juego.h" />
+    <ClInclude Include="tablero.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Juego.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
+    <ClCompile Include="tablero.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
