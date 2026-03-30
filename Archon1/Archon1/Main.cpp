@@ -2,4 +2,4 @@
 //los permisos estan bien concedidos, procedo a hacer pruebas de push  y pull
 //termino las pruebas de configuración del proyecto e
 
-//practica nueva 
+//este comentario solo existe en mi rama
