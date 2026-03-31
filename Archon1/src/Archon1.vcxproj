@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Juego.h" />
+    <ClInclude Include="Batalla.h" />
     <ClInclude Include="Personajes.h" />
     <ClInclude Include="tablero.h" />
   </ItemGroup>

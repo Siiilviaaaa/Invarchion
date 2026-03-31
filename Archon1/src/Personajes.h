@@ -7,7 +7,7 @@ class Personajes_carac
 {
 	Tipo tipo;
 	int vida;
-	int daño;
+	int danio;
 	double velocidad;
 
 public:
@@ -17,12 +17,12 @@ public:
 	//LEER LOS VALORES
 	Tipo return_Tipo() const { return tipo; }
 	int return_Vida() const { return vida; }
-	int return_Daño() const { return daño; }
+	int return_Danio() const { return danio; }
 	double return_Velocidad() const { return velocidad; }
 
 	//MODIFICAN NUEVOS VALORES
 	void setTipo(Tipo nuevoTipo) { tipo = nuevoTipo; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }
-	void setDaño(int nuevoDaño) { daño = nuevoDaño; }
+	void setDanio(int nuevoDaño) { danio = nuevoDaño; }
 	void setVelocidad(double nuevaVelocidad) { velocidad = nuevaVelocidad; }
 };
