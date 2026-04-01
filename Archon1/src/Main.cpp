@@ -21,11 +21,14 @@ void OnDraw(void) {
 
 
 	///IDENTIFICAR SI SE DIBUJA EL TABLERO O LA BATALLA
-    ///CUANDO ESTADO ESTE BIEN DEFINIDO QUITAR COMENTARIOS
+    ///CUANDO "ESTADO" ESTE BIEN DEFINIDO QUITAR COMENTARIOS
    // if (estadoActual==ESTADO_TABLERO)
     miTablero.dibujar(); // Llamamos al dibujo de nuestra clase
    // else if (estadoActual==ESTADO_BATALLA)
-   // cout << "Batalla en curso\n";
+   // {
+	//	batalla.dibujar(); ///SIN HACER
+	//start_combat(humanos, aliens);
+	// }
     
     glutSwapBuffers();
 }
