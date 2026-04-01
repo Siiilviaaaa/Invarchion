@@ -5,6 +5,7 @@
 #include "Batalla.h"
 
 using std::cout, std::cin, std::endl;
+#include "Juego.h"
 
 //porfavor no toqueis rutas de carpetas q me ha costado mucho y lloro, el archivo gitgnore igual
 //llevo un par de horas para guardar temas de la carpeta de extra, confirmadme si se escucha
@@ -40,6 +41,10 @@ void OnDraw(void) {
     glutSwapBuffers();
 }
 int main(int argc, char** argv) {
+    //INICIAR JUEGO
+    Invarchion.IniciarJuego(); //esto cambia el valor del bool ejecutandose a 1, por lo que podeis poner las funciones como la de dibujar el tablero en basse a esto
+
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(800, 600);
