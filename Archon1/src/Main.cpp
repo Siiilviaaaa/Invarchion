@@ -12,6 +12,13 @@ using std::cout, std::cin, std::endl;
 //si quereis configurarlo vosotras recordad q es copiar las funciones de freeglut del lab
 //como se rompa lloro
 
+
+//TIPOS DE HECHIZOS:  CREACION EN PROCESO
+//- REDUCIR VELOCIDAD ENEMIGO hechizos[0]
+//- AUMENTAR VELOCIDAD ALIADO hechizos[1]
+//- RESTAURAR PARTE DE LA VIDA ALIADO hechizo[2] --> ACTIVO EN TABLERO
+
+
 Tablero miTablero;
 
 void OnDraw(void) {
@@ -42,12 +49,12 @@ int main(int argc, char** argv) {
     miTablero.inicializarCamara();       // Configuramos la vista
 
     
-    std::cout << "Reproduciendo..." << std::endl;
+    cout << "Reproduciendo..." << std::endl;
 
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
     ETSIDI::play("extra/mi_musica.mp3");
 
-    std::cout << "Presiona Enter para salir y parar la musica..." << std::endl;
+    cout << "Presiona Enter para salir y parar la musica..." << std::endl;
     glutDisplayFunc(OnDraw);
     glutMainLoop();
     getchar(); // Esto mantiene el programa vivo para q de tiempo a escuchar

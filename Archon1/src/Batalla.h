@@ -5,7 +5,7 @@
 //CABECERAS DE FUNCIONES
 void start_combat(Personajes_carac& humanos, Personajes_carac& aliens);
 
-struct Disparo
+class Disparo
 {
 	double x, y; // POSICION
 	double velo_x, velo_y; // VELOCIDAD
@@ -13,5 +13,19 @@ struct Disparo
 	bool activo; // SI ESTA O NO EN PANTALLA
 	GLuint flecha; // IMAGEN
 
+public:
 	void dispararObjeto(double posX, double posY, GLuint png);
+};
+
+class Hechizo
+{
+	GLuint imagen;
+	int usos_max;
+	int usos_restantes;
+	bool activo; // "HECHIZO LANZADO DE MANERA VISUAL"
+	double posX, posY; // POSICION DEL HECHIZO EN PANTALLA
+
+public:
+	void usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo);
+	void usar_Pocion(Personajes_carac& aliado);
 };
