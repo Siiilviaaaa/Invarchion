@@ -27,7 +27,7 @@ void OnDraw(void) {
    // else if (estadoActual==ESTADO_BATALLA)
    // {
 	//	batalla.dibujar(); ///SIN HACER
-	//start_combat(humanos, aliens);
+	//  start_combat(humanos, aliens);
 	// }
     
     glutSwapBuffers();
