@@ -2,6 +2,9 @@
 #include "freeglut.h"
 #include "ETSIDI.h"
 #include "tablero.h"
+#include "Batalla.h"
+
+using std::cout, std::cin, std::endl;
 #include "Juego.h"
 
 //porfavor no toqueis rutas de carpetas q me ha costado mucho y lloro, el archivo gitgnore igual
@@ -10,17 +13,31 @@
 //si quereis configurarlo vosotras recordad q es copiar las funciones de freeglut del lab
 //como se rompa lloro
 
-Juego Invarchion;
+
+//TIPOS DE HECHIZOS:  CREACION EN PROCESO
+//- REDUCIR VELOCIDAD ENEMIGO hechizos[0]
+//- AUMENTAR VELOCIDAD ALIADO hechizos[1]
+//- RESTAURAR PARTE DE LA VIDA ALIADO hechizo[2] --> ACTIVO EN TABLERO
 
 
 Tablero miTablero;
+
 void OnDraw(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    miTablero.dibujar(); // Llamamos al dibujo de nuestra clase
 
+	///IDENTIFICAR SI SE DIBUJA EL TABLERO O LA BATALLA
+    ///CUANDO "ESTADO" ESTE BIEN DEFINIDO QUITAR COMENTARIOS
+   // if (estadoActual==ESTADO_TABLERO)
+    miTablero.dibujar(); // Llamamos al dibujo de nuestra clase
+   // else if (estadoActual==ESTADO_BATALLA)
+   // {
+	//	batalla.dibujar(); ///SIN HACER
+	//  start_combat(humanos, aliens);
+	// }
+    
     glutSwapBuffers();
 }
 int main(int argc, char** argv) {
@@ -37,12 +54,12 @@ int main(int argc, char** argv) {
     miTablero.inicializarCamara();       // Configuramos la vista
 
     
-    std::cout << "Reproduciendo..." << std::endl;
+    cout << "Reproduciendo..." << std::endl;
 
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
     ETSIDI::play("extra/mi_musica.mp3");
 
-    std::cout << "Presiona Enter para salir y parar la musica..." << std::endl;
+    cout << "Presiona Enter para salir y parar la musica..." << std::endl;
     glutDisplayFunc(OnDraw);
     glutMainLoop();
     getchar(); // Esto mantiene el programa vivo para q de tiempo a escuchar

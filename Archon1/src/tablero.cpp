@@ -47,3 +47,16 @@ void Tablero::dibujar() {
         glEnd();
     }
 }
+
+
+//INICIALIZAR POSICIONES PIEZAS
+//void Tablero::inicializarPiezas() 
+// {
+// 
+// CREAR PIEZAS Y POSICONARLAS [][] --> COORDENADAS
+// pieza [][] = Personajes_carac::craerPieza(SOLDADO);
+// pieza [][] = Personajes_carac::craerPieza(ARQUERO);
+// pieza [][] = Personajes_carac::craerPieza(VOLADOR);
+// pieza [][] = Personajes_carac::craerPieza(EXCAVADOR);
+// pieza [][] = Personajes_carac::craerPieza(HECHICERO);
+// }
