@@ -1,8 +1,7 @@
 #include <iostream>
-#include "Personajes.h"
+#include "Batalla.h"
 
 using std::cout, std::cin, std::endl;
-
 
 void start_combat(Personajes_carac& humanos, Personajes_carac& aliens)
 {
@@ -25,4 +24,22 @@ void start_combat(Personajes_carac& humanos, Personajes_carac& aliens)
 			break;
 		}
 	}
+}
+
+void Disparo::dispararObjeto(double posX, double posY, GLuint png)
+{
+	Disparo nuevo[10]; //10 DISPAROS ACTIVOS A LA VEZ
+
+	for (int i=0;i<10;i++)
+		if(!nuevo[i].activo) //SI EL DISPARO NO ESTA ACTIVO, SE DISPARA
+		{
+			nuevo[i].x = posX;
+			nuevo[i].y = posY;
+			nuevo[i].velo_x = 0.2; //VELOCIDAD EN X
+			nuevo[i].velo_y = 1; //VELOCIDAD EN Y
+			nuevo[i].danio = 10; //DAÑO QUE CAUSA
+			nuevo[i].activo = true; //SE ACTIVA EL DISPARO
+			nuevo[i].flecha = png; //IMAGEN DE LA FLECHA
+			break;
+		}
 }
