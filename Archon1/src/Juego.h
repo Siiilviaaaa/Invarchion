@@ -1,6 +1,7 @@
 #pragma once
 class Juego
 {
+private:
 	enum EstadosJuego :int {
 		EstadoMenu,
 		EstadoTablero,
@@ -13,9 +14,17 @@ class Juego
 		TurnoAliens
 	};
 
+	Turno turnoActual{ TurnoHumanos };
+	bool ejecutandose{ 0 };
+
+public:
+
 	void IniciarJuego();
 
-	
+	int getTurno();
+
+	void cambiarTurno();
+
 	void procesarEntradas(); //teclas y tal
 
 	void actualizar();
