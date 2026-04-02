@@ -30,6 +30,7 @@ void Tablero::inicializa() {
             default: tipo = blanca;
             }
             matriz[i][j].configurar(i, j, lado, tipo);
+            
         }
     }
 }
@@ -37,7 +38,7 @@ void Tablero::inicializa() {
 void Tablero::dibuja() {
     //meter foto de fondo
     glEnable(GL_TEXTURE_2D); // Activamos el uso de texturas
-    //glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/fondo_tablero.png").id);
+    //glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/fondo_tablero.png").id);
     glDisable(GL_LIGHTING); // Desactivamos luces para que la foto no se vea oscura
     glColor3f(1, 1, 1);    // Color blanco puro para no teñir la foto
     float m = 2.0f;
@@ -84,6 +85,27 @@ void Tablero::dibuja() {
     }
     glEnable(GL_LIGHTING);
 }
+
+//le devuelvo a sofia una casilla con todos sus atributos para que los compare
+Casilla Tablero::datos_casilla(int x, int y)
+{
+    Casilla casilla_ = matriz[x][y];
+    return casilla_;
+}
+
+void Tablero::vacia_casilla(int x, int y)
+{
+    matriz[x][y].ocupada = 0;
+}
+
+void Tablero::rellena_casilla(int x, int y, Casilla nueva)
+{
+    nueva = matriz[x][y]; //pensar si hace copia o borra lo q habia 
+}
+
+
+
+
 
 
 //INICIALIZAR POSICIONES PIEZAS

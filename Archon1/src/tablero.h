@@ -29,4 +29,11 @@ public:
     //INCICILIZAR POSICIONES PIEZAS
 	//void inicializarPiezas();
 
+
+    //funciones logica del cursor con sofia
+    Casilla datos_casilla(int x, int y);
+    void vacia_casilla(int x, int y);
+    void rellena_casilla(int x, int y, Casilla nueva); //procesar si tiene sentido lo q hace en casilla
+    
+
 };

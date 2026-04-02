@@ -1,9 +1,11 @@
 #pragma once
 using byte = unsigned char;
 enum bando { HUMANO, ALIEN, NEUTRAL };
+enum personaje{humano1, humano2, humano3, humano4, hmano5, humano6, alien1, alien2, alien3, alien4, alien5, alien6};
 enum Tipocasilla { blanca, negra, lila };
 class Casilla
 {
+public:
 	//variables para la posicion
 	int fila_, columna_; //posicion en el espacio
 	float lado; //valor lado cubo
@@ -11,9 +13,10 @@ class Casilla
 	bool ocupada; //hay pieza??
 
 	bando tipo_bando;//de que bando es la pieza???
+	personaje tipo_personaje;
 	Tipocasilla tipo_color;//color tablero
 
-public:
+//public:
 	Casilla();
 	void configurar(int f, int c, float l, Tipocasilla color_);
 	void dibuja();
@@ -27,5 +30,5 @@ public:
 	//double y()const { return y_; }
 	//void posicion(double ix, double iy);
 
-	//funciones logica del cursor con sofia
+	
 };

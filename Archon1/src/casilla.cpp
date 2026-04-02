@@ -1,4 +1,5 @@
 #include "casilla.h"
+#include "tablero.h"
 #include "freeglut.h"
 
 Casilla::Casilla() {
@@ -50,3 +51,5 @@ void Casilla::dibuja() {
     //glutWireCube(lado + 0.01f);//dibujo delineado
     glPopMatrix();
 }
+
+
