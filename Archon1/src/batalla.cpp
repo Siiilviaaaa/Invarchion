@@ -49,6 +49,13 @@ void Disparo::dispararObjeto(double posX, double posY, GLuint png)
 //HECHIZOS USADOS EN BATALLA
 void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 {
+	//INICIALIZAR TIEMPOS DE RECARGA
+	hechizos[0].t_recarga = 5.0;
+	hechizos[1].t_recarga = 3.0;
+
+	if(hechizos[tipoHechizo].t_restante>0)
+		return; //EN RECARGA
+	
 	if (hechizos[tipoHechizo].usos_restantes <= 0)
 		return; //MAXIMOS USADOS
 	else
@@ -58,19 +65,27 @@ void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 	{
 	case 0: //PARALIZAR AL ENEMIGO
 		objetivo.setVelocidad(objetivo.return_Velocidad() * 0.1); //REDUCE MUCHO LA VELOCIDAD
-		hechizos[tipoHechizo].activo = true;
+		objetivo.set_paralisis(5.0); //TIEMPO DE PARALISIS
 		break;
 	case 1: //VELOCIDAD
 		objetivo.setVelocidad(objetivo.return_Velocidad() * 1.5); //REDUCE LA VELOCIDAD A LA MITAD
-		hechizos[tipoHechizo].activo = true;
+		objetivo.set_hiperVelocidad(4.0); //TIEMPO DE HIPER VELOCIDAD
 		break;
 	}
+	hechizos[tipoHechizo].activo = true;
+	hechizos[tipoHechizo].t_restante = hechizos[tipoHechizo].t_recarga; //INICIAR DE VUELTA TIEMPO DE RECARGA
 }
 
 //HECHIZO USADO EN TABLERO
 void Hechizo::usar_Pocion(Personajes_carac & aliado)
 {
+	//INICIALIZAR TIEMPO DE RECARGA
+	hechizos[2].t_recarga = 10.0;
+
 	int nuevaVida;
+
+	if(movioPieza || usoPocion) //SI SE MOVIO O USO POCION
+		return;
 
 	if (hechizos[2].usos_restantes <= 0)
 		return; //MAXIMOS USADOS
@@ -82,6 +97,9 @@ void Hechizo::usar_Pocion(Personajes_carac & aliado)
 
 		aliado.setVida(aliado.return_Vida() + 30); //SUMAR A LA VIDA ACTUAL
 			aliado.setVida(aliado.return_Vida());
+
+			hechizos[2].activo = true;
+			usoPocion = true;
 	}
-		hechizos[2].activo = true;
+	
 }

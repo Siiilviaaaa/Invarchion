@@ -2,6 +2,11 @@
 #include "Personajes.h"
 #include "freeglut.h"
 
+//VARIABLES GLOBALES
+bool fin_turno = false;
+bool movioPieza = false;
+bool usoPocion = false;
+
 //CABECERAS DE FUNCIONES
 void start_combat(Personajes_carac& humanos, Personajes_carac& aliens);
 
@@ -24,6 +29,9 @@ class Hechizo
 	int usos_restantes;
 	bool activo; // "HECHIZO LANZADO DE MANERA VISUAL"
 	double posX, posY; // POSICION DEL HECHIZO EN PANTALLA
+
+	double t_recarga; // TIEMPO TOTAL DE RECARGA
+	double t_restante; // TIEMPO RESTANTE PARA USAR DE NUEVO
 
 public:
 	void usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo);
