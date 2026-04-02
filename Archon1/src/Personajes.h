@@ -33,6 +33,6 @@ public:
 	void setDanio(int nuevoDaño) { danio = nuevoDaño; }
 	void setVelocidad(double nuevaVelocidad) { velocidad = nuevaVelocidad; }
 
-	double set_paralisis(double nuevoTiempo) { t_paralisis = nuevoTiempo; }
-	double set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
+	//double set_paralisis(double nuevoTiempo) { t_paralisis = nuevoTiempo; }
+	//double set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
 };

@@ -4,6 +4,7 @@
 #include "tablero.h"
 #include "Batalla.h"
 #include "Juego.h"
+#include "casilla.h"
 
 using std::cout, std::cin, std::endl;
 
@@ -21,28 +22,36 @@ using std::cout, std::cin, std::endl;
 
 
 Tablero miTablero;
-
+void OnDraw(void);
 void OnDraw(void) {
+   
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    gluLookAt(7.0, 5.0, 20.0,
+        7.0, 5.0, 0.0,
+        0.0, 1.0, 0.0);
+
+    miTablero.dibuja();
+        //no borrar esta linea ni poner nada despues
+    glutSwapBuffers();
 
 
 	///IDENTIFICAR SI SE DIBUJA EL TABLERO O LA BATALLA
     ///CUANDO "ESTADO" ESTE BIEN DEFINIDO QUITAR COMENTARIOS
    // if (estadoActual==ESTADO_TABLERO)
-    miTablero.dibujar(); // Llamamos al dibujo de nuestra clase
+   
    // else if (estadoActual==ESTADO_BATALLA)
    // {
 	//	batalla.dibujar(); ///SIN HACER
 	//  start_combat(humanos, aliens);
 	// }
     
-    glutSwapBuffers();
 }
 int main(int argc, char** argv) {
     //INICIAR JUEGO
-    Invarchion.IniciarJuego(); //esto cambia el valor del bool ejecutandose a 1, por lo que podeis poner las funciones como la de dibujar el tablero en basse a esto
+   // Invarchion.IniciarJuego(); //esto cambia el valor del bool ejecutandose a 1, por lo que podeis poner las funciones como la de dibujar el tablero en basse a esto
 
 
     glutInit(&argc, argv);
@@ -51,9 +60,16 @@ int main(int argc, char** argv) {
     glutCreateWindow("Tablero");
     //se pude hacer una funcion con esta para cmabiar el color en funcion del turno
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f); // Fondo de ventana gris
-    miTablero.inicializarCamara();       // Configuramos la vista
+    miTablero.inicializa();       // Configuramos la vista
 
-    
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_COLOR_MATERIAL);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(40.0, 800 / 600.0f, 0.1, 150);
+
     cout << "Reproduciendo..." << std::endl;
 
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra

@@ -3,9 +3,9 @@
 #include "freeglut.h"
 
 //VARIABLES GLOBALES
-bool fin_turno = false;
-bool movioPieza = false;
-bool usoPocion = false;
+extern bool fin_turno;
+extern bool movioPieza;
+extern bool usoPocion;
 
 //CABECERAS DE FUNCIONES
 void start_combat(Personajes_carac& humanos, Personajes_carac& aliens);
