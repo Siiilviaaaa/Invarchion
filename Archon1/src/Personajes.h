@@ -10,6 +10,10 @@ class Personajes_carac
 	int danio;
 	double velocidad;
 
+	//TIEMPO DURACION HECHIZOS
+	double t_paralisis;
+	double t_hiperVelocidad;
+
 public:
 
 	static Personajes_carac crearPieza(Tipo tipo);
@@ -20,9 +24,15 @@ public:
 	int return_Danio() const { return danio; }
 	double return_Velocidad() const { return velocidad; }
 
+	double return_paralisis() const { return t_paralisis; }
+	double return_hiperVelocidad() const { return t_hiperVelocidad; }
+
 	//MODIFICAN NUEVOS VALORES
 	void setTipo(Tipo nuevoTipo) { tipo = nuevoTipo; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }
 	void setDanio(int nuevoDaño) { danio = nuevoDaño; }
 	void setVelocidad(double nuevaVelocidad) { velocidad = nuevaVelocidad; }
+
+	double set_paralisis(double nuevoTiempo) { t_paralisis = nuevoTiempo; }
+	double set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
 };

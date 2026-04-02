@@ -3,9 +3,9 @@
 #include "ETSIDI.h"
 #include "tablero.h"
 #include "Batalla.h"
+#include "Juego.h"
 
 using std::cout, std::cin, std::endl;
-#include "Juego.h"
 
 //porfavor no toqueis rutas de carpetas q me ha costado mucho y lloro, el archivo gitgnore igual
 //llevo un par de horas para guardar temas de la carpeta de extra, confirmadme si se escucha
@@ -15,9 +15,9 @@ using std::cout, std::cin, std::endl;
 
 
 //TIPOS DE HECHIZOS:  CREACION EN PROCESO
-//- REDUCIR VELOCIDAD ENEMIGO hechizos[0]
-//- AUMENTAR VELOCIDAD ALIADO hechizos[1]
-//- RESTAURAR PARTE DE LA VIDA ALIADO hechizo[2] --> ACTIVO EN TABLERO
+//- REDUCIR VELOCIDAD ENEMIGO hechizos[0]--> 2 VECES POR TURNO
+//- AUMENTAR VELOCIDAD ALIADO hechizos[1]--> 2 VECES POR TURNO
+//- RESTAURAR PARTE DE LA VIDA ALIADO hechizo[2]--> ACTIVO EN TABLERO --> 1 VEZ POR TURNO Y SE PIERDE TURNO
 
 
 Tablero miTablero;
