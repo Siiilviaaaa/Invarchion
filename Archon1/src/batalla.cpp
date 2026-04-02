@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Batalla.h"
+#include "Juego.h"
 
 using std::cout, std::cin, std::endl;
 
@@ -85,7 +86,7 @@ void Hechizo::usar_Pocion(Personajes_carac & aliado)
 	int nuevaVida;
 
 	if(movioPieza || usoPocion) //SI SE MOVIO O USO POCION
-		return;
+		void cambiarTurno(); //CAMBIAR TURNO
 
 	if (hechizos[2].usos_restantes <= 0)
 		return; //MAXIMOS USADOS

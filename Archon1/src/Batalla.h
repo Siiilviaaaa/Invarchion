@@ -3,7 +3,6 @@
 #include "freeglut.h"
 
 //VARIABLES GLOBALES
-bool fin_turno = false;
 bool movioPieza = false;
 bool usoPocion = false;
 

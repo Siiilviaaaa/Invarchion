@@ -23,9 +23,6 @@ public:
 
 	int getTurno();
 
-	//JULI, NECESITO LA FUNCION CAMBIAR TURNO CUANDO EL HECHICERO USE LA POCION
-	//QUIERO DECIR QUE CUANDO SE USE SE CAMBIE DE TURNO
-	//SOY SILVIA
 	void cambiarTurno();
 
 	void procesarEntradas(); //teclas y tal
@@ -35,7 +32,7 @@ public:
 	
 	void dibujarTablero();
 
-	void dibujarCapoBatalla();
+	void dibujarCampoBatalla();
 
 	void dibujarMenu();
 
