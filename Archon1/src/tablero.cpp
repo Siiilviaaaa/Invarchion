@@ -45,16 +45,15 @@ void Tablero::dibuja() {
     float ancho = 7 * lado;
     float alto = 5 * lado;
     glBegin(GL_POLYGON);
-    //// Mapeamos la foto (0,0 a 1,1) a los vértices del cuadrado
-    //// Usamos Z = -0.1 para que esté físicamente detrás de las casillas
+   
     glTexCoord2d(1, 1); glVertex3f(-m, -m, -0.1f);
     glTexCoord2d(0, 1); glVertex3f(ancho + m, -m, -0.1f);
     glTexCoord2d(0, 0); glVertex3f(ancho + m, alto + m, -0.1f);
     glTexCoord2d(1, 0); glVertex3f(-m, alto + m, -0.1f);
     glEnd();
 
-    glDisable(GL_TEXTURE_2D); // ¡IMPORTANTE! Apagamos texturas para que no afecten a las casillas
-    glEnable(GL_LIGHTING);    // Reactivamos luces si las usas
+    glDisable(GL_TEXTURE_2D); 
+    glEnable(GL_LIGHTING); 
 
     glPushMatrix();
     //para el fondo del tablero cambie de color segun turno
@@ -102,10 +101,6 @@ void Tablero::rellena_casilla(int x, int y, Casilla nueva)
 {
     nueva = matriz[x][y]; //pensar si hace copia o borra lo q habia 
 }
-
-
-
-
 
 
 //INICIALIZAR POSICIONES PIEZAS
