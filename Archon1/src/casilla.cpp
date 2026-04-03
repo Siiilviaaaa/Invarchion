@@ -1,7 +1,7 @@
 #include "casilla.h"
 #include "tablero.h"
 #include "freeglut.h"
-
+//declaracion de las casillas y sus funciones
 Casilla::Casilla() {
     fila_ = 0;
     columna_ = 0;

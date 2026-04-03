@@ -46,4 +46,3 @@ x86/
 !*.slnx
 !/Archon1/lib/*.lib
 !/Archon1/lib/*.h
-/Archon1/src/tablero.cpp

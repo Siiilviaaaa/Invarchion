@@ -1,4 +1,5 @@
 #pragma once
+//definicion del tipo de casilla y todos sus atributos
 using byte = unsigned char;
 enum bando { HUMANO, ALIEN, NEUTRAL };
 enum personaje{humano1, humano2, humano3, humano4, hmano5, humano6, alien1, alien2, alien3, alien4, alien5, alien6};

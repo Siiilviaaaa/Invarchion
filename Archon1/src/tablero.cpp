@@ -2,7 +2,7 @@
 #include "tablero.h"
 #include "freeglut.h"
 #include"ETSIDI.h"
-
+//declaracion matriz, constructor y funciones
 int matrizArchon[5][7] = {
     {0, 1, 2, 2, 2, 0, 1}, // Fila 0 (Superior)
     {1, 2, 1, 2, 0, 2, 0}, // Fila 1

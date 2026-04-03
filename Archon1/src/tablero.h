@@ -1,4 +1,5 @@
 #pragma once
+//declaracion del tablero a partir de las casillas
 #include "casilla.h"
 
 #include "freeglut.h" // Para las funciones de dibujo de OpenGL
