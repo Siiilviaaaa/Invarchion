@@ -1,6 +1,6 @@
 #pragma once
-#ifndef TABLERO_H
-#define TABLERO_H
+//declaracion del tablero a partir de las casillas
+#include "casilla.h"
 
 #include "freeglut.h" // Para las funciones de dibujo de OpenGL
 
@@ -9,9 +9,10 @@
 
 class Tablero {
 private:
-    int filas;
-    int cols;
-    float tamCasilla;
+    Casilla matriz[5][7];
+    float lado;
+    int turno; //por ejemplo 0 para humanos y 1 para aliens
+
     //Personajes_carac pieza[][];
 
 public:
@@ -19,16 +20,21 @@ public:
     Tablero();
 
     // Funciones principales
-    void inicializarCamara();
-    void dibujar();
+    void inicializa();
+    void dibuja();
 
     // Getters por si los necesitas después
-    int getFilas() { return filas; }
-    int getCols() { return cols; }
+    //int getFilas() { return filas; }
+    //int getCols() { return cols; }
 
     //INCICILIZAR POSICIONES PIEZAS
 	//void inicializarPiezas();
 
-};
 
-#endif
+    //funciones logica del cursor con sofia
+    Casilla datos_casilla(int x, int y);
+    void vacia_casilla(int x, int y);
+    void rellena_casilla(int x, int y, Casilla nueva); //procesar si tiene sentido lo q hace en casilla
+    
+
+};

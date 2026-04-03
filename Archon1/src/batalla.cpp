@@ -3,7 +3,9 @@
 #include "Juego.h"
 
 using std::cout, std::cin, std::endl;
-
+bool fin_turno = false;
+bool movioPieza = false;
+bool usoPocion = false;
 //VARIABLES GLOBALES
 const int Max_disparos = 10; //10 DISPAROS ACTIVOS A LA VEZ
 
@@ -76,11 +78,11 @@ void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 	{
 	case 0: //PARALIZAR AL ENEMIGO
 		objetivo.setVelocidad(objetivo.return_Velocidad() * 0.1); //REDUCE MUCHO LA VELOCIDAD
-		objetivo.set_paralisis(5.0); //TIEMPO DE PARALISIS
+		//objetivo.set_paralisis(5.0); //TIEMPO DE PARALISIS
 		break;
 	case 1: //VELOCIDAD
 		objetivo.setVelocidad(objetivo.return_Velocidad() * 1.5); //REDUCE LA VELOCIDAD A LA MITAD
-		objetivo.set_hiperVelocidad(4.0); //TIEMPO DE HIPER VELOCIDAD
+		//objetivo.set_hiperVelocidad(4.0); //TIEMPO DE HIPER VELOCIDAD
 		break;
 	}
 	hechizos[tipoHechizo].activo = true;
