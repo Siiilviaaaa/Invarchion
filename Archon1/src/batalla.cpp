@@ -5,8 +5,11 @@
 using std::cout, std::cin, std::endl;
 
 //VARIABLES GLOBALES
-Disparo nDisparos[10]; //10 DISPAROS ACTIVOS A LA VEZ
-Hechizo hechizos[3]; //3 TIPOS DE HECHIZOS
+const int Max_disparos = 10; //10 DISPAROS ACTIVOS A LA VEZ
+
+Disparo nDisparos[Max_disparos]; 
+Hechizo hechizos[3];  //3 HECHIZOS DISPONIBLES
+bool usoPocion = false;
 
 void start_combat(Personajes_carac& humanos, Personajes_carac& aliens)
 {
@@ -33,8 +36,8 @@ void start_combat(Personajes_carac& humanos, Personajes_carac& aliens)
 
 void Disparo::dispararObjeto(double posX, double posY, GLuint png)
 {
-	for (int i=0;i<10;i++)
-		if(!nDisparos[i].activo) //SI EL DISPARO NO ESTA ACTIVO, SE DISPARA
+	for (int i = 0;i < Max_disparos;i++)
+		if (!nDisparos[i].activo) //SI EL DISPARO NO ESTA ACTIVO, SE DISPARA
 		{
 			nDisparos[i].x = posX;
 			nDisparos[i].y = posY;
@@ -47,12 +50,19 @@ void Disparo::dispararObjeto(double posX, double posY, GLuint png)
 		}
 }
 
+void Hechizo::conf_Hechizos()
+{
+	hechizos[0].t_recarga = 5.0; //TIEMPO DE RECARGA PARALISIS
+	hechizos[1].t_recarga = 5.0; //TIEMPO DE RECARGA HIPERVELOCIDAD
+	
+	hechizos[2].usos_max = 1;
+	hechizos[2].usos_restantes = 1;
+}
+
 //HECHIZOS USADOS EN BATALLA
 void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 {
-	//INICIALIZAR TIEMPOS DE RECARGA
-	hechizos[0].t_recarga = 5.0;
-	hechizos[1].t_recarga = 3.0;
+	conf_Hechizos();
 
 	if(hechizos[tipoHechizo].t_restante>0)
 		return; //EN RECARGA
@@ -75,32 +85,39 @@ void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 	}
 	hechizos[tipoHechizo].activo = true;
 	hechizos[tipoHechizo].t_restante = hechizos[tipoHechizo].t_recarga; //INICIAR DE VUELTA TIEMPO DE RECARGA
+	juego.actualizar(); //ACTIALIZAR LOS TIEMPOS
+
 }
 
 //HECHIZO USADO EN TABLERO
 void Hechizo::usar_Pocion(Personajes_carac & aliado)
 {
-	//INICIALIZAR TIEMPO DE RECARGA
-	hechizos[2].t_recarga = 10.0;
+	conf_Hechizos();
 
 	int nuevaVida;
 
-	if(movioPieza || usoPocion) //SI SE MOVIO O USO POCION
-		void cambiarTurno(); //CAMBIAR TURNO
+	if (usoPocion) //SI USO POCION
+		return;
 
 	if (hechizos[2].usos_restantes <= 0)
 		return; //MAXIMOS USADOS
-	
-	//COMPROBAR SI PIEZA NECESITA CURARSE
-	if (aliado.return_Vida() < aliado.return_Vida()) //VIDA ACTUAL < VIDA MAX
+
+	if (aliado.return_Vida() >= aliado.return_VidaMax())
+		return; //NO NECESITA CURARSE
+	else
 	{
 		hechizos[2].usos_restantes--;
 
-		aliado.setVida(aliado.return_Vida() + 30); //SUMAR A LA VIDA ACTUAL
-			aliado.setVida(aliado.return_Vida());
+		nuevaVida=aliado.return_Vida() + 30; //SUMAR A LA VIDA ACTUAL
+		
+		if (nuevaVida > aliado.return_VidaMax())
+			nuevaVida = aliado.return_VidaMax();
 
-			hechizos[2].activo = true;
-			usoPocion = true;
+		aliado.setVida(nuevaVida);
+
+		hechizos[2].activo = true;
+		usoPocion = true;
+
+		juego.cambiarTurno(); //CAMBIAR TURNO AL USARSE POCION
 	}
-	
 }
