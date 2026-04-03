@@ -1,9 +1,5 @@
 #pragma once
 
-//DEFINIDA AQUI PARA NO HACER COPIAS
-//ASI CADA VEZ QUE #INCLUDE JUEGO.H UTILIZAMOS MISMO JUEGO
-extern Juego juego;
-
 class Juego
 {
 private:
@@ -46,3 +42,6 @@ public:
 
 };
 
+//DEFINIDA AQUI PARA NO HACER COPIAS
+//ASI CADA VEZ QUE #INCLUDE JUEGO.H UTILIZAMOS MISMO JUEGO
+extern Juego juego;
