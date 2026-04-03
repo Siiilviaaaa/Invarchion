@@ -38,15 +38,15 @@ void Tablero::inicializa() {
 void Tablero::dibuja() {
     //meter foto de fondo
     glEnable(GL_TEXTURE_2D); // Activamos el uso de texturas
-    //glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/fondo_tablero.png").id);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/fondotablero.png").id);
     glDisable(GL_LIGHTING); // Desactivamos luces para que la foto no se vea oscura
     glColor3f(1, 1, 1);    // Color blanco puro para no teñir la foto
     float m = 2.0f;
     float ancho = 7 * lado;
     float alto = 5 * lado;
     glBegin(GL_POLYGON);
-    // Mapeamos la foto (0,0 a 1,1) a los vértices del cuadrado
-    // Usamos Z = -0.1 para que esté físicamente detrás de las casillas
+    //// Mapeamos la foto (0,0 a 1,1) a los vértices del cuadrado
+    //// Usamos Z = -0.1 para que esté físicamente detrás de las casillas
     glTexCoord2d(1, 1); glVertex3f(-m, -m, -0.1f);
     glTexCoord2d(0, 1); glVertex3f(ancho + m, -m, -0.1f);
     glTexCoord2d(0, 0); glVertex3f(ancho + m, alto + m, -0.1f);
