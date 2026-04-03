@@ -1,11 +1,8 @@
-#include <iostream>
 #include "Batalla.h"
 #include "Juego.h"
 
 using std::cout, std::cin, std::endl;
-bool fin_turno = false;
-bool movioPieza = false;
-bool usoPocion = false;
+
 //VARIABLES GLOBALES
 const int Max_disparos = 10; //10 DISPAROS ACTIVOS A LA VEZ
 

@@ -17,6 +17,7 @@ class Disparo
 	GLuint flecha; // IMAGEN
 
 public:
+	Disparo(); //CONSTRUCTOR
 	void dispararObjeto(double posX, double posY, GLuint png);
 };
 
