@@ -2,10 +2,8 @@
 #include "Personajes.h"
 #include "freeglut.h"
 
-//VARIABLES GLOBALES
-bool fin_turno = false;
-bool movioPieza = false;
-bool usoPocion = false;
+//VARIABLES GLOBALES DEFINIDAS EN BATALLA.CPP
+extern bool usoPocion;
 
 //CABECERAS DE FUNCIONES
 void start_combat(Personajes_carac& humanos, Personajes_carac& aliens);
@@ -19,6 +17,7 @@ class Disparo
 	GLuint flecha; // IMAGEN
 
 public:
+	Disparo(); //CONSTRUCTOR
 	void dispararObjeto(double posX, double posY, GLuint png);
 };
 
@@ -34,6 +33,8 @@ class Hechizo
 	double t_restante; // TIEMPO RESTANTE PARA USAR DE NUEVO
 
 public:
+	Hechizo(); //CONSTRUCTOR
+	void conf_Hechizos(); //DIFERENCIAR TIPOS DE HECHIZOS
 	void usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo);
 	void usar_Pocion(Personajes_carac& aliado);
 };

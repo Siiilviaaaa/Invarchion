@@ -1,4 +1,8 @@
 #include "Juego.h"
+#include "Batalla.h"
+
+//VARIABLE JUEGO PARA USAR EN TODOS LOS FICHEROS
+Juego juego;
 
 void Juego::IniciarJuego() {
 
@@ -16,6 +20,9 @@ void Juego::IniciarJuego() {
 void Juego::cambiarTurno() {
     if (turnoActual == TurnoHumanos) turnoActual = TurnoAliens;
     else turnoActual = TurnoHumanos;
+
+    //RESET FLAG PARA EL USO DE LA POCION
+	usoPocion = false;
 }
 
 int Juego::getTurno() {
@@ -27,7 +34,7 @@ void Juego::procesarEntradas() {
 }
 
 void Juego::actualizar() {
-
+    //AÑADIR ACTIALIZACION DE TIEMPOS DE HECHIZOS (ESTA EN BATALLA.CPP)
 }
 
 
@@ -35,7 +42,7 @@ void Juego::dibujarTablero() {
 
 }
 
-void Juego::dibujarCapoBatalla() {
+void Juego::dibujarCampoBatalla() {
 
 }
 
