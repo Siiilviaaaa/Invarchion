@@ -6,8 +6,14 @@
 extern bool usoPocion;
 
 //CABECERAS DE FUNCIONES
+void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
+				double x1, double y1, double x2, double y2, GLuint flecha);
 void start_combat(Personajes_carac& humanos, Personajes_carac& aliens);
+void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
+			double x1, double y1, double x2, double y2);
+void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2);
 
+////////CLASES//////
 class Disparo
 {
 	double x, y; // POSICION
@@ -18,7 +24,8 @@ class Disparo
 
 public:
 	Disparo(); //CONSTRUCTOR
-	void dispararObjeto(double posX, double posY, GLuint png);
+	void crearDisparo(double posX, double posY, GLuint png);
+	void actualizarDisparos(Personajes_carac& j1, Personajes_carac& j2);
 };
 
 class Hechizo

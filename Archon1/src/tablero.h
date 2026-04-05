@@ -27,7 +27,7 @@ public:
     //int getFilas() { return filas; }
     //int getCols() { return cols; }
 
-    //INCICILIZAR POSICIONES PIEZAS
+    //INCIALIZAR POSICIONES PIEZAS
 	//void inicializarPiezas();
 
 
