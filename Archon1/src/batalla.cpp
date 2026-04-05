@@ -21,7 +21,7 @@ void Disparo::crearDisparo(double posX, double posY, GLuint png)
 			nDisparos[i].y = posY;
 			nDisparos[i].velo_x = 0.2; //VELOCIDAD EN X
 			nDisparos[i].velo_y = 1; //VELOCIDAD EN Y
-			nDisparos[i].danio = 10; //DAÑO QUE CAUSA
+			nDisparos[i].danio = 10; //DAÃ‘O QUE CAUSA
 			nDisparos[i].activo = true; //SE ACTIVA EL DISPARO
 			nDisparos[i].flecha = png; //IMAGEN DE LA FLECHA
 			break;
@@ -93,11 +93,11 @@ void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 	{
 	case 0: //PARALIZAR AL ENEMIGO
 		objetivo.setVelocidad(objetivo.return_Velocidad() * 0.1); //REDUCE MUCHO LA VELOCIDAD
-		objetivo.set_paralisis(5.0); //TIEMPO DE PARALISIS
+		//objetivo.set_paralisis(5.0); //TIEMPO DE PARALISIS
 		break;
 	case 1: //VELOCIDAD
 		objetivo.setVelocidad(objetivo.return_Velocidad() * 1.5); //REDUCE LA VELOCIDAD A LA MITAD
-		objetivo.set_hiperVelocidad(4.0); //TIEMPO DE HIPER VELOCIDAD
+		//objetivo.set_hiperVelocidad(4.0); //TIEMPO DE HIPER VELOCIDAD
 		break;
 	}
 	hechizos[tipoHechizo].activo = true;
@@ -168,7 +168,7 @@ void start_combat(Personajes_carac& humanos, Personajes_carac& aliens)
 
 		if (aliens.return_Vida() <= 0)
 		{
-			cout << "¡Humanos ganan!" << endl;
+			cout << "Â¡Humanos ganan!" << endl;
 			break;
 		}
 		//ALIENS ATACAN
@@ -176,7 +176,7 @@ void start_combat(Personajes_carac& humanos, Personajes_carac& aliens)
 
 		if (humanos.return_Vida() <= 0)
 		{
-			cout << "¡Aliens ganan!" << endl;
+			cout << "Â¡Aliens ganan!" << endl;
 			break;
 		}
 	}
