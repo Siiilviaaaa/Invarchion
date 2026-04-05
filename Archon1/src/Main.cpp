@@ -20,7 +20,7 @@ using std::cout, std::cin, std::endl;
 //- AUMENTAR VELOCIDAD ALIADO hechizos[1]--> 2 VECES POR TURNO
 //- RESTAURAR PARTE DE LA VIDA ALIADO hechizo[2]--> ACTIVO EN TABLERO --> 1 VEZ POR TURNO Y SE PIERDE TURNO
 
-
+Juego juego; // <--- ESTO ES LO QUE FALTA
 Tablero miTablero;
 void OnDraw(void);
 void OnDraw(void) {
