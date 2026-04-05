@@ -1,9 +1,6 @@
 #include "Juego.h"
 #include "Batalla.h"
 
-//VARIABLE JUEGO PARA USAR EN TODOS LOS FICHEROS
-Juego juego;
-
 void Juego::IniciarJuego() {
 
     ejecutandose = 1;
