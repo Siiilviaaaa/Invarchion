@@ -7,6 +7,8 @@ extern bool usoPocion;
 
 //CABECERAS DE FUNCIONES
 void start_combat(Personajes_carac& humanos, Personajes_carac& aliens);
+void ImpactoDisparo(Personajes_carac& objetivo, double posX, double posY);
+void pegar(Personajes_carac& atacante, Personajes_carac& objetivo);
 
 class Disparo
 {
@@ -18,7 +20,8 @@ class Disparo
 
 public:
 	Disparo(); //CONSTRUCTOR
-	void dispararObjeto(double posX, double posY, GLuint png);
+	void crearDisparo(double posX, double posY, GLuint png);
+	void ImpactoDisparo(Personajes_carac& objetivo, double posX, double posY);
 };
 
 class Hechizo

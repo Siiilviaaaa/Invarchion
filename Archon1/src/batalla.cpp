@@ -11,30 +11,7 @@ Disparo nDisparos[Max_disparos];
 Hechizo hechizos[3];  //3 HECHIZOS DISPONIBLES
 bool usoPocion = false;
 
-void start_combat(Personajes_carac& humanos, Personajes_carac& aliens)
-{
-	while (humanos.return_Vida() > 0 && aliens.return_Vida() > 0) //EL COMBATE CONTINUA HASTA QUE UNO DE LOS DOS SE QUEDE SIN VIDA
-	{
-		//HUMANOS ATACAN
-		aliens.setVida(aliens.return_Vida() - humanos.return_Danio());
-
-		if (aliens.return_Vida() <= 0)
-		{
-			cout << "¡Humanos ganan!" << endl;
-			break;
-		}
-		//ALIENS ATACAN
-		humanos.setVida(humanos.return_Vida() - aliens.return_Danio());
-
-		if (humanos.return_Vida() <= 0)
-		{
-			cout << "¡Aliens ganan!" << endl;
-			break;
-		}
-	}
-}
-
-void Disparo::dispararObjeto(double posX, double posY, GLuint png)
+void Disparo::crearDisparo(double posX, double posY, GLuint png)
 {
 	for (int i = 0;i < Max_disparos;i++)
 		if (!nDisparos[i].activo) //SI EL DISPARO NO ESTA ACTIVO, SE DISPARA
@@ -119,5 +96,77 @@ void Hechizo::usar_Pocion(Personajes_carac & aliado)
 		usoPocion = true;
 
 		juego.cambiarTurno(); //CAMBIAR TURNO AL USARSE POCION
+	}
+}
+
+void start_combat(Personajes_carac& humanos, Personajes_carac& aliens)
+{
+	while (humanos.return_Vida() > 0 && aliens.return_Vida() > 0) //EL COMBATE CONTINUA HASTA QUE UNO DE LOS DOS SE QUEDE SIN VIDA
+	{
+		//HUMANOS ATACAN
+		aliens.setVida(aliens.return_Vida() - humanos.return_Danio());
+
+		if (aliens.return_Vida() <= 0)
+		{
+			cout << "¡Humanos ganan!" << endl;
+			break;
+		}
+		//ALIENS ATACAN
+		humanos.setVida(humanos.return_Vida() - aliens.return_Danio());
+
+		if (humanos.return_Vida() <= 0)
+		{
+			cout << "¡Aliens ganan!" << endl;
+			break;
+		}
+	}
+}
+
+void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
+			double x1,double y1,double x2,double y2)
+{
+	if (atacante.return_Tipo() == ARQUERO) //EL ARQUERO NO PEGA, SOLO DISPARA
+		return;
+
+	double dx = x1 - x2;
+	double dy = y1 - y2;
+
+	double distancia = sqrt(dx * dx + dy * dy);
+
+	if (distancia > 1.5) //NO SE CONSIDERA GOLPE
+		return;
+
+	int nuevaVida = objetivo.return_Vida() - atacante.return_Danio();
+
+	if (nuevaVida < 0)
+		nuevaVida = 0;
+
+	objetivo.setVida(nuevaVida);
+}
+
+void Disparo::ImpactoDisparo(Personajes_carac& objetivo, double posX, double posY)
+{
+	for (int i = 0;i < Max_disparos;i++)
+	{
+		if (nDisparos[i].activo)
+		{
+			double dx = nDisparos[i].x - posX;
+			double dy = nDisparos[i].y - posY;
+
+			double distancia = sqrt(dx * dx + dy * dy);
+
+			
+			if (distancia < 1.0) //SE CONSIDERA UN IMPACTO
+			{
+				int nuevaVida = objetivo.return_Vida() - nDisparos[i].danio;
+
+				if (nuevaVida < 0)
+					nuevaVida = 0;
+
+				objetivo.setVida(nuevaVida);
+
+				nDisparos[i].activo = false; //SE DESACTIVA EL DISPARO AL IMPACTAR
+			}
+		}
 	}
 }
