@@ -21,7 +21,7 @@ void Disparo::crearDisparo(double posX, double posY, GLuint png)
 			nDisparos[i].y = posY;
 			nDisparos[i].velo_x = 0.2; //VELOCIDAD EN X
 			nDisparos[i].velo_y = 1; //VELOCIDAD EN Y
-			nDisparos[i].danio = 10; //DAÑO QUE CAUSA
+			nDisparos[i].danio = 10; //DA�O QUE CAUSA
 			nDisparos[i].activo = true; //SE ACTIVA EL DISPARO
 			nDisparos[i].flecha = png; //IMAGEN DE LA FLECHA
 			break;
