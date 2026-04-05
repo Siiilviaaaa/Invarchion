@@ -1,4 +1,4 @@
-#include "Batalla.h"
+/*#include "Batalla.h"
 
 //ASEGURARNOS QUE TODOS LOS ELEMENTOS SE INICIALICEN BIEN
 Disparo::Disparo()
@@ -22,4 +22,4 @@ Hechizo::Hechizo()
 	posX = 0;
 	posY = 0;
 	imagen = 0;
-}
+}*/

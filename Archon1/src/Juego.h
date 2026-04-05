@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 //DEFINIDA AQUI PARA NO HACER COPIAS
 //ASI CADA VEZ QUE #INCLUDE JUEGO.H UTILIZAMOS MISMO JUEGO
@@ -46,3 +46,4 @@ public:
 
 };
 
+*/

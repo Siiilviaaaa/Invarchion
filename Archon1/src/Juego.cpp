@@ -1,4 +1,4 @@
-#include "Juego.h"
+/*#include "Juego.h"
 #include "Batalla.h"
 
 //VARIABLE JUEGO PARA USAR EN TODOS LOS FICHEROS
@@ -52,4 +52,4 @@ void Juego::dibujarMenu() {
 
 void Juego::ejecutar() {
 
-}
+}*/

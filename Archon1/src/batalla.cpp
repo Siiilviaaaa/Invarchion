@@ -1,4 +1,4 @@
-#include <iostream>
+/*#include <iostream>
 #include "Batalla.h"
 #include "Juego.h"
 
@@ -122,4 +122,4 @@ void Hechizo::usar_Pocion(Personajes_carac & aliado)
 
 		juego.cambiarTurno(); //CAMBIAR TURNO AL USARSE POCION
 	}
-}
+}*/
