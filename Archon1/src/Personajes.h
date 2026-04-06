@@ -18,10 +18,7 @@ class Personajes_carac
 	int vida_max; //VARIABLE PARA COMPROBAR SU USAR POCION
 
 public:
-
-	static Personajes_carac crearPieza(Tipo tipo);
-
-	//LEER LOS VALORES
+	////////////GETTERS/////////////////
 	Tipo return_Tipo() const { return tipo; }
 	int return_Vida() const { return vida; }
 	int return_Danio() const { return danio; }
@@ -34,7 +31,7 @@ public:
 
 	int return_VidaMax() const { return vida_max; }
 
-	//MODIFICAN NUEVOS VALORES
+	///////////SETTERS/////////////////
 	void setTipo(Tipo nuevoTipo) { tipo = nuevoTipo; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }
 	void setDanio(int nuevoDaño) { danio = nuevoDaño; }
@@ -45,5 +42,8 @@ public:
 	double set_paralisis(double nuevoTiempo) { t_paralisis = nuevoTiempo; }
 	double set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
 
-	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }	
+	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
+
+	//////////METODOS//////////////
+	static Personajes_carac crearPieza(Tipo tipo);
 };

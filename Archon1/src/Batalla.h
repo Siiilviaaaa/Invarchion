@@ -40,8 +40,18 @@ class Hechizo
 	double t_restante; // TIEMPO RESTANTE PARA USAR DE NUEVO
 
 public:
+	//////////GETTERS Y SETTERS///////////
+	double return_RECARGA() const { return t_recarga; }
+	double return_RESTANTE() const { return t_restante; }
+	bool return_Activo() const { return activo; }
+	void setRECARGA(Tipo nuevoTiempo) { t_recarga = nuevoTiempo; }
+	void setRESTANTE(double nuevoTiempo) { t_restante = nuevoTiempo; }
+	void setActivo(bool nuevoActivo) { activo = nuevoActivo; }
+
+	////////////////METODOS///////////////
 	Hechizo(); //CONSTRUCTOR
 	void conf_Hechizos(); //DIFERENCIAR TIPOS DE HECHIZOS
 	void usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo);
 	void usar_Pocion(Personajes_carac& aliado);
+	void actualizarTiempos(double Time);  //ACTUALIZA TIEMPOS DE RECARGA
 };

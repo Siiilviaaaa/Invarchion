@@ -31,7 +31,7 @@ void Juego::procesarEntradas() {
 }
 
 void Juego::actualizar() {
-    //AÑADIR ACTIALIZACION DE TIEMPOS DE HECHIZOS (ESTA EN BATALLA.CPP)
+	//actualizarCombate(j1, j2); //ME DA ERROR EN J1 Y J2
 }
 
 
