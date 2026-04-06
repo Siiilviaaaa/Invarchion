@@ -76,6 +76,24 @@ void Hechizo::conf_Hechizos()
 	hechizos[2].usos_restantes = 1;
 }
 
+void actualizarTiempos(double Time)
+{
+	for (int i = 0;i < 2;i++) //SOLO LOS HECHIZOS DE BATALLA NECESITAN RECARGA
+	{
+		if (hechizos[i].return_RESTANTE()>0) //SI NECESITA RECARGA
+		{
+			double nuevoTiempo = hechizos[i].return_RESTANTE() - Time; //DISMINUIR EL TIEMPO RESTANTE
+			hechizos[i].setRESTANTE(nuevoTiempo);
+
+			if (hechizos[i].return_RESTANTE() <= 0) //SI EL TIEMPO SE ACABO, SE DESACTIVA EL HECHIZO
+			{
+				hechizos[i].setRESTANTE(0);
+				hechizos[i].setActivo(false);
+			}
+		}
+	}
+}
+
 //HECHIZOS USADOS EN BATALLA
 void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 {
@@ -221,5 +239,6 @@ void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2)
 	Disparo d;
 
 	d.actualizarDisparos(j1, j2);
+	actualizarTiempos(0.1);
 
 }
