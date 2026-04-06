@@ -9,7 +9,6 @@ Disparo::Disparo()
 	velo_y = 0;
 	danio = 0;
 	activo = false;
-	flecha = 0;
 }
 
 Hechizo::Hechizo()
@@ -21,5 +20,4 @@ Hechizo::Hechizo()
 	t_restante = 0;
 	posX = 0;
 	posY = 0;
-	imagen = 0;
 }
