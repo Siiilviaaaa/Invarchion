@@ -71,6 +71,7 @@ public:
 
 	////////////////METODOS///////////////
 	Hechizo(); //CONSTRUCTOR
+	void dibujarHechizo();
 	void conf_Hechizos(); //DIFERENCIAR TIPOS DE HECHIZOS
 	void usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo);
 	void usar_Pocion(Personajes_carac& aliado);

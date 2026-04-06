@@ -12,7 +12,15 @@ Disparo nDisparos[Max_disparos];
 Hechizo hechizos[3];  //3 HECHIZOS DISPONIBLES
 bool usoPocion = false;
 
-void Disparo::crearDisparo(double posX, double posY, GLuint png)
+void Disparo::dibujarDisparo()
+{
+	if (!activo) return;
+
+	sprite.setPos(x, y);
+	sprite.draw();
+}
+
+void Disparo::crearDisparo(double posX, double posY)
 {
 	for (int i = 0;i < Max_disparos;i++)
 		if (!nDisparos[i].activo) //SI EL DISPARO NO ESTA ACTIVO, SE DISPARA
@@ -23,7 +31,6 @@ void Disparo::crearDisparo(double posX, double posY, GLuint png)
 			nDisparos[i].velo_y = 1; //VELOCIDAD EN Y
 			nDisparos[i].danio = 10; //DAÑO QUE CAUSA
 			nDisparos[i].activo = true; //SE ACTIVA EL DISPARO
-			nDisparos[i].flecha = png; //IMAGEN DE LA FLECHA
 			break;
 		}
 }
@@ -76,7 +83,15 @@ void Hechizo::conf_Hechizos()
 	hechizos[2].usos_restantes = 1;
 }
 
-void actualizarTiempos(double Time)
+void Hechizo::dibujarHechizo()
+{
+	if (!activo) return;
+
+	sprite.setPos(posX, posY);
+	sprite.draw();
+}
+
+void Hechizo::actualizarTiempos(double Time)
 {
 	for (int i = 0;i < 2;i++) //SOLO LOS HECHIZOS DE BATALLA NECESITAN RECARGA
 	{
@@ -201,7 +216,7 @@ void start_combat(Personajes_carac& humanos, Personajes_carac& aliens)
 }
 
 void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
-				 double x1, double y1, double x2, double y2, GLuint flecha)
+				 double x1, double y1, double x2, double y2)
 {
 	switch (key)
 	{
@@ -209,7 +224,7 @@ void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
 		if (j1.return_Tipo() == ARQUERO)
 		{
 			Disparo d;
-			d.crearDisparo(x1, y1, flecha);
+			d.crearDisparo(x1, y1);
 		}
 		else
 			pegar(j1, j2, x1, y1, x2, y2);
@@ -218,7 +233,7 @@ void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
 		if (j2.return_Tipo() == ARQUERO)
 		{
 			Disparo d;
-			d.crearDisparo(x2, y2, flecha);
+			d.crearDisparo(x2, y2);
 		}
 		else
 			pegar(j2, j1, x1, y1, x2, y2);
@@ -237,8 +252,13 @@ void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
 void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2)
 {
 	Disparo d;
+	Hechizo h;
 
 	d.actualizarDisparos(j1, j2);
-	actualizarTiempos(0.1);
+
+	for (int i = 0;i < Max_disparos;i++)
+		nDisparos[i].dibujarDisparo();
+
+	h.actualizarTiempos(0.1);
 
 }
