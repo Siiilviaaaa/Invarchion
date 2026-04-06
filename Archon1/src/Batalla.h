@@ -22,7 +22,7 @@ class Disparo
 	int danio; // DAÑO QUE CAUSA
 	bool activo; // SI ESTA O NO EN PANTALLA
 
-	ETSIDI::Sprite _flecha;
+	ETSIDI::Sprite flecha;
 	
 public:
 	//////////GETTERS Y SETTERS///////////
@@ -30,10 +30,12 @@ public:
 	double return_Y() const { return y; }
 	double return_VX() const { return velo_x; }
 	double return_VY() const { return velo_y; }
+	bool return_Activo() const { return activo; }
 	void setX(double nuevoX) { x = nuevoX; }
 	void setY(double nuevoY) { y = nuevoY; }
 	void setVX(double nuevoVX) { velo_x = nuevoVX; }
 	void setVY(double nuevoVY) { velo_y = nuevoVY; }
+	void setActivo(bool nuevoActivo) { activo = nuevoActivo; }
 
 	////////////////METODOS///////////////
 	Disparo(); //CONSTRUCTOR
@@ -52,9 +54,9 @@ class Hechizo
 	double t_recarga; // TIEMPO TOTAL DE RECARGA
 	double t_restante; // TIEMPO RESTANTE PARA USAR DE NUEVO
 
-	ETSIDI::Sprite _hechizo1;
-	ETSIDI::Sprite _hechizo2;
-	ETSIDI::Sprite _pocion;
+	ETSIDI::Sprite hechizo1;
+	ETSIDI::Sprite hechizo2;
+	ETSIDI::Sprite pocion;
 
 public:
 	//////////GETTERS Y SETTERS///////////
@@ -63,16 +65,17 @@ public:
 	bool return_Activo() const { return activo; }
 	double return_PosX() const { return posX; }
 	double return_PosY() const { return posY; }
-	void setRECARGA(Tipo nuevoTiempo) { t_recarga = nuevoTiempo; }
+	void setRECARGA(double nuevoTiempo) { t_recarga = nuevoTiempo; }
 	void setRESTANTE(double nuevoTiempo) { t_restante = nuevoTiempo; }
 	void setActivo(bool nuevoActivo) { activo = nuevoActivo; }
 	void setPosX(double nuevoPosX) { posX = nuevoPosX; }
 	void setPosY(double nuevoPosY) { posY = nuevoPosY; }
 
 	////////////////METODOS///////////////
-	Hechizo(); //CONSTRUCTOR
+	enum TipoHechizo : int { PARALISIS, HIPERVELOCIDAD, POCION };
+	Hechizo(TipoHechizo tipo); //CONSTRUCTOR RECIBE EL TIPO  DE HECHIZO
+
 	void dibujarHechizo();
-	void conf_Hechizos(); //DIFERENCIAR TIPOS DE HECHIZOS
 	void usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo);
 	void usar_Pocion(Personajes_carac& aliado);
 	void actualizarTiempos(double Time);  //ACTUALIZA TIEMPOS DE RECARGA

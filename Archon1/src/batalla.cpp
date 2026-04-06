@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include "Batalla.h"
+#include "Constructores Batalla.h"
 #include "Juego.h"
 
 using std::cout, std::cin, std::endl;
@@ -16,8 +17,8 @@ void Disparo::dibujarDisparo()
 {
 	if (!activo) return;
 
-	sprite.setPos(x, y);
-	sprite.draw();
+	flecha.setPos(x, y);
+	flecha.draw();
 }
 
 void Disparo::crearDisparo(double posX, double posY)
@@ -74,21 +75,19 @@ void Disparo::actualizarDisparos(Personajes_carac& j1, Personajes_carac& j2)
 	}
 }
 
-void Hechizo::conf_Hechizos()
-{
-	hechizos[0].t_recarga = 5.0; //TIEMPO DE RECARGA PARALISIS
-	hechizos[1].t_recarga = 5.0; //TIEMPO DE RECARGA HIPERVELOCIDAD
-	
-	hechizos[2].usos_max = 1;
-	hechizos[2].usos_restantes = 1;
-}
-
 void Hechizo::dibujarHechizo()
 {
 	if (!activo) return;
 
-	sprite.setPos(posX, posY);
-	sprite.draw();
+	hechizo1.setPos(posX, posY);
+	hechizo1.draw();
+		
+	hechizo2.setPos(posX, posY);
+	hechizo2.draw();
+		
+	pocion.setPos(posX, posY);
+	pocion.draw();
+	
 }
 
 void Hechizo::actualizarTiempos(double Time)
@@ -112,8 +111,6 @@ void Hechizo::actualizarTiempos(double Time)
 //HECHIZOS USADOS EN BATALLA
 void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 {
-	conf_Hechizos();
-
 	if(hechizos[tipoHechizo].t_restante>0)
 		return; //EN RECARGA
 	
@@ -125,12 +122,10 @@ void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 	switch (tipoHechizo)
 	{
 	case 0: //PARALIZAR AL ENEMIGO
-		objetivo.setVelocidad(objetivo.return_Velocidad() * 0.1); //REDUCE MUCHO LA VELOCIDAD
-		//objetivo.set_paralisis(5.0); //TIEMPO DE PARALISIS
+		objetivo.set_paralisis(5.0); //TIEMPO DE PARALISIS
 		break;
 	case 1: //VELOCIDAD
-		objetivo.setVelocidad(objetivo.return_Velocidad() * 1.5); //REDUCE LA VELOCIDAD A LA MITAD
-		//objetivo.set_hiperVelocidad(4.0); //TIEMPO DE HIPER VELOCIDAD
+		objetivo.set_hiperVelocidad(4.0); //TIEMPO DE HIPER VELOCIDAD
 		break;
 	}
 	hechizos[tipoHechizo].activo = true;
@@ -142,8 +137,6 @@ void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 //HECHIZO USADO EN TABLERO
 void Hechizo::usar_Pocion(Personajes_carac & aliado)
 {
-	conf_Hechizos();
-
 	int nuevaVida;
 
 	if (usoPocion) //SI USO POCION
@@ -251,14 +244,19 @@ void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
 
 void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2)
 {
-	Disparo d;
-	Hechizo h;
-
-	d.actualizarDisparos(j1, j2);
-
+	//ACTUALIZAR DISPAROS
 	for (int i = 0;i < Max_disparos;i++)
-		nDisparos[i].dibujarDisparo();
+		if (nDisparos[i].return_Activo())
+		{
+			nDisparos[i].dibujarDisparo();
+			nDisparos[i].actualizarDisparos(j1, j2);
 
-	h.actualizarTiempos(0.1);
+		}
 
+	//ACTUALIZAR HECHIZOS
+	for (int i = 0;i < 3;i++)
+		hechizos[i].actualizarTiempos(0.1);
+
+	j1.actualizarEfectos();
+	j2.actualizarEfectos();
 }

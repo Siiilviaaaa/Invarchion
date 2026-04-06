@@ -13,16 +13,44 @@ Disparo::Disparo() :flecha("Recursos/flecha.png")
 	activo = false;
 }
 
-Hechizo::Hechizo():
+Hechizo::Hechizo(TipoHechizo tipo):
 	hechizo1("Recursos/hechizo1.png"),
 	hechizo2("Recursos/hechizo2.png"),
 	pocion("Recursos/pocion.png")
 {
-	usos_max = 2;
-	usos_restantes = 2;
-	activo = false;
-	t_recarga = 0;
-	t_restante = 0;
-	posX = 0;
-	posY = 0;
+	switch (tipo)
+	{
+	case Hechizo::PARALISIS:
+		t_recarga = 5.0;
+		usos_max = 2;
+		usos_restantes = 2;
+
+		activo = false;
+		t_restante = 0;
+		posX = 0;
+		posY = 0;
+		break;
+	case Hechizo::HIPERVELOCIDAD:
+		t_recarga = 5.0;
+		usos_max = 2;
+		usos_restantes = 2;
+
+		activo = false;
+		t_restante = 0;
+		posX = 0;
+		posY = 0;
+		break;
+	case Hechizo::POCION:
+		t_recarga = 0.0; //LA POCION NO TIENE RECARGA, SOLO USOS LIMITADOS
+		usos_max = 1;
+		usos_restantes = 1;
+
+		activo = false;
+		t_restante = 0;
+		posX = 0;
+		posY = 0;
+		break;
+	default:
+		break;
+	}
 }

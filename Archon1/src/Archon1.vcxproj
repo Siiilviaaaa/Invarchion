@@ -22,6 +22,7 @@
     <ClInclude Include="..\src\Juego.h" />
     <ClInclude Include="Batalla.h" />
     <ClInclude Include="casilla.h" />
+    <ClInclude Include="Constructores Batalla.h" />
     <ClInclude Include="Personajes.h" />
     <ClInclude Include="tablero.h" />
   </ItemGroup>
@@ -30,7 +31,6 @@
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="Batalla.cpp" />
     <ClCompile Include="casilla.cpp" />
-    <ClCompile Include="Constructores Batalla.cpp" />
     <ClCompile Include="Personajes.cpp" />
     <ClCompile Include="tablero.cpp" />
   </ItemGroup>

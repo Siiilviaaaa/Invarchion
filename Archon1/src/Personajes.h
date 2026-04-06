@@ -9,6 +9,7 @@ class Personajes_carac
 	int vida;
 	int danio;
 	double velocidad;
+	double vel_base;
 	double x, y;
 
 	//TIEMPO DURACION HECHIZOS
@@ -23,6 +24,7 @@ public:
 	int return_Vida() const { return vida; }
 	int return_Danio() const { return danio; }
 	double return_Velocidad() const { return velocidad; }
+	double return_Vbase() const { return vel_base; }
 	double return_X() const { return x; }
 	double return_Y() const { return y; }
 
@@ -36,14 +38,16 @@ public:
 	void setVida(int nuevaVida) { vida = nuevaVida; }
 	void setDanio(int nuevoDaño) { danio = nuevoDaño; }
 	void setVelocidad(double nuevaVelocidad) { velocidad = nuevaVelocidad; }
+	void setV_base(double nuevaVelocidad) { vel_base = nuevaVelocidad; }
 	void setX(double nuevaX) { x = nuevaX; }
 	void setY(double nuevaY) { y = nuevaY; }
 
-	double set_paralisis(double nuevoTiempo) { t_paralisis = nuevoTiempo; }
-	double set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
+	void set_paralisis(double nuevoTiempo) { t_paralisis = nuevoTiempo; }
+	void set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
 
 	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
 
 	//////////METODOS//////////////
 	static Personajes_carac crearPieza(Tipo tipo);
+	void actualizarEfectos();
 };
