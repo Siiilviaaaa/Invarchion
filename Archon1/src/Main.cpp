@@ -5,33 +5,127 @@
 #include "Batalla.h"
 #include "Juego.h"
 #include "casilla.h"
+#include "menu.h"
+#include <cctype>
 
 using std::cout, std::cin, std::endl;
 
-//porfavor no toqueis rutas de carpetas q me ha costado mucho y lloro, el archivo gitgnore igual
-//llevo un par de horas para guardar temas de la carpeta de extra, confirmadme si se escucha
-//hoy no se si me da tiempo a terminar de configurar el main, de ahi en adelante con todo
-//si quereis configurarlo vosotras recordad q es copiar las funciones de freeglut del lab
-//como se rompa lloro
+//IMPORTANTE AÑADIR LOS ENUM Q HAGAN FALTA
+enum Estado { MENU, SELECCION, JUEGO, RANKING };
+Estado estado = MENU;
+int bando_jugador{};//variable global que devuelve el bando del jugador y ese empieza primero
 
+//
+//RECORDAD QUE YO SIEMPRE PONGO MENSAJES EN EL SHELL PARA SABER Q ESTAMOS HACIENDO Y SI LA FUNCIONALIDAD VA Y LO Q ME FALLA SON LOS GRÁFICOS
+//
+
+Juego juego; // <--- ESTO ES LO QUE FALTA
+Menu miMenu;
 Tablero miTablero;
-void OnDraw(void);
-void OnDraw(void) {
+
+void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
+{
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        if (estado == MENU) {
+            //BOTÓN EXIT (Centro: 178, 182)
+            if (x > 100 && x < 250 && y > 120 && y < 250) {
+                std::cout << "[CLICK] Saliendo del juego..." << std::endl;
+                exit(0);
+            }
+            //BOTÓN JUGAR (Centro: 399, 399)
+            if (x > 270 && x < 530 && y > 290 && y < 510) {
+                std::cout << "[CLICK] ¡A JUGAR!" << std::endl;
+                estado = SELECCION;
+            }
+            //BOTÓN RANKING (Centro: 622, 183)
+            if (x > 550 && x < 700 && y > 120 && y < 250) {
+                std::cout << "[CLICK] Abriendo Ranking..." << std::endl;
+                estado = RANKING;
+            }
+        }
+        else if (estado == SELECCION)
+        {
+            //aqui no hay nada para q si estamos en seleccion no se hagan el listo y le puedan dar a exit
+        }
+
+    }
+
+}
+
+void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado de batalla con su respectiva camara, creo q es de Elena eso
+                  //también he conservado la posición original del tablero y he movido yo mi menú para q no hubiera problemas
+{
    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+   
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(7.0, 5.0, 20.0,
-        7.0, 5.0, 0.0,
-        0.0, 1.0, 0.0);
 
     miTablero.dibuja();
-  
-        //no borrar esta linea ni poner nada despues
-    glutSwapBuffers();
-   
+ 
+  switch (estado) {
+    case MENU:
+        //primero camara
+        gluLookAt(50.0, 50.0, 20.0,
+            50.0, 50.0, 0.0,
+            0.0, 1.0, 0.0);
+        //despues dibujar
+        miMenu.dibuja_menu();
+        break;
+    case JUEGO:
+        gluLookAt(7.0, 5.0, 20.0,
+            7.0, 5.0, 0.0,
+            0.0, 1.0, 0.0);
+        miTablero.dibuja();
+        break;
+    case RANKING:
+        //pantallaRanking.draw();
+        break;
+    case SELECCION:
+        // Mantenengo la misma cámara que el menú para que se siga vienda debajo que queda bien
+        gluLookAt(50.0, 50.0, 20.0,
+            50.0, 50.0, 0.0,
+            0.0, 1.0, 0.0);
+
+        // Dibujo el menú de fondo (para que no desaparezca)
+        miMenu.dibuja_menu();
+        // Dibujo la capa de selección encima
+        miMenu.dibuja_capa_seleccion();
+        break;
+    }
+    //no borrar esta linea ni poner nada despues
+    glutSwapBuffers();   
 }
+
+void OnTimer(int value) //no tengo 100% claro si es estrictamente necesaria pero yo la he añadido pq me facilitaba la vida
+{
+    glutPostRedisplay();
+    // Se vuelve a llamar a sí misma cada 20ms (unos 50 FPS)
+    glutTimerFunc(20, OnTimer, 0);
+}
+
+void OnKeyboardDown(unsigned char key, int x, int y) {
+    // Solo procesamos estas teclas si estamos en la pantalla de bando para q no se solape con el movimiento de las fichas luego, ok??
+    if (estado == SELECCION) {
+
+        key = tolower(key); //el tolower es TO  LOWER  CASE, por si alguna lo necesita usar es para no poner 'a'||'A'
+
+        if (key == 'h') {
+            std::cout << "[SISTEMA] Has elegido: HUMANOS. Iniciando despliegue..." << std::endl;
+            bando_jugador = 1; // La que hay al principio como global (1: Humanos, 2: Aliens)
+            estado = JUEGO;
+        }
+        else if (key == 'a') {
+            std::cout << "[SISTEMA] Has elegido: ALIENS. Iniciando invasión..." << std::endl;
+            bando_jugador = 2;
+            estado = JUEGO;
+        }
+
+        // Refresco de pantalla para q se pinte
+        glutPostRedisplay();
+    }
+}
+
 int main(int argc, char** argv) {
     //INICIAR JUEGO
    // Invarchion.IniciarJuego(); //esto cambia el valor del bool ejecutandose a 1, por lo que podeis poner las funciones como la de dibujar el tablero en basse a esto
@@ -43,7 +137,9 @@ int main(int argc, char** argv) {
     glutCreateWindow("Tablero");
     //se pude hacer una funcion con esta para cmabiar el color en funcion del turno
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f); // Fondo de ventana gris
-    miTablero.inicializa();       // Configuramos la vista
+    
+    miMenu.inicializa_menu();
+    miTablero.inicializa(); // Configuramos las vistas de Elena y Diego que son las hechas hasta ahora
 
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHTING);
@@ -53,15 +149,17 @@ int main(int argc, char** argv) {
     glLoadIdentity();
     gluPerspective(40.0, 800 / 600.0f, 0.1, 150);
 
+    //esto todo habrá q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
     cout << "Reproduciendo..." << std::endl;
-
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
     ETSIDI::play("extra/mi_musica.mp3");
 
-    cout << "Presiona Enter para salir y parar la musica..." << std::endl;
+//aqui he añadido alguna mia
+    glutMouseFunc(mouse);
+    glutTimerFunc(20, OnTimer, 0);
     glutDisplayFunc(OnDraw);
+    glutKeyboardFunc(OnKeyboardDown);
     glutMainLoop();
-    getchar(); // Esto mantiene el programa vivo para q de tiempo a escuchar
     
     return 0;
 
