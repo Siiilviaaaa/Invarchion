@@ -1,13 +1,12 @@
 #include <iostream>
 #include <cmath>
 #include "Batalla.h"
-#include "Constructores Batalla.h"
 #include "Juego.h"
 
 using std::cout, std::cin, std::endl;
 
 //VARIABLES GLOBALES
-Hechizo hechizos[3];  //3 HECHIZOS DISPONIBLES
+Hechizo hechizos[3];
 bool usoPocion = false;
 
 void Disparo::dibujarDisparo()
@@ -44,35 +43,47 @@ bool Disparo::Impacto(Personajes_carac& objetivo)
 	return false;
 }
 
+void Hechizo::configurar(TipoHechizo t)
+{
+	tipo = t;
+
+	switch (tipo)
+	{
+	case PARALISIS:
+		t_recarga = 5.0;
+		usos_restantes = 2;
+		grafico = ETSIDI::Sprite("Recursos/paralisis.png");
+		break;
+	case HIPERVELOCIDAD:
+		t_recarga = 5.0;
+		usos_restantes = 2;
+		grafico = ETSIDI::Sprite("Recursos/hiperVelocidad.png");
+		break;
+	case POCION:
+		t_recarga = 0.0; //LA POCION NO TIENE RECARGA, SOLO USOS LIMITADOS
+		usos_restantes = 1;
+		grafico = ETSIDI::Sprite("Recursos/pocion.png");
+		break;
+	}
+}
+
 void Hechizo::dibujarHechizo()
 {
-	if (!activo) return;
-
-	hechizo1.setPos(posX, posY);
-	hechizo1.draw();
-		
-	hechizo2.setPos(posX, posY);
-	hechizo2.draw();
-		
-	pocion.setPos(posX, posY);
-	pocion.draw();
-	
+	if (activo) {
+		grafico.setPos(posX, posY);
+		grafico.draw();
+	}
 }
 
 void Hechizo::actualizarTiempos(double Time)
 {
-	for (int i = 0;i < 2;i++) //SOLO LOS HECHIZOS DE BATALLA NECESITAN RECARGA
+	if (t_restante > 0)
 	{
-		if (hechizos[i].return_RESTANTE()>0) //SI NECESITA RECARGA
+		t_restante -= Time;
+		if (t_restante <= 0)
 		{
-			double nuevoTiempo = hechizos[i].return_RESTANTE() - Time; //DISMINUIR EL TIEMPO RESTANTE
-			hechizos[i].setRESTANTE(nuevoTiempo);
-
-			if (hechizos[i].return_RESTANTE() <= 0) //SI EL TIEMPO SE ACABO, SE DESACTIVA EL HECHIZO
-			{
-				hechizos[i].setRESTANTE(0);
-				hechizos[i].setActivo(false);
-			}
+			t_restante = 0;
+			activo = false; //EL HECHIZO YA NO ESTA ACTIVO, PERO SIGUE EN RECARGA
 		}
 	}
 }
@@ -80,31 +91,20 @@ void Hechizo::actualizarTiempos(double Time)
 //HECHIZOS USADOS EN BATALLA
 void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 {
-	if(hechizos[tipoHechizo].t_restante>0)
+	if(t_restante>0)
 		return; //EN RECARGA
 	
-	if (hechizos[tipoHechizo].usos_restantes <= 0)
+	if (usos_restantes <= 0)
 		return; //MAXIMOS USADOS
 	else
-	hechizos[tipoHechizo].usos_restantes--;
+	usos_restantes--;
 
-	switch (tipoHechizo)
-	{
-	case 0: //PARALIZAR AL ENEMIGO
-		objetivo.set_paralisis(5.0); //TIEMPO DE PARALISIS
-		break;
-	case 1: //VELOCIDAD
-		objetivo.set_hiperVelocidad(4.0); //TIEMPO DE HIPER VELOCIDAD
-		break;
-	}
-	hechizos[tipoHechizo].activo = true;
-	hechizos[tipoHechizo].t_restante = hechizos[tipoHechizo].t_recarga; //INICIAR DE VUELTA TIEMPO DE RECARGA
-	juego.actualizar(); //ACTIALIZAR LOS TIEMPOS
-
+	t_restante = t_recarga; //INICIAR RECARGA
+	activo = true;
 }
 
 //HECHIZO USADO EN TABLERO
-void Hechizo::usar_Pocion(Personajes_carac & aliado)
+/*void Hechizo::usar_Pocion(Personajes_carac& aliado)
 {
 	int nuevaVida;
 
@@ -133,6 +133,7 @@ void Hechizo::usar_Pocion(Personajes_carac & aliado)
 		juego.cambiarTurno(); //CAMBIAR TURNO AL USARSE POCION
 	}
 }
+*/
 
 void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
 	double x1, double y1, double x2, double y2)
@@ -152,29 +153,6 @@ void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
 		nuevaVida = 0;
 
 	objetivo.setVida(nuevaVida);
-}
-
-void start_combat(Personajes_carac& humanos, Personajes_carac& aliens)
-{
-	while (humanos.return_Vida() > 0 && aliens.return_Vida() > 0) //EL COMBATE CONTINUA HASTA QUE UNO DE LOS DOS SE QUEDE SIN VIDA
-	{
-		//HUMANOS ATACAN
-		aliens.setVida(aliens.return_Vida() - humanos.return_Danio());
-
-		if (aliens.return_Vida() <= 0)
-		{
-			cout << "¡Humanos ganan!" << endl;
-			break;
-		}
-		//ALIENS ATACAN
-		humanos.setVida(humanos.return_Vida() - aliens.return_Danio());
-
-		if (humanos.return_Vida() <= 0)
-		{
-			cout << "¡Aliens ganan!" << endl;
-			break;
-		}
-	}
 }
 
 void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
@@ -205,10 +183,32 @@ void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
 
 void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2)
 {
-	//ACTUALIZAR HECHIZOS
-	for (int i = 0;i < 3;i++)
-		hechizos[i].actualizarTiempos(0.1);
+	for (int i=0;i<3;i++)
+		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
+
+	j1.gestionarDisparos(j2);
+	j2.gestionarDisparos(j1);
 
 	j1.actualizarEfectos();
 	j2.actualizarEfectos();
+}
+
+int FinalBatalla(Personajes_carac& humanos, Personajes_carac& aliens)
+{
+	//RETORNA 0 SI SIGUEN PELEANDO
+	//RETORNA 1 SI HUMANOS GANAN
+	//RETORNA 2 SI ALIENS GANAN
+
+	if (aliens.return_Vida() <= 0)
+	{
+		cout << "HUMANS WIN!" << endl;
+		return 1;
+	}
+	else if (humanos.return_Vida() <= 0)
+	{
+		cout << "ALIENS WIN!" << endl;
+		return 2;
+	}
+
+	return 0;
 }

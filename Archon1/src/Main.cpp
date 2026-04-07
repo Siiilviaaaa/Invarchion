@@ -14,13 +14,6 @@ using std::cout, std::cin, std::endl;
 //si quereis configurarlo vosotras recordad q es copiar las funciones de freeglut del lab
 //como se rompa lloro
 
-
-//TIPOS DE HECHIZOS:  CREACION EN PROCESO
-//- REDUCIR VELOCIDAD ENEMIGO hechizos[0]--> 2 VECES POR TURNO
-//- AUMENTAR VELOCIDAD ALIADO hechizos[1]--> 2 VECES POR TURNO
-//- RESTAURAR PARTE DE LA VIDA ALIADO hechizo[2]--> ACTIVO EN TABLERO --> 1 VEZ POR TURNO Y SE PIERDE TURNO
-
-
 Tablero miTablero;
 void OnDraw(void);
 void OnDraw(void) {
@@ -37,18 +30,7 @@ void OnDraw(void) {
   
         //no borrar esta linea ni poner nada despues
     glutSwapBuffers();
-
-
-	///IDENTIFICAR SI SE DIBUJA EL TABLERO O LA BATALLA
-    ///CUANDO "ESTADO" ESTE BIEN DEFINIDO QUITAR COMENTARIOS
-   // if (estadoActual==ESTADO_TABLERO)
    
-   // else if (estadoActual==ESTADO_BATALLA)
-   // {
-	//	batalla.dibujar(); ///SIN HACER
-	//  start_combat(humanos, aliens);
-	// }
-    
 }
 int main(int argc, char** argv) {
     //INICIAR JUEGO

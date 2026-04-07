@@ -1,7 +1,12 @@
-#include "Personajes.h"
 #include "Batalla.h"
 
 using std::cout, std::cin, std::endl;
+
+Personajes_carac::Personajes_carac()
+{
+	for (int i = 0;i < MAX_DISPAROS;i++)
+		nDisparos[i] = nullptr;
+}
 
 Personajes_carac Personajes_carac::crearPieza(Tipo tipo)
 {
@@ -65,13 +70,15 @@ void Personajes_carac::lanzarDisparo()
 
 	for (int i = 0;i < MAX_DISPAROS;i++)
 	{
-		if (!nDisparos[i].return_Activo())
+		if (nDisparos[i]==nullptr)
 		{
-			nDisparos[i].setX(x);
-			nDisparos[i].setY(y);
-			nDisparos[i].setVX(0.2);
-			nDisparos[i].setVY(1,0);
-			nDisparos[i].setActivo(true);
+			nDisparos[i] = new Disparo(); //RESERVA MEMORIA
+
+			nDisparos[i]->setX(x);
+			nDisparos[i]->setY(y);
+			nDisparos[i]->setVX(0.2);
+			nDisparos[i]->setVY(1.0);
+			nDisparos[i]->setActivo(true);
 			break;
 		}
 	}
@@ -80,11 +87,16 @@ void Personajes_carac::lanzarDisparo()
 void Personajes_carac::gestionarDisparos(Personajes_carac& enemigo)
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
-		if (nDisparos[i].return_Activo())
+		if (nDisparos[i] != nullptr)
 		{
-			nDisparos[i].moverDisparo();
-			nDisparos[i].dibujarDisparo();
-			nDisparos[i].Impacto(enemigo);
+			nDisparos[i]->moverDisparo();
+			nDisparos[i]->dibujarDisparo();
+
+			if (nDisparos[i]->Impacto(enemigo) || !nDisparos[i]->return_Activo())
+			{ //SI NO ESTA ACTIVO Y SI IMPACTA
+				delete nDisparos[i]; //LIBERAR MEMORIA
+				nDisparos[i] = nullptr; //DEJAR HUECO LIBRE
+			}
 		}
 }
 
