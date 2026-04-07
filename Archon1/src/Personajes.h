@@ -40,6 +40,7 @@ public:
 	void setVida(int nuevaVida) { vida = nuevaVida; }
 	void setDanio(int nuevoDaño) { danio = nuevoDaño; }
 	void setVelocidad(double nuevaVelocidad) { velocidad = nuevaVelocidad; }
+	void setV_base(double nuevaVBase) { vel_base = nuevaVBase; }
 	void setX(double nuevaX) { x = nuevaX; }
 	void setY(double nuevaY) { y = nuevaY; }
 

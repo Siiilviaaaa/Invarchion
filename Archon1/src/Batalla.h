@@ -54,13 +54,11 @@ private:
 	double t_recarga; // TIEMPO TOTAL DE RECARGA
 	double t_restante; // TIEMPO RESTANTE PARA USAR DE NUEVO
 
-	ETSIDI::Sprite grafico; //GRAFICO DEL HECHIZO
+	ETSIDI::Sprite mis_hechizos; //GRAFICO DEL HECHIZO
 
 public:
-	//////////GETTERS Y SETTERS///////////
 	double return_RESTANTE() const { return t_restante; }
 	
-	////////////////METODOS///////////////
 	Hechizo(); //CONSTRUCTOR 
 	void configurar(TipoHechizo t);
 	void dibujarHechizo();

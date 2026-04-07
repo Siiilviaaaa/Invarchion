@@ -52,17 +52,17 @@ void Hechizo::configurar(TipoHechizo t)
 	case PARALISIS:
 		t_recarga = 5.0;
 		usos_restantes = 2;
-		grafico = ETSIDI::Sprite("Recursos/paralisis.png");
+		mis_hechizos = ETSIDI::Sprite("Recursos/paralisis.png");
 		break;
 	case HIPERVELOCIDAD:
 		t_recarga = 5.0;
 		usos_restantes = 2;
-		grafico = ETSIDI::Sprite("Recursos/hiperVelocidad.png");
+		mis_hechizos = ETSIDI::Sprite("Recursos/hiperVelocidad.png");
 		break;
 	case POCION:
 		t_recarga = 0.0; //LA POCION NO TIENE RECARGA, SOLO USOS LIMITADOS
 		usos_restantes = 1;
-		grafico = ETSIDI::Sprite("Recursos/pocion.png");
+		mis_hechizos = ETSIDI::Sprite("Recursos/pocion.png");
 		break;
 	}
 }
@@ -70,8 +70,8 @@ void Hechizo::configurar(TipoHechizo t)
 void Hechizo::dibujarHechizo()
 {
 	if (activo) {
-		grafico.setPos(posX, posY);
-		grafico.draw();
+		mis_hechizos.setPos(posX, posY);
+		mis_hechizos.draw();
 	}
 }
 
