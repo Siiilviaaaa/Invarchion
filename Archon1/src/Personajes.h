@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "Batalla.h"
 
 enum Tipo { SOLDADO, ARQUERO, VOLADOR, EXCAVADOR, HECHICERO };
 
@@ -12,10 +13,13 @@ class Personajes_carac
 	double vel_base;
 	double x, y;
 
-	//TIEMPO DURACION HECHIZOS
+	//DISPAROS
+	static const int MAX_DISPAROS = 10;
+	Disparo nDisparos[MAX_DISPAROS];
+
+	//HECHIZOS
 	double t_paralisis;
 	double t_hiperVelocidad;
-
 	int vida_max; //VARIABLE PARA COMPROBAR SU USAR POCION
 
 public:
@@ -50,4 +54,7 @@ public:
 	//////////METODOS//////////////
 	static Personajes_carac crearPieza(Tipo tipo);
 	void actualizarEfectos();
+
+	void gestionarDisparos(Personajes_carac& enemigo);
+	void lanzarDisparo();
 };

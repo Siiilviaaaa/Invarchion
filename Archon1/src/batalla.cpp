@@ -7,9 +7,6 @@
 using std::cout, std::cin, std::endl;
 
 //VARIABLES GLOBALES
-const int Max_disparos = 10; //10 DISPAROS ACTIVOS A LA VEZ
-
-Disparo nDisparos[Max_disparos]; 
 Hechizo hechizos[3];  //3 HECHIZOS DISPONIBLES
 bool usoPocion = false;
 
@@ -21,58 +18,30 @@ void Disparo::dibujarDisparo()
 	flecha.draw();
 }
 
-void Disparo::crearDisparo(double posX, double posY)
+void Disparo::moverDisparo()
 {
-	for (int i = 0;i < Max_disparos;i++)
-		if (!nDisparos[i].activo) //SI EL DISPARO NO ESTA ACTIVO, SE DISPARA
-		{
-			nDisparos[i].x = posX;
-			nDisparos[i].y = posY;
-			nDisparos[i].velo_x = 0.2; //VELOCIDAD EN X
-			nDisparos[i].velo_y = 1; //VELOCIDAD EN Y
-			nDisparos[i].danio = 10; //DAÑO QUE CAUSA
-			nDisparos[i].activo = true; //SE ACTIVA EL DISPARO
-			break;
-		}
+	if (!activo) return;
+	x += velo_x;
+	y += velo_y;
+	//SI EL DISPARO SALE DE PANTALLA, SE DESACTIVA
+	if (x < 0 || x > 800 || y < 0 || y > 600) activo = false;
 }
 
-void Disparo::actualizarDisparos(Personajes_carac& j1, Personajes_carac& j2)
+bool Disparo::Impacto(Personajes_carac& objetivo)
 {
-	for (int i = 0;i < Max_disparos;i++)
+	if (!activo) return false;
+
+	double dx = x - objetivo.return_X();
+	double dy = y - objetivo.return_Y();
+
+	if (sqrt(dx * dx + dy * dy) < 1.0) //SI EL DISPARO IMPACTA AL ENEMIGO
 	{
-		if (nDisparos[i].activo)
-		{
-			nDisparos[i].x += nDisparos[i].velo_x; //ACTUALIZAR POSICION EN X
-			nDisparos[i].y += nDisparos[i].velo_y; //ACTUALIZAR POSICION EN Y
-			if (nDisparos[i].y > 10) //SI EL DISPARO SALE DE PANTALLA, SE DESACTIVA
-			{
-				nDisparos[i].activo = false;
-				continue;
-			}
-
-			//COMPROBAR IMPACTO
-			//JUGADOR 1
-			double dx1 = nDisparos[i].x - j1.return_X();
-			double dy1 = nDisparos[i].y - j1.return_Y();
-
-			if (sqrt(dx1 * dx1 + dy1 * dy1) < 1.0) //SE CONSIDERA UN IMPACTO
-			{
-				j1.setVida(j1.return_Vida() - nDisparos[i].danio);
-				nDisparos[i].activo = false; //SE DESACTIVA EL DISPARO AL IMPACTAR
-				continue;
-			}
-
-			//JUGADOR 2
-			double dx2 = nDisparos[i].x - j2.return_X();
-			double dy2 = nDisparos[i].y - j2.return_Y();
-
-			if (sqrt(dx2 * dx2 + dy2 * dy2) < 1.0)
-			{
-				j2.setVida(j2.return_Vida() - nDisparos[i].danio);
-				nDisparos[i].activo = false;
-			}
-		}
+		objetivo.setVida(objetivo.return_Vida() - danio); //REDUCIR VIDA DEL ENEMIGO
+		activo = false; //DESACTIVAR DISPARO AL CHOCAR
+		return true;
 	}
+	
+	return false;
 }
 
 void Hechizo::dibujarHechizo()
@@ -214,20 +183,12 @@ void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
 	switch (key)
 	{
 	case ' ': //HUMANOS PELEAN O DISPARAN CON EL ESPACIO
-		if (j1.return_Tipo() == ARQUERO)
-		{
-			Disparo d;
-			d.crearDisparo(x1, y1);
-		}
+		if (j1.return_Tipo() == ARQUERO) j1.lanzarDisparo();
 		else
 			pegar(j1, j2, x1, y1, x2, y2);
 		break;
 	case 13: //ALIENS PELEAN O DISPARAN CON ENTER
-		if (j2.return_Tipo() == ARQUERO)
-		{
-			Disparo d;
-			d.crearDisparo(x2, y2);
-		}
+		if (j2.return_Tipo() == ARQUERO) j2.lanzarDisparo();
 		else
 			pegar(j2, j1, x1, y1, x2, y2);
 		break;
@@ -244,15 +205,6 @@ void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
 
 void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2)
 {
-	//ACTUALIZAR DISPAROS
-	for (int i = 0;i < Max_disparos;i++)
-		if (nDisparos[i].return_Activo())
-		{
-			nDisparos[i].dibujarDisparo();
-			nDisparos[i].actualizarDisparos(j1, j2);
-
-		}
-
 	//ACTUALIZAR HECHIZOS
 	for (int i = 0;i < 3;i++)
 		hechizos[i].actualizarTiempos(0.1);

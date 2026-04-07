@@ -40,12 +40,17 @@ public:
 	////////////////METODOS///////////////
 	Disparo(); //CONSTRUCTOR
 	void dibujarDisparo();
-	void crearDisparo(double posX, double posY);
-	void actualizarDisparos(Personajes_carac& j1, Personajes_carac& j2);
+	void moverDisparo();
+	bool Impacto(Personajes_carac& objetivo);
+	
 };
 
 class Hechizo
 {
+public:
+	enum TipoHechizo : int { PARALISIS, HIPERVELOCIDAD, POCION };
+private:
+	TipoHechizo tipo;
 	int usos_max;
 	int usos_restantes;
 	bool activo; // "HECHIZO LANZADO DE MANERA VISUAL"
@@ -72,9 +77,7 @@ public:
 	void setPosY(double nuevoPosY) { posY = nuevoPosY; }
 
 	////////////////METODOS///////////////
-	enum TipoHechizo : int { PARALISIS, HIPERVELOCIDAD, POCION };
-	Hechizo(TipoHechizo tipo); //CONSTRUCTOR RECIBE EL TIPO  DE HECHIZO
-
+	Hechizo(); //CONSTRUCTOR 
 	void dibujarHechizo();
 	void usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo);
 	void usar_Pocion(Personajes_carac& aliado);

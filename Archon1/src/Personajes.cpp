@@ -1,4 +1,5 @@
 #include "Personajes.h"
+#include "Batalla.h"
 
 using std::cout, std::cin, std::endl;
 
@@ -56,6 +57,35 @@ Personajes_carac Personajes_carac::crearPieza(Tipo tipo)
 		break;
 	}
 	return pieza;
+}
+
+void Personajes_carac::lanzarDisparo()
+{
+	if (tipo != ARQUERO) return;
+
+	for (int i = 0;i < MAX_DISPAROS;i++)
+	{
+		if (!nDisparos[i].return_Activo())
+		{
+			nDisparos[i].setX(x);
+			nDisparos[i].setY(y);
+			nDisparos[i].setVX(0.2);
+			nDisparos[i].setVY(1,0);
+			nDisparos[i].setActivo(true);
+			break;
+		}
+	}
+}
+
+void Personajes_carac::gestionarDisparos(Personajes_carac& enemigo)
+{
+	for (int i = 0;i < MAX_DISPAROS;i++)
+		if (nDisparos[i].return_Activo())
+		{
+			nDisparos[i].moverDisparo();
+			nDisparos[i].dibujarDisparo();
+			nDisparos[i].Impacto(enemigo);
+		}
 }
 
 void Personajes_carac::actualizarEfectos()
