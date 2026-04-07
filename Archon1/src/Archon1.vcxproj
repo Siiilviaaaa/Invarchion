@@ -31,6 +31,7 @@
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="Batalla.cpp" />
     <ClCompile Include="casilla.cpp" />
+    <ClCompile Include="Constructores.cpp" />
     <ClCompile Include="Constructores Batalla.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Personajes.cpp" />

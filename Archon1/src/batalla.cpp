@@ -6,111 +6,106 @@
 using std::cout, std::cin, std::endl;
 
 //VARIABLES GLOBALES
-const int Max_disparos = 10; //10 DISPAROS ACTIVOS A LA VEZ
-
-Disparo nDisparos[Max_disparos]; 
-Hechizo hechizos[3];  //3 HECHIZOS DISPONIBLES
+Hechizo hechizos[3];
 bool usoPocion = false;
 
-void Disparo::crearDisparo(double posX, double posY, GLuint png)
+void Disparo::dibujarDisparo()
 {
-	for (int i = 0;i < Max_disparos;i++)
-		if (!nDisparos[i].activo) //SI EL DISPARO NO ESTA ACTIVO, SE DISPARA
-		{
-			nDisparos[i].x = posX;
-			nDisparos[i].y = posY;
-			nDisparos[i].velo_x = 0.2; //VELOCIDAD EN X
-			nDisparos[i].velo_y = 1; //VELOCIDAD EN Y
-			nDisparos[i].danio = 10; //DA�O QUE CAUSA
-			nDisparos[i].activo = true; //SE ACTIVA EL DISPARO
-			nDisparos[i].flecha = png; //IMAGEN DE LA FLECHA
-			break;
-		}
+	if (!activo) return;
+
+	flecha.setPos(x, y);
+	flecha.draw();
 }
 
-void Disparo::actualizarDisparos(Personajes_carac& j1, Personajes_carac& j2)
+void Disparo::moverDisparo()
 {
-	for (int i = 0;i < Max_disparos;i++)
+	if (!activo) return;
+	x += velo_x;
+	y += velo_y;
+	//SI EL DISPARO SALE DE PANTALLA, SE DESACTIVA
+	if (x < 0 || x > 800 || y < 0 || y > 600) activo = false;
+}
+
+bool Disparo::Impacto(Personajes_carac& objetivo)
+{
+	if (!activo) return false;
+
+	double dx = x - objetivo.return_X();
+	double dy = y - objetivo.return_Y();
+
+	if (sqrt(dx * dx + dy * dy) < 1.0) //SI EL DISPARO IMPACTA AL ENEMIGO
 	{
-		if (nDisparos[i].activo)
-		{
-			nDisparos[i].x += nDisparos[i].velo_x; //ACTUALIZAR POSICION EN X
-			nDisparos[i].y += nDisparos[i].velo_y; //ACTUALIZAR POSICION EN Y
-			if (nDisparos[i].y > 10) //SI EL DISPARO SALE DE PANTALLA, SE DESACTIVA
-			{
-				nDisparos[i].activo = false;
-				continue;
-			}
+		objetivo.setVida(objetivo.return_Vida() - danio); //REDUCIR VIDA DEL ENEMIGO
+		activo = false; //DESACTIVAR DISPARO AL CHOCAR
+		return true;
+	}
+	
+	return false;
+}
 
-			//COMPROBAR IMPACTO
-			//JUGADOR 1
-			double dx1 = nDisparos[i].x - j1.return_X();
-			double dy1 = nDisparos[i].y - j1.return_Y();
+void Hechizo::configurar(TipoHechizo t)
+{
+	tipo = t;
 
-			if (sqrt(dx1 * dx1 + dy1 * dy1) < 1.0) //SE CONSIDERA UN IMPACTO
-			{
-				j1.setVida(j1.return_Vida() - nDisparos[i].danio);
-				nDisparos[i].activo = false; //SE DESACTIVA EL DISPARO AL IMPACTAR
-				continue;
-			}
-
-			//JUGADOR 2
-			double dx2 = nDisparos[i].x - j2.return_X();
-			double dy2 = nDisparos[i].y - j2.return_Y();
-
-			if (sqrt(dx2 * dx2 + dy2 * dy2) < 1.0)
-			{
-				j2.setVida(j2.return_Vida() - nDisparos[i].danio);
-				nDisparos[i].activo = false;
-			}
-		}
+	switch (tipo)
+	{
+	case PARALISIS:
+		t_recarga = 5.0;
+		usos_restantes = 2;
+		mis_hechizos = ETSIDI::Sprite("Recursos/paralisis.png");
+		break;
+	case HIPERVELOCIDAD:
+		t_recarga = 5.0;
+		usos_restantes = 2;
+		mis_hechizos = ETSIDI::Sprite("Recursos/hiperVelocidad.png");
+		break;
+	case POCION:
+		t_recarga = 0.0; //LA POCION NO TIENE RECARGA, SOLO USOS LIMITADOS
+		usos_restantes = 1;
+		mis_hechizos = ETSIDI::Sprite("Recursos/pocion.png");
+		break;
 	}
 }
 
-void Hechizo::conf_Hechizos()
+void Hechizo::dibujarHechizo()
 {
-	hechizos[0].t_recarga = 5.0; //TIEMPO DE RECARGA PARALISIS
-	hechizos[1].t_recarga = 5.0; //TIEMPO DE RECARGA HIPERVELOCIDAD
-	
-	hechizos[2].usos_max = 1;
-	hechizos[2].usos_restantes = 1;
+	if (activo) {
+		mis_hechizos.setPos(posX, posY);
+		mis_hechizos.draw();
+	}
+}
+
+void Hechizo::actualizarTiempos(double Time)
+{
+	if (t_restante > 0)
+	{
+		t_restante -= Time;
+		if (t_restante <= 0)
+		{
+			t_restante = 0;
+			activo = false; //EL HECHIZO YA NO ESTA ACTIVO, PERO SIGUE EN RECARGA
+		}
+	}
 }
 
 //HECHIZOS USADOS EN BATALLA
 void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 {
-	conf_Hechizos();
-
-	if(hechizos[tipoHechizo].t_restante>0)
+	if(t_restante>0)
 		return; //EN RECARGA
 	
-	if (hechizos[tipoHechizo].usos_restantes <= 0)
+	if (usos_restantes <= 0)
 		return; //MAXIMOS USADOS
 	else
-	hechizos[tipoHechizo].usos_restantes--;
+	usos_restantes--;
 
-	switch (tipoHechizo)
-	{
-	case 0: //PARALIZAR AL ENEMIGO
-		objetivo.setVelocidad(objetivo.return_Velocidad() * 0.1); //REDUCE MUCHO LA VELOCIDAD
-		//objetivo.set_paralisis(5.0); //TIEMPO DE PARALISIS
-		break;
-	case 1: //VELOCIDAD
-		objetivo.setVelocidad(objetivo.return_Velocidad() * 1.5); //REDUCE LA VELOCIDAD A LA MITAD
-		//objetivo.set_hiperVelocidad(4.0); //TIEMPO DE HIPER VELOCIDAD
-		break;
-	}
-	hechizos[tipoHechizo].activo = true;
-	hechizos[tipoHechizo].t_restante = hechizos[tipoHechizo].t_recarga; //INICIAR DE VUELTA TIEMPO DE RECARGA
-	juego.actualizar(); //ACTIALIZAR LOS TIEMPOS
-
+	t_restante = t_recarga; //INICIAR RECARGA
+	activo = true;
 }
 
 //HECHIZO USADO EN TABLERO
-void Hechizo::usar_Pocion(Personajes_carac & aliado)
+/*void Hechizo::usar_Pocion(Personajes_carac& aliado)
 {
-	conf_Hechizos();
-
 	int nuevaVida;
 
 	if (usoPocion) //SI USO POCION
@@ -138,6 +133,7 @@ void Hechizo::usar_Pocion(Personajes_carac & aliado)
 		juego.cambiarTurno(); //CAMBIAR TURNO AL USARSE POCION
 	}
 }
+*/
 
 void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
 	double x1, double y1, double x2, double y2)
@@ -159,49 +155,18 @@ void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
 	objetivo.setVida(nuevaVida);
 }
 
-void start_combat(Personajes_carac& humanos, Personajes_carac& aliens)
-{
-	while (humanos.return_Vida() > 0 && aliens.return_Vida() > 0) //EL COMBATE CONTINUA HASTA QUE UNO DE LOS DOS SE QUEDE SIN VIDA
-	{
-		//HUMANOS ATACAN
-		aliens.setVida(aliens.return_Vida() - humanos.return_Danio());
-
-		if (aliens.return_Vida() <= 0)
-		{
-			cout << "¡Humanos ganan!" << endl;
-			break;
-		}
-		//ALIENS ATACAN
-		humanos.setVida(humanos.return_Vida() - aliens.return_Danio());
-
-		if (humanos.return_Vida() <= 0)
-		{
-			cout << "¡Aliens ganan!" << endl;
-			break;
-		}
-	}
-}
-
 void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
-				 double x1, double y1, double x2, double y2, GLuint flecha)
+				 double x1, double y1, double x2, double y2)
 {
 	switch (key)
 	{
 	case ' ': //HUMANOS PELEAN O DISPARAN CON EL ESPACIO
-		if (j1.return_Tipo() == ARQUERO)
-		{
-			Disparo d;
-			d.crearDisparo(x1, y1, flecha);
-		}
+		if (j1.return_Tipo() == ARQUERO) j1.lanzarDisparo();
 		else
 			pegar(j1, j2, x1, y1, x2, y2);
 		break;
 	case 13: //ALIENS PELEAN O DISPARAN CON ENTER
-		if (j2.return_Tipo() == ARQUERO)
-		{
-			Disparo d;
-			d.crearDisparo(x2, y2, flecha);
-		}
+		if (j2.return_Tipo() == ARQUERO) j2.lanzarDisparo();
 		else
 			pegar(j2, j1, x1, y1, x2, y2);
 		break;
@@ -218,8 +183,32 @@ void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
 
 void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2)
 {
-	Disparo d;
+	for (int i=0;i<3;i++)
+		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
 
-	d.actualizarDisparos(j1, j2);
+	j1.gestionarDisparos(j2);
+	j2.gestionarDisparos(j1);
 
+	j1.actualizarEfectos();
+	j2.actualizarEfectos();
+}
+
+int FinalBatalla(Personajes_carac& humanos, Personajes_carac& aliens)
+{
+	//RETORNA 0 SI SIGUEN PELEANDO
+	//RETORNA 1 SI HUMANOS GANAN
+	//RETORNA 2 SI ALIENS GANAN
+
+	if (aliens.return_Vida() <= 0)
+	{
+		cout << "HUMANS WIN!" << endl;
+		return 1;
+	}
+	else if (humanos.return_Vida() <= 0)
+	{
+		cout << "ALIENS WIN!" << endl;
+		return 2;
+	}
+
+	return 0;
 }
