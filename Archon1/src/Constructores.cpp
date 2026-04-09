@@ -10,7 +10,7 @@ Disparo::Disparo() : flecha("Recursos/flecha.png")
 	activo = false;
 }
 
-Hechizo::Hechizo() : mis_hechizos("Recursos/paralisis.png")
+Hechizo::Hechizo() : mis_hechizos("Recursos/hechizo1.png")
 {
 	tipo = PARALISIS;
 	usos_restantes = 0;

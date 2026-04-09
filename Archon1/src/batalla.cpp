@@ -52,12 +52,12 @@ void Hechizo::configurar(TipoHechizo t)
 	case PARALISIS:
 		t_recarga = 5.0;
 		usos_restantes = 2;
-		mis_hechizos = ETSIDI::Sprite("Recursos/paralisis.png");
+		mis_hechizos = ETSIDI::Sprite("Recursos/hechizo1.png");
 		break;
 	case HIPERVELOCIDAD:
 		t_recarga = 5.0;
 		usos_restantes = 2;
-		mis_hechizos = ETSIDI::Sprite("Recursos/hiperVelocidad.png");
+		mis_hechizos = ETSIDI::Sprite("Recursos/hechizo2.png");
 		break;
 	case POCION:
 		t_recarga = 0.0; //LA POCION NO TIENE RECARGA, SOLO USOS LIMITADOS
