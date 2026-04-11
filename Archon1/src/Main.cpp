@@ -8,6 +8,7 @@
 #include "menu.h"
 #include <cctype>
 
+
 using std::cout, std::cin, std::endl;
 
 //IMPORTANTE AÑADIR LOS ENUM Q HAGAN FALTA
@@ -49,7 +50,7 @@ void mouse(int button, int state, int x, int y) //esta funcion detecta los click
         }
 
     }
-
+    cout << "SOFIA-PRUEBA-MERGE";
 }
 
 void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado de batalla con su respectiva camara, creo q es de Elena eso
