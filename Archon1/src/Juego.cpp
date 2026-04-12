@@ -1,5 +1,7 @@
 #include "Juego.h"
-#include "Batalla.h"
+
+///VARIABLE GLOBAL DEFINIDA EN HECHIZOS.CPP
+extern bool usoPocion;
 
 void Juego::IniciarJuego() {
 

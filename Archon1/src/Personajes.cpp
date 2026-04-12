@@ -1,6 +1,6 @@
 #include "Batalla.h"
-
-using std::cout, std::cin, std::endl;
+#include "Hechizos.h"
+#include "Disparos.h"
 
 Personajes_carac::Personajes_carac()
 {

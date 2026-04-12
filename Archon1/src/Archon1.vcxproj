@@ -22,6 +22,8 @@
     <ClInclude Include="..\src\Juego.h" />
     <ClInclude Include="Batalla.h" />
     <ClInclude Include="casilla.h" />
+    <ClInclude Include="Disparos.h" />
+    <ClInclude Include="Hechizos.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="Personajes.h" />
     <ClInclude Include="tablero.h" />
@@ -31,7 +33,8 @@
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="Batalla.cpp" />
     <ClCompile Include="casilla.cpp" />
-    <ClCompile Include="Constructores.cpp" />
+    <ClCompile Include="Disparos.cpp" />
+    <ClCompile Include="Hechizos.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Personajes.cpp" />
     <ClCompile Include="tablero.cpp" />
