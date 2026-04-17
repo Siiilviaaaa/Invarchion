@@ -1,7 +1,7 @@
 #pragma once
 #include "ETSIDI.h"
 
-class Personajes_carac; //DECLARACION ANTICIPADA
+class Personaje; //DECLARACION ANTICIPADA
 
 class Disparo
 {
@@ -25,7 +25,7 @@ public:
 	Disparo();//COSNTRUCTOR
 	void dibujarDisparo();
 	void moverDisparo();
-	bool Impacto(Personajes_carac& objetivo);
+	bool Impacto(Personaje& objetivo);
 
 };
 
