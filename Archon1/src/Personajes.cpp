@@ -2,15 +2,16 @@
 #include "Hechizos.h"
 #include "Disparos.h"
 
-Personajes_carac::Personajes_carac()
+//personaje::personaje(tipo_figura t, bando e, int x, int y)
+Personaje::Personaje()
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		nDisparos[i] = nullptr;
 }
 
-Personajes_carac Personajes_carac::crearPieza(Tipo tipo)
+Personaje Personaje::crearPieza(Tipo_figura tipo)
 {
-	Personajes_carac pieza;
+	Personaje pieza;
 	pieza.setTipo(tipo);
 
 	//DECIDIR CARACTERISTICAS SEGUN EL TIPO DE PIEZA
@@ -64,7 +65,7 @@ Personajes_carac Personajes_carac::crearPieza(Tipo tipo)
 	return pieza;
 }
 
-void Personajes_carac::lanzarDisparo()
+void Personaje::lanzarDisparo()
 {
 	if (tipo != ARQUERO) return;
 
@@ -84,7 +85,7 @@ void Personajes_carac::lanzarDisparo()
 	}
 }
 
-void Personajes_carac::gestionarDisparos(Personajes_carac& enemigo)
+void Personaje::gestionarDisparos(Personaje& enemigo)
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		if (nDisparos[i] != nullptr)
@@ -100,7 +101,7 @@ void Personajes_carac::gestionarDisparos(Personajes_carac& enemigo)
 		}
 }
 
-void Personajes_carac::actualizarEfectos()
+void Personaje::actualizarEfectos()
 {
 	if (t_paralisis > 0)
 	{

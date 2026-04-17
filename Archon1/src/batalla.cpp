@@ -6,7 +6,7 @@
 
 using std::cout, std::cin, std::endl;
 
-void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
+void pegar(Personaje& atacante, Personaje& objetivo,
 	double x1, double y1, double x2, double y2)
 {
 	if (atacante.return_Tipo() == ARQUERO) //EL ARQUERO NO PEGA, SOLO DISPARA
@@ -26,7 +26,7 @@ void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
 	objetivo.setVida(nuevaVida);
 }
 
-void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
+void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,
 				 double x1, double y1, double x2, double y2)
 {
 	switch (key)
@@ -52,7 +52,7 @@ void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
 	}
 }
 
-void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2)
+void actualizarCombate(Personaje& j1, Personaje& j2)
 {
 	for (int i=0;i<3;i++)
 		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
@@ -64,7 +64,7 @@ void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2)
 	j2.actualizarEfectos();
 }
 
-int FinalBatalla(Personajes_carac& humanos, Personajes_carac& aliens)
+int FinalBatalla(Personaje& humanos, Personaje& aliens)
 {
 	//RETORNA 0 SI SIGUEN PELEANDO
 	//RETORNA 1 SI HUMANOS GANAN

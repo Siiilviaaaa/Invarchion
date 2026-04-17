@@ -29,7 +29,7 @@ void Disparo::moverDisparo()
 	if (x < 0 || x > 800 || y < 0 || y > 600) activo = false;
 }
 
-bool Disparo::Impacto(Personajes_carac& objetivo)
+bool Disparo::Impacto(Personaje& objetivo)
 {
 	if (!activo) return false;
 

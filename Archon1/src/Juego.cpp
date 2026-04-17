@@ -3,18 +3,22 @@
 ///VARIABLE GLOBAL DEFINIDA EN HECHIZOS.CPP
 extern bool usoPocion;
 
-void Juego::IniciarJuego() {
+Juego::Juego():
+    turnoActual{ TurnoHumanos },
+    ejecutandose {true}
+{
+    
+    for (int i = 0; i < MAX_PERSONAJES;i++) {
+        figuras[i] = nullptr;
+    }
 
-    ejecutandose = 1;
+}
+void Juego::setBandoJugador(bando_jugador b)
+{
+    bandoJugador = b;
+}
 
-    //// Constructor cuando sepamos como va le añadiré cosas
-    //Juego();
 
-    //// Destructor lo mismo
-    //~Juego();
-
-    //hay que decri que se cree el menu, el teblero y la pantalla de batalla
-};
 
 void Juego::cambiarTurno() {
     if (turnoActual == TurnoHumanos) turnoActual = TurnoAliens;
@@ -28,27 +32,34 @@ int Juego::getTurno() {
     return turnoActual;
 }
 
-void Juego::procesarEntradas() {
+
+
+
+//void Juego::dibujarTablero() {
+//
+//}
+//
+//void Juego::dibujarCampoBatalla() {
+//
+//}
+//
+//void Juego::dibujarMenu() {
+//
+//}
+
+
+
+void Juego::JuegoHaTerminado()
+{
 
 }
 
-void Juego::actualizar() {
-	//actualizarCombate(j1, j2); //ME DA ERROR EN J1 Y J2
+void Juego::spawnPersonaje(Tipo_figura t, Bando e, int x, int y)
+{
+    for (int i = 0; i < MAX_PERSONAJES;i++) {
+        if (figuras[i] == nullptr) {
+            figuras[i] = new Personaje();
+        }
+    }
 }
 
-
-void Juego::dibujarTablero() {
-
-}
-
-void Juego::dibujarCampoBatalla() {
-
-}
-
-void Juego::dibujarMenu() {
-
-}
-
-void Juego::ejecutar() {
-
-}

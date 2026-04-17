@@ -64,7 +64,7 @@ void Hechizo::actualizarTiempos(double Time)
 }
 
 //HECHIZOS USADOS EN BATALLA
-void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
+void Hechizo::usar_Hechizo(int tipoHechizo, Personaje& objetivo)
 {
 	if (t_restante > 0)
 		return; //EN RECARGA
@@ -79,7 +79,7 @@ void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 }
 
 //HECHIZO USADO EN TABLERO
-void Hechizo::usar_Pocion(Personajes_carac& aliado)
+void Hechizo::usar_Pocion(Personaje& aliado)
 {
 	int nuevaVida;
 

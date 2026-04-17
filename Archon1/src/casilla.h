@@ -1,12 +1,9 @@
 #pragma once
+#include <Personajes.h> //he quitado en lo que definias los tipos de personajes, que ya estaba en personajes.h
 //definicion del tipo de casilla y todos sus atributos
 using byte = unsigned char;
-enum bando { HUMANO, ALIEN, NEUTRAL };
 
-//ELENA ESTO NO VA AQUI, ESTA EN PERSONAJES.H
-enum personaje{humano1, humano2, humano3, humano4, humano5, humano6, alien1, alien2, alien3, alien4, alien5, alien6};
-
-enum Tipocasilla { blanca, negra, lila };
+enum Tipocasilla { blanca, negra, lila};
 class Casilla
 {
 public:
@@ -16,8 +13,8 @@ public:
 	//estado de la logica
 	bool ocupada; //hay pieza??
 
-	bando tipo_bando;//de que bando es la pieza???
-	personaje tipo_personaje; //ELENA ESTO NO VA AQUI, ESTA EN PERSONAJES.H
+	Bando tipo_bando;//de que bando es la pieza
+	Tipo_figura tipo_personaje; 
 	Tipocasilla tipo_color;//color tablero
 
 //public:

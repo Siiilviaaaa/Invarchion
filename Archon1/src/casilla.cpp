@@ -8,7 +8,7 @@ Casilla::Casilla() {
     lado = 1.0f;
     tipo_color = blanca;
     ocupada = false;
-    tipo_bando = NEUTRAL;
+    //tipo_bando = NEUTRAL;
 }
 void Casilla::configurar(int f, int c, float l, Tipocasilla color_)
 {

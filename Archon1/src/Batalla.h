@@ -5,9 +5,9 @@
 #include "ETSIDI.h"
 
 //CABECERAS DE FUNCIONES
-void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
+void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,
 				double x1, double y1, double x2, double y2);
-int FinalBatalla(Personajes_carac& humanos, Personajes_carac& aliens);
-void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2);
-void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
+int FinalBatalla(Personaje& humanos, Personaje& aliens);
+void actualizarCombate(Personaje& j1, Personaje& j2);
+void pegar(Personaje& atacante, Personaje& objetivo,
 			double x1, double y1, double x2, double y2);
