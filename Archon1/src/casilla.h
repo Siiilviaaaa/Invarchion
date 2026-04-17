@@ -3,7 +3,7 @@
 //definicion del tipo de casilla y todos sus atributos
 using byte = unsigned char;
 
-enum Tipocasilla { blanca, negra, lila};
+enum Tipocasilla { blanca, negra, lila}; //porfi define las casillas especiales
 class Casilla
 {
 public:

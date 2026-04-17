@@ -2,6 +2,7 @@
 #include "Juego.h"
 #include "tablero.h"
 #include "Personajes.h"
+#include <iostream>
 
 ///VARIABLE GLOBAL DEFINIDA EN HECHIZOS.CPP
 extern bool usoPocion;
@@ -52,8 +53,7 @@ int Juego::getTurno() {
 
 HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp de cada movimiento
 {
-
-    //condicion de "exterminio"--> matan a todas las piezas de un bando
+    //condicion de "EXTERMINIO >:o"--> matan a todas las piezas de un bando
     int contador_humanos{};
     int contador_aliens{};
     for (int i = 0;i < MAX_PERSONAJES;i++) {//se recorren todos los personajes y se cuantos quedan vivos
@@ -63,9 +63,18 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
         }
     }
 
-    if (contador_humanos == 0) return GanaronAliens;
-    if (contador_aliens == 0) return GanaronAliens;
+    if (contador_humanos == 0) {
+        std::cout << "ganaron aliens por exterminio >:o";
+        return GanaronAliens;
+    }
+    if (contador_aliens == 0) {
+        std::cout << "ganaron humanos por exterminio >:o";
+        return GanaronAliens;
+    }
     if (contador_aliens > 0 && contador_humanos > 0) return AunEnCurso;
+
+
+    //condicion de que estan las casillas guays ocuapadas (necesito que se añadan esas casillas)
 }
 
 void Juego::spawnPersonaje(Tipo_figura t, Bando e, int x, int y)
