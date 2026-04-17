@@ -20,9 +20,10 @@ Estado estado = MENU;
 //RECORDAD QUE YO SIEMPRE PONGO MENSAJES EN EL SHELL PARA SABER Q ESTAMOS HACIENDO Y SI LA FUNCIONALIDAD VA Y LO Q ME FALLA SON LOS GRÁFICOS
 //
 
-Juego juego; // <--- ESTO ES LO QUE FALTA
+
 Menu miMenu;
 Tablero miTablero;
+Juego juego(&miTablero); // <--- ESTO ES LO QUE FALTA
 
 void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
 { //esto no debería de ir en una funcion por separado?

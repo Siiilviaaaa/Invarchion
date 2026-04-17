@@ -52,4 +52,10 @@ void Casilla::dibuja() {
     glPopMatrix();
 }
 
+Bando Casilla::ComprobarSiHayPiezaEncima(int x, int y)
+{
+    Bando bandoRetornado{};
+    return bandoRetornado;
+}
+
 

@@ -1,5 +1,6 @@
 #pragma once
-#include <Personajes.h>
+#include "Personajes.h"
+#include "tablero.h"
 
 #define MAX_PERSONAJES 20
 
@@ -11,20 +12,27 @@ enum bando_jugador {
 	Bando_jugador_es_Humano,
 	Bando_jugador_es_Alien
 };
+
+enum HanGanado {
+	AunEnCurso,
+	GanaronHumanos,
+	GanaronAliens
+};
+
 class Juego
 {
 private:
-
+	Tablero* ptrTablero;
 	
 	Turno turnoActual{ TurnoHumanos };
 	bool ejecutandose{ 0 };
-	bando_jugador bandoJugador;
-
+	bando_jugador bandoJugador{};
+	HanGanado estado_victoria;
 	Personaje* figuras[MAX_PERSONAJES]; //hay 20 figuritas en el tablero
 
 public:
 
-	Juego();
+	Juego(Tablero* t);
 
 	int getTurno();
 
@@ -43,7 +51,7 @@ public:
 
 	//void dibujarMenu();
 
-	void JuegoHaTerminado();
+	HanGanado DeterminarSiJuegoHaTerminado();
 
 	void spawnPersonaje(Tipo_figura t, Bando e, int x, int y);
 

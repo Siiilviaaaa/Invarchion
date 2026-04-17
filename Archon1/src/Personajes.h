@@ -8,6 +8,7 @@ enum Bando { HUMANO, ALIEN };
 class Personaje
 {
 	Tipo_figura tipo;
+	Bando bando;
 	int vida;
 	int danio;
 	double velocidad;
@@ -28,6 +29,7 @@ public:
 	Personaje();
 	////////////GETTERS/////////////////
 	Tipo_figura return_Tipo() const { return tipo; }
+	Bando return_Bando()const { return bando; }
 	int return_Vida() const { return vida; }
 	int return_Danio() const { return danio; }
 	double return_X() const { return x; }

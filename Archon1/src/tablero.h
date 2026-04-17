@@ -4,12 +4,14 @@
 
 #include "freeglut.h" // Para las funciones de dibujo de OpenGL
 
+#define ANCHO_TABLERO 5
+#define ALTO_TABLERO 7
 //ELENA CREO QUE ESTO VA AQUI, LO DEJO TODO COMENTADO POR SI ACASO, SOY SILVIA ;)
 //#include "Personajes.h" //PARA PODER POSICIONAR LAS PIEZAS
 
 class Tablero {
 private:
-    Casilla matriz[5][7];
+    Casilla matriz[ANCHO_TABLERO][ALTO_TABLERO];
     float lado;
     int turno; //por ejemplo 0 para humanos y 1 para aliens
 
