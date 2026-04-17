@@ -148,12 +148,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\lib;..\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>ETSIDI.lib;freeglut.lib;</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -166,12 +166,12 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\lib;..\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>ETSIDI.lib;freeglut.lib;</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

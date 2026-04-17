@@ -1,11 +1,14 @@
+#pragma once
 #include "Juego.h"
+#include "tablero.h"
+#include "Personajes.h"
+#include <iostream>
 
 ///VARIABLE GLOBAL DEFINIDA EN HECHIZOS.CPP
 extern bool usoPocion;
 
-Juego::Juego():
-    turnoActual{ TurnoHumanos },
-    ejecutandose {true}
+Juego::Juego(Tablero* t) :
+    ptrTablero(t)
 {
     
     for (int i = 0; i < MAX_PERSONAJES;i++) {
@@ -17,7 +20,6 @@ void Juego::setBandoJugador(bando_jugador b)
 {
     bandoJugador = b;
 }
-
 
 
 void Juego::cambiarTurno() {
@@ -49,9 +51,30 @@ int Juego::getTurno() {
 
 
 
-void Juego::JuegoHaTerminado()
+HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp de cada movimiento
 {
+    //condicion de "EXTERMINIO >:o"--> matan a todas las piezas de un bando
+    int contador_humanos{};
+    int contador_aliens{};
+    for (int i = 0;i < MAX_PERSONAJES;i++) {//se recorren todos los personajes y se cuantos quedan vivos
+        if (figuras[i] != nullptr && figuras[i]->return_Vida() > 0) {
+            if (figuras[i]->return_Bando() == HUMANO) contador_humanos++;
+            else contador_aliens++;
+        }
+    }
 
+    if (contador_humanos == 0) {
+        std::cout << "ganaron aliens por exterminio >:o";
+        return GanaronAliens;
+    }
+    if (contador_aliens == 0) {
+        std::cout << "ganaron humanos por exterminio >:o";
+        return GanaronAliens;
+    }
+    if (contador_aliens > 0 && contador_humanos > 0) return AunEnCurso;
+
+
+    //condicion de que estan las casillas guays ocuapadas (necesito que se añadan esas casillas)
 }
 
 void Juego::spawnPersonaje(Tipo_figura t, Bando e, int x, int y)

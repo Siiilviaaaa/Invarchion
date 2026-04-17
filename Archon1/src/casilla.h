@@ -3,7 +3,7 @@
 //definicion del tipo de casilla y todos sus atributos
 using byte = unsigned char;
 
-enum Tipocasilla { blanca, negra, lila};
+enum Tipocasilla { blanca, negra, lila}; //porfi define las casillas especiales
 class Casilla
 {
 public:
@@ -16,6 +16,7 @@ public:
 	Bando tipo_bando;//de que bando es la pieza
 	Tipo_figura tipo_personaje; 
 	Tipocasilla tipo_color;//color tablero
+	
 
 //public:
 	Casilla();
@@ -25,6 +26,8 @@ public:
 	int fila()const { return fila_; }
 	void columna(int c) { columna_ = c; }
 	int columna()const { return columna_; }
+
+	Bando ComprobarSiHayPiezaEncima(int x, int y);//develveme personaje.bando, asi yo se q si es null no hay nada y si no, que pieza hay, gracias
 	//void x(double x) { x_= x; }
 	//double x() const{ return x_; }
 	//void y(double y) { y_ = y; }
