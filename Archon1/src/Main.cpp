@@ -6,6 +6,7 @@
 #include "Juego.h"
 #include "casilla.h"
 #include "menu.h"
+#include "dibujo_tablero.h"
 #include <cctype>
 
 
@@ -23,6 +24,7 @@ Estado estado = MENU;
 
 Menu miMenu;
 Tablero miTablero;
+Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
 Juego juego(&miTablero); // <--- ESTO ES LO QUE FALTA
 
 void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
@@ -63,7 +65,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    miTablero.dibuja();
+    dibujo_tablero.dibuja();
  
   switch (estado) {
     case MENU:
@@ -78,7 +80,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
         gluLookAt(7.0, 5.0, 20.0,
             7.0, 5.0, 0.0,
             0.0, 1.0, 0.0);
-        miTablero.dibuja();
+        dibujo_tablero.dibuja();
         break;
     case RANKING:
         //pantallaRanking.draw();

@@ -13,9 +13,8 @@ int matrizArchon[5][7] = {
 
 };
 Tablero::Tablero() {
-    lado = 2.0f;
-    inicializa();//llamamos a q se inicialice la casilla
     turno = 0;
+    inicializa();//llamamos a q se inicialice la casilla
 }
 
 void Tablero::inicializa() {
@@ -29,78 +28,30 @@ void Tablero::inicializa() {
             case 2: tipo = lila; break;
             default: tipo = blanca;
             }
-            matriz[i][j].configurar(i, j, lado, tipo);
-            
+            datos[i][j] = InfoCasilla(tipo);
+            matriz[i][j] = Casilla(i, j, &datos[i][j]);
+                        
         }
     }
 }
 
-void Tablero::dibuja() {
-    //meter foto de fondo
-    glEnable(GL_TEXTURE_2D); // Activamos el uso de texturas
-    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/fondotablero.png").id);
-    glDisable(GL_LIGHTING); // Desactivamos luces para que la foto no se vea oscura
-    glColor3f(1, 1, 1);    // Color blanco puro para no teñir la foto
-    float m = 2.0f;
-    float ancho = 7 * lado;
-    float alto = 5 * lado;
-    glBegin(GL_POLYGON);
-   
-    glTexCoord2d(1, 1); glVertex3f(-m, -m, -0.1f);
-    glTexCoord2d(0, 1); glVertex3f(ancho + m, -m, -0.1f);
-    glTexCoord2d(0, 0); glVertex3f(ancho + m, alto + m, -0.1f);
-    glTexCoord2d(1, 0); glVertex3f(-m, alto + m, -0.1f);
-    glEnd();
 
-    glDisable(GL_TEXTURE_2D); 
-    glEnable(GL_LIGHTING); 
-
-    glPushMatrix();
-    //para el fondo del tablero cambie de color segun turno
-    if (turno == 0)
-        glColor3f(0.0f, 0.3f, 0.6f);
-    else
-        glColor3f(0.6f, 0.0f, 0.0f);
-
-
-    float anchoTotal = 7 * lado;
-    float altoTotal = 5 * lado;
-    glLineWidth(7.0f);
-    glBegin(GL_LINE_LOOP);
-    glVertex3f(0, 0, 0.05f);
-    glVertex3f(anchoTotal, 0, 0.05f);
-    glVertex3f(anchoTotal, altoTotal, 0.05f);
-    glVertex3f(0, altoTotal, 0.05f);
-    glEnd();
-
-    glPopMatrix();
-
-    //dibujar el tablero llamando a las casillas, iterando sobre la matriz
-    glDisable(GL_LIGHTING);
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 7; j++) {
-            matriz[i][j].dibuja(); // Cada casilla ya sabe dónde está y su color
-        }
-    }
-    glEnable(GL_LIGHTING);
-}
-
-//le devuelvo a sofia una casilla con todos sus atributos para que los compare
-Casilla Tablero::datos_casilla(int x, int y)
-{
-    Casilla casilla_ = matriz[x][y];
-    return casilla_;
-}
-
-void Tablero::vacia_casilla(int x, int y)
-{
-    matriz[x][y].ocupada = 0;
-}
-
-void Tablero::rellena_casilla(int x, int y, Casilla nueva)
-{
-    nueva = matriz[x][y]; //pensar si hace copia o borra lo q habia 
-}
+////le devuelvo a sofia una casilla con todos sus atributos para que los compare
+//Casilla Tablero::datos_casilla(int x, int y)
+//{
+//    Casilla casilla_ = matriz[x][y];
+//    return casilla_;
+//}
+//
+//void Tablero::vacia_casilla(int x, int y)
+//{
+//    matriz[x][y].ocupada = 0;
+//}
+//
+//void Tablero::rellena_casilla(int x, int y, Casilla nueva)
+//{
+//    nueva = matriz[x][y]; //pensar si hace copia o borra lo q habia 
+//}
 
 
 //INICIALIZAR POSICIONES PIEZAS
