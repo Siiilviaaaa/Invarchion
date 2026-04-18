@@ -6,6 +6,7 @@
 #include "Juego.h"
 #include "casilla.h"
 #include "menu.h"
+#include "dibujo_tablero.h"
 #include <cctype>
 
 
@@ -23,7 +24,7 @@ int bando_jugador{};//variable global que devuelve el bando del jugador y ese em
 Juego juego; // <--- ESTO ES LO QUE FALTA
 Menu miMenu;
 Tablero miTablero;
-
+Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
 void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
 {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
@@ -62,7 +63,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    miTablero.dibuja();
+    dibujo_tablero.dibuja();
  
   switch (estado) {
     case MENU:
@@ -77,7 +78,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
         gluLookAt(7.0, 5.0, 20.0,
             7.0, 5.0, 0.0,
             0.0, 1.0, 0.0);
-        miTablero.dibuja();
+        dibujo_tablero.dibuja();
         break;
     case RANKING:
         //pantallaRanking.draw();
