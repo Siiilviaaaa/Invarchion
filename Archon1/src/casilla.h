@@ -1,33 +1,24 @@
 #pragma once
+#include "Informacion Casilla.h"
 //definicion del tipo de casilla y todos sus atributos
-using byte = unsigned char;
-enum bando { HUMANO, ALIEN, NEUTRAL };
 
-//ELENA ESTO NO VA AQUI, ESTA EN PERSONAJES.H
-enum personaje{humano1, humano2, humano3, humano4, humano5, humano6, alien1, alien2, alien3, alien4, alien5, alien6};
-
-enum Tipocasilla { blanca, negra, lila };
 class Casilla
 {
-public:
 	//variables para la posicion
-	int fila_, columna_; //posicion en el espacio
-	float lado; //valor lado cubo
-	//estado de la logica
-	bool ocupada; //hay pieza??
+	int fila, columna; //posicion en el espacio
+	InfoCasilla* info;
+public:
+	Casilla(): fila(0), columna(0), info(nullptr){}
+	Casilla(int f_, int c_, InfoCasilla* info_):fila(f_), columna(c_), info(info_){}
 
-	bando tipo_bando;//de que bando es la pieza???
-	personaje tipo_personaje; //ELENA ESTO NO VA AQUI, ESTA EN PERSONAJES.H
-	Tipocasilla tipo_color;//color tablero
+	
+	int getfila()const { return fila; }
+	int getcolumna()const { return columna; }
+	InfoCasilla* getInfo() const { return info; }
 
-//public:
-	Casilla();
-	void configurar(int f, int c, float l, Tipocasilla color_);
-	void dibuja();
-	void fila(int f) { fila_ = f; }
-	int fila()const { return fila_; }
-	void columna(int c) { columna_ = c; }
-	int columna()const { return columna_; }
+	//void configurar(int f, int c, float l, Tipocasilla color_);
+	//void dibuja();
+	
 	//void x(double x) { x_= x; }
 	//double x() const{ return x_; }
 	//void y(double y) { y_ = y; }

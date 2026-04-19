@@ -2,18 +2,18 @@
 //declaracion del tablero a partir de las casillas
 #include "casilla.h"
 
-#include "freeglut.h" // Para las funciones de dibujo de OpenGL
+
 
 //ELENA CREO QUE ESTO VA AQUI, LO DEJO TODO COMENTADO POR SI ACASO, SOY SILVIA ;)
 //#include "Personajes.h" //PARA PODER POSICIONAR LAS PIEZAS
 
 class Tablero {
 private:
-    Casilla matriz[5][7];
-    float lado;
+    InfoCasilla datos[5][7]; //para la informacion
+    Casilla matriz[5][7]; 
+    
     int turno; //por ejemplo 0 para humanos y 1 para aliens
 
-    //Personajes_carac pieza[][];
 
 public:
     // Constructor
@@ -21,12 +21,14 @@ public:
 
     // Funciones principales
     void inicializa();
-    void dibuja();
-
-    // Getters por si los necesitas después
-    //int getFilas() { return filas; }
-    //int getCols() { return cols; }
-
+    const Casilla* getCasilla(int f, int c) const {
+        return &matriz[f][c];
+    }
+    Casilla* casillaModificable(int f, int c) {
+        return &matriz[f][c];
+    }
+    void cambiarTurno() { turno = (turno == 0) ? 1 : 0; }
+    int getTurno() const { return turno; }
     //INCIALIZAR POSICIONES PIEZAS
 	//void inicializarPiezas();
 

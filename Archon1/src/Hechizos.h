@@ -1,7 +1,7 @@
 #pragma once
 #include "ETSIDI.h"
 
-class Personajes_carac; //DECLARACION ANTICIPADA
+class Personaje; //DECLARACION ANTICIPADA
 
 class Hechizo
 {
@@ -24,8 +24,8 @@ public:
 	Hechizo(); //CONSTRUCTOR 
 	void configurar(TipoHechizo t);
 	void dibujarHechizo();
-	void usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo);
-	void usar_Pocion(Personajes_carac& aliado);
+	void usar_Hechizo(int tipoHechizo, Personaje& objetivo);
+	void usar_Pocion(Personaje& aliado);
 	void actualizarTiempos(double Time);  //ACTUALIZA TIEMPOS DE RECARGA
 };
 
