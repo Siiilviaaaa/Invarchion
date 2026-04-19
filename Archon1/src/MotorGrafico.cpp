@@ -114,14 +114,13 @@ void MotorGrafico::dibujarVida_Muerte(const Personaje& humano, const Personaje& 
 {
 	//BARRA HUMANOS (IZQ)
 	float porcentaje_h = (float)humano.return_Vida() / humano.return_VidaMax();
-	int frame = 10;
+	int frame = 10; //NO SE MUY BIEN COMO AJUSTAR LOS FRAMES
 
 	barraVida.setPos(5.0, 18.0);
 	barraVida.draw();
 
 	//BARRA ALIENS (DCH)
 	float porcentaje_a = (float)alien.return_Vida() / alien.return_VidaMax();
-	int frame = 10; //NO SE MUY BIEN COMO AJUSTAR LOS FRAMES
 
 	barraVida.setPos(15.0, 18.0);
 	barraVida.draw();
