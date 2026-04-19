@@ -2,7 +2,7 @@
 
 class Disparo;
 
-enum Tipo_figura { SOLDADO, ARQUERO, VOLADOR, EXCAVADOR, HECHICERO };
+enum Tipo_figura { LUCHADOR, ARQUERO, VOLADOR, EXCAVADOR, HECHICERO };
 enum Bando { HUMANO, ALIEN };
 
 class Personaje
