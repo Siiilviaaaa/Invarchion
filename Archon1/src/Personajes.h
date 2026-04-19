@@ -40,7 +40,7 @@ public:
 	///////////SETTERS/////////////////
 	void setTipo(Tipo_figura nuevoTipo) { tipo = nuevoTipo; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }
-	void setDanio(int nuevoDaño) { danio = nuevoDaño; }
+	void setDanio(int nuevoDanio) { danio = nuevoDanio; }
 	void setVelocidad(double nuevaVelocidad) { velocidad = nuevaVelocidad; }
 	void setV_base(double nuevaVBase) { vel_base = nuevaVBase; }
 	void setX(double nuevaX) { x = nuevaX; }

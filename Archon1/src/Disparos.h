@@ -1,5 +1,4 @@
 #pragma once
-#include "ETSIDI.h"
 
 class Personaje; //DECLARACION ANTICIPADA
 
@@ -9,8 +8,6 @@ class Disparo
 	double velo_x, velo_y; // VELOCIDAD
 	int danio; // DAÑO QUE CAUSA
 	bool activo; // SI ESTA O NO EN PANTALLA
-
-	ETSIDI::Sprite flecha;
 
 public:
 	//////////GETTERS Y SETTERS///////////
@@ -23,9 +20,7 @@ public:
 
 	////////////////METODOS///////////////
 	Disparo();//COSNTRUCTOR
-	void dibujarDisparo();
 	void moverDisparo();
 	bool Impacto(Personaje& objetivo);
-
 };
 

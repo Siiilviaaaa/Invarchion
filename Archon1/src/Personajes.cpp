@@ -91,7 +91,6 @@ void Personaje::gestionarDisparos(Personaje& enemigo)
 		if (nDisparos[i] != nullptr)
 		{
 			nDisparos[i]->moverDisparo();
-			nDisparos[i]->dibujarDisparo();
 
 			if (nDisparos[i]->Impacto(enemigo) || !nDisparos[i]->return_Activo())
 			{ //SI NO ESTA ACTIVO Y SI IMPACTA

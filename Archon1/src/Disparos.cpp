@@ -2,7 +2,7 @@
 #include "Disparos.h"
 #include "Personajes.h"
 
-Disparo::Disparo() : flecha("Recursos/flecha.png")
+Disparo::Disparo()
 {
 	x = 0.0;
 	y = 0.0;
@@ -10,14 +10,6 @@ Disparo::Disparo() : flecha("Recursos/flecha.png")
 	velo_y = 0.0;
 	danio = 15;
 	activo = false;
-}
-
-void Disparo::dibujarDisparo()
-{
-	if (!activo) return;
-
-	flecha.setPos(x, y);
-	flecha.draw();
 }
 
 void Disparo::moverDisparo()
@@ -42,6 +34,5 @@ bool Disparo::Impacto(Personaje& objetivo)
 		activo = false; //DESACTIVAR DISPARO AL CHOCAR
 		return true;
 	}
-
 	return false;
 }
