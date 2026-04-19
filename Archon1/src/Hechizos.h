@@ -17,6 +17,10 @@ private:
 
 public:
 	double return_RESTANTE() const { return t_restante; }
+	bool return_Activo() const { return activo; }
+	TipoHechizo return_Tipo() const { return tipo; }
+	double return_X() const { return posX; }
+	double return_Y() const { return posY; }
 
 	Hechizo(); //CONSTRUCTOR 
 	void configurar(TipoHechizo t);
