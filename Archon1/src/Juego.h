@@ -1,43 +1,60 @@
 #pragma once
+#include "Personajes.h"
+#include "tablero.h"
+
+#define MAX_PERSONAJES 20
+
+enum Turno : int {
+	TurnoHumanos,
+	TurnoAliens
+};
+enum bando_jugador {
+	Bando_jugador_es_Humano,
+	Bando_jugador_es_Alien
+};
+
+enum HanGanado {
+	AunEnCurso,
+	GanaronHumanos,
+	GanaronAliens
+};
 
 class Juego
 {
 private:
-	enum EstadosJuego :int {
-		EstadoMenu,
-		EstadoTablero,
-		EstadoBatalla,
-		EstadoFinDePartida
-	};
-
-	enum Turno : int {
-		TurnoHumanos,
-		TurnoAliens
-	};
-
+	Tablero* ptrTablero;
+	
 	Turno turnoActual{ TurnoHumanos };
 	bool ejecutandose{ 0 };
+	bando_jugador bandoJugador{};
+	HanGanado estado_victoria;
+	Personaje* figuras[MAX_PERSONAJES]; //hay 20 figuritas en el tablero
 
 public:
 
-	void IniciarJuego();
+	Juego(Tablero* t);
 
 	int getTurno();
 
+	void setBandoJugador(bando_jugador b);
+
 	void cambiarTurno();
 
-	void procesarEntradas(); //teclas y tal
+	//void procesarEntradas(); //teclas y tal
 
-	void actualizar();
+	//void actualizar();
 
-	
-	void dibujarTablero();
+	//
+	//void dibujarTablero();
 
-	void dibujarCampoBatalla();
+	//void dibujarCampoBatalla();
 
-	void dibujarMenu();
+	//void dibujarMenu();
 
-	void ejecutar();
+	HanGanado DeterminarSiJuegoHaTerminado();
+
+	void spawnPersonaje(Tipo_figura t, Bando e, int x, int y);
+
 
 
 };

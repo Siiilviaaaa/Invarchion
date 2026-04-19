@@ -1,47 +1,13 @@
 #pragma once
 #include "Personajes.h"
 #include "freeglut.h"
-
-//VARIABLES GLOBALES DEFINIDAS EN BATALLA.CPP
-extern bool usoPocion;
+#include "Juego.h"
+#include "ETSIDI.h"
 
 //CABECERAS DE FUNCIONES
-void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
-				double x1, double y1, double x2, double y2, GLuint flecha);
-void start_combat(Personajes_carac& humanos, Personajes_carac& aliens);
-void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
+void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,
+				double x1, double y1, double x2, double y2);
+int FinalBatalla(Personaje& humanos, Personaje& aliens);
+void actualizarCombate(Personaje& j1, Personaje& j2);
+void pegar(Personaje& atacante, Personaje& objetivo,
 			double x1, double y1, double x2, double y2);
-void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2);
-
-////////CLASES//////
-class Disparo
-{
-	double x, y; // POSICION
-	double velo_x, velo_y; // VELOCIDAD
-	int danio; // DAÑO QUE CAUSA
-	bool activo; // SI ESTA O NO EN PANTALLA
-	GLuint flecha; // IMAGEN
-
-public:
-	Disparo(); //CONSTRUCTOR
-	void crearDisparo(double posX, double posY, GLuint png);
-	void actualizarDisparos(Personajes_carac& j1, Personajes_carac& j2);
-};
-
-class Hechizo
-{
-	GLuint imagen;
-	int usos_max;
-	int usos_restantes;
-	bool activo; // "HECHIZO LANZADO DE MANERA VISUAL"
-	double posX, posY; // POSICION DEL HECHIZO EN PANTALLA
-
-	double t_recarga; // TIEMPO TOTAL DE RECARGA
-	double t_restante; // TIEMPO RESTANTE PARA USAR DE NUEVO
-
-public:
-	Hechizo(); //CONSTRUCTOR
-	void conf_Hechizos(); //DIFERENCIAR TIPOS DE HECHIZOS
-	void usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo);
-	void usar_Pocion(Personajes_carac& aliado);
-};

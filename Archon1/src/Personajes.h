@@ -1,49 +1,59 @@
 #pragma once
-#include <iostream>
 
-enum Tipo { SOLDADO, ARQUERO, VOLADOR, EXCAVADOR, HECHICERO };
+class Disparo;
 
-class Personajes_carac
+enum Tipo_figura { SOLDADO, ARQUERO, VOLADOR, EXCAVADOR, HECHICERO };
+enum Bando { HUMANO, ALIEN };
+
+class Personaje
 {
-	Tipo tipo;
+	Tipo_figura tipo;
+	Bando bando;
 	int vida;
 	int danio;
 	double velocidad;
+	double vel_base;
 	double x, y;
 
-	//TIEMPO DURACION HECHIZOS
+	//DISPAROS
+	static const int MAX_DISPAROS = 10;
+	Disparo* nDisparos[MAX_DISPAROS];
+
+	//HECHIZOS
 	double t_paralisis;
 	double t_hiperVelocidad;
-
 	int vida_max; //VARIABLE PARA COMPROBAR SU USAR POCION
 
 public:
-
-	static Personajes_carac crearPieza(Tipo tipo);
-
-	//LEER LOS VALORES
-	Tipo return_Tipo() const { return tipo; }
+	//Personaje(Tipo_figura t, Bando e, int x, int y);
+	Personaje();
+	////////////GETTERS/////////////////
+	Tipo_figura return_Tipo() const { return tipo; }
+	Bando return_Bando()const { return bando; }
 	int return_Vida() const { return vida; }
 	int return_Danio() const { return danio; }
-	double return_Velocidad() const { return velocidad; }
 	double return_X() const { return x; }
 	double return_Y() const { return y; }
-
-	double return_paralisis() const { return t_paralisis; }
-	double return_hiperVelocidad() const { return t_hiperVelocidad; }
-
+	double return_Vbase() const { return vel_base; }
 	int return_VidaMax() const { return vida_max; }
 
-	//MODIFICAN NUEVOS VALORES
-	void setTipo(Tipo nuevoTipo) { tipo = nuevoTipo; }
+	///////////SETTERS/////////////////
+	void setTipo(Tipo_figura nuevoTipo) { tipo = nuevoTipo; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }
 	void setDanio(int nuevoDaño) { danio = nuevoDaño; }
 	void setVelocidad(double nuevaVelocidad) { velocidad = nuevaVelocidad; }
+	void setV_base(double nuevaVBase) { vel_base = nuevaVBase; }
 	void setX(double nuevaX) { x = nuevaX; }
 	void setY(double nuevaY) { y = nuevaY; }
 
-	double set_paralisis(double nuevoTiempo) { t_paralisis = nuevoTiempo; }
-	double set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
+	void set_paralisis(double nuevoTiempo) { t_paralisis = nuevoTiempo; }
+	void set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
 
-	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }	
+	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
+
+	//////////METODOS//////////////
+	static Personaje crearPieza(Tipo_figura tipo);
+	void actualizarEfectos();
+	void gestionarDisparos(Personaje& enemigo);
+	void lanzarDisparo();
 };

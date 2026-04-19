@@ -6,48 +6,42 @@
 #include "Juego.h"
 #include "casilla.h"
 #include "menu.h"
+#include "dibujo_tablero.h"
 #include <cctype>
 
 
 using std::cout, std::cin, std::endl;
 
-//IMPORTANTE AÑADIR LOS ENUM Q HAGAN FALTA
+//IMPORTANTE AÃ‘ADIR LOS ENUM Q HAGAN FALTA
 enum Estado { MENU, SELECCION, JUEGO, RANKING };
 Estado estado = MENU;
-int bando_jugador{};//variable global que devuelve el bando del jugador y ese empieza primero
+//variable global que devuelve el bando del jugador y ese empieza primero
 
 //
-//RECORDAD QUE YO SIEMPRE PONGO MENSAJES EN EL SHELL PARA SABER Q ESTAMOS HACIENDO Y SI LA FUNCIONALIDAD VA Y LO Q ME FALLA SON LOS GRÁFICOS
+//RECORDAD QUE YO SIEMPRE PONGO MENSAJES EN EL SHELL PARA SABER Q ESTAMOS HACIENDO Y SI LA FUNCIONALIDAD VA Y LO Q ME FALLA SON LOS GRÃFICOS
 //
-
-
-//TIPOS DE HECHIZOS:  CREACION EN PROCESO
-//- REDUCIR VELOCIDAD ENEMIGO hechizos[0]--> 2 VECES POR TURNO
-//- AUMENTAR VELOCIDAD ALIADO hechizos[1]--> 2 VECES POR TURNO
-//- RESTAURAR PARTE DE LA VIDA ALIADO hechizo[2]--> ACTIVO EN TABLERO --> 1 VEZ POR TURNO Y SE PIERDE TURNO
-
-Juego juego; // <--- ESTO ES LO QUE FALTA
-
 
 
 Menu miMenu;
 Tablero miTablero;
+Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
+Juego juego(&miTablero); // <--- ESTO ES LO QUE FALTA
 
-void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
-{
+void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menÃº
+{ //esto no deberÃ­a de ir en una funcion por separado?
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         if (estado == MENU) {
-            //BOTÓN EXIT (Centro: 178, 182)
+            //BOTÃ“N EXIT (Centro: 178, 182)
             if (x > 100 && x < 250 && y > 120 && y < 250) {
                 std::cout << "[CLICK] Saliendo del juego..." << std::endl;
                 exit(0);
             }
-            //BOTÓN JUGAR (Centro: 399, 399)
+            //BOTÃ“N JUGAR (Centro: 399, 399)
             if (x > 270 && x < 530 && y > 290 && y < 510) {
-                std::cout << "[CLICK] ¡A JUGAR!" << std::endl;
+                std::cout << "[CLICK] Â¡A JUGAR!" << std::endl;
                 estado = SELECCION;
             }
-            //BOTÓN RANKING (Centro: 622, 183)
+            //BOTÃ“N RANKING (Centro: 622, 183)
             if (x > 550 && x < 700 && y > 120 && y < 250) {
                 std::cout << "[CLICK] Abriendo Ranking..." << std::endl;
                 estado = RANKING;
@@ -59,11 +53,11 @@ void mouse(int button, int state, int x, int y) //esta funcion detecta los click
         }
 
     }
-    cout << "SOFIA-PRUEBA-MERGE";
+    
 }
 
-void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado de batalla con su respectiva camara, creo q es de Elena eso
-                  //también he conservado la posición original del tablero y he movido yo mi menú para q no hubiera problemas
+void OnDraw(void) //aqui dentro estÃ¡ el switch al que hay q aÃ±adir el estado de batalla con su respectiva camara, creo q es de Elena eso
+                  //tambiÃ©n he conservado la posiciÃ³n original del tablero y he movido yo mi menÃº para q no hubiera problemas
 {
    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -71,7 +65,9 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado de 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    switch (estado) {
+    dibujo_tablero.dibuja();
+ 
+  switch (estado) {
     case MENU:
         //primero camara
         gluLookAt(50.0, 50.0, 20.0,
@@ -84,20 +80,20 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado de 
         gluLookAt(7.0, 5.0, 20.0,
             7.0, 5.0, 0.0,
             0.0, 1.0, 0.0);
-        miTablero.dibuja();
+        dibujo_tablero.dibuja();
         break;
     case RANKING:
         //pantallaRanking.draw();
         break;
     case SELECCION:
-        // Mantenengo la misma cámara que el menú para que se siga vienda debajo que queda bien
+        // Mantenengo la misma cÃ¡mara que el menÃº para que se siga vienda debajo que queda bien
         gluLookAt(50.0, 50.0, 20.0,
             50.0, 50.0, 0.0,
             0.0, 1.0, 0.0);
 
-        // Dibujo el menú de fondo (para que no desaparezca)
+        // Dibujo el menÃº de fondo (para que no desaparezca)
         miMenu.dibuja_menu();
-        // Dibujo la capa de selección encima
+        // Dibujo la capa de selecciÃ³n encima
         miMenu.dibuja_capa_seleccion();
         break;
     }
@@ -105,10 +101,10 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado de 
     glutSwapBuffers();   
 }
 
-void OnTimer(int value) //no tengo 100% claro si es estrictamente necesaria pero yo la he añadido pq me facilitaba la vida
+void OnTimer(int value) //no tengo 100% claro si es estrictamente necesaria pero yo la he aÃ±adido pq me facilitaba la vida
 {
     glutPostRedisplay();
-    // Se vuelve a llamar a sí misma cada 20ms (unos 50 FPS)
+    // Se vuelve a llamar a sÃ­ misma cada 20ms (unos 50 FPS)
     glutTimerFunc(20, OnTimer, 0);
 }
 
@@ -120,14 +116,15 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
 
         if (key == 'h') {
             std::cout << "[SISTEMA] Has elegido: HUMANOS. Iniciando despliegue..." << std::endl;
-            bando_jugador = 1; // La que hay al principio como global (1: Humanos, 2: Aliens)
+            juego.setBandoJugador(Bando_jugador_es_Humano);
             estado = JUEGO;
         }
         else if (key == 'a') {
-            std::cout << "[SISTEMA] Has elegido: ALIENS. Iniciando invasión..." << std::endl;
-            bando_jugador = 2;
+            std::cout << "[SISTEMA] Has elegido: ALIENS. Iniciando invasiÃ³n..." << std::endl;
+            juego.setBandoJugador(Bando_jugador_es_Alien);
             estado = JUEGO;
         }
+
 
         // Refresco de pantalla para q se pinte
         glutPostRedisplay();
@@ -157,12 +154,12 @@ int main(int argc, char** argv) {
     glLoadIdentity();
     gluPerspective(40.0, 800 / 600.0f, 0.1, 150);
 
-    //esto todo habrá q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
+    //esto todo habrÃ¡ q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
     cout << "Reproduciendo..." << std::endl;
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
     ETSIDI::play("extra/mi_musica.mp3");
 
-//aqui he añadido alguna mia
+//aqui he aÃ±adido alguna mia
     glutMouseFunc(mouse);
     glutTimerFunc(20, OnTimer, 0);
     glutDisplayFunc(OnDraw);
