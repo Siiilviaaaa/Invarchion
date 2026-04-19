@@ -1,13 +1,25 @@
 #include "MotorGrafico.h"
 
-MotorGrafico::MotorGrafico():
-	calavera ("Recursos/calavera.png"),
-	Flecha ("Recursos/flecha.png"),
-	Paralisis ("Recursos/hechizo1.png"),
-	Velocidad ("Recursos/hechizo2.png"),
-	Pocion ("Recursos/pocion.png")
+MotorGrafico::MotorGrafico() :
+	luchador("Recursos/luchador.png"),
+	soldado("Recursos/soldado.png"),
+	volador("Recursos/volador.png"),
+	minero("Recursos/minero.png"),
+	hechicero("Recursos/hechicero.png"),
+
+	golem("Recursos/golem.png"),
+	arquero("Recursos/arquero.png"),
+	murcielago("Recursos/murcielago.png"),
+	gusano("Recursos/gusano.png"),
+	mago("Recursos/mago.png"),
+
+	barraVida("Recursos/barra.png"),
+	calavera("Recursos/calavera.png"),
+	Flecha("Recursos/flecha.png"),
+	Paralisis("Recursos/hechizo1.png"),
+	Velocidad("Recursos/hechizo2.png"),
+	Pocion("Recursos/pocion.png")
 {
-	calavera.setSize(1.2, 1.2);
 }
 
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
