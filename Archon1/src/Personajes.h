@@ -25,8 +25,13 @@ class Personaje
 	int vida_max; //VARIABLE PARA COMPROBAR SU USAR POCION
 
 public:
+	static int puntuacionHumanos;
+	static int puntuacionAliens;
+	void sumarPuntos(int puntos);
+
 	//Personaje(Tipo_figura t, Bando e, int x, int y);
 	Personaje();
+
 	////////////GETTERS/////////////////
 	Tipo_figura return_Tipo() const { return tipo; }
 	Bando return_Bando()const { return bando; }

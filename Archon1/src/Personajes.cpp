@@ -2,11 +2,23 @@
 #include "Hechizos.h"
 #include "Disparos.h"
 
+////VARIABLES GLOBALES
+int Personaje::puntuacionHumanos = 0;
+int Personaje::puntuacionAliens = 0;
+
 //personaje::personaje(tipo_figura t, bando e, int x, int y)
 Personaje::Personaje()
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		nDisparos[i] = nullptr;
+}
+
+void Personaje::sumarPuntos(int puntos)
+{
+	if (bando == HUMANO)
+		puntuacionHumanos += puntos;
+	else
+		puntuacionAliens += puntos;
 }
 
 Personaje Personaje::crearPieza(Tipo_figura tipo)
@@ -17,7 +29,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo)
 	//DECIDIR CARACTERISTICAS SEGUN EL TIPO DE PIEZA
 	switch (tipo)
 	{
-	case SOLDADO:
+	case LUCHADOR:
 		pieza.setVida(100);
 		pieza.setDanio(10);
 		pieza.setV_base(0.8);

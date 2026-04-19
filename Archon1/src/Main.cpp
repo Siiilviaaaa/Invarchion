@@ -1,6 +1,6 @@
 #include <iostream>
 #include "freeglut.h"
-#include "ETSIDI.h"
+#include "MotorGrafico.h"
 #include "tablero.h"
 #include "Batalla.h"
 #include "Juego.h"
