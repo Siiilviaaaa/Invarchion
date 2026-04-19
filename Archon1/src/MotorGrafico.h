@@ -21,6 +21,8 @@ class MotorGrafico
 	ETSIDI::Sprite mago; //SIN HACER
 	
 	////ELEMENTOS BATALLA////
+	ETSIDI::Sprite barraVida;
+	ETSIDI::Sprite calavera;
 	ETSIDI::Sprite Flecha;
 	ETSIDI::Sprite Paralisis;
 	ETSIDI::Sprite Velocidad;
@@ -32,9 +34,9 @@ class MotorGrafico
 
 public:
 	MotorGrafico();
-	~MotorGrafico();
 	void dibujarDisparo(const Disparo& disparo);
 	void dibujarHechizo(const Hechizo& hechizo);
 	void dibujarPersonaje(const Personaje& personaje);
+	void dibujarCalavera(const Personaje& personaje);
 };
 

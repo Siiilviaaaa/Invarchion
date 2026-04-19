@@ -1,12 +1,13 @@
 #include "MotorGrafico.h"
 
 MotorGrafico::MotorGrafico():
-	Flecha("Recursos/flecha.png"),
-	Paralisis("Recursos/hechizo1.png"),
-	Velocidad("Recursos/hechizo2.png"),
-	Pocion("Recursos/pocion.png")
+	calavera ("Recursos/calavera.png"),
+	Flecha ("Recursos/flecha.png"),
+	Paralisis ("Recursos/hechizo1.png"),
+	Velocidad ("Recursos/hechizo2.png"),
+	Pocion ("Recursos/pocion.png")
 {
-	//CONFIGURAR POSICIONES Y TAMAÑOS INICIALES
+	calavera.setSize(1.2, 1.2);
 }
 
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
@@ -106,5 +107,17 @@ void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)
 			Pocion.setPos(hechizo.return_X(), hechizo.return_Y());
 			Pocion.draw();
 		}
+	}
+}
+
+void MotorGrafico::dibujarCalavera(const Personaje& personaje)
+{
+	double x = personaje.return_X();
+	double y = personaje.return_Y() + 1.2; //DIBUJAR CALAVERA ENCIMA DEL PERSONAJE
+
+	if (personaje.return_Vida() <= 0) //SI MUERE, DIBUJAR CALAVERA
+	{
+		calavera.setPos(x, y);
+		calavera.draw();
 	}
 }
