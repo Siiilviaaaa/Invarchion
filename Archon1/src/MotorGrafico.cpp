@@ -8,3 +8,12 @@ MotorGrafico::MotorGrafico():
 {
 	//CONFIGURAR POSICIONES Y TAMAÑOS
 }
+
+void MotorGrafico::dibujarDisparo(const Disparo& disparo)
+{
+	if (disparo.return_Activo())
+	{
+		Flecha.setPos(disparo.return_X(), disparo.return_Y());
+		Flecha.draw();
+	}
+}

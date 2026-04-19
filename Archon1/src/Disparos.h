@@ -12,6 +12,8 @@ class Disparo
 public:
 	//////////GETTERS Y SETTERS///////////
 	bool return_Activo() const { return activo; }
+	double return_X() const { return x; }
+	double return_Y() const { return y; }
 	void setX(double nuevoX) { x = nuevoX; }
 	void setY(double nuevoY) { y = nuevoY; }
 	void setVX(double nuevoVX) { velo_x = nuevoVX; }
