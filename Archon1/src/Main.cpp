@@ -9,7 +9,7 @@
 #include "dibujo_tablero.h"
 #include <cctype>
 
-
+//er
 using std::cout, std::cin, std::endl;
 
 //IMPORTANTE AÑADIR LOS ENUM Q HAGAN FALTA
