@@ -110,14 +110,31 @@ void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)
 	}
 }
 
-void MotorGrafico::dibujarCalavera(const Personaje& personaje)
+void MotorGrafico::dibujarVida_Muerte(const Personaje& humano, const Personaje& alien)
 {
-	double x = personaje.return_X();
-	double y = personaje.return_Y() + 1.2; //DIBUJAR CALAVERA ENCIMA DEL PERSONAJE
+	//BARRA HUMANOS (IZQ)
+	float porcentaje_h = (float)humano.return_Vida() / humano.return_VidaMax();
+	int frame = 10;
 
-	if (personaje.return_Vida() <= 0) //SI MUERE, DIBUJAR CALAVERA
+	barraVida.setPos(5.0, 18.0);
+	barraVida.draw();
+
+	//BARRA ALIENS (DCH)
+	float porcentaje_a = (float)alien.return_Vida() / alien.return_VidaMax();
+	int frame = 10; //NO SE MUY BIEN COMO AJUSTAR LOS FRAMES
+
+	barraVida.setPos(15.0, 18.0);
+	barraVida.draw();
+
+	if (humano.return_Vida() <= 0) //SI MUERE, DIBUJAR CALAVERA
 	{
-		calavera.setPos(x, y);
+		calavera.setPos(humano.return_X(), humano.return_Y() + 1.2); //DIBUJAR CALAVERA ENCIMA DEL PERSONAJE
+		calavera.draw();
+	}
+
+	if (alien.return_Vida() <= 0)
+	{
+		calavera.setPos(alien.return_X(), alien.return_Y() + 1.2);
 		calavera.draw();
 	}
 }

@@ -37,6 +37,6 @@ public:
 	void dibujarDisparo(const Disparo& disparo);
 	void dibujarHechizo(const Hechizo& hechizo);
 	void dibujarPersonaje(const Personaje& personaje);
-	void dibujarCalavera(const Personaje& personaje);
+	void dibujarVida_Muerte(const Personaje& humano, const Personaje& alien);
 };
 
