@@ -10,10 +10,10 @@
 //soltar o no la pieza
 //pedir cambio de turno-pedir cambio a la batalla
 
-Cursor::Cursor(int col, int fil)
+Cursor::Cursor()
 {
-	columna = col;
-	fila = fil;
+	fila = 0;
+	columna = 0;
 }
 
 void Cursor::dibuja()
@@ -24,24 +24,40 @@ void Cursor::inicializa(int turno)
 {//posicionar las coordenadas del cursor en el inicio base segun turno 
 	if (turno == 0)// es el turno de los humanos!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	{
-		fila = 3;
-		columna = 1;
-		//Una vez que cmabie esto deberia pintarse la forma del cursor
+		filaEstoy = 3;
+		columnaEstoy = 1;
+		//Una vez que cambie esto deberia pintarse la forma del cursor
 	}
 	if (turno == 1)// es el turno de los humanos!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	{
-		fila = 3;
-		columna = 7;
-		//Una vez que cmabie esto deberia pintarse la forma del cursor
+		filaEstoy = 3;
+		columnaEstoy = 7;
+		//Una vez que cambie esto deberia pintarse la forma del cursor
 	}
 }
 
-void Cursor::preguntar_coger()
+void Cursor::preguntar_coger(Matriz m, int turno, Cursor cursor)
 {
+	if (m[cursor.columnaEstoy][cursor.filaEstoy].hay_pieza == 1)//de la matriz que nos han pasado, mediante una funcion de la propia matriz, detecta que hay una pieza en la zona entarra aqui
+	{
+		if (m[cursor.columnaEstoy][cursor.filaEstoy].bando == turno)
+		{
+			persona = m[cursor.columnaEstoy][cursor.filaEstoy].personaje;//a la persona del cursor le asigno la persona que hay en la matriz
+			//nos copiamos la celda de la matriz en la que estoy para acordarno luego por si hay que retroceder
+			filaVengo = filaEstoy;
+			columnaVengo = columnaEstoy;
+			m[cursor.columnaEstoy][cursor.filaEstoy].personaje.borrar();//para que se borre el perosnaje de la pantalla
+		}
+	}
 }
 
-void Cursor::preguntar_soltar()
+void Cursor::preguntar_soltar(Matriz m, int turno, Cursor cursor)
 {
+	if (m[cursor.columnaEstoy][cursor.filaEstoy].hay_pieza == 0)//si la casilla esta vacia
+	{
+		coger();
+
+	}
 }
 
 void Cursor::coger()

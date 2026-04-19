@@ -7,6 +7,7 @@
 #include "casilla.h"
 #include "menu.h"
 #include "dibujo_tablero.h"
+#include "Cursor.h"
 #include <cctype>
 
 
@@ -26,6 +27,7 @@ Menu miMenu;
 Tablero miTablero;
 Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
 Juego juego(&miTablero); // <--- ESTO ES LO QUE FALTA
+Cursor mi_cursor{};
 
 void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
 { //esto no debería de ir en una funcion por separado?
