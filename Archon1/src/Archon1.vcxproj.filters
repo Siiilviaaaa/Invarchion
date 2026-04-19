@@ -33,6 +33,7 @@
     <ClInclude Include="menu.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Cursor.h">
     <ClInclude Include="Disparos.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -77,7 +78,13 @@
     <ClCompile Include="dibujo_tablero.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="MotorGrafico.cpp">
+    <ClCompile Include="casilla.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Cursor.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
