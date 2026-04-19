@@ -21,7 +21,7 @@ public:
 
     // Funciones principales
     void inicializa();
-    const Casilla* getCasilla(int f, int c) const {
+    const Casilla* getCasilla(int f, int c) const { //mirar si esta funcion le sirve a sofia y juli
         return &matriz[f][c];
     }
     Casilla* casillaModificable(int f, int c) {
