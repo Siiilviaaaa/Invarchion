@@ -22,6 +22,7 @@
     <ClInclude Include="..\src\Juego.h" />
     <ClInclude Include="Batalla.h" />
     <ClInclude Include="casilla.h" />
+    <ClInclude Include="Cursor.h" />
     <ClInclude Include="dibujo_tablero.h" />
     <ClInclude Include="Disparos.h" />
     <ClInclude Include="Hechizos.h" />
@@ -34,6 +35,8 @@
     <ClCompile Include="..\src\Juego.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="Batalla.cpp" />
+    <ClCompile Include="casilla.cpp" />
+    <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="dibujo_tablero.cpp" />
     <ClCompile Include="Disparos.cpp" />
     <ClCompile Include="Hechizos.cpp" />
@@ -107,6 +110,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir).vs\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
