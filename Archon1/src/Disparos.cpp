@@ -21,7 +21,7 @@ void Disparo::moverDisparo()
 	if (x < 0 || x > 800 || y < 0 || y > 600) activo = false;
 }
 
-bool Disparo::Impacto(Personaje& objetivo)
+bool Disparo::Impacto(Personaje& objetivo, Personaje& atacante)
 {
 	if (!activo) return false;
 
@@ -31,6 +31,8 @@ bool Disparo::Impacto(Personaje& objetivo)
 	if (sqrt(dx * dx + dy * dy) < 1.0) //SI EL DISPARO IMPACTA AL ENEMIGO
 	{
 		objetivo.setVida(objetivo.return_Vida() - danio); //REDUCIR VIDA DEL ENEMIGO
+		
+		atacante.sumarPuntos(15); //15 PUNTOS SI ACIERTA
 		activo = false; //DESACTIVAR DISPARO AL CHOCAR
 		return true;
 	}

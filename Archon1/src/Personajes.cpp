@@ -104,7 +104,7 @@ void Personaje::gestionarDisparos(Personaje& enemigo)
 		{
 			nDisparos[i]->moverDisparo();
 
-			if (nDisparos[i]->Impacto(enemigo) || !nDisparos[i]->return_Activo())
+			if (nDisparos[i]->Impacto(enemigo, *this) || !nDisparos[i]->return_Activo())
 			{ //SI NO ESTA ACTIVO Y SI IMPACTA
 				delete nDisparos[i]; //LIBERAR MEMORIA
 				nDisparos[i] = nullptr; //DEJAR HUECO LIBRE

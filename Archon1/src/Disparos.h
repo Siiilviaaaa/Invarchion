@@ -23,6 +23,6 @@ public:
 	////////////////METODOS///////////////
 	Disparo();//COSNTRUCTOR
 	void moverDisparo();
-	bool Impacto(Personaje& objetivo);
+	bool Impacto(Personaje& objetivo, Personaje& atacante);
 };
 

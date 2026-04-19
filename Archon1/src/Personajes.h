@@ -27,10 +27,16 @@ class Personaje
 public:
 	static int puntuacionHumanos;
 	static int puntuacionAliens;
-	void sumarPuntos(int puntos);
-
+	
 	//Personaje(Tipo_figura t, Bando e, int x, int y);
+	
+	//////////METODOS//////////////
 	Personaje();
+	void sumarPuntos(int puntos);
+	static Personaje crearPieza(Tipo_figura tipo);
+	void actualizarEfectos();
+	void gestionarDisparos(Personaje& enemigo);
+	void lanzarDisparo();
 
 	////////////GETTERS/////////////////
 	Tipo_figura return_Tipo() const { return tipo; }
@@ -55,10 +61,4 @@ public:
 	void set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
 
 	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
-
-	//////////METODOS//////////////
-	static Personaje crearPieza(Tipo_figura tipo);
-	void actualizarEfectos();
-	void gestionarDisparos(Personaje& enemigo);
-	void lanzarDisparo();
 };
