@@ -28,6 +28,7 @@
     <ClInclude Include="Hechizos.h" />
     <ClInclude Include="Informacion Casilla.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="MotorGrafico.h" />
     <ClInclude Include="Personajes.h" />
     <ClInclude Include="tablero.h" />
   </ItemGroup>
@@ -41,6 +42,7 @@
     <ClCompile Include="Disparos.cpp" />
     <ClCompile Include="Hechizos.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="MotorGrafico.cpp" />
     <ClCompile Include="Personajes.cpp" />
     <ClCompile Include="tablero.cpp" />
   </ItemGroup>

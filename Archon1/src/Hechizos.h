@@ -1,5 +1,4 @@
 #pragma once
-#include "ETSIDI.h"
 
 class Personaje; //DECLARACION ANTICIPADA
 
@@ -16,14 +15,15 @@ private:
 	double t_recarga; // TIEMPO TOTAL DE RECARGA
 	double t_restante; // TIEMPO RESTANTE PARA USAR DE NUEVO
 
-	ETSIDI::Sprite mis_hechizos; //GRAFICO DEL HECHIZO
-
 public:
 	double return_RESTANTE() const { return t_restante; }
+	bool return_Activo() const { return activo; }
+	TipoHechizo return_Tipo() const { return tipo; }
+	double return_X() const { return posX; }
+	double return_Y() const { return posY; }
 
 	Hechizo(); //CONSTRUCTOR 
 	void configurar(TipoHechizo t);
-	void dibujarHechizo();
 	void usar_Hechizo(int tipoHechizo, Personaje& objetivo);
 	void usar_Pocion(Personaje& aliado);
 	void actualizarTiempos(double Time);  //ACTUALIZA TIEMPOS DE RECARGA

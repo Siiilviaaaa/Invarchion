@@ -1,5 +1,4 @@
 #pragma once
-#include "ETSIDI.h"
 
 class Personaje; //DECLARACION ANTICIPADA
 
@@ -10,11 +9,11 @@ class Disparo
 	int danio; // DAÑO QUE CAUSA
 	bool activo; // SI ESTA O NO EN PANTALLA
 
-	ETSIDI::Sprite flecha;
-
 public:
 	//////////GETTERS Y SETTERS///////////
 	bool return_Activo() const { return activo; }
+	double return_X() const { return x; }
+	double return_Y() const { return y; }
 	void setX(double nuevoX) { x = nuevoX; }
 	void setY(double nuevoY) { y = nuevoY; }
 	void setVX(double nuevoVX) { velo_x = nuevoVX; }
@@ -23,9 +22,7 @@ public:
 
 	////////////////METODOS///////////////
 	Disparo();//COSNTRUCTOR
-	void dibujarDisparo();
 	void moverDisparo();
-	bool Impacto(Personaje& objetivo);
-
+	bool Impacto(Personaje& objetivo, Personaje& atacante);
 };
 

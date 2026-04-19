@@ -40,6 +40,15 @@
     <ClInclude Include="Hechizos.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="dibujo_tablero.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Informacion Casilla.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="MotorGrafico.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Juego.cpp">
@@ -57,9 +66,6 @@
     <ClCompile Include="Batalla.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="casilla.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="menu.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
@@ -67,6 +73,9 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="Hechizos.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="dibujo_tablero.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="casilla.cpp">

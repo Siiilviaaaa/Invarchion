@@ -2,7 +2,7 @@
 
 class Disparo;
 
-enum Tipo_figura { SOLDADO, ARQUERO, VOLADOR, EXCAVADOR, HECHICERO };
+enum Tipo_figura { LUCHADOR, ARQUERO, VOLADOR, EXCAVADOR, HECHICERO };
 enum Bando { HUMANO, ALIEN };
 
 class Personaje
@@ -25,8 +25,19 @@ class Personaje
 	int vida_max; //VARIABLE PARA COMPROBAR SU USAR POCION
 
 public:
+	static int puntuacionHumanos;
+	static int puntuacionAliens;
+	
 	//Personaje(Tipo_figura t, Bando e, int x, int y);
+	
+	//////////METODOS//////////////
 	Personaje();
+	void sumarPuntos(int puntos);
+	static Personaje crearPieza(Tipo_figura tipo);
+	void actualizarEfectos();
+	void gestionarDisparos(Personaje& enemigo);
+	void lanzarDisparo();
+
 	////////////GETTERS/////////////////
 	Tipo_figura return_Tipo() const { return tipo; }
 	Bando return_Bando()const { return bando; }
@@ -40,7 +51,7 @@ public:
 	///////////SETTERS/////////////////
 	void setTipo(Tipo_figura nuevoTipo) { tipo = nuevoTipo; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }
-	void setDanio(int nuevoDaño) { danio = nuevoDaño; }
+	void setDanio(int nuevoDanio) { danio = nuevoDanio; }
 	void setVelocidad(double nuevaVelocidad) { velocidad = nuevaVelocidad; }
 	void setV_base(double nuevaVBase) { vel_base = nuevaVBase; }
 	void setX(double nuevaX) { x = nuevaX; }
@@ -50,10 +61,4 @@ public:
 	void set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
 
 	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
-
-	//////////METODOS//////////////
-	static Personaje crearPieza(Tipo_figura tipo);
-	void actualizarEfectos();
-	void gestionarDisparos(Personaje& enemigo);
-	void lanzarDisparo();
 };

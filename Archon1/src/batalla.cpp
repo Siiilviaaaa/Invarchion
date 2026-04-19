@@ -24,6 +24,7 @@ void pegar(Personaje& atacante, Personaje& objetivo,
 		nuevaVida = 0;
 
 	objetivo.setVida(nuevaVida);
+	atacante.sumarPuntos(10); //10 PUNTOS POR GOLPEAR
 }
 
 void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,

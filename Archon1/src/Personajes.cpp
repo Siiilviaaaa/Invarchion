@@ -2,11 +2,23 @@
 #include "Hechizos.h"
 #include "Disparos.h"
 
+////VARIABLES GLOBALES
+int Personaje::puntuacionHumanos = 0;
+int Personaje::puntuacionAliens = 0;
+
 //personaje::personaje(tipo_figura t, bando e, int x, int y)
 Personaje::Personaje()
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		nDisparos[i] = nullptr;
+}
+
+void Personaje::sumarPuntos(int puntos)
+{
+	if (bando == HUMANO)
+		puntuacionHumanos += puntos;
+	else
+		puntuacionAliens += puntos;
 }
 
 Personaje Personaje::crearPieza(Tipo_figura tipo)
@@ -17,7 +29,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo)
 	//DECIDIR CARACTERISTICAS SEGUN EL TIPO DE PIEZA
 	switch (tipo)
 	{
-	case SOLDADO:
+	case LUCHADOR:
 		pieza.setVida(100);
 		pieza.setDanio(10);
 		pieza.setV_base(0.8);
@@ -91,9 +103,8 @@ void Personaje::gestionarDisparos(Personaje& enemigo)
 		if (nDisparos[i] != nullptr)
 		{
 			nDisparos[i]->moverDisparo();
-			nDisparos[i]->dibujarDisparo();
 
-			if (nDisparos[i]->Impacto(enemigo) || !nDisparos[i]->return_Activo())
+			if (nDisparos[i]->Impacto(enemigo, *this) || !nDisparos[i]->return_Activo())
 			{ //SI NO ESTA ACTIVO Y SI IMPACTA
 				delete nDisparos[i]; //LIBERAR MEMORIA
 				nDisparos[i] = nullptr; //DEJAR HUECO LIBRE
