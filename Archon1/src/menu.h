@@ -1,23 +1,36 @@
 #pragma once
 #include "ETSIDI.h"
+#include <string>
+#include <vector>
+#include <fstream>
 
+struct EntradaRanking {
+    std::string nombre;
+    int puntos;
+};
 
 class Menu {
 private:
     ETSIDI::Sprite _fondo;
-
     ETSIDI::Sprite _boton_jugar;
     ETSIDI::Sprite _boton_ranking;
     ETSIDI::Sprite _boton_exit;
     ETSIDI::Sprite _seleccion;
+    ETSIDI::Sprite _ranking;
 
-    // Aquí podríais añadir más Sprites para el menú si quereis, no lo haría la verdad
+    std::vector<std::string> _lineas_ranking;
+
+    // CORRECCIÓN: El vector debe ser un miembro de la clase
+    std::vector<EntradaRanking> _lista_puntuaciones;
 
 public:
     Menu();
 
-    // Funciones principales del menú
     void inicializa_menu();
     void dibuja_menu();
     void dibuja_capa_seleccion();
+
+    void dibuja_ranking();
+    void cargar_ranking();
+    void actualizar_ranking(std::string nombre, int puntos);
 };

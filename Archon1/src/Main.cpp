@@ -45,6 +45,7 @@ void mouse(int button, int state, int x, int y) //esta funcion detecta los click
             //BOTÓN RANKING (Centro: 622, 183)
             if (x > 550 && x < 700 && y > 120 && y < 250) {
                 std::cout << "[CLICK] Abriendo Ranking..." << std::endl;
+                miMenu.cargar_ranking();
                 estado = RANKING;
             }
         }
@@ -84,7 +85,10 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
         dibujo_tablero.dibuja();
         break;
     case RANKING:
-        //pantallaRanking.draw();
+        gluLookAt(200.0, 200.0, 20.0,
+            200.0, 200.0, 0.0,
+            0.0, 1.0, 0.0);
+        miMenu.dibuja_ranking();
         break;
     case SELECCION:
         // Mantenengo la misma cámara que el menú para que se siga vienda debajo que queda bien
@@ -105,31 +109,71 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
 void OnTimer(int value) //no tengo 100% claro si es estrictamente necesaria pero yo la he añadido pq me facilitaba la vida
 {
     glutPostRedisplay();
-    // Se vuelve a llamar a sí misma cada 20ms (unos 50 FPS)
+    //Se vuelve a llamar a sí misma cada 20ms (unos 50 FPS)
     glutTimerFunc(20, OnTimer, 0);
 }
 
 void OnKeyboardDown(unsigned char key, int x, int y) {
-    // Solo procesamos estas teclas si estamos en la pantalla de bando para q no se solape con el movimiento de las fichas luego, ok??
+    unsigned char c = tolower(key);
+
+    // AÑADIDO NUEVO POR COMODIDAD Salida y navegación con ESC
+    if (key == 27) {
+        if (estado == MENU) exit(0);
+        else estado = MENU;
+    }
+
+    /////////////////////////////////ESTA ES UNA FUNCIONALIDAD DE DEBUG Y HAY QUE SINCRONIZARLA CON LOS RETURN DE LAS FUNCIONES DE PUNTUACION///////////////
+    if (c == 'r') {
+        std::string nombre;
+        int puntos;
+
+        std::cout << "\n--- REGISTRO DE PUNTUACION ---" << std::endl;
+
+        // Limpiamos cualquier basura que quedara en el buffer antes de empezar
+        std::cin.clear();
+        fflush(stdin);
+
+        std::cout << "TRES LETRAS (sin espacios): ";
+        std::cin >> nombre;
+        do {
+            if (nombre.size() > 3) {
+
+                std::cout << "TRES LETRAS (sin espacios): ";
+                std::cin >> nombre;
+            }
+        } while (nombre.size() > 3);
+        
+
+        std::cout << "Puntuacion (solo numeros): ";
+        if (!(std::cin >> puntos)) {
+            //Si el usuario mete letras en vez de números, evitamos el bucle infinito
+            std::cout << "Error: Puntos invalidos." << std::endl;
+            std::cin.clear();
+            std::cin.ignore(1000, '\n');
+            puntos = 0;
+        }
+
+        miMenu.actualizar_ranking(nombre, puntos);
+        estado = RANKING;
+
+        //Limpiamos al terminar para que no afecte a la ventana de GLUT
+        std::cin.ignore(1000, '\n');
+        std::cout << "--- ACTUALIZADO ---" << std::endl;
+    }
+
+    //Selección de bando
     if (estado == SELECCION) {
-
-        key = tolower(key); //el tolower es TO  LOWER  CASE, por si alguna lo necesita usar es para no poner 'a'||'A'
-
-        if (key == 'h') {
-            std::cout << "[SISTEMA] Has elegido: HUMANOS. Iniciando despliegue..." << std::endl;
+        if (c == 'h') {
             juego.setBandoJugador(Bando_jugador_es_Humano);
             estado = JUEGO;
         }
-        else if (key == 'a') {
-            std::cout << "[SISTEMA] Has elegido: ALIENS. Iniciando invasión..." << std::endl;
+        else if (c == 'a') {
             juego.setBandoJugador(Bando_jugador_es_Alien);
             estado = JUEGO;
         }
-
-
-        // Refresco de pantalla para q se pinte
-        glutPostRedisplay();
     }
+
+    glutPostRedisplay();
 }
 
 int main(int argc, char** argv) {
@@ -155,12 +199,10 @@ int main(int argc, char** argv) {
     glLoadIdentity();
     gluPerspective(40.0, 800 / 600.0f, 0.1, 150);
 
-    //esto todo habrá q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
     cout << "Reproduciendo..." << std::endl;
-    // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
+
     ETSIDI::play("extra/mi_musica.mp3");
 
-//aqui he añadido alguna mia
     glutMouseFunc(mouse);
     glutTimerFunc(20, OnTimer, 0);
     glutDisplayFunc(OnDraw);
