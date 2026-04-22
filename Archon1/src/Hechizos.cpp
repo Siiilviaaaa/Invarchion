@@ -65,6 +65,9 @@ void Hechizo::usar_Hechizo(int tipoHechizo, Personaje& objetivo)
 
 	t_restante = t_recarga; //INICIAR RECARGA
 	activo = true;
+
+	if (tipoHechizo == PARALISIS) objetivo.set_paralisis(5.0);
+	else if (tipoHechizo == HIPERVELOCIDAD) objetivo.set_hiperVelocidad(5.0);
 }
 
 //HECHIZO USADO EN TABLERO

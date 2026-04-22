@@ -31,6 +31,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo)
 	{
 	case LUCHADOR:
 		pieza.setVida(100);
+		pieza.setVidaMax(100);
 		pieza.setDanio(10);
 		pieza.setV_base(0.8);
 
@@ -40,6 +41,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo)
 		break;
 	case ARQUERO:
 		pieza.setVida(80);
+		pieza.setVidaMax(80);
 		pieza.setDanio(15);
 		pieza.setV_base(1.2);
 
@@ -49,6 +51,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo)
 		break;
 	case VOLADOR:
 		pieza.setVida(140);
+		pieza.setVidaMax(140);
 		pieza.setDanio(8);
 		pieza.setV_base(1.5);
 
@@ -58,6 +61,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo)
 		break;
 	case EXCAVADOR:
 		pieza.setVida(60);
+		pieza.setVidaMax(60);
 		pieza.setDanio(30);
 		pieza.setV_base(1.0);
 
@@ -67,6 +71,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo)
 		break;
 	case HECHICERO:
 		pieza.setVida(90);
+		pieza.setVidaMax(90);
 		pieza.setDanio(25);
 		pieza.setV_base(1.3);
 		pieza.setVelocidad(1.3);

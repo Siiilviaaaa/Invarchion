@@ -30,6 +30,7 @@
     <ClInclude Include="Informacion Casilla.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="MotorGrafico.h" />
+    <ClInclude Include="Obstaculo.h" />
     <ClInclude Include="Pared.h" />
     <ClInclude Include="Personajes.h" />
     <ClInclude Include="tablero.h" />
@@ -45,6 +46,7 @@
     <ClCompile Include="Hechizos.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="MotorGrafico.cpp" />
+    <ClCompile Include="Obtaculo.cpp" />
     <ClCompile Include="Pared.cpp" />
     <ClCompile Include="Personajes.cpp" />
     <ClCompile Include="tablero.cpp" />
