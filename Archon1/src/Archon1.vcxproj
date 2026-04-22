@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\Juego.h" />
     <ClInclude Include="Batalla.h" />
+    <ClInclude Include="Caja.h" />
     <ClInclude Include="casilla.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="dibujo_tablero.h" />
@@ -29,6 +30,7 @@
     <ClInclude Include="Informacion Casilla.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="MotorGrafico.h" />
+    <ClInclude Include="Pared.h" />
     <ClInclude Include="Personajes.h" />
     <ClInclude Include="tablero.h" />
   </ItemGroup>
@@ -36,12 +38,14 @@
     <ClCompile Include="..\src\Juego.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="Batalla.cpp" />
+    <ClCompile Include="Caja.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="dibujo_tablero.cpp" />
     <ClCompile Include="Disparos.cpp" />
     <ClCompile Include="Hechizos.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="MotorGrafico.cpp" />
+    <ClCompile Include="Pared.cpp" />
     <ClCompile Include="Personajes.cpp" />
     <ClCompile Include="tablero.cpp" />
   </ItemGroup>
