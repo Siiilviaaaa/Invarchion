@@ -21,9 +21,9 @@ public:
 	void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,double x1, double y1, double x2, double y2);
 	
 	/////////INTERACCION CON LOS ELEMENTOS////////////
-	static bool rebotePersonaje(Personaje& j, const Pared& p);
-	static bool reboteDisparo(Disparo& j, const Pared& p);
+	static bool NoMover(Personaje& j, const Pared& p);
+	static bool reboteDisparos(Disparo& j, const Pared& p);
 
-	static void limitesDisparo(Disparo& d, Caja& c);
-	static void limitesPersonaje(Personaje& j, Caja& c);
+	static void limites_d(Disparo& d, Caja& c);
+	static void limites_p(Personaje& j, Caja& c);
 };

@@ -82,3 +82,29 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,
 		break;
 	}
 }
+
+bool Batalla::NoMover(Personaje& j, const Pared& p)
+{
+	return false;
+}
+
+bool Batalla::reboteDisparos(Disparo& j, const Pared& p)
+{
+	return false;
+}
+
+void Batalla::limites_d(Disparo& d, Caja& c)
+{
+	reboteDisparos(d, c.suelo);
+	reboteDisparos(d, c.techo);
+	reboteDisparos(d, c.izq);
+	reboteDisparos(d, c.dch);
+}
+
+void Batalla::limites_p(Personaje& j, Caja& c)
+{
+	NoMover(j, c.suelo);
+	NoMover(j, c.techo);
+	NoMover(j, c.izq);
+	NoMover(j, c.dch);
+}
