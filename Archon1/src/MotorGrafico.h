@@ -4,6 +4,8 @@
 #include "Hechizos.h"
 #include "Personajes.h"
 
+//RELACION DE AMISTAD DE PERSONAJES, HECHIZOS, DISPAROS PARA PODER ACCEDER A SUS ATRIBUTOS PRIVADOS
+
 class MotorGrafico
 {
 	////PERSONAJES HUMANOS////

@@ -12,4 +12,5 @@ public:
 	double getY() const { return y; }
 	double getRadio() const { return radio; }
 
+	friend class MotorGrafico;
 };

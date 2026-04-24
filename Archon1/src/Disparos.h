@@ -24,5 +24,7 @@ public:
 	Disparo();//COSNTRUCTOR
 	void moverDisparo();
 	bool Impacto(Personaje& objetivo, Personaje& atacante);
+
+	friend class MotorGrafico;
 };
 

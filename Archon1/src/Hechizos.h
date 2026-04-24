@@ -27,6 +27,8 @@ public:
 	void usar_Hechizo(int tipoHechizo, Personaje& objetivo);
 	void usar_Pocion(Personaje& aliado);
 	void actualizarTiempos(double Time);  //ACTUALIZA TIEMPOS DE RECARGA
+
+	friend class MotorGrafico;
 };
 
 //////VARIABLES GLOBALES DEFINIDAS EN HECHIZOS.CPP
