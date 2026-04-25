@@ -3,6 +3,7 @@
 #include "freeglut.h"
 
 class Dibujar_tablero {
+	friend class MotorGrafico;
 	Tablero* tablero;
 	float lado;
 public:

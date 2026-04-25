@@ -34,6 +34,7 @@
     <ClInclude Include="Pared.h" />
     <ClInclude Include="Personajes.h" />
     <ClInclude Include="tablero.h" />
+    <ClInclude Include="vista.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Juego.cpp" />
