@@ -1,13 +1,13 @@
 #include "MotorGrafico.h"
 
 MotorGrafico::MotorGrafico() :
-	luchador("Recursos/luchador.png"),
-	soldado("Recursos/soldado.png"),
+	luchador("Recursos/luchador.png"), 	
+	soldado("Recursos/soldado.png"),	
 	volador("Recursos/volador.png"),
-	minero("Recursos/minero.png"),
+	minero("Recursos/minero.png"),	
 	hechicero("Recursos/hechicero.png"),
 
-	golem("Recursos/golem.png"),
+	golem("Recursos/golem.png"),	
 	arquero("Recursos/arquero.png"),
 	murcielago("Recursos/murcielago.png"),
 	gusano("Recursos/gusano.png"),
@@ -21,6 +21,11 @@ MotorGrafico::MotorGrafico() :
 	Pocion("Recursos/pocion.png")
 {
 }
+
+//void MotorGrafico::dibujarEscenaBatalla(const Caja& c, const Personaje& atacante, const Personaje& defensor)
+//{
+//	dibujarCaja(c);
+//}
 
 void MotorGrafico::dibujarPared(const Pared& p)
 {

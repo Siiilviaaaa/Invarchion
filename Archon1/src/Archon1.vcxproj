@@ -47,6 +47,7 @@
     <ClCompile Include="Hechizos.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="MotorGrafico.cpp" />
+    <ClCompile Include="Obstaculo.cpp" />
     <ClCompile Include="Obtaculo.cpp" />
     <ClCompile Include="Pared.cpp" />
     <ClCompile Include="Personajes.cpp" />

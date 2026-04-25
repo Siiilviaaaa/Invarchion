@@ -27,6 +27,8 @@ Estado estado = MENU;
 Menu miMenu;
 Tablero miTablero;
 Camara miCamara;
+MotorGrafico motor;
+Caja miCaja;
 Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
 Juego juego(&miTablero); // <--- ESTO ES LO QUE FALTA
 
@@ -95,6 +97,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
         break;
     case BATALLA:
         miCamara.vistaBatalla();
+        motor.dibujarCaja(miCaja);
         break;
 
     }
@@ -129,6 +132,12 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
 
         // Refresco de pantalla para q se pinte
         glutPostRedisplay();
+    }
+    key = tolower(key);
+    if (key == 'b') { //luego se sustituira cuando tengamos la variable de entrar en batalla
+        if (estado == JUEGO) {
+            estado = BATALLA;
+        }
     }
 }
 
