@@ -85,11 +85,20 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,
 
 bool Batalla::NoMover(Personaje& j, const Pared& p)
 {
+	if (p.distancia(j.return_X(), j.return_Y()) < 1.0)
+		return true; //CHOCA
 	return false;
 }
 
-bool Batalla::reboteDisparos(Disparo& j, const Pared& p)
+bool Batalla::reboteDisparos(Disparo& d, const Pared& p)
 {
+	double dx, dy;
+	if (p.distancia(d.return_X(), d.return_Y()) < 0.5)
+	{
+		d.setVX(d.return_VX());
+		d.setVY(d.return_VY());
+		return true;
+	}
 	return false;
 }
 

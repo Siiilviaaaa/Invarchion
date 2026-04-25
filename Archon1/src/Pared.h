@@ -10,5 +10,5 @@ class Pared
 public:
 	Pared(double x_1, double y_1, double x_2, double y_2, unsigned char rojo, unsigned char verde, unsigned char azul);
 	
-	double distancia(double px, double py, double* pdir_x, double* pdir_);
+	double distancia(double px, double py)const;
 };

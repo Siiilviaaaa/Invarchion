@@ -22,7 +22,7 @@ public:
 	
 	/////////INTERACCION CON LOS ELEMENTOS////////////
 	static bool NoMover(Personaje& j, const Pared& p);
-	static bool reboteDisparos(Disparo& j, const Pared& p);
+	static bool reboteDisparos(Disparo& d, const Pared& p);
 
 	static void limites_d(Disparo& d, Caja& c);
 	static void limites_p(Personaje& j, Caja& c);
