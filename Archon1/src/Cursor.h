@@ -8,7 +8,8 @@ class Cursor {
 public:
 	void inicializar(int turno);
 	void dibuja();
-	void mueve(unsigned char key, int turno);
-	void coger();
-	void soltar();
+	void mover_cursor(unsigned char key, int turno);
+	void mover(unsigned char key, int turno);
+	int coger();
+	int soltar();
  };
