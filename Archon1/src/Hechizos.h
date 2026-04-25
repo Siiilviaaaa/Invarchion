@@ -4,6 +4,8 @@ class Personaje; //DECLARACION ANTICIPADA
 
 class Hechizo
 {
+	friend class MotorGrafico;
+
 public:
 	enum TipoHechizo : int { PARALISIS, HIPERVELOCIDAD, POCION };
 private:

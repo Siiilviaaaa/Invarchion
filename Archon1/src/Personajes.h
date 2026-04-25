@@ -7,6 +7,8 @@ enum Bando { HUMANO, ALIEN };
 
 class Personaje
 {
+	friend class MotorGrafico;
+
 	Tipo_figura tipo;
 	Bando bando;
 	int vida;
@@ -56,9 +58,7 @@ public:
 	void setV_base(double nuevaVBase) { vel_base = nuevaVBase; }
 	void setX(double nuevaX) { x = nuevaX; }
 	void setY(double nuevaY) { y = nuevaY; }
-
 	void set_paralisis(double nuevoTiempo) { t_paralisis = nuevoTiempo; }
 	void set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
-
 	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
 };

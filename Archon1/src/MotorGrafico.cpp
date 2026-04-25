@@ -22,67 +22,89 @@ MotorGrafico::MotorGrafico() :
 {
 }
 
+void MotorGrafico::dibujarPared(const Pared& p)
+{
+	glDisable(GL_LIGHTING);
+	glColor3ub(p.r, p.g, p.b);
+	glBegin(GL_POLYGON);
+	glVertex3f(p.x1, p.y1, 10);
+	glVertex3f(p.x2, p.y2, 10);
+	glVertex3f(p.x2, p.y2, -10);
+	glVertex3f(p.x1, p.y1, -10);
+	glEnd(); //
+	glEnable(GL_LIGHTING);
+}
+
+void MotorGrafico::dibujarCaja(const Caja& c)
+{
+	dibujarPared(c.suelo);
+	dibujarPared(c.techo);
+	dibujarPared(c.izq);
+	dibujarPared(c.dcha);
+
+}
+
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
 	//HACER ANIMACION!!!!!!!!!!!!!!!!
-	switch (personaje.return_Tipo())
+	switch (personaje.tipo)
 	{
 	case Tipo_figura::LUCHADOR:
-		if (personaje.return_Bando() == HUMANO)
+		if (personaje.bando == HUMANO)
 		{
-			luchador.setPos(personaje.return_X(), personaje.return_Y());
+			luchador.setPos(personaje.x, personaje.y);
 			luchador.draw();
 		}else
 		{
-			golem.setPos(personaje.return_X(), personaje.return_Y());
+			golem.setPos(personaje.x, personaje.y);
 			golem.draw();
 		}
 		break;
 	case Tipo_figura::ARQUERO:
-		if (personaje.return_Bando() == HUMANO)
+		if (personaje.bando == HUMANO)
 		{
-			soldado.setPos(personaje.return_X(), personaje.return_Y());
+			soldado.setPos(personaje.x, personaje.y);
 			soldado.draw();
 		}
 		else
 		{
-			arquero.setPos(personaje.return_X(), personaje.return_Y());
+			arquero.setPos(personaje.x, personaje.y);
 			arquero.draw();
 		}
 		break;
 	case Tipo_figura::VOLADOR:
-		if (personaje.return_Bando() == HUMANO)
+		if (personaje.bando == HUMANO)
 		{
-			volador.setPos(personaje.return_X(), personaje.return_Y());
+			volador.setPos(personaje.x, personaje.y);
 			volador.draw();
 		}
 		else
 		{
-			murcielago.setPos(personaje.return_X(), personaje.return_Y());
+			murcielago.setPos(personaje.x, personaje.y);
 			murcielago.draw();
 		}
 		break;
 	case Tipo_figura::EXCAVADOR:
-		if (personaje.return_Bando() == HUMANO)
+		if (personaje.bando == HUMANO)
 		{
-			minero.setPos(personaje.return_X(), personaje.return_Y());
+			minero.setPos(personaje.x, personaje.y);
 			minero.draw();
 		}
 		else
 		{
-			gusano.setPos(personaje.return_X(), personaje.return_Y());
+			gusano.setPos(personaje.x, personaje.y);
 			gusano.draw();
 		}
 		break;
 	case Tipo_figura::HECHICERO:
-		if (personaje.return_Bando() == HUMANO)
+		if (personaje.bando == HUMANO)
 		{
-			hechicero.setPos(personaje.return_X(), personaje.return_Y());
+			hechicero.setPos(personaje.x, personaje.y);
 			hechicero.draw();
 		}
 		else
 		{
-			mago.setPos(personaje.return_X(), personaje.return_Y());
+			mago.setPos(personaje.x, personaje.y);
 			mago.draw();
 		}
 		break;
@@ -93,30 +115,30 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 
 void MotorGrafico::dibujarDisparo(const Disparo& disparo)
 {
-	if (disparo.return_Activo())
+	if (disparo.activo)
 	{
-		Flecha.setPos(disparo.return_X(), disparo.return_Y());
+		Flecha.setPos(disparo.x, disparo.x);
 		Flecha.draw();
 	}
 }
 
 void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)
 {
-	if (hechizo.return_Activo())
+	if (hechizo.activo)
 	{
-		if (hechizo.return_Tipo() == Hechizo::PARALISIS)
+		if (hechizo.tipo == Hechizo::PARALISIS)
 		{
-			Paralisis.setPos(hechizo.return_X(), hechizo.return_Y());
+			Paralisis.setPos(hechizo.posX, hechizo.posY);
 			Paralisis.draw();
 		}
-		else if(hechizo.return_Tipo() == Hechizo::HIPERVELOCIDAD)
+		else if(hechizo.tipo == Hechizo::HIPERVELOCIDAD)
 		{
-			Velocidad.setPos(hechizo.return_X(), hechizo.return_Y());
+			Velocidad.setPos(hechizo.posX, hechizo.posY);
 			Velocidad.draw();
 		}
-		else if(hechizo.return_Tipo() == Hechizo::POCION)
+		else if(hechizo.tipo == Hechizo::POCION)
 		{
-			Pocion.setPos(hechizo.return_X(), hechizo.return_Y());
+			Pocion.setPos(hechizo.posX, hechizo.posY);
 			Pocion.draw();
 		}
 	}
@@ -125,27 +147,27 @@ void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)
 void MotorGrafico::dibujarVida_Muerte(const Personaje& humano, const Personaje& alien)
 {
 	//BARRA HUMANOS (IZQ)
-	float porcentaje_h = (float)humano.return_Vida() / humano.return_VidaMax();
+	float porcentaje_h = (float)humano.vida / humano.vida_max;
 	int frame = 10; //NO SE MUY BIEN COMO AJUSTAR LOS FRAMES
 
 	barraVida.setPos(5.0, 18.0);
 	barraVida.draw();
 
 	//BARRA ALIENS (DCH)
-	float porcentaje_a = (float)alien.return_Vida() / alien.return_VidaMax();
+	float porcentaje_a = (float)alien.vida / alien.vida_max;
 
 	barraVida.setPos(15.0, 18.0);
 	barraVida.draw();
 
-	if (humano.return_Vida() <= 0) //SI MUERE, DIBUJAR CALAVERA
+	if (humano.vida <= 0) //SI MUERE, DIBUJAR CALAVERA
 	{
-		calavera.setPos(humano.return_X(), humano.return_Y() + 1.2); //DIBUJAR CALAVERA ENCIMA DEL PERSONAJE
+		calavera.setPos(humano.x, humano.y + 1.2); //DIBUJAR CALAVERA ENCIMA DEL PERSONAJE
 		calavera.draw();
 	}
 
-	if (alien.return_Vida() <= 0)
+	if (alien.vida <= 0)
 	{
-		calavera.setPos(alien.return_X(), alien.return_Y() + 1.2);
+		calavera.setPos(alien.x, alien.y + 1.2);
 		calavera.draw();
 	}
 }
