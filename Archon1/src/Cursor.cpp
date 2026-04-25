@@ -136,4 +136,5 @@ int Cursor::coger(int turno)
 
 int Cursor::soltar()
 {
+
 }
