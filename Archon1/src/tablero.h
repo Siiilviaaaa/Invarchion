@@ -8,12 +8,11 @@
 //#include "Personajes.h" //PARA PODER POSICIONAR LAS PIEZAS
 
 class Tablero {
-private:
-    InfoCasilla datos[5][7]; //para la informacion
+
+    InfoCasilla datos[5][7]; //para la informacion//ESTA ES LA MATRI QUE HABLA SOFIA 
     Casilla matriz[5][7]; 
     
     int turno; //por ejemplo 0 para humanos y 1 para aliens
-
 
 public:
     // Constructor
