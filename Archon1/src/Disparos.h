@@ -4,6 +4,8 @@ class Personaje; //DECLARACION ANTICIPADA
 
 class Disparo
 {
+	friend class MotorGrafico;
+
 	double x, y; // POSICION
 	double velo_x, velo_y; // VELOCIDAD
 	int danio; // DAÑO QUE CAUSA
@@ -24,7 +26,5 @@ public:
 	Disparo();//COSNTRUCTOR
 	void moverDisparo();
 	bool Impacto(Personaje& objetivo, Personaje& atacante);
-
-	friend class MotorGrafico;
 };
 

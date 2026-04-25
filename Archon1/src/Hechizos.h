@@ -4,6 +4,8 @@ class Personaje; //DECLARACION ANTICIPADA
 
 class Hechizo
 {
+	friend class MotorGrafico;
+
 public:
 	enum TipoHechizo : int { PARALISIS, HIPERVELOCIDAD, POCION };
 private:
@@ -27,8 +29,6 @@ public:
 	void usar_Hechizo(int tipoHechizo, Personaje& objetivo);
 	void usar_Pocion(Personaje& aliado);
 	void actualizarTiempos(double Time);  //ACTUALIZA TIEMPOS DE RECARGA
-
-	friend class MotorGrafico;
 };
 
 //////VARIABLES GLOBALES DEFINIDAS EN HECHIZOS.CPP

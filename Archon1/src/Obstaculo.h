@@ -2,6 +2,8 @@
 
 class Obstaculo
 {
+	friend class MotorGrafico;
+
 	double x, y;
 	double radio;
 
@@ -11,6 +13,4 @@ public:
 	double getX() const { return x; }
 	double getY() const { return y; }
 	double getRadio() const { return radio; }
-
-	friend class MotorGrafico;
 };

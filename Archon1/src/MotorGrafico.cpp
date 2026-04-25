@@ -22,6 +22,28 @@ MotorGrafico::MotorGrafico() :
 {
 }
 
+void MotorGrafico::dibujarPared(const Pared& p)
+{
+	glDisable(GL_LIGHTING);
+	glColor3ub(p.r, p.g, p.b);
+	glBegin(GL_POLYGON);
+	glVertex3f(p.x1, p.y1, 10);
+	glVertex3f(p.x2, p.y2, 10);
+	glVertex3f(p.x2, p.y2, -10);
+	glVertex3f(p.x1, p.y1, -10);
+	glEnd(); //
+	glEnable(GL_LIGHTING);
+}
+
+void MotorGrafico::dibujarCaja(const Caja& c)
+{
+	dibujarPared(c.suelo);
+	dibujarPared(c.techo);
+	dibujarPared(c.izq);
+	dibujarPared(c.dcha);
+
+}
+
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
 	//HACER ANIMACION!!!!!!!!!!!!!!!!
