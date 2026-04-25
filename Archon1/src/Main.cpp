@@ -8,12 +8,13 @@
 #include "menu.h"
 #include "dibujo_tablero.h"
 #include <cctype>
+#include "vista.h"
 
 //er
 using std::cout, std::cin, std::endl;
 
 //IMPORTANTE AÑADIR LOS ENUM Q HAGAN FALTA
-enum Estado { MENU, SELECCION, JUEGO, RANKING };
+enum Estado { MENU, SELECCION, JUEGO, RANKING, BATALLA };
 Estado estado = MENU;
 //variable global que devuelve el bando del jugador y ese empieza primero
 
@@ -25,6 +26,7 @@ Estado estado = MENU;
 
 Menu miMenu;
 Tablero miTablero;
+Camara miCamara;
 Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
 Juego juego(&miTablero);
 Batalla miBatalla;
@@ -71,16 +73,12 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
   switch (estado) {
     case MENU:
         //primero camara
-        gluLookAt(50.0, 50.0, 20.0,
-            50.0, 50.0, 0.0,
-            0.0, 1.0, 0.0);
+        miCamara.vistaMenu();
         //despues dibujar
         miMenu.dibuja_menu();
         break;
     case JUEGO:
-        gluLookAt(7.0, 5.0, 20.0,
-            7.0, 5.0, 0.0,
-            0.0, 1.0, 0.0);
+        miCamara.vistaJuego();
         dibujo_tablero.dibuja();
         break;
     case RANKING:
@@ -88,15 +86,17 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
         break;
     case SELECCION:
         // Mantenengo la misma cámara que el menú para que se siga vienda debajo que queda bien
-        gluLookAt(50.0, 50.0, 20.0,
-            50.0, 50.0, 0.0,
-            0.0, 1.0, 0.0);
+        miCamara.vistaMenu();
 
         // Dibujo el menú de fondo (para que no desaparezca)
         miMenu.dibuja_menu();
         // Dibujo la capa de selección encima
         miMenu.dibuja_capa_seleccion();
         break;
+    case BATALLA:
+        miCamara.vistaBatalla();
+        break;
+
     }
     //no borrar esta linea ni poner nada despues
     glutSwapBuffers();   
