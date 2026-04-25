@@ -1,6 +1,6 @@
 #include <iostream>
 #include "freeglut.h"
-#include "ETSIDI.h"
+#include "MotorGrafico.h"
 #include "tablero.h"
 #include "Batalla.h"
 #include "Juego.h"
@@ -9,24 +9,27 @@
 #include "dibujo_tablero.h"
 #include <cctype>
 
-
+//er
 using std::cout, std::cin, std::endl;
 
 //IMPORTANTE AÑADIR LOS ENUM Q HAGAN FALTA
 enum Estado { MENU, SELECCION, JUEGO, RANKING };
 Estado estado = MENU;
-int bando_jugador{};//variable global que devuelve el bando del jugador y ese empieza primero
+//variable global que devuelve el bando del jugador y ese empieza primero
 
 //
 //RECORDAD QUE YO SIEMPRE PONGO MENSAJES EN EL SHELL PARA SABER Q ESTAMOS HACIENDO Y SI LA FUNCIONALIDAD VA Y LO Q ME FALLA SON LOS GRÁFICOS
 //
 
-Juego juego; // <--- ESTO ES LO QUE FALTA
+//PARA QUE NO SE RESTAURE LA VIDA DE LOS PERSONAJES AL ACABAR LA BATALLA SOLO USAR CREARPIEZA 1 VEZ AL INICIO
+
 Menu miMenu;
 Tablero miTablero;
 Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
+Juego juego(&miTablero); // <--- ESTO ES LO QUE FALTA
+
 void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
-{
+{ //esto no debería de ir en una funcion por separado?
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         if (estado == MENU) {
             //BOTÓN EXIT (Centro: 178, 182)
@@ -51,7 +54,7 @@ void mouse(int button, int state, int x, int y) //esta funcion detecta los click
         }
 
     }
-    cout << "SOFIA-PRUEBA-MERGE";
+    
 }
 
 void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado de batalla con su respectiva camara, creo q es de Elena eso
@@ -114,14 +117,15 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
 
         if (key == 'h') {
             std::cout << "[SISTEMA] Has elegido: HUMANOS. Iniciando despliegue..." << std::endl;
-            bando_jugador = 1; // La que hay al principio como global (1: Humanos, 2: Aliens)
+            juego.setBandoJugador(Bando_jugador_es_Humano);
             estado = JUEGO;
         }
         else if (key == 'a') {
             std::cout << "[SISTEMA] Has elegido: ALIENS. Iniciando invasión..." << std::endl;
-            bando_jugador = 2;
+            juego.setBandoJugador(Bando_jugador_es_Alien);
             estado = JUEGO;
         }
+
 
         // Refresco de pantalla para q se pinte
         glutPostRedisplay();

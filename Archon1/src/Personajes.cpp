@@ -2,22 +2,36 @@
 #include "Hechizos.h"
 #include "Disparos.h"
 
-Personajes_carac::Personajes_carac()
+////VARIABLES GLOBALES
+int Personaje::puntuacionHumanos = 0;
+int Personaje::puntuacionAliens = 0;
+
+//personaje::personaje(tipo_figura t, bando e, int x, int y)
+Personaje::Personaje()
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		nDisparos[i] = nullptr;
 }
 
-Personajes_carac Personajes_carac::crearPieza(Tipo tipo)
+void Personaje::sumarPuntos(int puntos)
 {
-	Personajes_carac pieza;
+	if (bando == HUMANO)
+		puntuacionHumanos += puntos;
+	else
+		puntuacionAliens += puntos;
+}
+
+Personaje Personaje::crearPieza(Tipo_figura tipo)
+{
+	Personaje pieza;
 	pieza.setTipo(tipo);
 
 	//DECIDIR CARACTERISTICAS SEGUN EL TIPO DE PIEZA
 	switch (tipo)
 	{
-	case SOLDADO:
+	case LUCHADOR:
 		pieza.setVida(100);
+		pieza.setVidaMax(100);
 		pieza.setDanio(10);
 		pieza.setV_base(0.8);
 
@@ -27,6 +41,7 @@ Personajes_carac Personajes_carac::crearPieza(Tipo tipo)
 		break;
 	case ARQUERO:
 		pieza.setVida(80);
+		pieza.setVidaMax(80);
 		pieza.setDanio(15);
 		pieza.setV_base(1.2);
 
@@ -36,6 +51,7 @@ Personajes_carac Personajes_carac::crearPieza(Tipo tipo)
 		break;
 	case VOLADOR:
 		pieza.setVida(140);
+		pieza.setVidaMax(140);
 		pieza.setDanio(8);
 		pieza.setV_base(1.5);
 
@@ -45,6 +61,7 @@ Personajes_carac Personajes_carac::crearPieza(Tipo tipo)
 		break;
 	case EXCAVADOR:
 		pieza.setVida(60);
+		pieza.setVidaMax(60);
 		pieza.setDanio(30);
 		pieza.setV_base(1.0);
 
@@ -54,6 +71,7 @@ Personajes_carac Personajes_carac::crearPieza(Tipo tipo)
 		break;
 	case HECHICERO:
 		pieza.setVida(90);
+		pieza.setVidaMax(90);
 		pieza.setDanio(25);
 		pieza.setV_base(1.3);
 		pieza.setVelocidad(1.3);
@@ -64,7 +82,7 @@ Personajes_carac Personajes_carac::crearPieza(Tipo tipo)
 	return pieza;
 }
 
-void Personajes_carac::lanzarDisparo()
+void Personaje::lanzarDisparo()
 {
 	if (tipo != ARQUERO) return;
 
@@ -84,15 +102,14 @@ void Personajes_carac::lanzarDisparo()
 	}
 }
 
-void Personajes_carac::gestionarDisparos(Personajes_carac& enemigo)
+void Personaje::gestionarDisparos(Personaje& enemigo)
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		if (nDisparos[i] != nullptr)
 		{
 			nDisparos[i]->moverDisparo();
-			nDisparos[i]->dibujarDisparo();
 
-			if (nDisparos[i]->Impacto(enemigo) || !nDisparos[i]->return_Activo())
+			if (nDisparos[i]->Impacto(enemigo, *this) || !nDisparos[i]->return_Activo())
 			{ //SI NO ESTA ACTIVO Y SI IMPACTA
 				delete nDisparos[i]; //LIBERAR MEMORIA
 				nDisparos[i] = nullptr; //DEJAR HUECO LIBRE
@@ -100,7 +117,7 @@ void Personajes_carac::gestionarDisparos(Personajes_carac& enemigo)
 		}
 }
 
-void Personajes_carac::actualizarEfectos()
+void Personaje::actualizarEfectos()
 {
 	if (t_paralisis > 0)
 	{

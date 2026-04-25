@@ -7,7 +7,7 @@ Hechizo hechizos[3];
 bool usoPocion = false;
 extern Juego juego;
 
-Hechizo::Hechizo() : mis_hechizos("Recursos/hechizo1.png")
+Hechizo::Hechizo()
 {
 	tipo = PARALISIS;
 	usos_restantes = 0;
@@ -27,26 +27,15 @@ void Hechizo::configurar(TipoHechizo t)
 	case PARALISIS:
 		t_recarga = 5.0;
 		usos_restantes = 2;
-		mis_hechizos = ETSIDI::Sprite("Recursos/hechizo1.png");
 		break;
 	case HIPERVELOCIDAD:
 		t_recarga = 5.0;
 		usos_restantes = 2;
-		mis_hechizos = ETSIDI::Sprite("Recursos/hechizo2.png");
 		break;
 	case POCION:
 		t_recarga = 0.0; //LA POCION NO TIENE RECARGA, SOLO USOS LIMITADOS
 		usos_restantes = 1;
-		mis_hechizos = ETSIDI::Sprite("Recursos/pocion.png");
 		break;
-	}
-}
-
-void Hechizo::dibujarHechizo()
-{
-	if (activo) {
-		mis_hechizos.setPos(posX, posY);
-		mis_hechizos.draw();
 	}
 }
 
@@ -64,7 +53,7 @@ void Hechizo::actualizarTiempos(double Time)
 }
 
 //HECHIZOS USADOS EN BATALLA
-void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
+void Hechizo::usar_Hechizo(int tipoHechizo, Personaje& objetivo)
 {
 	if (t_restante > 0)
 		return; //EN RECARGA
@@ -76,10 +65,13 @@ void Hechizo::usar_Hechizo(int tipoHechizo, Personajes_carac& objetivo)
 
 	t_restante = t_recarga; //INICIAR RECARGA
 	activo = true;
+
+	if (tipoHechizo == PARALISIS) objetivo.set_paralisis(5.0);
+	else if (tipoHechizo == HIPERVELOCIDAD) objetivo.set_hiperVelocidad(5.0);
 }
 
 //HECHIZO USADO EN TABLERO
-void Hechizo::usar_Pocion(Personajes_carac& aliado)
+void Hechizo::usar_Pocion(Personaje& aliado)
 {
 	int nuevaVida;
 

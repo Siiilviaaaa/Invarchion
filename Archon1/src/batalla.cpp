@@ -1,12 +1,42 @@
 #include <iostream>
 #include <cmath>
 #include "Batalla.h"
-#include "Disparos.h"
-#include "Hechizos.h"
 
 using std::cout, std::cin, std::endl;
 
-void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
+void Batalla::actualizarCombate(Personaje& j1, Personaje& j2)
+{
+	for (int i = 0;i < 3;i++)
+		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
+
+	j1.gestionarDisparos(j2);
+	j2.gestionarDisparos(j1);
+
+	j1.actualizarEfectos();
+	j2.actualizarEfectos();
+}
+
+int Batalla::FinCombate(Personaje& humanos, Personaje& aliens)
+{
+	//RETORNA 0 SI SIGUEN PELEANDO
+	//RETORNA 1 SI HUMANOS GANAN
+	//RETORNA 2 SI ALIENS GANAN
+
+	if (aliens.return_Vida() <= 0)
+	{
+		cout << "HUMANS WIN!" << endl;
+		return 1;
+	}
+	else if (humanos.return_Vida() <= 0)
+	{
+		cout << "ALIENS WIN!" << endl;
+		return 2;
+	}
+
+	return 0;
+}
+
+void Batalla::pegar(Personaje& atacante, Personaje& objetivo,
 	double x1, double y1, double x2, double y2)
 {
 	if (atacante.return_Tipo() == ARQUERO) //EL ARQUERO NO PEGA, SOLO DISPARA
@@ -24,9 +54,10 @@ void pegar(Personajes_carac& atacante, Personajes_carac& objetivo,
 		nuevaVida = 0;
 
 	objetivo.setVida(nuevaVida);
+	atacante.sumarPuntos(10); //10 PUNTOS POR GOLPEAR
 }
 
-void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
+void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,
 				 double x1, double y1, double x2, double y2)
 {
 	switch (key)
@@ -52,34 +83,37 @@ void KeyBatalla(unsigned char key, Personajes_carac& j1, Personajes_carac& j2,
 	}
 }
 
-void actualizarCombate(Personajes_carac& j1, Personajes_carac& j2)
+bool Batalla::NoMover(Personaje& j, const Pared& p)
 {
-	for (int i=0;i<3;i++)
-		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
-
-	j1.gestionarDisparos(j2);
-	j2.gestionarDisparos(j1);
-
-	j1.actualizarEfectos();
-	j2.actualizarEfectos();
+	if (p.distancia(j.return_X(), j.return_Y()) < 1.0)
+		return true; //CHOCA
+	return false;
 }
 
-int FinalBatalla(Personajes_carac& humanos, Personajes_carac& aliens)
+bool Batalla::reboteDisparos(Disparo& d, const Pared& p)
 {
-	//RETORNA 0 SI SIGUEN PELEANDO
-	//RETORNA 1 SI HUMANOS GANAN
-	//RETORNA 2 SI ALIENS GANAN
-
-	if (aliens.return_Vida() <= 0)
+	double dx, dy;
+	if (p.distancia(d.return_X(), d.return_Y()) < 0.5)
 	{
-		cout << "HUMANS WIN!" << endl;
-		return 1;
+		d.setVX(d.return_VX());
+		d.setVY(d.return_VY());
+		return true;
 	}
-	else if (humanos.return_Vida() <= 0)
-	{
-		cout << "ALIENS WIN!" << endl;
-		return 2;
-	}
+	return false;
+}
 
-	return 0;
+void Batalla::limites_d(Disparo& d, Caja& c)
+{
+	reboteDisparos(d, c.return_suelo());
+	reboteDisparos(d, c.return_techo());
+	reboteDisparos(d, c.return_izq());
+	reboteDisparos(d, c.return_dcha());
+}
+
+void Batalla::limites_p(Personaje& j, Caja& c)
+{
+	NoMover(j, c.return_suelo());
+	NoMover(j, c.return_techo());
+	NoMover(j, c.return_izq());
+	NoMover(j, c.return_dcha());
 }
