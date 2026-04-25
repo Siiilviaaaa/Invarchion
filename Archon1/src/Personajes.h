@@ -7,6 +7,7 @@ enum Bando { HUMANO, ALIEN };
 
 class Personaje
 {
+	friend class Cursor;
 	Tipo_figura tipo;
 	Bando bando;
 	int vida;

@@ -10,6 +10,6 @@ public:
 	void dibuja();
 	void mover_cursor(unsigned char key, int turno);
 	void mover(unsigned char key, int turno);
-	int coger();
+	int coger(int turno);
 	int soltar();
  };
