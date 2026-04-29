@@ -102,6 +102,26 @@ bool Batalla::reboteDisparos(Disparo& d, const Pared& p)
 	return false;
 }
 
+bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o)
+{
+	double dx = j.return_X() - o.return_X();
+	double dy = j.return_Y() - o.return_Y();
+	double dist = sqrt(dx * dx + dy * dy);
+
+	if (dist < (o.return_Radio() + 0.8)) {
+		//EMPUJAR HACIA FUERA
+		double angulo = atan2(dy, dx);
+		j.setX(o.return_X() + (o.return_Radio() + 0.81) * cos(angulo));
+		j.setY(o.return_Y() + (o.return_Radio() + 0.81) * sin(angulo));
+	}
+	return false;
+}
+
+bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o)
+{
+	return false;
+}
+
 void Batalla::limites_d(Disparo& d, Caja& c)
 {
 	reboteDisparos(d, c.return_suelo());
