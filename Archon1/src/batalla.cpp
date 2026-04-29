@@ -4,7 +4,7 @@
 
 using std::cout, std::cin, std::endl;
 
-void Batalla::actualizarCombate(Personaje& j1, Personaje& j2)
+void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja)
 {
 	for (int i = 0;i < 3;i++)
 		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
@@ -14,6 +14,9 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2)
 
 	j1.actualizarEfectos();
 	j2.actualizarEfectos();
+
+	limites_p(j1, caja);
+	limites_p(j2, caja);
 }
 
 int Batalla::FinCombate(Personaje& humanos, Personaje& aliens)
@@ -119,7 +122,27 @@ bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o)
 
 bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o)
 {
-	return false;
+	if (d.return_Activo()) {
+		double dx = d.return_X() - o.return_X();
+		double dy = d.return_Y() - o.return_Y();
+		double dist = sqrt(dx * dx + dy * dy);
+
+		if (dist < o.return_Radio())
+		{
+			//INVERTIR SEGÚN DONDE GOLPEE
+			if (std::abs(dx) > std::abs(dy))	//SI GOLPEA MAS POR LOS LADOS QUE POR ARRIBA
+				d.setVX(-d.return_VX());		//REBOTE HORIZONTAL
+			else
+				d.setVY(-d.return_VY());		//REBOTE VERTICAL
+
+			//NUEVA VELOCIDAD
+			d.setX(d.return_X() + d.return_VX());
+				d.setY(d.return_Y() + d.return_VY());
+
+			return true;
+		}
+	}
+	else return false;
 }
 
 void Batalla::limites_d(Disparo& d, Caja& c)
