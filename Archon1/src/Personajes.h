@@ -50,6 +50,8 @@ public:
 	double return_Vbase() const { return vel_base; }
 	int return_VidaMax() const { return vida_max; }
 
+	Disparo* (&return_Disparos())[10] { return nDisparos; }
+
 	///////////SETTERS/////////////////
 	void setTipo(Tipo_figura nuevoTipo) { tipo = nuevoTipo; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }

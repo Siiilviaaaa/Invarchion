@@ -14,7 +14,7 @@ class Batalla
 {
 public:
 	/////////ACTUALIZACIONES//////////////
-	void actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja);
+	void actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo& obs);
 	int FinCombate(Personaje& humanos, Personaje& aliens);
 
 	/////////DAÑAR AL OPONENTE////////////

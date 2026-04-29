@@ -4,19 +4,41 @@
 
 using std::cout, std::cin, std::endl;
 
-void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja)
+void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstaculo& obs)
 {
 	for (int i = 0;i < 3;i++)
 		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
 
-	j1.gestionarDisparos(j2);
-	j2.gestionarDisparos(j1);
-
 	j1.actualizarEfectos();
 	j2.actualizarEfectos();
 
+	j1.gestionarDisparos(j2);
+	j2.gestionarDisparos(j1);
+
+	for (int i = 0;i < 10;i++)
+	{
+		//DISPAROS DEL J1
+		if (j1.return_Disparos()[i] != nullptr)
+		{
+			limites_d(*j1.return_Disparos()[i], caja);
+			choqueObstaculo(*j1.return_Disparos()[i], obs);
+		}
+
+		//DISPAROS DEL J2
+		if (j1.return_Disparos()[i] != nullptr)
+		{
+			limites_d(*j2.return_Disparos()[i], caja);
+			choqueObstaculo(*j2.return_Disparos()[i], obs);
+		}
+	}
+
 	limites_p(j1, caja);
 	limites_p(j2, caja);
+
+	choqueObstaculo(j1, obs);
+	choqueObstaculo(j2, obs);
+
+	FinCombate(j1, j2);
 }
 
 int Batalla::FinCombate(Personaje& humanos, Personaje& aliens)
