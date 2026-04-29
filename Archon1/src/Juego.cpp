@@ -86,3 +86,16 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int x, int y)
     }
 }
 
+//JULI NO SE DONDE PONER QUE LA BATALLA SIGUE EN CURSO, TE LO DEJO POR AQUI
+//int estado = batalla.FinCombate(jugador1, jugador2);
+//
+//if (estado == 1) {
+//    // Ganan humanos y sumar puntos extra por victoria
+//    jugador1.sumarPuntos(100);
+//        // Cambiar estado del juego a "TABLERO"
+//}
+//else if (estado == 2) {
+//    // Ganan aliens y sumar puntos
+//    jugador2.sumarPuntos(100);
+//        // Cambiar estado del juego a "TABLERO"
+//}

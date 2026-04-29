@@ -13,6 +13,19 @@ Personaje::Personaje()
 		nDisparos[i] = nullptr;
 }
 
+Personaje::~Personaje()
+{
+	//LIMPIAR MEMORIA DE LOS DISPAROS CUANDO EL PERSOANJE MUERE
+	for (int i = 0; i < MAX_DISPAROS; i++)
+	{
+		if (nDisparos[i] != nullptr)
+		{
+			delete nDisparos[i];
+			nDisparos[i] = nullptr;
+		}
+	}
+}
+
 void Personaje::sumarPuntos(int puntos)
 {
 	if (bando == HUMANO)

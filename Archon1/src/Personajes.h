@@ -34,6 +34,8 @@ public:
 	
 	//////////METODOS//////////////
 	Personaje();
+	~Personaje();
+
 	void sumarPuntos(int puntos);
 	static Personaje crearPieza(Tipo_figura tipo);
 	void actualizarEfectos();
