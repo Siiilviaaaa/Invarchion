@@ -10,7 +10,7 @@ class Obstaculo
 public:
 	Obstaculo(double pos_x, double pos_y, double r);
 
-	double getX() const { return x; }
-	double getY() const { return y; }
-	double getRadio() const { return radio; }
+	double return_X() const { return x; }
+	double return_Y() const { return y; }
+	double return_Radio() const { return radio; }
 };

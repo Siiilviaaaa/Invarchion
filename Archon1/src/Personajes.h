@@ -34,6 +34,8 @@ public:
 	
 	//////////METODOS//////////////
 	Personaje();
+	~Personaje();
+
 	void sumarPuntos(int puntos);
 	static Personaje crearPieza(Tipo_figura tipo);
 	void actualizarEfectos();
@@ -49,6 +51,8 @@ public:
 	double return_Y() const { return y; }
 	double return_Vbase() const { return vel_base; }
 	int return_VidaMax() const { return vida_max; }
+
+	Disparo* (&return_Disparos())[10] { return nDisparos; }
 
 	///////////SETTERS/////////////////
 	void setTipo(Tipo_figura nuevoTipo) { tipo = nuevoTipo; }
