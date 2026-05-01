@@ -1,6 +1,6 @@
 #pragma once
 #include "Pared.h"
-
+#include "ETSIDI.h"
 class Caja
 {
 	friend class MotorGrafico;
@@ -11,10 +11,10 @@ class Caja
 
 public:
 	Caja() :
-		suelo(0, 0, 20, 0, 92, 64, 51),
-		techo(0, 15, 20, 15, 75, 50, 35),
-		izq(0, 0, 0, 15, 110, 80, 65),
-		dcha(20, 0, 20, 15, 85, 60, 45) {}
+		suelo(0, 0, 20, 0, 26, 9, 26),
+		techo(0, 15, 20, 15, 61, 28, 43),
+		izq(0, 0, 0, 15, 107, 45, 45),
+		dcha(20, 0, 20, 15, 107, 45, 50) {}
 	Pared return_suelo() const { return suelo; }
 	Pared return_techo()const { return techo;}
 	Pared return_izq()const { return izq;}

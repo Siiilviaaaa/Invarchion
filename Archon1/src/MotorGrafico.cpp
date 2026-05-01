@@ -32,10 +32,10 @@ void MotorGrafico::dibujarPared(const Pared& p)
 	glDisable(GL_LIGHTING);
 	glColor3ub(p.r, p.g, p.b);
 	glBegin(GL_POLYGON);
-	glVertex3f(p.x1, p.y1, 10);
-	glVertex3f(p.x2, p.y2, 10);
-	glVertex3f(p.x2, p.y2, -10);
-	glVertex3f(p.x1, p.y1, -10);
+	glVertex3f(p.x1, p.y1, 2);
+	glVertex3f(p.x2, p.y2, 2);
+	glVertex3f(p.x2, p.y2, -2);
+	glVertex3f(p.x1, p.y1, -2);
 	glEnd(); //
 	glEnable(GL_LIGHTING);
 }
@@ -46,6 +46,19 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 	dibujarPared(c.techo);
 	dibujarPared(c.izq);
 	dibujarPared(c.dcha);
+	//para dibujar fondo
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/batalla3.png").id);
+	glDisable(GL_LIGHTING);
+	glBegin(GL_POLYGON);
+	glColor3f(1, 1, 1);
+	glTexCoord2d(0, 1); glVertex2d(-0, 0);
+	glTexCoord2d(1, 1); glVertex2d(20, 0);
+	glTexCoord2d(1, 0); glVertex2d(20, 15);
+	glTexCoord2d(0, 0); glVertex2d(0, 15);
+	glEnd();
+	glEnable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
 
 }
 
