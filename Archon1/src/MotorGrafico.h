@@ -5,6 +5,7 @@
 #include "Personajes.h"
 #include "Caja.h"
 #include "Obstaculo.h"
+#include "Cursor.h"
 
 //RELACION DE AMISTAD DE PERSONAJES, HECHIZOS, DISPAROS PARA PODER ACCEDER A SUS ATRIBUTOS PRIVADOS
 
@@ -40,6 +41,7 @@ public:
 	MotorGrafico();
 	void dibujarEscenaBatalla(const Caja& c, const Personaje& atacante, const Personaje& defensor);
 	void dibujarPared(const Pared& p);
+	void dibujarCursor(Cursor cursor);
 	void dibujarObstaculo(const Obstaculo& obs);
 	void dibujarCaja(const Caja& c);
 	void dibujarDisparo(const Disparo& disparo);
