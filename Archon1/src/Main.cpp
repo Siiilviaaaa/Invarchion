@@ -1,20 +1,20 @@
 #include <iostream>
 #include "freeglut.h"
-#include "ETSIDI.h"
+#include "MotorGrafico.h"
 #include "tablero.h"
 #include "Batalla.h"
 #include "Juego.h"
 #include "casilla.h"
 #include "menu.h"
 #include "dibujo_tablero.h"
-#include "Cursor.h"
 #include <cctype>
+#include "vista.h"
 
-
+//er
 using std::cout, std::cin, std::endl;
 
 //IMPORTANTE AÑADIR LOS ENUM Q HAGAN FALTA
-enum Estado { MENU, SELECCION, JUEGO, RANKING };
+enum Estado { MENU, SELECCION, JUEGO, RANKING, BATALLA };
 Estado estado = MENU;
 //variable global que devuelve el bando del jugador y ese empieza primero
 
@@ -22,12 +22,16 @@ Estado estado = MENU;
 //RECORDAD QUE YO SIEMPRE PONGO MENSAJES EN EL SHELL PARA SABER Q ESTAMOS HACIENDO Y SI LA FUNCIONALIDAD VA Y LO Q ME FALLA SON LOS GRÁFICOS
 //
 
+//PARA QUE NO SE RESTAURE LA VIDA DE LOS PERSONAJES AL ACABAR LA BATALLA SOLO USAR CREARPIEZA 1 VEZ AL INICIO
 
 Menu miMenu;
 Tablero miTablero;
+Camara miCamara;
+MotorGrafico motor;
+Caja miCaja;
 Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
-Juego juego(&miTablero); // <--- ESTO ES LO QUE FALTA
-Cursor mi_cursor{};
+Juego juego(&miTablero);
+Batalla miBatalla;
 
 void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
 { //esto no debería de ir en una funcion por separado?
@@ -61,7 +65,6 @@ void mouse(int button, int state, int x, int y) //esta funcion detecta los click
 void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado de batalla con su respectiva camara, creo q es de Elena eso
                   //también he conservado la posición original del tablero y he movido yo mi menú para q no hubiera problemas
 {
-   
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    
     glMatrixMode(GL_MODELVIEW);
@@ -72,16 +75,12 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
   switch (estado) {
     case MENU:
         //primero camara
-        gluLookAt(50.0, 50.0, 20.0,
-            50.0, 50.0, 0.0,
-            0.0, 1.0, 0.0);
+        miCamara.vistaMenu();
         //despues dibujar
         miMenu.dibuja_menu();
         break;
     case JUEGO:
-        gluLookAt(7.0, 5.0, 20.0,
-            7.0, 5.0, 0.0,
-            0.0, 1.0, 0.0);
+        miCamara.vistaJuego();
         dibujo_tablero.dibuja();
         break;
     case RANKING:
@@ -89,15 +88,18 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
         break;
     case SELECCION:
         // Mantenengo la misma cámara que el menú para que se siga vienda debajo que queda bien
-        gluLookAt(50.0, 50.0, 20.0,
-            50.0, 50.0, 0.0,
-            0.0, 1.0, 0.0);
+        miCamara.vistaMenu();
 
         // Dibujo el menú de fondo (para que no desaparezca)
         miMenu.dibuja_menu();
         // Dibujo la capa de selección encima
         miMenu.dibuja_capa_seleccion();
         break;
+    case BATALLA:
+        miCamara.vistaBatalla();
+        motor.dibujarCaja(miCaja);
+        break;
+
     }
     //no borrar esta linea ni poner nada despues
     glutSwapBuffers();   
@@ -106,6 +108,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
 void OnTimer(int value) //no tengo 100% claro si es estrictamente necesaria pero yo la he añadido pq me facilitaba la vida
 {
     glutPostRedisplay();
+
     // Se vuelve a llamar a sí misma cada 20ms (unos 50 FPS)
     glutTimerFunc(20, OnTimer, 0);
 }
@@ -131,12 +134,17 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         // Refresco de pantalla para q se pinte
         glutPostRedisplay();
     }
+    key = tolower(key);
+    if (key == 'b') { //luego se sustituira cuando tengamos la variable de entrar en batalla
+        if (estado == JUEGO) {
+            estado = BATALLA;
+        }
+    }
 }
 
 int main(int argc, char** argv) {
     //INICIAR JUEGO
    // Invarchion.IniciarJuego(); //esto cambia el valor del bool ejecutandose a 1, por lo que podeis poner las funciones como la de dibujar el tablero en basse a esto
-
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
@@ -169,5 +177,4 @@ int main(int argc, char** argv) {
     glutMainLoop();
     
     return 0;
-
 }
