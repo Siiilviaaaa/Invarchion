@@ -24,7 +24,7 @@ public:
 	void vistaBatalla() {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		gluLookAt(10.0, 7.5, 35.0,
+		gluLookAt(10.0, 7.5, 23.0,
 			10.0, 7.5, 0.0,
 			0.0, 1.0, 0.0);
 	}

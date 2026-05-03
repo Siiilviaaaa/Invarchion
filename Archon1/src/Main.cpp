@@ -30,8 +30,7 @@ Camara miCamara;
 MotorGrafico motor;
 Caja miCaja;
 Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
-Juego juego(&miTablero);
-Batalla miBatalla;
+Juego juego(&miTablero); // <--- ESTO ES LO QUE FALTA
 
 void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
 { //esto no debería de ir en una funcion por separado?
@@ -65,6 +64,7 @@ void mouse(int button, int state, int x, int y) //esta funcion detecta los click
 void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado de batalla con su respectiva camara, creo q es de Elena eso
                   //también he conservado la posición original del tablero y he movido yo mi menú para q no hubiera problemas
 {
+   
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    
     glMatrixMode(GL_MODELVIEW);
@@ -108,7 +108,6 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
 void OnTimer(int value) //no tengo 100% claro si es estrictamente necesaria pero yo la he añadido pq me facilitaba la vida
 {
     glutPostRedisplay();
-
     // Se vuelve a llamar a sí misma cada 20ms (unos 50 FPS)
     glutTimerFunc(20, OnTimer, 0);
 }
@@ -139,12 +138,14 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         if (estado == JUEGO) {
             estado = BATALLA;
         }
+        motor.inicializarBatalla();
     }
 }
 
 int main(int argc, char** argv) {
     //INICIAR JUEGO
    // Invarchion.IniciarJuego(); //esto cambia el valor del bool ejecutandose a 1, por lo que podeis poner las funciones como la de dibujar el tablero en basse a esto
+
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
@@ -177,4 +178,5 @@ int main(int argc, char** argv) {
     glutMainLoop();
     
     return 0;
+
 }
