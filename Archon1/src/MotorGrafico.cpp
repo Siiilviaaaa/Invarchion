@@ -1,6 +1,8 @@
 #include "MotorGrafico.h"
-
+#include <ctime>
+#include <cstdlib>
 MotorGrafico::MotorGrafico() :
+	numObstaculos(5),
 	luchador("Recursos/luchador.png"), 	
 	soldado("Recursos/soldado.png"),	
 	volador("Recursos/volador.png"),
@@ -20,12 +22,42 @@ MotorGrafico::MotorGrafico() :
 	Velocidad("Recursos/hechizo2.png"),
 	Pocion("Recursos/pocion.png")
 {
+	for (int i = 0; i < 5; i++) {
+		listaObstaculos[i] = nullptr;
+	}
 }
 
-//void MotorGrafico::dibujarEscenaBatalla(const Caja& c, const Personaje& atacante, const Personaje& defensor)
-//{
-//	dibujarCaja(c);
-//}
+void MotorGrafico::inicializarBatalla()
+{
+	srand((unsigned int)time(NULL));
+	int aceptados = 0;
+	for (int i = 0; i < numObstaculos; i++) {
+		if (listaObstaculos[i]) delete listaObstaculos[i];
+		listaObstaculos[i] = nullptr;
+	}
+	double r = 1.0;
+	const float dist_min = 3.5f;
+	while (aceptados < numObstaculos) {
+		double rx = r + ((double)rand()/RAND_MAX) *(20 - 2 * r);
+		double ry = r + ((double)rand() / RAND_MAX) * (10 - 2 * r);
+		bool colision = false;
+		for (int j = 0; j < aceptados; j++) {
+			Obstaculo* existente = listaObstaculos[j];
+			float dx = (float)(rx - existente->getX());
+			float dy = (float)(ry - existente->getY());
+			float distancia = sqrtf(powf(dx, 2) + powf(dy, 2));
+			if (distancia < dist_min) {
+				colision = true;
+				break;
+			}
+		}
+		if (!colision) {
+			listaObstaculos[aceptados] = new Obstaculo(rx, ry, r);
+			aceptados++;
+		}
+	}
+	
+}
 
 void MotorGrafico::dibujarPared(const Pared& p)
 {
@@ -39,6 +71,7 @@ void MotorGrafico::dibujarPared(const Pared& p)
 	glEnd(); //
 	glEnable(GL_LIGHTING);
 }
+
 
 void MotorGrafico::dibujarCaja(const Caja& c)
 {
@@ -57,8 +90,32 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 	glTexCoord2d(1, 0); glVertex2d(20, 15);
 	glTexCoord2d(0, 0); glVertex2d(0, 15);
 	glEnd();
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/obstaculo3.png").id);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.1f);
+	for (int i = 0; i < numObstaculos; i++) {
+		if (listaObstaculos[i] != nullptr) {
+			double x = listaObstaculos[i]->getX();
+			double y = listaObstaculos[i]->getY();
+			double r = listaObstaculos[i]->getRadio();
+			//glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+			glBegin(GL_QUADS);
+			glTexCoord2d(0, 1); glVertex3d(x - r, y - r, 0.1);
+			glTexCoord2d(1, 1); glVertex3d(x + r, y - r, 0.1);
+			glTexCoord2d(1, 0); glVertex3d(x + r, y + r, 0.1);
+			glTexCoord2d(0, 0); glVertex3d(x - r, y + r, 0.1);
+			glEnd();
+		}
+	}
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
+
 
 }
 
@@ -135,7 +192,7 @@ void MotorGrafico::dibujarDisparo(const Disparo& disparo)
 {
 	if (disparo.activo)
 	{
-		Flecha.setPos(disparo.x, disparo.x);
+		Flecha.setPos(disparo.x, disparo.y);
 		Flecha.draw();
 	}
 }

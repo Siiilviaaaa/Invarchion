@@ -138,6 +138,7 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         if (estado == JUEGO) {
             estado = BATALLA;
         }
+        motor.inicializarBatalla();
     }
 }
 
