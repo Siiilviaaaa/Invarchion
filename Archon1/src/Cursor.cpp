@@ -22,10 +22,6 @@ void Cursor::inicializar(int turno)
 	}
 }
 
-void Cursor::dibuja()
-{
-}
-
 void Cursor::mover_cursor(unsigned char key,int turno)
 {
 	//movimiento exclusivo del cursor 

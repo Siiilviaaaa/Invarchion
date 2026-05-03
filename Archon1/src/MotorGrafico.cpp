@@ -55,10 +55,10 @@ void MotorGrafico::dibujarCursor(Cursor cursor)
 	glLineWidth(0.2f); //grosor del delineado de 0.2, que se vea pero no excesivo 
 	glColor3ub(255, 128, 0);//color naranja llamativo
 	glBegin(GL_LINE_LOOP);
-	glVertex2f(cursor.columna(), cursor.fila());
-	glVertex2f(cursor.columna() + ancho, cursor.fila());
-	glVertex2f(cursor.columna() + ancho, cursor.fila() + ancho);
-	glVertex2f(cursor.columna(), cursor.fila() + ancho);
+	glVertex2f(cursor.obt_columna(), cursor.obt_fila());
+	glVertex2f(cursor.obt_columna() + ancho, cursor.obt_fila());
+	glVertex2f(cursor.obt_columna() + ancho, cursor.obt_fila() + ancho);
+	glVertex2f(cursor.obt_columna(), cursor.obt_fila() + ancho);
 	glEnd();
 	glLineWidth(1.0f); // volver al grosor normal
 }
