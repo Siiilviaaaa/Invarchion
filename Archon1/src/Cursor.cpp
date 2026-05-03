@@ -6,7 +6,7 @@
 //de momento se coge esta
 Casilla matriz_global[5][7];//esta realmente es una matriz global externa del main que guarda toda la informacion del juego actualizado
 
-void Cursor::inicializar(int turno)
+void Cursor::inicializar_tablero(int turno)
 {
 	if (turno == 0)//turno de los humanos
 	{
@@ -22,7 +22,7 @@ void Cursor::inicializar(int turno)
 	}
 }
 
-void Cursor::mover_cursor(unsigned char key,int turno)
+void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 {
 	//movimiento exclusivo del cursor 
 	if (turno == 0)//turno de humanos
@@ -43,7 +43,7 @@ void Cursor::mover_cursor(unsigned char key,int turno)
 		if ((key == GLUT_KEY_DOWN) && (fila < 5)) fila -= 1;
 	}
 }
-void Cursor::mover(unsigned char key, int turno)
+void Cursor::mover_tablero(unsigned char key, int turno)
 {
 	if (turno == 0)
 	{
@@ -55,7 +55,6 @@ void Cursor::mover(unsigned char key, int turno)
 			{
 				contador_selecciones - 1;
 			}
-			
 			// si coger nos devuelve un ok, le restamos uno a contador_selecciones
 			//A PARTIR DE AHORA HAY QUE CONTAR MOVIMIENTOS!
 		}
@@ -90,7 +89,7 @@ void Cursor::mover(unsigned char key, int turno)
 			}
 			else
 			{
-				mover_cursor(key, turno);//PERO ESTA YA NO ES LA MISMA KEY?!!?!??!??
+				mover_cursor_tablero(key, turno);//PERO ESTA YA NO ES LA MISMA KEY?!!?!??!??
 			}
 
 			// si coger nos devuelve un ok, le restamos uno a contador_selecciones
@@ -112,7 +111,7 @@ void Cursor::mover(unsigned char key, int turno)
 			}
 			else
 			{
-				mover_cursor(key, turno);
+				mover_cursor_tablero(key, turno);
 			}
 		}
 	}
