@@ -13,7 +13,7 @@ class Personaje
 	Bando bando;
 	int vida;
 	int danio;
-	double velocidad;
+	double v;
 	double vel_base;
 	double x, y;
 
@@ -58,7 +58,7 @@ public:
 	void setTipo(Tipo_figura nuevoTipo) { tipo = nuevoTipo; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }
 	void setDanio(int nuevoDanio) { danio = nuevoDanio; }
-	void setVelocidad(double nuevaVelocidad) { velocidad = nuevaVelocidad; }
+	void setVelocidad(double V) { v = V;}
 	void setV_base(double nuevaVBase) { vel_base = nuevaVBase; }
 	void setX(double nuevaX) { x = nuevaX; }
 	void setY(double nuevaY) { y = nuevaY; }

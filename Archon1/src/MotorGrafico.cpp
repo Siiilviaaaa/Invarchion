@@ -1,4 +1,5 @@
 #include "MotorGrafico.h"
+#include "freeglut.h"
 #include <ctime>
 #include <cstdlib>
 
@@ -121,80 +122,47 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
-	//HACER ANIMACION!!!!!!!!!!!!!!!!
-	switch (personaje.tipo)
-	{
-	case Tipo_figura::LUCHADOR:
-		if (personaje.bando == HUMANO)
-		{
-			luchador.setPos(personaje.x, personaje.y);
-			luchador.draw();
-		}else
-		{
-			golem.setPos(personaje.x, personaje.y);
-			golem.draw();
-		}
-		break;
-	case Tipo_figura::ARQUERO:
-		if (personaje.bando == HUMANO)
-		{
-			soldado.setPos(personaje.x, personaje.y);
-			soldado.draw();
-		}
-		else
-		{
-			arquero.setPos(personaje.x, personaje.y);
-			arquero.draw();
-		}
-		break;
-	case Tipo_figura::VOLADOR:
-		if (personaje.bando == HUMANO)
-		{
-			volador.setPos(personaje.x, personaje.y);
-			volador.draw();
-		}
-		else
-		{
-			murcielago.setPos(personaje.x, personaje.y);
-			murcielago.draw();
-		}
-		break;
-	case Tipo_figura::EXCAVADOR:
-		if (personaje.bando == HUMANO)
-		{
-			minero.setPos(personaje.x, personaje.y);
-			minero.draw();
-		}
-		else
-		{
-			gusano.setPos(personaje.x, personaje.y);
-			gusano.draw();
-		}
-		break;
-	case Tipo_figura::HECHICERO:
-		if (personaje.bando == HUMANO)
-		{
-			hechicero.setPos(personaje.x, personaje.y);
-			hechicero.draw();
-		}
-		else
-		{
-			mago.setPos(personaje.x, personaje.y);
-			mago.draw();
-		}
-		break;
-	default:
-		break;
-	}
+	//DEJO LOS SPRITES SIN HACER PORQUE ME ESTOY LIANDO, DIBUJO PELOTITAS
+	glPushMatrix();
+	glTranslated(personaje.x, personaje.y, 0.5);
+	glDisable(GL_LIGHTING);
+	if (personaje.bando == HUMANO) glColor3ub(0, 0, 255);
+	else glColor3ub(255, 0, 0);
+	glutSolidSphere(0.5, 20, 20);
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
+
+	/*glPushMatrix();
+	glTranslated(personaje.x, personaje.y, 1);
+	personaje.sprite.draw();
+	glPopMatrix();
+
+	etsidi::sprite* imagen =
+		(personaje.tipo == luchador) ? ((personaje.bando == humano) ? &luchador : &golem) :
+		(personaje.tipo == arquero) ? ((personaje.bando == humano) ? &soldado : &arquero) :
+		(personaje.tipo == volador) ? ((personaje.bando == humano) ? &volador : &murcielago) :
+		(personaje.tipo == excavador) ? ((personaje.bando == humano) ? &minero : &gusano) :
+		(personaje.tipo == hechicero) ? ((personaje.bando == humano) ? &hechicero : &mago) : nullptr;*/
+
 }
 
 void MotorGrafico::dibujarDisparo(const Disparo& disparo)
 {
-	if (disparo.activo)
+	if (disparo.activo) {
+		glPushMatrix();
+		glTranslated(disparo.x, disparo.y, 0.5);
+		glDisable(GL_LIGHTING);
+		glColor3ub(255, 255, 0);
+		glutSolidSphere(0.2, 10, 10);
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+	}
+
+	/*if (disparo.activo)
 	{
 		Flecha.setPos(disparo.x, disparo.y);
 		Flecha.draw();
-	}
+	}*/
 }
 
 void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)

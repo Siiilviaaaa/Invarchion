@@ -41,12 +41,10 @@ class MotorGrafico
 
 public:
 	MotorGrafico();
-
 	
 	void inicializarBatalla();
 	void dibujarPared(const Pared& p);
 	void dibujarCaja(const Caja& c);
-	
 	
 	void dibujarDisparo(const Disparo& disparo);
 	void dibujarHechizo(const Hechizo& hechizo);

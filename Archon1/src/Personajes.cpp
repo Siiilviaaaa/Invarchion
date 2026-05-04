@@ -45,7 +45,19 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 	pieza.set_paralisis(0.0);
 	pieza.set_hiperVelocidad(0.0);
 
-	//DECIDIR CARACTERISTICAS SEGUN EL TIPO DE PIEZA
+	//SPRITES
+	/*if (tipo == LUCHADOR)
+		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/luchador.png", 5) : ETSIDI::SpriteSequence("Recursos/golem.png", 5);
+	else if (tipo == ARQUERO)
+		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/soldado.png", 5) : ETSIDI::SpriteSequence("Recursos/arquero.png", 5);
+	else if (tipo == VOLADOR)
+		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/volador.png", 5) : ETSIDI::SpriteSequence("Recursos/murcielago.png", 5);
+	else if (tipo == EXCAVADOR)
+		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/minero.png", 5) : ETSIDI::SpriteSequence("Recursos/gusano.png", 5);
+	else if (tipo == HECHICERO)
+		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/hechicero.png", 5) : ETSIDI::SpriteSequence("Recursos/mago.png", 5);*/
+	
+	//CARACTERISTICAS
 	switch (tipo)
 	{
 	case LUCHADOR:
