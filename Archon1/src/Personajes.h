@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include <iostream>
 
 class Disparo;
 
@@ -7,6 +9,7 @@ enum Bando { HUMANO, ALIEN };
 
 class Personaje
 {
+protected: //asi pueden ver estas variables los hijos
 	friend class MotorGrafico;
 
 	Tipo_figura tipo;
@@ -17,9 +20,10 @@ class Personaje
 	double vel_base;
 	double x, y;
 
-	//DISPAROS
+	//DISPAROS TENGO QEU CAMBIARLOOOO
 	static const int MAX_DISPAROS = 10;
-	Disparo* nDisparos[MAX_DISPAROS];
+	//std::vector<Disparo*> disparos;
+	//Disparo* nDisparos[MAX_DISPAROS];
 
 	//HECHIZOS
 	double t_paralisis;
@@ -32,15 +36,16 @@ public:
 	
 	//Personaje(Tipo_figura t, Bando e, int x, int y);
 	
-	//////////METODOS//////////////
+	//////////METODOS//////////////							   
 	Personaje();
-	~Personaje();
+	virtual ~Personaje();
 
 	void sumarPuntos(int puntos);
-	static Personaje crearPieza(Tipo_figura tipo);
+	static Personaje* crearPieza(Tipo_figura tipo, int x, int y, Bando bando);
 	void actualizarEfectos();
 	void gestionarDisparos(Personaje& enemigo);
 	void lanzarDisparo();
+	virtual void ataque() = 0; //esto es para que cada hijo defina su propiio método
 
 	////////////GETTERS/////////////////
 	Tipo_figura return_Tipo() const { return tipo; }
@@ -52,7 +57,8 @@ public:
 	double return_Vbase() const { return vel_base; }
 	int return_VidaMax() const { return vida_max; }
 
-	Disparo* (&return_Disparos())[10] { return nDisparos; }
+	//std::vector<Disparo*>& getDisparos() { return disparos; }
+	//Disparo* (&return_Disparos())[10] { return nDisparos; }
 
 	///////////SETTERS/////////////////
 	void setTipo(Tipo_figura nuevoTipo) { tipo = nuevoTipo; }
@@ -65,4 +71,49 @@ public:
 	void set_paralisis(double nuevoTiempo) { t_paralisis = nuevoTiempo; }
 	void set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
 	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
+};
+
+//hago HIJOS, para que cada personaje tenga habilidades distintas
+
+class Luchador : public Personaje {
+public: 
+	Luchador(int _x, int _y, Bando _bando) : Personaje() {}
+
+	void ataque(); //asi se puede tener atauqes distintos para cada personaje
+};
+
+class Arquero : public Personaje {
+private: 
+public:
+	Arquero(int _x, int _y, Bando _bando) : Personaje() {}
+
+	void ataque() override { //asi se puede tener atauqes distintos para cada personaje
+	}
+};
+
+class Volador : public Personaje {
+public:
+	Volador(int _x, int _y, Bando _bando) : Personaje() {}
+
+	void ataque(); //asi se puede tener atauqes distintos para cada personaje
+};
+
+class Excavador : public Personaje {
+private: 
+	bool estaBajoTierra{ false };
+public:
+	Excavador(int _x, int _y, Bando _bando) : Personaje() {}
+
+	void ataque() override{}
+	void cambiarSiEstaBajoTierra() {
+		if (!estaBajoTierra) estaBajoTierra = true;
+		else estaBajoTierra = false;
+	}
+};
+
+class Hechicero : public Personaje {
+public:
+	Hechicero(int _x, int _y, Bando _bando) : Personaje() {}
+
+	void ataque();
 };

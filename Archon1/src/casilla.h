@@ -24,6 +24,4 @@ public:
 	//void y(double y) { y_ = y; }
 	//double y()const { return y_; }
 	//void posicion(double ix, double iy);
-
-	
 };

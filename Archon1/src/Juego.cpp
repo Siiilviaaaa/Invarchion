@@ -56,7 +56,7 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
     //condicion de "EXTERMINIO >:o"--> matan a todas las piezas de un bando
     int contador_humanos{};
     int contador_aliens{};
-    for (int i = 0;i < MAX_PERSONAJES;i++) {//se recorren todos los personajes y se cuantos quedan vivos
+    for (int i = 0;i < MAX_PERSONAJES;i++) {//se recorren todos los personajes y se ve cuantos quedan vivos
         if (figuras[i] != nullptr && figuras[i]->return_Vida() > 0) {
             if (figuras[i]->return_Bando() == HUMANO) contador_humanos++;
             else contador_aliens++;
@@ -81,7 +81,7 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int x, int y)
 {
     for (int i = 0; i < MAX_PERSONAJES;i++) {
         if (figuras[i] == nullptr) {
-            figuras[i] = new Personaje();
+            figuras[i] = Personaje::crearPieza(t, x, y, e);
         }
     }
 }

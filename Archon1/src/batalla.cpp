@@ -9,28 +9,29 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacu
 	for (int i = 0;i < 3;i++)
 		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
 
-	j1.actualizarEfectos();
-	j2.actualizarEfectos();
+	//ESTO AHORA YA NO DEPENDE DE LA CLASE PADRE DEL PERSONAJE, AHORA L OGESTIONA O EL HIJO O LA CLASE DISPARO
+	//j1.actualizarEfectos();
+	//j2.actualizarEfectos();
 
-	j1.gestionarDisparos(j2);
-	j2.gestionarDisparos(j1);
+	//j1.gestionarDisparos(j2);
+	//j2.gestionarDisparos(j1);
 
-	for (int i = 0;i < 10;i++)
-	{
-		//DISPAROS DEL J1
-		if (j1.return_Disparos()[i] != nullptr)
-		{
-			limites_d(*j1.return_Disparos()[i], caja);
-			choqueObstaculo(*j1.return_Disparos()[i], obs);
-		}
+	//for (int i = 0;i < 10;i++)
+	//{
+	//	//DISPAROS DEL J1
+	//	if (j1.return_Disparos()[i] != nullptr)
+	//	{
+	//		limites_d(*j1.return_Disparos()[i], caja);
+	//		choqueObstaculo(*j1.return_Disparos()[i], obs);
+	//	}
 
-		//DISPAROS DEL J2
-		if (j1.return_Disparos()[i] != nullptr)
-		{
-			limites_d(*j2.return_Disparos()[i], caja);
-			choqueObstaculo(*j2.return_Disparos()[i], obs);
-		}
-	}
+	//	//DISPAROS DEL J2
+	//	if (j1.return_Disparos()[i] != nullptr)
+	//	{
+	//		limites_d(*j2.return_Disparos()[i], caja);
+	//		choqueObstaculo(*j2.return_Disparos()[i], obs);
+	//	}
+	//}
 
 	limites_p(j1, caja);
 	limites_p(j2, caja);
@@ -88,12 +89,12 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,
 	switch (key)
 	{
 	case ' ': //HUMANOS PELEAN O DISPARAN CON EL ESPACIO
-		if (j1.return_Tipo() == ARQUERO) j1.lanzarDisparo();
+		if (j1.return_Tipo() == ARQUERO) j1.ataque();
 		else
 			pegar(j1, j2, x1, y1, x2, y2);
 		break;
 	case 13: //ALIENS PELEAN O DISPARAN CON ENTER
-		if (j2.return_Tipo() == ARQUERO) j2.lanzarDisparo();
+		if (j2.return_Tipo() == ARQUERO) j2.ataque();
 		else
 			pegar(j2, j1, x1, y1, x2, y2);
 		break;
