@@ -37,7 +37,7 @@ public:
 	~Personaje();
 
 	void sumarPuntos(int puntos);
-	static Personaje crearPieza(Tipo_figura tipo);
+	static Personaje crearPieza(Tipo_figura tipo, Bando b, double posX, double posY);
 	void actualizarEfectos();
 	void gestionarDisparos(Personaje& enemigo);
 	void lanzarDisparo();
