@@ -17,8 +17,6 @@ void Disparo::moverDisparo()
 	if (!activo) return;
 	x += velo_x;
 	y += velo_y;
-	//SI EL DISPARO SALE DE PANTALLA, SE DESACTIVA
-	if (x < 0 || x > 800 || y < 0 || y > 600) activo = false;
 }
 
 bool Disparo::Impacto(Personaje& objetivo, Personaje& atacante)
@@ -32,7 +30,7 @@ bool Disparo::Impacto(Personaje& objetivo, Personaje& atacante)
 	{
 		objetivo.setVida(objetivo.return_Vida() - danio); //REDUCIR VIDA DEL ENEMIGO
 		
-		atacante.sumarPuntos(15); //15 PUNTOS SI ACIERTA
+		//atacante.sumarPuntos(15); //15 PUNTOS SI ACIERTA
 		activo = false; //DESACTIVAR DISPARO AL CHOCAR
 		return true;
 	}

@@ -107,6 +107,12 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
         //PRUEBAS
         motor.dibujarPersonaje(pj1);
         motor.dibujarPersonaje(pj2);
+
+        for (int i = 0; i < 20; i++) {
+            if (miBatalla.return_nDisparos()[i] != nullptr) {
+                motor.dibujarDisparo(*miBatalla.return_nDisparos()[i]);
+            }
+        }
         break;
 
     }
@@ -151,18 +157,18 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         if (estado == JUEGO) {
             estado = BATALLA;
         }
-        pj1 = Personaje::crearPieza(LUCHADOR, HUMANO, 5.0, 7.5);  
+        pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);  
         pj2 = Personaje::crearPieza(LUCHADOR, ALIEN, 15.0, 7.5); 
         motor.inicializarBatalla();
     }
 
     if (estado == BATALLA) {
-        miBatalla.KeyBatalla(key, pj1, pj2, pj1.return_X(), pj1.return_Y(), pj2.return_X(), pj2.return_Y());
+        miBatalla.KeyBatalla(key, pj1, pj2);
 
-        if (key == 'w') pj1.setY(pj1.return_Y() + pj1.return_Vbase());
-        if (key == 's') pj1.setY(pj1.return_Y() - pj1.return_Vbase());
-        if (key == 'a') pj1.setX(pj1.return_X() - pj1.return_Vbase());
-        if (key == 'd') pj1.setX(pj1.return_X() + pj1.return_Vbase());
+        if (key == 'w') { pj1.setY(pj1.return_Y() + pj1.return_Vbase()); pj1.direccion(0, 1); }
+        if (key == 's') { pj1.setY(pj1.return_Y() - pj1.return_Vbase()); pj1.direccion(0, -1); }
+        if (key == 'a') { pj1.setX(pj1.return_X() - pj1.return_Vbase()); pj1.direccion(-1, 0); }
+        if (key == 'd') { pj1.setX(pj1.return_X() + pj1.return_Vbase()); pj1.direccion(1, 0); }
     }
 }
 
@@ -202,5 +208,4 @@ int main(int argc, char** argv) {
     glutMainLoop();
 
     return 0;
-
 }

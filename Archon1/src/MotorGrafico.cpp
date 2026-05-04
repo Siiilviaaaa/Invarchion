@@ -19,7 +19,6 @@ MotorGrafico::MotorGrafico() :
 
 	barraVida("Recursos/barra.png"),
 	calavera("Recursos/calavera.png"),
-	Flecha("Recursos/flecha.png"),
 	Paralisis("Recursos/hechizo1.png"),
 	Velocidad("Recursos/hechizo2.png"),
 	Pocion("Recursos/pocion.png")
@@ -122,7 +121,6 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
-	//DEJO LOS SPRITES SIN HACER PORQUE ME ESTOY LIANDO, DIBUJO PELOTITAS
 	glPushMatrix();
 	glDisable(GL_LIGHTING);
 	glTranslated(personaje.x,personaje.y, 0.5);
@@ -132,37 +130,19 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
 
-	/*glPushMatrix();
-	glTranslated(personaje.x, personaje.y, 1);
-	personaje.sprite.draw();
-	glPopMatrix();
-
-	etsidi::sprite* imagen =
-		(personaje.tipo == luchador) ? ((personaje.bando == humano) ? &luchador : &golem) :
-		(personaje.tipo == arquero) ? ((personaje.bando == humano) ? &soldado : &arquero) :
-		(personaje.tipo == volador) ? ((personaje.bando == humano) ? &volador : &murcielago) :
-		(personaje.tipo == excavador) ? ((personaje.bando == humano) ? &minero : &gusano) :
-		(personaje.tipo == hechicero) ? ((personaje.bando == humano) ? &hechicero : &mago) : nullptr;*/
-
 }
 
 void MotorGrafico::dibujarDisparo(const Disparo& disparo)
 {
-	if (disparo.activo) {
-		glPushMatrix();
-		glTranslated(disparo.x, disparo.y, 0.5);
-		glDisable(GL_LIGHTING);
-		glColor3ub(255, 255, 0);
-		glutSolidSphere(0.2, 10, 10);
-		glEnable(GL_LIGHTING);
-		glPopMatrix();
-	}
+	if (!disparo.activo)return;
 
-	/*if (disparo.activo)
-	{
-		Flecha.setPos(disparo.x, disparo.y);
-		Flecha.draw();
-	}*/
+	glPushMatrix();
+	glTranslated(disparo.x, disparo.y, 0.5);
+	glDisable(GL_LIGHTING);
+	glColor3ub(255, 255, 0);
+	glutSolidSphere(0.2, 10, 10);
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
 }
 
 void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)

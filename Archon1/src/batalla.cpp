@@ -4,6 +4,53 @@
 
 using std::cout, std::cin, std::endl;
 
+Batalla::Batalla()
+{
+	for (int i = 0;i < MAX_DISPAROS;i++)
+		nDisparos[i] = nullptr;
+}
+
+Batalla::~Batalla()
+{
+	//LIMPIAR MEMORIA DE LOS DISPAROS CUANDO EL PERSOANJE MUERE
+	for (int i = 0; i < MAX_DISPAROS; i++)
+	{
+		if (nDisparos[i] != nullptr)
+		{
+			delete nDisparos[i];
+			nDisparos[i] = nullptr;
+		}
+	}
+}
+
+void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
+{
+	double x1 = j1.return_X(), y1 = j1.return_Y();
+	double x2 = j2.return_X(), y2 = j2.return_Y();
+
+	switch (key)
+	{
+	case ' ': //HUMANOS PELEAN O DISPARAN CON EL ESPACIO
+		if (j1.return_Tipo() == ARQUERO) lanzarDisparo(j1);
+		else
+			pegar(j1, j2, x1, y1, x2, y2);
+		break;
+	case 13: //ALIENS PELEAN O DISPARAN CON ENTER
+		if (j2.return_Tipo() == ARQUERO) lanzarDisparo(j2);
+		else
+			pegar(j2, j1, x1, y1, x2, y2);
+		break;
+	case 'h': //HUMANOS USAN HECHIZO
+		juego.getTurno() == 0 ? hechizos[0].usar_Hechizo(0, j2) : hechizos[0].usar_Hechizo(0, j1);
+		break;
+	case 'v': //HUMANOS USAN HECHIZO
+		juego.getTurno() == 0 ? hechizos[1].usar_Hechizo(1, j2) : hechizos[1].usar_Hechizo(1, j1);
+		break;
+	default:
+		break;
+	}
+}
+
 void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstaculo& obs)
 {
 	for (int i = 0;i < 3;i++)
@@ -12,23 +59,20 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacu
 	j1.actualizarEfectos();
 	j2.actualizarEfectos();
 
-	j1.gestionarDisparos(j2);
-	j2.gestionarDisparos(j1);
-
-	for (int i = 0;i < 10;i++)
+	for (int i = 0;i < MAX_DISPAROS;i++)
 	{
-		//DISPAROS DEL J1
-		if (j1.return_Disparos()[i] != nullptr)
-		{
-			limites_d(*j1.return_Disparos()[i], caja);
-			choqueObstaculo(*j1.return_Disparos()[i], obs);
-		}
-
-		//DISPAROS DEL J2
-		if (j1.return_Disparos()[i] != nullptr)
-		{
-			limites_d(*j2.return_Disparos()[i], caja);
-			choqueObstaculo(*j2.return_Disparos()[i], obs);
+		if (nDisparos[i] != nullptr) {
+			nDisparos[i]->moverDisparo();
+			
+			//COLISION CONTRA LA CAJA
+			limites_d(*nDisparos[i], caja);
+			choqueObstaculo(*nDisparos[i], obs);
+			
+			//ELIMINAR SI IMPACTA
+			if (nDisparos[i]->Impacto(j1, j2) || nDisparos[i]->Impacto(j2, j1) || !nDisparos[i]->return_Activo()) {
+				delete nDisparos[i];
+					nDisparos[i] = nullptr;
+			}
 		}
 	}
 
@@ -80,32 +124,37 @@ void Batalla::pegar(Personaje& atacante, Personaje& objetivo,
 		nuevaVida = 0;
 
 	objetivo.setVida(nuevaVida);
-	atacante.sumarPuntos(10); //10 PUNTOS POR GOLPEAR
+	//atacante.sumarPuntos(10); //10 PUNTOS POR GOLPEAR
 }
 
-void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,
-				 double x1, double y1, double x2, double y2)
+void Batalla::lanzarDisparo(Personaje& aliado)
 {
-	switch (key)
+	//PARA COMPROBAR PORQUE NO SE DIBUJA
+	std::cout << "Disparando..." << std::endl;
+	if (aliado.return_Tipo() != ARQUERO) {
+		std::cout << "No es arquero, no puede disparar" << std::endl;
+		return;
+	}
+
+	if (aliado.return_Tipo() != ARQUERO) return;
+
+	for (int i = 0;i < MAX_DISPAROS;i++)
 	{
-	case ' ': //HUMANOS PELEAN O DISPARAN CON EL ESPACIO
-		if (j1.return_Tipo() == ARQUERO) j1.lanzarDisparo();
-		else
-			pegar(j1, j2, x1, y1, x2, y2);
-		break;
-	case 13: //ALIENS PELEAN O DISPARAN CON ENTER
-		if (j2.return_Tipo() == ARQUERO) j2.lanzarDisparo();
-		else
-			pegar(j2, j1, x1, y1, x2, y2);
-		break;
-	case 'h': //HUMANOS USAN HECHIZO
-		juego.getTurno() == 0 ? hechizos[0].usar_Hechizo(0,j2) : hechizos[0].usar_Hechizo(0,j1);
-		break;
-	case 'v': //HUMANOS USAN HECHIZO
-		juego.getTurno() == 0 ? hechizos[1].usar_Hechizo(1,j2) : hechizos[1].usar_Hechizo(1,j1);
-		break;
-	default:
-		break;
+		if (nDisparos[i] == nullptr)
+		{
+			nDisparos[i] = new Disparo(); //RESERVA MEMORIA
+
+			nDisparos[i]->setX(aliado.return_X());
+			nDisparos[i]->setY(aliado.return_Y());
+
+			double vx = aliado.return_dirX() * 0.5;
+			double vy = aliado.return_dirY() * 0.5;
+
+			nDisparos[i]->setVX(vx);
+			nDisparos[i]->setVY(vy);
+			nDisparos[i]->setActivo(true);
+			break;
+		}
 	}
 }
 
@@ -160,7 +209,7 @@ bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o)
 
 			//NUEVA VELOCIDAD
 			d.setX(d.return_X() + d.return_VX());
-				d.setY(d.return_Y() + d.return_VY());
+			d.setY(d.return_Y() + d.return_VY());
 
 			return true;
 		}

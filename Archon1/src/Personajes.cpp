@@ -2,37 +2,14 @@
 #include "Hechizos.h"
 #include "Disparos.h"
 
-////VARIABLES GLOBALES
-int Personaje::puntuacionHumanos = 0;
-int Personaje::puntuacionAliens = 0;
-
-//personaje::personaje(tipo_figura t, bando e, int x, int y)
-Personaje::Personaje()
-{
-	for (int i = 0;i < MAX_DISPAROS;i++)
-		nDisparos[i] = nullptr;
-}
-
-Personaje::~Personaje()
-{
-	//LIMPIAR MEMORIA DE LOS DISPAROS CUANDO EL PERSOANJE MUERE
-	for (int i = 0; i < MAX_DISPAROS; i++)
-	{
-		if (nDisparos[i] != nullptr)
-		{
-			delete nDisparos[i];
-			nDisparos[i] = nullptr;
-		}
-	}
-}
-
-void Personaje::sumarPuntos(int puntos)
-{
-	if (bando == HUMANO)
-		puntuacionHumanos += puntos;
-	else
-		puntuacionAliens += puntos;
-}
+//METER EN JUEGO.CPP
+//void Personaje::sumarPuntos(int puntos)
+//{
+//	if (bando == HUMANO)
+//		puntuacionHumanos += puntos;
+//	else
+//		puntuacionAliens += puntos;
+//}
 
 Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double posY)
 {
@@ -96,39 +73,12 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 	return pieza;
 }
 
-void Personaje::lanzarDisparo()
+void Personaje::direccion(double dx, double dy)
 {
-	if (tipo != ARQUERO) return;
-
-	for (int i = 0;i < MAX_DISPAROS;i++)
-	{
-		if (nDisparos[i]==nullptr)
-		{
-			nDisparos[i] = new Disparo(); //RESERVA MEMORIA
-
-			nDisparos[i]->setX(x);
-			nDisparos[i]->setY(y);
-			nDisparos[i]->setVX(0.2);
-			nDisparos[i]->setVY(1.0);
-			nDisparos[i]->setActivo(true);
-			break;
-		}
+	if (dx != 0 || dy != 0) { //SOLO ACTUALIZAMOS SI SE MUEVE
+		dirX = dx;
+		dirY = dy;
 	}
-}
-
-void Personaje::gestionarDisparos(Personaje& enemigo)
-{
-	for (int i = 0;i < MAX_DISPAROS;i++)
-		if (nDisparos[i] != nullptr)
-		{
-			nDisparos[i]->moverDisparo();
-
-			if (nDisparos[i]->Impacto(enemigo, *this) || !nDisparos[i]->return_Activo())
-			{ //SI NO ESTA ACTIVO Y SI IMPACTA
-				delete nDisparos[i]; //LIBERAR MEMORIA
-				nDisparos[i] = nullptr; //DEJAR HUECO LIBRE
-			}
-		}
 }
 
 void Personaje::actualizarEfectos()

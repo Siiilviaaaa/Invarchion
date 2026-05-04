@@ -12,14 +12,21 @@
 
 class Batalla
 {
+	static const int MAX_DISPAROS = 20;
+	Disparo* nDisparos[MAX_DISPAROS];
 public:
+	Batalla();
+	~Batalla();
+	Disparo* (&return_nDisparos())[20] { return nDisparos; }
+
 	/////////ACTUALIZACIONES//////////////
+	void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2);
 	void actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo& obs);
 	int FinCombate(Personaje& humanos, Personaje& aliens);
 
 	/////////DAÑAR AL OPONENTE////////////
 	void pegar(Personaje& atacante, Personaje& objetivo, double x1, double y1, double x2, double y2);
-	void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,double x1, double y1, double x2, double y2);
+	void lanzarDisparo(Personaje& aliado);
 	
 	/////////INTERACCION CON LOS ELEMENTOS////////////
 	static bool NoMover(Personaje& j, const Pared& p);
