@@ -159,15 +159,15 @@ void Personaje::actualizarEfectos()
 
 void Luchador::ataque() {
 	// Por ahora vacío para que compile, luego añades lógica cuerpo a cuerpo
-	std::cout << "Luchador atacando cuerpo a cuerpo!" << std::endl;
+	std::cout << "Luchador atacando" << std::endl;
 }
 
 void Volador::ataque() {
 	// Lógica para ataque desde el aire
-	std::cout << "Volador picando desde las alturas!" << std::endl;
+	std::cout << "Volador atacando" << std::endl;
 }
 
 void Hechicero::ataque() {
 	// Aquí podrías llamar a usar_Hechizo[cite: 3, 10]
-	std::cout << "Hechicero lanzando magia!" << std::endl;
+	std::cout << "Hechicero lanzando hechizos" << std::endl;
 }
