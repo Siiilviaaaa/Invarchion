@@ -23,6 +23,18 @@ MotorGrafico::MotorGrafico() :
 	Velocidad("Recursos/hechizo2.png"),
 	Pocion("Recursos/pocion.png")
 {
+	//DIMENSIONES
+	luchador.setSize(2.0, 2.0);
+	golem.setSize(2.0, 2.0);
+	soldado.setSize(2.0, 2.0);
+	arquero.setSize(2.0, 2.0);
+	volador.setSize(2.0, 2.0);
+	murcielago.setSize(2.0, 2.0);
+	minero.setSize(2.0, 2.0);
+	gusano.setSize(2.0, 2.0);
+	hechicero.setSize(2.0, 2.0);
+	mago.setSize(2.0, 2.0);
+
 	for (int i = 0; i < 5; i++) {
 		listaObstaculos[i] = nullptr;
 	}
