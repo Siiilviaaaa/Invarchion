@@ -11,38 +11,26 @@ class Personaje
 
 	Tipo_figura tipo;
 	Bando bando;
-	int vida;
+	int vida, vida_max; //VARIABLE PARA COMPROBAR SU USAR POCION
 	int danio;
-	double velocidad;
+	double v;
 	double vel_base;
 	double x, y;
 
-	//DISPAROS
-	static const int MAX_DISPAROS = 10;
-	Disparo* nDisparos[MAX_DISPAROS];
+	//DIRECCION
+	double dirX, dirY;
 
 	//HECHIZOS
 	double t_paralisis;
 	double t_hiperVelocidad;
-	int vida_max; //VARIABLE PARA COMPROBAR SU USAR POCION
 
 public:
-	static int puntuacionHumanos;
-	static int puntuacionAliens;
-	
-	//Personaje(Tipo_figura t, Bando e, int x, int y);
-	
-	//////////METODOS//////////////
-	Personaje();
-	~Personaje();
-
-	void sumarPuntos(int puntos);
+	//void sumarPuntos(int puntos);   METER EN JUEGO.H
 	static Personaje crearPieza(Tipo_figura tipo, Bando b, double posX, double posY);
+	void direccion(double dx, double dy);
 	void actualizarEfectos();
-	void gestionarDisparos(Personaje& enemigo);
-	void lanzarDisparo();
 
-	////////////GETTERS/////////////////
+	//////////METODOS//////////////
 	Tipo_figura return_Tipo() const { return tipo; }
 	Bando return_Bando()const { return bando; }
 	int return_Vida() const { return vida; }
@@ -51,14 +39,14 @@ public:
 	double return_Y() const { return y; }
 	double return_Vbase() const { return vel_base; }
 	int return_VidaMax() const { return vida_max; }
-
-	Disparo* (&return_Disparos())[10] { return nDisparos; }
+	double return_dirX() const { return dirX; }
+	double return_dirY() const { return dirY; }
 
 	///////////SETTERS/////////////////
 	void setTipo(Tipo_figura nuevoTipo) { tipo = nuevoTipo; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }
 	void setDanio(int nuevoDanio) { danio = nuevoDanio; }
-	void setVelocidad(double nuevaVelocidad) { velocidad = nuevaVelocidad; }
+	void setVelocidad(double V) { v = V;}
 	void setV_base(double nuevaVBase) { vel_base = nuevaVBase; }
 	void setX(double nuevaX) { x = nuevaX; }
 	void setY(double nuevaY) { y = nuevaY; }

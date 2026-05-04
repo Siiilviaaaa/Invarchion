@@ -4,6 +4,58 @@
 
 using std::cout, std::cin, std::endl;
 
+Batalla::Batalla()
+{
+	for (int i = 0;i < MAX_DISPAROS;i++)
+		nDisparos[i] = nullptr;
+}
+
+Batalla::~Batalla()
+{
+	//LIMPIAR MEMORIA DE LOS DISPAROS CUANDO EL PERSOANJE MUERE
+	for (int i = 0; i < MAX_DISPAROS; i++)
+	{
+		if (nDisparos[i] != nullptr)
+		{
+			delete nDisparos[i];
+			nDisparos[i] = nullptr;
+		}
+	}
+}
+
+void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
+{
+	double x1 = j1.return_X(), y1 = j1.return_Y();
+	double x2 = j2.return_X(), y2 = j2.return_Y();
+
+	switch (key)
+	{
+	case ' ': //HUMANOS PELEAN O DISPARAN CON EL ESPACIO
+		if (j1.return_Tipo() == ARQUERO) lanzarDisparo(j1);
+		else
+			pegar(j1, j2, x1, y1, x2, y2);
+		break;
+	case 13: //ALIENS PELEAN O DISPARAN CON ENTER
+		if (j2.return_Tipo() == ARQUERO) lanzarDisparo(j2);
+		else
+			pegar(j2, j1, x1, y1, x2, y2);
+		break;
+	case 'h': //HUMANOS USAN HECHIZO
+		juego.getTurno() == 0 ? hechizos[0].usar_Hechizo(0, j2) : hechizos[0].usar_Hechizo(0, j1);
+		break;
+	case 'v': //HUMANOS USAN HECHIZO
+		juego.getTurno() == 0 ? hechizos[1].usar_Hechizo(1, j2) : hechizos[1].usar_Hechizo(1, j1);
+		break;
+	default:
+		break;
+	}
+
+	if (key == 'w') { j1.setY(j1.return_Y() + j1.return_Vbase()); j1.direccion(0, 1); }
+	if (key == 's') { j1.setY(j1.return_Y() - j1.return_Vbase()); j1.direccion(0, -1); }
+	if (key == 'a') { j1.setX(j1.return_X() - j1.return_Vbase()); j1.direccion(-1, 0); }
+	if (key == 'd') { j1.setX(j1.return_X() + j1.return_Vbase()); j1.direccion(1, 0); }
+}
+
 void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstaculo& obs)
 {
 	for (int i = 0;i < 3;i++)
@@ -12,23 +64,20 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacu
 	j1.actualizarEfectos();
 	j2.actualizarEfectos();
 
-	j1.gestionarDisparos(j2);
-	j2.gestionarDisparos(j1);
-
-	for (int i = 0;i < 10;i++)
+	for (int i = 0;i < MAX_DISPAROS;i++)
 	{
-		//DISPAROS DEL J1
-		if (j1.return_Disparos()[i] != nullptr)
-		{
-			limites_d(*j1.return_Disparos()[i], caja);
-			choqueObstaculo(*j1.return_Disparos()[i], obs);
-		}
-
-		//DISPAROS DEL J2
-		if (j1.return_Disparos()[i] != nullptr)
-		{
-			limites_d(*j2.return_Disparos()[i], caja);
-			choqueObstaculo(*j2.return_Disparos()[i], obs);
+		if (nDisparos[i] != nullptr) {
+			nDisparos[i]->moverDisparo();
+			
+			//COLISION CONTRA LA CAJA
+			limites_d(*nDisparos[i], caja);
+			choqueObstaculo(*nDisparos[i], obs);
+			
+			//ELIMINAR SI IMPACTA
+			if (nDisparos[i]->Impacto(j1, j2) || nDisparos[i]->Impacto(j2, j1) || !nDisparos[i]->return_Activo()) {
+				delete nDisparos[i];
+					nDisparos[i] = nullptr;
+			}
 		}
 	}
 
@@ -38,7 +87,8 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacu
 	choqueObstaculo(j1, obs);
 	choqueObstaculo(j2, obs);
 
-	FinCombate(j1, j2);
+	int resultado = FinCombate(j1, j2);
+	if (resultado != 0) return;
 }
 
 int Batalla::FinCombate(Personaje& humanos, Personaje& aliens)
@@ -79,32 +129,42 @@ void Batalla::pegar(Personaje& atacante, Personaje& objetivo,
 		nuevaVida = 0;
 
 	objetivo.setVida(nuevaVida);
-	atacante.sumarPuntos(10); //10 PUNTOS POR GOLPEAR
+	//atacante.sumarPuntos(10); //10 PUNTOS POR GOLPEAR
 }
 
-void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2,
-				 double x1, double y1, double x2, double y2)
+void Batalla::lanzarDisparo(Personaje& aliado)
 {
-	switch (key)
+	std::cout << "Disparando..." << std::endl;
+
+	if (aliado.return_Tipo() != ARQUERO) {
+		std::cout << "No es arquero, no puede disparar" << std::endl;
+		return;
+	}
+
+	bool hueco = false; //PARA VER SI HAY CAPACIDAD EN EL ARRAY
+	for (int i = 0;i < MAX_DISPAROS;i++)
 	{
-	case ' ': //HUMANOS PELEAN O DISPARAN CON EL ESPACIO
-		if (j1.return_Tipo() == ARQUERO) j1.lanzarDisparo();
-		else
-			pegar(j1, j2, x1, y1, x2, y2);
-		break;
-	case 13: //ALIENS PELEAN O DISPARAN CON ENTER
-		if (j2.return_Tipo() == ARQUERO) j2.lanzarDisparo();
-		else
-			pegar(j2, j1, x1, y1, x2, y2);
-		break;
-	case 'h': //HUMANOS USAN HECHIZO
-		juego.getTurno() == 0 ? hechizos[0].usar_Hechizo(0,j2) : hechizos[0].usar_Hechizo(0,j1);
-		break;
-	case 'v': //HUMANOS USAN HECHIZO
-		juego.getTurno() == 0 ? hechizos[1].usar_Hechizo(1,j2) : hechizos[1].usar_Hechizo(1,j1);
-		break;
-	default:
-		break;
+		if (nDisparos[i] == nullptr)
+		{
+			nDisparos[i] = new Disparo(); //RESERVA MEMORIA
+
+			double margen = 1.2; //EVITAMOS EL SUICIDIO
+			nDisparos[i]->setX(aliado.return_X() + aliado.return_dirX() * margen);
+			nDisparos[i]->setY(aliado.return_Y() + aliado.return_dirY() * margen);
+
+			double vx = aliado.return_dirX() * 0.15;
+			double vy = aliado.return_dirY() * 0.15;
+
+			nDisparos[i]->setVX(vx);
+			nDisparos[i]->setVY(vy);
+			nDisparos[i]->setActivo(true);
+
+			hueco = true;
+			break;
+		}
+	}
+	if (!hueco) {
+		std::cout << "Maximo de disparos alcanzado" << std::endl;
 	}
 }
 
@@ -159,7 +219,7 @@ bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o)
 
 			//NUEVA VELOCIDAD
 			d.setX(d.return_X() + d.return_VX());
-				d.setY(d.return_Y() + d.return_VY());
+			d.setY(d.return_Y() + d.return_VY());
 
 			return true;
 		}
@@ -177,8 +237,12 @@ void Batalla::limites_d(Disparo& d, Caja& c)
 
 void Batalla::limites_p(Personaje& j, Caja& c)
 {
-	NoMover(j, c.return_suelo());
-	NoMover(j, c.return_techo());
-	NoMover(j, c.return_izq());
-	NoMover(j, c.return_dcha());
+	double radio = 1.0;
+
+	//COMPROBAR CADA PARED
+	//SI NOMOVER ES TRUE, LIMITE
+	j.setX(NoMover(j, c.return_izq()) ? radio : j.return_X());
+	j.setX(NoMover(j, c.return_dcha()) ? 20.0 - radio : j.return_X());
+	j.setY(NoMover(j, c.return_suelo()) ? radio : j.return_Y());
+	j.setY(NoMover(j, c.return_techo()) ? 15.0 - radio : j.return_Y());
 }

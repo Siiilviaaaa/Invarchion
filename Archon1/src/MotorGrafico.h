@@ -27,7 +27,6 @@ class MotorGrafico
 	////ELEMENTOS BATALLA////
 	ETSIDI::Sprite barraVida;
 	ETSIDI::Sprite calavera;
-	ETSIDI::Sprite Flecha;
 	ETSIDI::Sprite Paralisis;
 	ETSIDI::Sprite Velocidad;
 	ETSIDI::Sprite Pocion;
@@ -41,17 +40,14 @@ class MotorGrafico
 
 public:
 	MotorGrafico();
-
 	
 	void inicializarBatalla();
 	void dibujarPared(const Pared& p);
 	void dibujarCaja(const Caja& c);
 	
-	
-	void dibujarDisparo(const Disparo& disparo);
+	void dibujarDisparo(Disparo* disparo);
 	void dibujarHechizo(const Hechizo& hechizo);
 	void dibujarPersonaje(const Personaje& personaje);
 	void dibujarVida_Muerte(const Personaje& humano, const Personaje& alien);
 	
 };
-
