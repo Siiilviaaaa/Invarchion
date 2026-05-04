@@ -30,7 +30,12 @@ Camara miCamara;
 MotorGrafico motor;
 Caja miCaja;
 Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
-Juego juego(&miTablero); // <--- ESTO ES LO QUE FALTA
+Juego juego(&miTablero);
+
+//PRUEBAS
+Batalla miBatalla;
+Personaje pj1, pj2;
+Obstaculo obs_prueba(10.0, 7.5, 1.5);
 
 void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
 { //esto no debería de ir en una funcion por separado?
@@ -58,21 +63,21 @@ void mouse(int button, int state, int x, int y) //esta funcion detecta los click
         }
 
     }
-    
+
 }
 
 void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado de batalla con su respectiva camara, creo q es de Elena eso
-                  //también he conservado la posición original del tablero y he movido yo mi menú para q no hubiera problemas
+//también he conservado la posición original del tablero y he movido yo mi menú para q no hubiera problemas
 {
-   
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     dibujo_tablero.dibuja();
- 
-  switch (estado) {
+
+    switch (estado) {
     case MENU:
         //primero camara
         miCamara.vistaMenu();
@@ -98,15 +103,27 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
     case BATALLA:
         miCamara.vistaBatalla();
         motor.dibujarCaja(miCaja);
+
+        glMatrixMode(GL_MODELVIEW);
+        glDisable(GL_LIGHTING);
+
+        //PRUEBAS
+        motor.dibujarPersonaje(pj1);
+        motor.dibujarPersonaje(pj2);
+        glEnable(GL_LIGHTING);
         break;
 
     }
     //no borrar esta linea ni poner nada despues
-    glutSwapBuffers();   
+    glutSwapBuffers();
 }
 
-void OnTimer(int value) //no tengo 100% claro si es estrictamente necesaria pero yo la he añadido pq me facilitaba la vida
+void OnTimer(int value)
 {
+    if (estado == BATALLA) {
+        miBatalla.actualizarCombate(pj1, pj2, miCaja, obs_prueba);
+    }
+
     glutPostRedisplay();
     // Se vuelve a llamar a sí misma cada 20ms (unos 50 FPS)
     glutTimerFunc(20, OnTimer, 0);
@@ -129,16 +146,29 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
             estado = JUEGO;
         }
 
-
         // Refresco de pantalla para q se pinte
         glutPostRedisplay();
     }
     key = tolower(key);
-    if (key == 'b') { //luego se sustituira cuando tengamos la variable de entrar en batalla
+    if(key == 'b') {
+        std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
         if (estado == JUEGO) {
             estado = BATALLA;
         }
         motor.inicializarBatalla();
+
+        //PRUEBAS
+        pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 4.0, 7.5);
+        pj2 = Personaje::crearPieza(LUCHADOR, ALIEN, 16.0, 7.5);
+    }
+
+    if (estado == BATALLA) {
+        miBatalla.KeyBatalla(key, pj1, pj2, pj1.return_X(), pj1.return_Y(), pj2.return_X(), pj2.return_Y());
+
+        if (key == 'w') pj1.setY(pj1.return_Y() + pj1.return_Vbase());
+        if (key == 's') pj1.setY(pj1.return_Y() - pj1.return_Vbase());
+        if (key == 'a') pj1.setX(pj1.return_X() - pj1.return_Vbase());
+        if (key == 'd') pj1.setX(pj1.return_X() + pj1.return_Vbase());
     }
 }
 
@@ -153,7 +183,7 @@ int main(int argc, char** argv) {
     glutCreateWindow("Tablero");
     //se pude hacer una funcion con esta para cmabiar el color en funcion del turno
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f); // Fondo de ventana gris
-    
+
     miMenu.inicializa_menu();
     miTablero.inicializa(); // Configuramos las vistas de Elena y Diego que son las hechas hasta ahora
 
@@ -170,13 +200,13 @@ int main(int argc, char** argv) {
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
     ETSIDI::play("extra/mi_musica.mp3");
 
-//aqui he añadido alguna mia
+    //aqui he añadido alguna mia
     glutMouseFunc(mouse);
     glutTimerFunc(20, OnTimer, 0);
     glutDisplayFunc(OnDraw);
     glutKeyboardFunc(OnKeyboardDown);
     glutMainLoop();
-    
+
     return 0;
 
 }
