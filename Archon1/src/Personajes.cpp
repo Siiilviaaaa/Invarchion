@@ -26,6 +26,11 @@ Personaje::~Personaje()
 	}
 }
 
+void Personaje::mover()
+{
+	x += v * 0.1;
+}
+
 void Personaje::sumarPuntos(int puntos)
 {
 	if (bando == HUMANO)

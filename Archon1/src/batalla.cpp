@@ -38,7 +38,8 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacu
 	choqueObstaculo(j1, obs);
 	choqueObstaculo(j2, obs);
 
-	FinCombate(j1, j2);
+	int resultado = FinCombate(j1, j2);
+	if (resultado != 0) return;
 }
 
 int Batalla::FinCombate(Personaje& humanos, Personaje& aliens)

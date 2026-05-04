@@ -35,7 +35,7 @@ Juego juego(&miTablero);
 //PRUEBAS
 Batalla miBatalla;
 Personaje pj1, pj2;
-Obstaculo obs_prueba(0.0,0.3,0.4);
+Obstaculo obs_prueba(0.0, 0.3, 0.4);
 
 void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
 { //esto no debería de ir en una funcion por separado?
@@ -104,13 +104,8 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
         miCamara.vistaBatalla();
         motor.dibujarCaja(miCaja);
 
-        glMatrixMode(GL_MODELVIEW);
-        glDisable(GL_LIGHTING);
-
         //PRUEBAS
         motor.dibujarPersonaje(pj1);
-        motor.dibujarPersonaje(pj2);
-        glEnable(GL_LIGHTING);
         break;
 
     }
@@ -122,6 +117,7 @@ void OnTimer(int value)
 {
     if (estado == BATALLA) {
         miBatalla.actualizarCombate(pj1, pj2, miCaja, obs_prueba);
+        pj1.mover();
     }
 
     glutPostRedisplay();
@@ -156,10 +152,6 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
             estado = BATALLA;
         }
         motor.inicializarBatalla();
-
-        //PRUEBAS
-        pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 4.0, 7.5);
-        pj2 = Personaje::crearPieza(LUCHADOR, ALIEN, 16.0, 7.5);
     }
 
     if (estado == BATALLA) {
