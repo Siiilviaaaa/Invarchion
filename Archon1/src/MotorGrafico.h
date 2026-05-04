@@ -45,7 +45,7 @@ public:
 	void dibujarPared(const Pared& p);
 	void dibujarCaja(const Caja& c);
 	
-	void dibujarDisparo(const Disparo& disparo);
+	void dibujarDisparo(Disparo* disparo);
 	void dibujarHechizo(const Hechizo& hechizo);
 	void dibujarPersonaje(const Personaje& personaje);
 	void dibujarVida_Muerte(const Personaje& humano, const Personaje& alien);

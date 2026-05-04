@@ -109,8 +109,9 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
         motor.dibujarPersonaje(pj2);
 
         for (int i = 0; i < 20; i++) {
-            if (miBatalla.return_nDisparos()[i] != nullptr) {
-                motor.dibujarDisparo(*miBatalla.return_nDisparos()[i]);
+            Disparo* d = miBatalla.return_nDisparos()[i];
+            if (d != nullptr) {
+                motor.dibujarDisparo(d); //SE PASA EL PUNTERO
             }
         }
         break;
@@ -123,7 +124,8 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
 void OnTimer(int value)
 {
     if (estado == BATALLA) {
-        miBatalla.actualizarCombate(pj1, pj2, miCaja, obs_prueba);
+        if (pj1.return_Vida() > 0 && pj2.return_Vida() > 0) //PARA QUE NO SALGA DE MANERA INDEFINIDA EL GANADOR POR PANTALLA
+            miBatalla.actualizarCombate(pj1, pj2, miCaja, obs_prueba);
     }
 
     glutPostRedisplay();
@@ -157,18 +159,15 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         if (estado == JUEGO) {
             estado = BATALLA;
         }
-        pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);  
-        pj2 = Personaje::crearPieza(LUCHADOR, ALIEN, 15.0, 7.5); 
+        pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
+        pj1.direccion(1.0, 0.0);
+        pj2 = Personaje::crearPieza(LUCHADOR, ALIEN, 15.0, 7.5);
+        pj2.direccion(-1.0, 0.0);
         motor.inicializarBatalla();
     }
 
     if (estado == BATALLA) {
         miBatalla.KeyBatalla(key, pj1, pj2);
-
-        if (key == 'w') { pj1.setY(pj1.return_Y() + pj1.return_Vbase()); pj1.direccion(0, 1); }
-        if (key == 's') { pj1.setY(pj1.return_Y() - pj1.return_Vbase()); pj1.direccion(0, -1); }
-        if (key == 'a') { pj1.setX(pj1.return_X() - pj1.return_Vbase()); pj1.direccion(-1, 0); }
-        if (key == 'd') { pj1.setX(pj1.return_X() + pj1.return_Vbase()); pj1.direccion(1, 0); }
     }
 }
 

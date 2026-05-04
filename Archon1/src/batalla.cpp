@@ -49,6 +49,11 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 	default:
 		break;
 	}
+
+	if (key == 'w') { j1.setY(j1.return_Y() + j1.return_Vbase()); j1.direccion(0, 1); }
+	if (key == 's') { j1.setY(j1.return_Y() - j1.return_Vbase()); j1.direccion(0, -1); }
+	if (key == 'a') { j1.setX(j1.return_X() - j1.return_Vbase()); j1.direccion(-1, 0); }
+	if (key == 'd') { j1.setX(j1.return_X() + j1.return_Vbase()); j1.direccion(1, 0); }
 }
 
 void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstaculo& obs)
@@ -129,32 +134,37 @@ void Batalla::pegar(Personaje& atacante, Personaje& objetivo,
 
 void Batalla::lanzarDisparo(Personaje& aliado)
 {
-	//PARA COMPROBAR PORQUE NO SE DIBUJA
 	std::cout << "Disparando..." << std::endl;
+
 	if (aliado.return_Tipo() != ARQUERO) {
 		std::cout << "No es arquero, no puede disparar" << std::endl;
 		return;
 	}
 
-	if (aliado.return_Tipo() != ARQUERO) return;
-
+	bool hueco = false; //PARA VER SI HAY CAPACIDAD EN EL ARRAY
 	for (int i = 0;i < MAX_DISPAROS;i++)
 	{
 		if (nDisparos[i] == nullptr)
 		{
 			nDisparos[i] = new Disparo(); //RESERVA MEMORIA
 
-			nDisparos[i]->setX(aliado.return_X());
-			nDisparos[i]->setY(aliado.return_Y());
+			double margen = 1.2; //EVITAMOS EL SUICIDIO
+			nDisparos[i]->setX(aliado.return_X() + aliado.return_dirX() * margen);
+			nDisparos[i]->setY(aliado.return_Y() + aliado.return_dirY() * margen);
 
-			double vx = aliado.return_dirX() * 0.5;
-			double vy = aliado.return_dirY() * 0.5;
+			double vx = aliado.return_dirX() * 0.15;
+			double vy = aliado.return_dirY() * 0.15;
 
 			nDisparos[i]->setVX(vx);
 			nDisparos[i]->setVY(vy);
 			nDisparos[i]->setActivo(true);
+
+			hueco = true;
 			break;
 		}
+	}
+	if (!hueco) {
+		std::cout << "Maximo de disparos alcanzado" << std::endl;
 	}
 }
 

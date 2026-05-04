@@ -116,7 +116,6 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 	glEnable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
 
-
 }
 
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
@@ -132,15 +131,15 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 
 }
 
-void MotorGrafico::dibujarDisparo(const Disparo& disparo)
+void MotorGrafico::dibujarDisparo(Disparo* disparo)
 {
-	if (!disparo.activo)return;
+	if (disparo == nullptr)return;
 
 	glPushMatrix();
-	glTranslated(disparo.x, disparo.y, 0.5);
+	glTranslated(disparo->x, disparo->y, 0.5);
 	glDisable(GL_LIGHTING);
 	glColor3ub(255, 255, 0);
-	glutSolidSphere(0.2, 10, 10);
+	glutSolidSphere(0.4, 10, 10);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
 }
