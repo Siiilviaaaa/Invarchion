@@ -125,10 +125,10 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 	//DEJO LOS SPRITES SIN HACER PORQUE ME ESTOY LIANDO, DIBUJO PELOTITAS
 	glPushMatrix();
 	glDisable(GL_LIGHTING);
-	glTranslated(7, 5, 0.5);
+	glTranslated(personaje.x,personaje.y, 0.5);
 	if (personaje.bando == HUMANO) glColor3ub(0, 0, 255);
 	else glColor3ub(255, 0, 0);
-	glutSolidSphere(2.0, 20, 20);
+	glutSolidSphere(1.0, 20, 20);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
 

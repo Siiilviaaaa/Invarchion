@@ -106,6 +106,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
 
         //PRUEBAS
         motor.dibujarPersonaje(pj1);
+        motor.dibujarPersonaje(pj2);
         break;
 
     }
@@ -117,7 +118,6 @@ void OnTimer(int value)
 {
     if (estado == BATALLA) {
         miBatalla.actualizarCombate(pj1, pj2, miCaja, obs_prueba);
-        pj1.mover();
     }
 
     glutPostRedisplay();
@@ -151,6 +151,8 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         if (estado == JUEGO) {
             estado = BATALLA;
         }
+        pj1 = Personaje::crearPieza(LUCHADOR, HUMANO, 5.0, 7.5);  
+        pj2 = Personaje::crearPieza(LUCHADOR, ALIEN, 15.0, 7.5); 
         motor.inicializarBatalla();
     }
 

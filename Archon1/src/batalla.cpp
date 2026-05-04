@@ -178,8 +178,12 @@ void Batalla::limites_d(Disparo& d, Caja& c)
 
 void Batalla::limites_p(Personaje& j, Caja& c)
 {
-	NoMover(j, c.return_suelo());
-	NoMover(j, c.return_techo());
-	NoMover(j, c.return_izq());
-	NoMover(j, c.return_dcha());
+	double radio = 1.0;
+
+	//COMPROBAR CADA PARED
+	//SI NOMOVER ES TRUE, LIMITE
+	j.setX(NoMover(j, c.return_izq()) ? radio : j.return_X());
+	j.setX(NoMover(j, c.return_dcha()) ? 20.0 - radio : j.return_X());
+	j.setY(NoMover(j, c.return_suelo()) ? radio : j.return_Y());
+	j.setY(NoMover(j, c.return_techo()) ? 15.0 - radio : j.return_Y());
 }
