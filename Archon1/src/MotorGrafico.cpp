@@ -1,6 +1,7 @@
 #include "MotorGrafico.h"
 #include <ctime>
 #include <cstdlib>
+
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
 	luchador("Recursos/luchador.png"), 	
@@ -43,8 +44,8 @@ void MotorGrafico::inicializarBatalla()
 		bool colision = false;
 		for (int j = 0; j < aceptados; j++) {
 			Obstaculo* existente = listaObstaculos[j];
-			float dx = (float)(rx - existente->getX());
-			float dy = (float)(ry - existente->getY());
+			float dx = (float)(rx - existente->return_X());
+			float dy = (float)(ry - existente->return_Y());
 			float distancia = sqrtf(powf(dx, 2) + powf(dy, 2));
 			if (distancia < dist_min) {
 				colision = true;
@@ -68,10 +69,9 @@ void MotorGrafico::dibujarPared(const Pared& p)
 	glVertex3f(p.x2, p.y2, 2);
 	glVertex3f(p.x2, p.y2, -2);
 	glVertex3f(p.x1, p.y1, -2);
-	glEnd(); //
+	glEnd();
 	glEnable(GL_LIGHTING);
 }
-
 
 void MotorGrafico::dibujarCaja(const Caja& c)
 {
@@ -98,9 +98,9 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 	glAlphaFunc(GL_GREATER, 0.1f);
 	for (int i = 0; i < numObstaculos; i++) {
 		if (listaObstaculos[i] != nullptr) {
-			double x = listaObstaculos[i]->getX();
-			double y = listaObstaculos[i]->getY();
-			double r = listaObstaculos[i]->getRadio();
+			double x = listaObstaculos[i]->return_X();
+			double y = listaObstaculos[i]->return_Y();
+			double r = listaObstaculos[i]->return_Radio();
 			//glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
 			glBegin(GL_QUADS);
 			glTexCoord2d(0, 1); glVertex3d(x - r, y - r, 0.1);
