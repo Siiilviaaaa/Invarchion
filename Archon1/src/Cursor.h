@@ -1,14 +1,18 @@
 #pragma once
+#include "Informacion Casilla.h"
 
 class Cursor {
-	int fila,columna;//ver si hay .h de posicion 
-	//QUIZA EL CURSOR DEBERIA TENER UN ATRIBUTO QUE ES UN PERSONAJE PARA QU EAL COGER Y SOLTAR NO SE PIERDA
+	int fila, columna;
+	int filaAntes, columnaAntes;
+	InfoCasilla* informacion;
+	int contador_selecciones;//indica si se ha dado ya a coger y soltar personajes
+	int movimientos_restantes;
 public:
-	Cursor(int fi, int col);//constructor
-	void dibuja();
-	void inicializa(int turno);
-	void preguntar_coger();
-	void preguntar_soltar();
-	void coger();
-	void soltar();
-};
+	int obt_fila() const { return fila; }
+	int obt_columna() const { return columna; }
+	void inicializar_tablero(int turno);
+	void mover_cursor_tablero(unsigned char key, int turno);
+	void seleccion_personaje_tablero(unsigned char key, int turno);
+	int coger(int turno);
+	int soltar();
+ };

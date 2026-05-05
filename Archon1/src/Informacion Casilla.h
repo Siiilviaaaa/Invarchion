@@ -2,7 +2,9 @@
 #include "Personajes.h"
 enum Tipocasilla{blanca, negra, lila};
 
-class InfoCasilla {
+class InfoCasilla 
+{
+	friend class Cursor;
 	Tipocasilla tipo_color;
 	Personaje* personajeEncima;
 public:

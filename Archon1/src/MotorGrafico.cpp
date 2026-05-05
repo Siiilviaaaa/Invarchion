@@ -117,7 +117,20 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 	glDisable(GL_TEXTURE_2D);
 
 }
-
+void MotorGrafico::dibujarCursor(Cursor cursor)
+{
+	float ancho=1.0;//lo que mide cada lado del cuadraro-tablero
+	//se añade en el motor grafico la funcion de que el cursor se dibuje, para que cuando se modifiquen las corrdenadas se repinte
+	glLineWidth(0.2f); //grosor del delineado de 0.2, que se vea pero no excesivo 
+	glColor3ub(255, 128, 0);//color naranja llamativo
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(cursor.obt_columna(), cursor.obt_fila());
+	glVertex2f(cursor.obt_columna() + ancho, cursor.obt_fila());
+	glVertex2f(cursor.obt_columna() + ancho, cursor.obt_fila() + ancho);
+	glVertex2f(cursor.obt_columna(), cursor.obt_fila() + ancho);
+	glEnd();
+	glLineWidth(1.0f); // volver al grosor normal
+}
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
 	glPushMatrix();

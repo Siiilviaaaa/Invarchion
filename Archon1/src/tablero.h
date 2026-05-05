@@ -13,7 +13,6 @@ class Tablero {
     
     int turno; //por ejemplo 0 para humanos y 1 para aliens
 
-
 public:
     // Constructor
     Tablero();
