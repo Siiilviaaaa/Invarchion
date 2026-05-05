@@ -47,3 +47,4 @@ x86/
 !/Archon1/lib/*.lib
 !/Archon1/lib/*.h
 /Archon1/bin/Archon1.exe
+/Archon1/bin/Archon1.exe

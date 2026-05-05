@@ -98,6 +98,7 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 				{
 					fila +=1;
 					movimientos_restantes -= 1;
+					//print te qyuedan x movimientos DIEGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 				}
 				break;
 			}
@@ -251,7 +252,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					//AVISAR AL CAMMBIO DE TURNO 
 					break; 
 				}
-				case 2: std::cout << "hay un enemigo, avisamos a batalla" << std::endl; break;
+				case 2: std::cout << "hay un enemigo, avisamos a batalla" << std::endl; break;//meter una variable externa y moifica el main
 				}
 			}
 			else
@@ -264,13 +265,13 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 
 int Cursor::coger(int turno)
 {
+	//crear variable que llame a elena: tablero.h get y modificar casilla
 	InfoCasilla* infoCasillaActual = matriz_global[fila][columna].info;//copiamos el valor de la matriz
 
 	if (infoCasillaActual == nullptr)//comprobar que la casilla tiene informacion-evitar fallos del programa
 	{
 		return 0;
 	}
-
 	if (infoCasillaActual->personajeEncima == nullptr)//comprueba si hay personaje en la casilla o esta libre
 	{
 		return 0;
