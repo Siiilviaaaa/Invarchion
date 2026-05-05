@@ -6,6 +6,7 @@ class Cursor {
 	int filaAntes, columnaAntes;
 	InfoCasilla* informacion;
 	int contador_selecciones;//indica si se ha dado ya a coger y soltar personajes
+	int movimientos_restantes;
 public:
 	int obt_fila() const { return fila; }
 	int obt_columna() const { return columna; }
