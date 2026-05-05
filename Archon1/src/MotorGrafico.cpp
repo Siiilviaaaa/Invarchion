@@ -1,6 +1,10 @@
 #include "MotorGrafico.h"
+#include "freeglut.h"
+#include <ctime>
+#include <cstdlib>
 
 MotorGrafico::MotorGrafico() :
+	numObstaculos(5),
 	luchador("Recursos/luchador.png"), 	
 	soldado("Recursos/soldado.png"),	
 	volador("Recursos/volador.png"),
@@ -15,28 +19,57 @@ MotorGrafico::MotorGrafico() :
 
 	barraVida("Recursos/barra.png"),
 	calavera("Recursos/calavera.png"),
-	Flecha("Recursos/flecha.png"),
 	Paralisis("Recursos/hechizo1.png"),
 	Velocidad("Recursos/hechizo2.png"),
 	Pocion("Recursos/pocion.png")
 {
+	for (int i = 0; i < 5; i++) {
+		listaObstaculos[i] = nullptr;
+	}
 }
 
-//void MotorGrafico::dibujarEscenaBatalla(const Caja& c, const Personaje& atacante, const Personaje& defensor)
-//{
-//	dibujarCaja(c);
-//}
+void MotorGrafico::inicializarBatalla()
+{
+	srand((unsigned int)time(NULL));
+	int aceptados = 0;
+	for (int i = 0; i < numObstaculos; i++) {
+		if (listaObstaculos[i]) delete listaObstaculos[i];
+		listaObstaculos[i] = nullptr;
+	}
+	double r = 1.0;
+	const float dist_min = 3.5f;
+	while (aceptados < numObstaculos) {
+		double rx = r + ((double)rand()/RAND_MAX) *(20 - 2 * r);
+		double ry = r + ((double)rand() / RAND_MAX) * (10 - 2 * r);
+		bool colision = false;
+		for (int j = 0; j < aceptados; j++) {
+			Obstaculo* existente = listaObstaculos[j];
+			float dx = (float)(rx - existente->return_X());
+			float dy = (float)(ry - existente->return_Y());
+			float distancia = sqrtf(powf(dx, 2) + powf(dy, 2));
+			if (distancia < dist_min) {
+				colision = true;
+				break;
+			}
+		}
+		if (!colision) {
+			listaObstaculos[aceptados] = new Obstaculo(rx, ry, r);
+			aceptados++;
+		}
+	}
+	
+}
 
 void MotorGrafico::dibujarPared(const Pared& p)
 {
 	glDisable(GL_LIGHTING);
 	glColor3ub(p.r, p.g, p.b);
 	glBegin(GL_POLYGON);
-	glVertex3f(p.x1, p.y1, 10);
-	glVertex3f(p.x2, p.y2, 10);
-	glVertex3f(p.x2, p.y2, -10);
-	glVertex3f(p.x1, p.y1, -10);
-	glEnd(); //
+	glVertex3f(p.x1, p.y1, 2);
+	glVertex3f(p.x2, p.y2, 2);
+	glVertex3f(p.x2, p.y2, -2);
+	glVertex3f(p.x1, p.y1, -2);
+	glEnd();
 	glEnable(GL_LIGHTING);
 }
 
@@ -46,6 +79,42 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 	dibujarPared(c.techo);
 	dibujarPared(c.izq);
 	dibujarPared(c.dcha);
+	//para dibujar fondo
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/batalla3.png").id);
+	glDisable(GL_LIGHTING);
+	glBegin(GL_POLYGON);
+	glColor3f(1, 1, 1);
+	glTexCoord2d(0, 1); glVertex2d(-0, 0);
+	glTexCoord2d(1, 1); glVertex2d(20, 0);
+	glTexCoord2d(1, 0); glVertex2d(20, 15);
+	glTexCoord2d(0, 0); glVertex2d(0, 15);
+	glEnd();
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/obstaculo3.png").id);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.1f);
+	for (int i = 0; i < numObstaculos; i++) {
+		if (listaObstaculos[i] != nullptr) {
+			double x = listaObstaculos[i]->return_X();
+			double y = listaObstaculos[i]->return_Y();
+			double r = listaObstaculos[i]->return_Radio();
+			//glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+			glBegin(GL_QUADS);
+			glTexCoord2d(0, 1); glVertex3d(x - r, y - r, 0.1);
+			glTexCoord2d(1, 1); glVertex3d(x + r, y - r, 0.1);
+			glTexCoord2d(1, 0); glVertex3d(x + r, y + r, 0.1);
+			glTexCoord2d(0, 0); glVertex3d(x - r, y + r, 0.1);
+			glEnd();
+		}
+	}
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glEnable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
 
 }
 void MotorGrafico::dibujarCursor(Cursor cursor)
@@ -64,80 +133,28 @@ void MotorGrafico::dibujarCursor(Cursor cursor)
 }
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
-	//HACER ANIMACION!!!!!!!!!!!!!!!!
-	switch (personaje.tipo)
-	{
-	case Tipo_figura::LUCHADOR:
-		if (personaje.bando == HUMANO)
-		{
-			luchador.setPos(personaje.x, personaje.y);
-			luchador.draw();
-		}else
-		{
-			golem.setPos(personaje.x, personaje.y);
-			golem.draw();
-		}
-		break;
-	case Tipo_figura::ARQUERO:
-		if (personaje.bando == HUMANO)
-		{
-			soldado.setPos(personaje.x, personaje.y);
-			soldado.draw();
-		}
-		else
-		{
-			arquero.setPos(personaje.x, personaje.y);
-			arquero.draw();
-		}
-		break;
-	case Tipo_figura::VOLADOR:
-		if (personaje.bando == HUMANO)
-		{
-			volador.setPos(personaje.x, personaje.y);
-			volador.draw();
-		}
-		else
-		{
-			murcielago.setPos(personaje.x, personaje.y);
-			murcielago.draw();
-		}
-		break;
-	case Tipo_figura::EXCAVADOR:
-		if (personaje.bando == HUMANO)
-		{
-			minero.setPos(personaje.x, personaje.y);
-			minero.draw();
-		}
-		else
-		{
-			gusano.setPos(personaje.x, personaje.y);
-			gusano.draw();
-		}
-		break;
-	case Tipo_figura::HECHICERO:
-		if (personaje.bando == HUMANO)
-		{
-			hechicero.setPos(personaje.x, personaje.y);
-			hechicero.draw();
-		}
-		else
-		{
-			mago.setPos(personaje.x, personaje.y);
-			mago.draw();
-		}
-		break;
-	default:
-		break;
-	}
+	glPushMatrix();
+	glDisable(GL_LIGHTING);
+	glTranslated(personaje.x,personaje.y, 0.5);
+	if (personaje.bando == HUMANO) glColor3ub(0, 0, 255);
+	else glColor3ub(255, 0, 0);
+	glutSolidSphere(1.0, 20, 20);
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
+
 }
 
-void MotorGrafico::dibujarDisparo(const Disparo& disparo)
+void MotorGrafico::dibujarDisparo(Disparo* disparo)
 {
-	if (disparo.activo)
-	{
-		Flecha.setPos(disparo.x, disparo.x);
-		Flecha.draw();
-	}
+	if (disparo == nullptr)return;
+
+	glPushMatrix();
+	glTranslated(disparo->x, disparo->y, 0.5);
+	glDisable(GL_LIGHTING);
+	glColor3ub(255, 255, 0);
+	glutSolidSphere(0.4, 10, 10);
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
 }
 
 void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)

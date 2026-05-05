@@ -2,44 +2,39 @@
 #include "Hechizos.h"
 #include "Disparos.h"
 
-////VARIABLES GLOBALES
-int Personaje::puntuacionHumanos = 0;
-int Personaje::puntuacionAliens = 0;
+//METER EN JUEGO.CPP
+//void Personaje::sumarPuntos(int puntos)
+//{
+//	if (bando == HUMANO)
+//		puntuacionHumanos += puntos;
+//	else
+//		puntuacionAliens += puntos;
+//}
 
-//personaje::personaje(tipo_figura t, bando e, int x, int y)
-Personaje::Personaje()
-{
-	for (int i = 0;i < MAX_DISPAROS;i++)
-		nDisparos[i] = nullptr;
-}
-
-Personaje::~Personaje()
-{
-	//LIMPIAR MEMORIA DE LOS DISPAROS CUANDO EL PERSOANJE MUERE
-	for (int i = 0; i < MAX_DISPAROS; i++)
-	{
-		if (nDisparos[i] != nullptr)
-		{
-			delete nDisparos[i];
-			nDisparos[i] = nullptr;
-		}
-	}
-}
-
-void Personaje::sumarPuntos(int puntos)
-{
-	if (bando == HUMANO)
-		puntuacionHumanos += puntos;
-	else
-		puntuacionAliens += puntos;
-}
-
-Personaje Personaje::crearPieza(Tipo_figura tipo)
+Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double posY)
 {
 	Personaje pieza;
-	pieza.setTipo(tipo);
 
-	//DECIDIR CARACTERISTICAS SEGUN EL TIPO DE PIEZA
+	pieza.setTipo(tipo);
+	pieza.setBando(b);
+	pieza.setX(posX);
+	pieza.setY(posY);
+	pieza.set_paralisis(0.0);
+	pieza.set_hiperVelocidad(0.0);
+
+	//SPRITES
+	/*if (tipo == LUCHADOR)
+		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/luchador.png", 5) : ETSIDI::SpriteSequence("Recursos/golem.png", 5);
+	else if (tipo == ARQUERO)
+		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/soldado.png", 5) : ETSIDI::SpriteSequence("Recursos/arquero.png", 5);
+	else if (tipo == VOLADOR)
+		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/volador.png", 5) : ETSIDI::SpriteSequence("Recursos/murcielago.png", 5);
+	else if (tipo == EXCAVADOR)
+		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/minero.png", 5) : ETSIDI::SpriteSequence("Recursos/gusano.png", 5);
+	else if (tipo == HECHICERO)
+		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/hechicero.png", 5) : ETSIDI::SpriteSequence("Recursos/mago.png", 5);*/
+	
+	//CARACTERISTICAS
 	switch (tipo)
 	{
 	case LUCHADOR:
@@ -47,87 +42,43 @@ Personaje Personaje::crearPieza(Tipo_figura tipo)
 		pieza.setVidaMax(100);
 		pieza.setDanio(10);
 		pieza.setV_base(0.8);
-
-		pieza.setVelocidad(0.8);
-		pieza.t_paralisis = 0;
-		pieza.t_hiperVelocidad = 0;
 		break;
 	case ARQUERO:
 		pieza.setVida(80);
 		pieza.setVidaMax(80);
 		pieza.setDanio(15);
 		pieza.setV_base(1.2);
-
-		pieza.setVelocidad(1.2);
-		pieza.t_paralisis = 0;
-		pieza.t_hiperVelocidad = 0;
 		break;
 	case VOLADOR:
 		pieza.setVida(140);
 		pieza.setVidaMax(140);
 		pieza.setDanio(8);
 		pieza.setV_base(1.5);
-
-		pieza.setVelocidad(1.5);
-		pieza.t_paralisis = 0;
-		pieza.t_hiperVelocidad = 0;
 		break;
 	case EXCAVADOR:
 		pieza.setVida(60);
 		pieza.setVidaMax(60);
 		pieza.setDanio(30);
 		pieza.setV_base(1.0);
-
-		pieza.setVelocidad(1.0);
-		pieza.t_paralisis = 0;
-		pieza.t_hiperVelocidad = 0;
 		break;
 	case HECHICERO:
 		pieza.setVida(90);
 		pieza.setVidaMax(90);
 		pieza.setDanio(25);
 		pieza.setV_base(1.3);
-		pieza.setVelocidad(1.3);
-		break;
-	default:
 		break;
 	}
+	pieza.setVelocidad(pieza.return_Vbase());
+
 	return pieza;
 }
 
-void Personaje::lanzarDisparo()
+void Personaje::direccion(double dx, double dy)
 {
-	if (tipo != ARQUERO) return;
-
-	for (int i = 0;i < MAX_DISPAROS;i++)
-	{
-		if (nDisparos[i]==nullptr)
-		{
-			nDisparos[i] = new Disparo(); //RESERVA MEMORIA
-
-			nDisparos[i]->setX(x);
-			nDisparos[i]->setY(y);
-			nDisparos[i]->setVX(0.2);
-			nDisparos[i]->setVY(1.0);
-			nDisparos[i]->setActivo(true);
-			break;
-		}
+	if (dx != 0 || dy != 0) { //SOLO ACTUALIZAMOS SI SE MUEVE
+		dirX = dx;
+		dirY = dy;
 	}
-}
-
-void Personaje::gestionarDisparos(Personaje& enemigo)
-{
-	for (int i = 0;i < MAX_DISPAROS;i++)
-		if (nDisparos[i] != nullptr)
-		{
-			nDisparos[i]->moverDisparo();
-
-			if (nDisparos[i]->Impacto(enemigo, *this) || !nDisparos[i]->return_Activo())
-			{ //SI NO ESTA ACTIVO Y SI IMPACTA
-				delete nDisparos[i]; //LIBERAR MEMORIA
-				nDisparos[i] = nullptr; //DEJAR HUECO LIBRE
-			}
-		}
 }
 
 void Personaje::actualizarEfectos()
