@@ -12,6 +12,7 @@ class Personaje
 
 	Tipo_figura tipo;
 	Bando bando;
+	int movimientos;
 	int vida;
 	int danio;
 	double velocidad;
