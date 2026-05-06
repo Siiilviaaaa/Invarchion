@@ -5,22 +5,22 @@
 
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
-	luchador("Recursos/luchador.png"), 	
-	soldado("Recursos/soldado.png"),	
-	volador("Recursos/volador.png"),
-	minero("Recursos/minero.png"),	
-	hechicero("Recursos/hechicero.png"),
+	luchador("Recursos/luchador.png", numColumnasSpritePersonaje, numFilasSpritePersonaje), 	
+	soldado("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	volador("Recursos/volador.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	minero("Recursos/minero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	hechicero("Recursos/hechicero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
-	golem("Recursos/golem.png"),	
-	arquero("Recursos/arquero.png"),
-	murcielago("Recursos/murcielago.png"),
-	gusano("Recursos/gusano.png"),
-	mago("Recursos/mago.png"),
+	golem("Recursos/golem.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	arquero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	murcielago("Recursos/murcielago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	gusano("Recursos/gusano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	mago("Recursos/mago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
-	barraVida("Recursos/barra.png"),
-	calavera("Recursos/calavera.png"),
-	Paralisis("Recursos/hechizo1.png"),
-	Velocidad("Recursos/hechizo2.png"),
+	barraVida("Recursos/barra.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	calavera("Recursos/calavera.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	Paralisis("Recursos/hechizo1.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	Velocidad("Recursos/hechizo2.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	Pocion("Recursos/pocion.png")
 {
 	for (int i = 0; i < 5; i++) {

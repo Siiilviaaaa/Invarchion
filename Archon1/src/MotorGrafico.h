@@ -11,19 +11,21 @@
 
 class MotorGrafico
 {
+	const int numColumnasSpritePersonaje{ 3 };
+	const int numFilasSpritePersonaje{ 4 };
 	////PERSONAJES HUMANOS////
-	ETSIDI::Sprite luchador; //SIN HACER PERO PARA PODER CREAR LA FUNCION ME LO INVENTO, CAMBIAR LUEGO LOS NORMBRES
-	ETSIDI::Sprite soldado;
-	ETSIDI::Sprite volador; //SIN HACER
-	ETSIDI::Sprite minero;
-	ETSIDI::Sprite hechicero; //SIN HACER
+	ETSIDI::SpriteSequence luchador; //SIN HACER PERO PARA PODER CREAR LA FUNCION ME LO INVENTO, CAMBIAR LUEGO LOS NORMBRES
+	ETSIDI::SpriteSequence soldado;
+	ETSIDI::SpriteSequence volador; //SIN HACER
+	ETSIDI::SpriteSequence minero;
+	ETSIDI::SpriteSequence hechicero; //SIN HACER
 
 	////PERSONAJES ALIENS////
-	ETSIDI::Sprite golem;
-	ETSIDI::Sprite arquero;
-	ETSIDI::Sprite murcielago;
-	ETSIDI::Sprite gusano; //SIN HACER
-	ETSIDI::Sprite mago; //SIN HACER
+	ETSIDI::SpriteSequence golem;
+	ETSIDI::SpriteSequence arquero;
+	ETSIDI::SpriteSequence murcielago;
+	ETSIDI::SpriteSequence gusano; //SIN HACER
+	ETSIDI::SpriteSequence mago; //SIN HACER
 	
 	////ELEMENTOS BATALLA////
 	ETSIDI::Sprite barraVida;
