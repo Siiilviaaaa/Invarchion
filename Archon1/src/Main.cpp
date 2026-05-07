@@ -121,8 +121,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
 void OnTimer(int value)
 {
     if (estado == BATALLA) {
-        if (pj1.return_Vida() > 0 && pj2.return_Vida() > 0) //PARA QUE NO SALGA DE MANERA INDEFINIDA EL GANADOR POR PANTALLA
-            miBatalla.actualizarCombate(pj1, pj2, miCaja, motor.obtenerObstaculos());
+       int ganador = miBatalla.actualizarCombate(pj1, pj2, miCaja, motor.obtenerObstaculos());
     }
 
     glutPostRedisplay();
@@ -156,9 +155,9 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         if (estado == JUEGO) {
             estado = BATALLA;
         }
-        pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
+        pj1 = Personaje::crearPieza(LUCHADOR, HUMANO, 5.0, 7.5);
         pj1.direccion(1.0, 0.0);
-        pj2 = Personaje::crearPieza(LUCHADOR, ALIEN, 15.0, 7.5);
+        pj2 = Personaje::crearPieza(ARQUERO, ALIEN, 15.0, 7.5);
         pj2.direccion(-1.0, 0.0);
         motor.inicializarBatalla();
     }
