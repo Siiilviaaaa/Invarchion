@@ -21,7 +21,7 @@ public:
 
 	/////////ACTUALIZACIONES//////////////
 	void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2);
-	int actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo* lista[5]);
+	void actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo* lista[5]);
 	int FinCombate(Personaje& humanos, Personaje& aliens);
 
 	/////////DAÑAR AL OPONENTE////////////

@@ -58,7 +58,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 	if (key == 'l') { j2.setX(j2.return_X() + j2.return_Vbase()); j2.direccion(1, 0); }
 }
 
-int Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstaculo* lista[5])
+void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstaculo* lista[5])
 {
 	for (int i = 0;i < 3;i++)
 		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
@@ -106,9 +106,8 @@ int Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacul
 	int resultado = FinCombate(j1, j2);
 	if (resultado != 0) {
 		eliminarRestos();
-    fin_ = true;
+		fin_ = true;
 	}
-	return resultado;
 }
 
 int Batalla::FinCombate(Personaje& humanos, Personaje& aliens)

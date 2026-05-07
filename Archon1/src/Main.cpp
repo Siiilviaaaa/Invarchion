@@ -87,6 +87,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
     case JUEGO:
         miCamara.vistaJuego();
         dibujo_tablero.dibuja();
+        fin_ = false;
         break;
     case RANKING:
         //pantallaRanking.draw();
@@ -122,7 +123,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
 void OnTimer(int value)
 {
     if (estado == BATALLA) {
-       int ganador = miBatalla.actualizarCombate(pj1, pj2, miCaja, motor.obtenerObstaculos());
+       miBatalla.actualizarCombate(pj1, pj2, miCaja, motor.obtenerObstaculos());
     }
 
     glutPostRedisplay();
