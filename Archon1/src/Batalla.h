@@ -38,4 +38,7 @@ public:
 
 	static void limites_d(Disparo& d, Caja& c);
 	static void limites_p(Personaje& j, Caja& c);
+
+	//para hacer la barra de vida
+	void dibujarInterfaz(Personaje& j1, Personaje& j2);
 };
