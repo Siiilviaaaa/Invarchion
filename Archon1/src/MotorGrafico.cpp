@@ -234,10 +234,10 @@ void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho
 	
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBegin(GL_POLYGON);
-		glTexCoord2f(0.0f, vSup); glVertex2f(x, y + alto);        // Arriba Izq
-		glTexCoord2f(1.0f, vSup); glVertex2f(x + ancho, y + alto); // Arriba Der
-		glTexCoord2f(1.0f, vInf); glVertex2f(x + ancho, y);        // Abajo Der
-		glTexCoord2f(0.0f, vInf); glVertex2f(x, y);               // Abajo Izq
+		glTexCoord2f(0.0f, vSup); glVertex2f(x, y + alto);        
+		glTexCoord2f(1.0f, vSup); glVertex2f(x + ancho, y + alto); 
+		glTexCoord2f(1.0f, vInf); glVertex2f(x + ancho, y);        
+		glTexCoord2f(0.0f, vInf); glVertex2f(x, y);               
 	glEnd();
 
 	glDisable(GL_BLEND);
