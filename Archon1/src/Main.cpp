@@ -35,7 +35,6 @@ Juego juego(&miTablero);
 //PRUEBAS
 Batalla miBatalla;
 Personaje pj1, pj2;
-Obstaculo obs_prueba(0.0, 0.3, 0.4);
 
 void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
 { //esto no debería de ir en una funcion por separado?
@@ -104,7 +103,6 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
         miCamara.vistaBatalla();
         motor.dibujarCaja(miCaja);
 
-        //PRUEBAS
         motor.dibujarPersonaje(pj1);
         motor.dibujarPersonaje(pj2);
 
@@ -115,7 +113,6 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
             }
         }
         break;
-
     }
     //no borrar esta linea ni poner nada despues
     glutSwapBuffers();
@@ -125,7 +122,7 @@ void OnTimer(int value)
 {
     if (estado == BATALLA) {
         if (pj1.return_Vida() > 0 && pj2.return_Vida() > 0) //PARA QUE NO SALGA DE MANERA INDEFINIDA EL GANADOR POR PANTALLA
-            miBatalla.actualizarCombate(pj1, pj2, miCaja, obs_prueba);
+            miBatalla.actualizarCombate(pj1, pj2, miCaja, motor.obtenerObstaculos());
     }
 
     glutPostRedisplay();
