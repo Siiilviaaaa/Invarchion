@@ -35,6 +35,7 @@ Juego juego(&miTablero);
 //PRUEBAS
 Batalla miBatalla;
 Personaje pj1, pj2;
+bool fin_ = false;
 
 void mouse(int button, int state, int x, int y) //esta funcion detecta los clicks en el menú
 { //esto no debería de ir en una funcion por separado?
@@ -165,6 +166,9 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
 
     if (estado == BATALLA) {
         miBatalla.KeyBatalla(key, pj1, pj2);
+    }
+    if (fin_ == true) {
+        estado = JUEGO;
     }
 }
 

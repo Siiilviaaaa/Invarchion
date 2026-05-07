@@ -3,7 +3,7 @@
 #include "Batalla.h"
 
 using std::cout, std::cin, std::endl;
-
+extern bool fin_;
 Batalla::Batalla()
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
@@ -100,7 +100,9 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacu
 	}
 
 	int resultado = FinCombate(j1, j2);
-	if (resultado != 0) return;
+	if (resultado != 0) {
+		fin_ = true;
+	}
 }
 
 int Batalla::FinCombate(Personaje& humanos, Personaje& aliens)
