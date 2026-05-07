@@ -81,10 +81,26 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacu
 			}
 			
 			//ELIMINAR SI IMPACTA
-			if (nDisparos[i]->Impacto(j1, j2) || nDisparos[i]->Impacto(j2, j1) || !nDisparos[i]->return_Activo()) {
+			if (nDisparos[i]->Impacto(j1, j2)) {
+				std::cout << "¡J1 ha sido golpeado! Vida: " << j1.return_Vida() << std::endl;
 				delete nDisparos[i];
-					nDisparos[i] = nullptr;
+				nDisparos[i] = nullptr;
 			}
+			else if (nDisparos[i]->Impacto(j2, j1)) {
+				std::cout << "¡J2 ha sido golpeado! Vida: " << j2.return_Vida() << std::endl;
+				delete nDisparos[i];
+				nDisparos[i] = nullptr;
+			}
+			else if (!nDisparos[i]->return_Activo()) {
+				delete nDisparos[i];
+				nDisparos[i] = nullptr;
+			}
+			/*if (nDisparos[i]->Impacto(j1, j2) || nDisparos[i]->Impacto(j2, j1) || !nDisparos[i]->return_Activo()) {
+				delete nDisparos[i];
+				nDisparos[i] = nullptr;
+				std::cout << "VIDA ACTUAL J1: " << j1.return_Vida() << std::endl;
+				std::cout << "VIDA ACTUAL J2: " << j2.return_Vida() << std::endl;
+			}*/
 		}
 	}
 

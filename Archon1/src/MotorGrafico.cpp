@@ -3,6 +3,7 @@
 #include <ctime>
 #include <cstdlib>
 
+
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
 	luchador("Recursos/luchador.png"), 	
@@ -205,4 +206,43 @@ void MotorGrafico::dibujarVida_Muerte(const Personaje& humano, const Personaje& 
 		calavera.setPos(alien.x, alien.y + 1.2);
 		calavera.draw();
 	}
+}
+
+void MotorGrafico::dibujarBarraVida(Personaje& j1, Personaje& j2)
+{
+	float porcentaje1 = (float)j1.return_Vida() / (float)j1.return_VidaMax();
+	float porcentaje2 = (float)j2.return_Vida() / (float)j2.return_VidaMax();
+	recortarBarra(porcentaje1, 1.0f, 1.0f, 4.5f, 0.8f);
+	recortarBarra(porcentaje2, 14.5f, 1.0f, 4.5f, 0.8f);
+}
+void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho, float alto)
+{
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/barra.png").id);
+	if (porcentaje < 0) porcentaje = 0;
+	if (porcentaje > 1) porcentaje = 1;
+	int indice = (int)((1.0f - porcentaje) * 9.0f);
+	if (indice > 9) indice = 9;
+	float paso = 1.0f/10.0f;
+	float vSup = (float)indice * paso;
+	float vInf = vSup + 0.1f;
+
+	
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBegin(GL_POLYGON);
+		glTexCoord2f(0.0f, vSup); glVertex2f(x, y + alto);        // Arriba Izq
+		glTexCoord2f(1.0f, vSup); glVertex2f(x + ancho, y + alto); // Arriba Der
+		glTexCoord2f(1.0f, vInf); glVertex2f(x + ancho, y);        // Abajo Der
+		glTexCoord2f(0.0f, vInf); glVertex2f(x, y);               // Abajo Izq
+	glEnd();
+
+	glDisable(GL_BLEND);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_TEXTURE_2D);
+	
 }

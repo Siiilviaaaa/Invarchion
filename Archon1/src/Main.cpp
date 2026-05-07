@@ -87,6 +87,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
     case JUEGO:
         miCamara.vistaJuego();
         dibujo_tablero.dibuja();
+        fin_ = false;
         break;
     case RANKING:
         //pantallaRanking.draw();
@@ -103,7 +104,6 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
     case BATALLA:
         miCamara.vistaBatalla();
         motor.dibujarCaja(miCaja);
-
         motor.dibujarPersonaje(pj1);
         motor.dibujarPersonaje(pj2);
 
@@ -113,7 +113,9 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
                 motor.dibujarDisparo(d); //SE PASA EL PUNTERO
             }
         }
+        motor.dibujarBarraVida(pj1, pj2);
         break;
+        
     }
     //no borrar esta linea ni poner nada despues
     glutSwapBuffers();
