@@ -8,9 +8,11 @@ enum Bando { HUMANO, ALIEN };
 class Personaje
 {
 	friend class MotorGrafico;
+	friend class Cursor;
 
 	Tipo_figura tipo;
 	Bando bando;
+	int movimientos;
 	int vida, vida_max; //VARIABLE PARA COMPROBAR SU USAR POCION
 	int danio;
 	double v;

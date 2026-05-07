@@ -3,7 +3,7 @@
 #include "Batalla.h"
 
 using std::cout, std::cin, std::endl;
-
+extern bool fin_;
 Batalla::Batalla()
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
@@ -106,6 +106,7 @@ int Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacul
 	int resultado = FinCombate(j1, j2);
 	if (resultado != 0) {
 		eliminarRestos();
+    fin_ = true;
 	}
 	return resultado;
 }
@@ -201,7 +202,7 @@ void Batalla::eliminarRestos()
 		if (nDisparos[i] != nullptr)
 		{
 			delete nDisparos[i];      // Liberamos la memoria
-			nDisparos[i] = nullptr;   // Marcamos como vacío
+			nDisparos[i] = nullptr;   // Marcamos como vacï¿½o
 		}
 	}
 }
