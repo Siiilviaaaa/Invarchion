@@ -126,6 +126,9 @@ void OnTimer(int value)
     if (estado == BATALLA) {
         if (pj1.return_Vida() > 0 && pj2.return_Vida() > 0) //PARA QUE NO SALGA DE MANERA INDEFINIDA EL GANADOR POR PANTALLA
             miBatalla.actualizarCombate(pj1, pj2, miCaja, motor.obtenerObstaculos());
+        if (fin_ == true) {
+            estado = JUEGO;
+        }
     }
 
     glutPostRedisplay();
@@ -169,9 +172,7 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
     if (estado == BATALLA) {
         miBatalla.KeyBatalla(key, pj1, pj2);
     }
-    if (fin_ == true) {
-        estado = JUEGO;
-    }
+    
 }
 
 int main(int argc, char** argv) {
