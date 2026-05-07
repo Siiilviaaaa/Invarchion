@@ -152,8 +152,8 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 			nDisparos[i]->setX(aliado.return_X() + aliado.return_dirX() * margen);
 			nDisparos[i]->setY(aliado.return_Y() + aliado.return_dirY() * margen);
 
-			double vx = aliado.return_dirX() * 0.15;
-			double vy = aliado.return_dirY() * 0.15;
+			double vx = aliado.return_dirX() * 0.1;
+			double vy = aliado.return_dirY() * 0.1;
 
 			nDisparos[i]->setVX(vx);
 			nDisparos[i]->setVY(vy);
@@ -177,11 +177,25 @@ bool Batalla::NoMover(Personaje& j, const Pared& p)
 
 bool Batalla::reboteDisparos(Disparo& d, const Pared& p)
 {
-	double dx, dy;
 	if (p.distancia(d.return_X(), d.return_Y()) < 0.5)
 	{
-		d.setVX(d.return_VX());
-		d.setVY(d.return_VY());
+		//SI y1 == y2 -> SUELO O TECHO
+		if (std::abs(p.return_Y1() - p.return_Y2()) < 0.1)
+			d.setVY(-d.return_VY()); //REBOTE VERTICAL
+		//SI x1 == x2 -> DCH O IZQ
+		else if (std::abs(p.return_X1() - p.return_X2()) < 0.1)
+			d.setVX(-d.return_VX()); //REBOTE HORIZONTAL
+
+		//MAX 2 REBOTES
+		d.setRebotes(d.return_Rebotes() + 1);
+
+		if (d.return_Rebotes() > 2)
+			d.setActivo(false);
+
+		//PA QUE NO SE QUEDE UNIDO A LA PARED
+		d.setX(d.return_X() + d.return_VX() * 2);
+		d.setY(d.return_Y() + d.return_VY() * 2);
+
 		return true;
 	}
 	return false;
