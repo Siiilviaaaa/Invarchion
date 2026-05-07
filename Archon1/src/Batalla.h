@@ -25,10 +25,12 @@ public:
 	int FinCombate(Personaje& humanos, Personaje& aliens);
 
 	/////////DAÑAR AL OPONENTE////////////
-	void pegar(Personaje& atacante, Personaje& objetivo, double x1, double y1, double x2, double y2);
+	void pegar(Personaje& atacante, Personaje& objetivo);
 	void lanzarDisparo(Personaje& aliado);
-	
+	void eliminarRestos();
+
 	/////////INTERACCION CON LOS ELEMENTOS////////////
+	void entrePersonajes(Personaje& j1, Personaje& j2);
 	static bool NoMover(Personaje& j, const Pared& p);
 	static bool reboteDisparos(Disparo& d, const Pared& p);
 	static bool choqueObstaculo(Personaje& j, const Obstaculo& o);
