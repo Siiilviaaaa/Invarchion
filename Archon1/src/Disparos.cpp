@@ -10,6 +10,7 @@ Disparo::Disparo()
 	velo_y = 0.0;
 	danio = 15;
 	activo = false;
+	rebotes = 0;
 }
 
 void Disparo::moverDisparo()

@@ -56,7 +56,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 	if (key == 'd') { j1.setX(j1.return_X() + j1.return_Vbase()); j1.direccion(1, 0); }
 }
 
-void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstaculo& obs)
+void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstaculo* lista[5])
 {
 	for (int i = 0;i < 3;i++)
 		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
@@ -64,6 +64,7 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacu
 	j1.actualizarEfectos();
 	j2.actualizarEfectos();
 
+	////////////////DISPAROS//////////////////
 	for (int i = 0;i < MAX_DISPAROS;i++)
 	{
 		if (nDisparos[i] != nullptr) {
@@ -71,7 +72,13 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacu
 			
 			//COLISION CONTRA LA CAJA
 			limites_d(*nDisparos[i], caja);
-			choqueObstaculo(*nDisparos[i], obs);
+
+			//COLISION OBSTACULOS
+			for (int k = 0; k < 5; k++) {
+				if (lista[k] != nullptr) {
+					choqueObstaculo(*nDisparos[i], *lista[k]);
+				}
+			}
 			
 			//ELIMINAR SI IMPACTA
 			if (nDisparos[i]->Impacto(j1, j2) || nDisparos[i]->Impacto(j2, j1) || !nDisparos[i]->return_Activo()) {
@@ -81,11 +88,16 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacu
 		}
 	}
 
+	////////////////PERSONAJES//////////////////
 	limites_p(j1, caja);
 	limites_p(j2, caja);
 
-	choqueObstaculo(j1, obs);
-	choqueObstaculo(j2, obs);
+	for (int k = 0; k < 5; k++) {
+		if (lista[k] != nullptr) {
+			choqueObstaculo(j1, *lista[k]);
+			choqueObstaculo(j2, *lista[k]);
+		}
+	}
 
 	int resultado = FinCombate(j1, j2);
 	if (resultado != 0) return;
@@ -152,8 +164,8 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 			nDisparos[i]->setX(aliado.return_X() + aliado.return_dirX() * margen);
 			nDisparos[i]->setY(aliado.return_Y() + aliado.return_dirY() * margen);
 
-			double vx = aliado.return_dirX() * 0.15;
-			double vy = aliado.return_dirY() * 0.15;
+			double vx = aliado.return_dirX() * 0.1;
+			double vy = aliado.return_dirY() * 0.1;
 
 			nDisparos[i]->setVX(vx);
 			nDisparos[i]->setVY(vy);
@@ -177,11 +189,29 @@ bool Batalla::NoMover(Personaje& j, const Pared& p)
 
 bool Batalla::reboteDisparos(Disparo& d, const Pared& p)
 {
-	double dx, dy;
 	if (p.distancia(d.return_X(), d.return_Y()) < 0.5)
 	{
-		d.setVX(d.return_VX());
-		d.setVY(d.return_VY());
+		//SI y1 == y2 -> SUELO O TECHO
+		if (std::abs(p.return_Y1() - p.return_Y2()) < 0.1)
+			d.setVY(-d.return_VY()); //REBOTE VERTICAL
+		//SI x1 == x2 -> DCH O IZQ
+		else if (std::abs(p.return_X1() - p.return_X2()) < 0.1)
+			d.setVX(-d.return_VX()); //REBOTE HORIZONTAL
+
+		//MAX 2 REBOTES
+		d.setRebotes(d.return_Rebotes() + 1);
+		std::cout << "Rebote (caja). TOTAL: " << d.return_Rebotes() << "/2" << std::endl;
+
+		if (d.return_Rebotes() > 2) {
+			d.setActivo(false);
+			std::cout << "[SISTEMA] Disparo agotado (caja)" << std::endl;
+
+		}
+
+		//PA QUE NO SE QUEDE UNIDO A LA PARED
+		d.setX(d.return_X() + d.return_VX() * 2);
+		d.setY(d.return_Y() + d.return_VY() * 2);
+
 		return true;
 	}
 	return false;
@@ -193,38 +223,52 @@ bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o)
 	double dy = j.return_Y() - o.return_Y();
 	double dist = sqrt(dx * dx + dy * dy);
 
-	if (dist < (o.return_Radio() + 0.8)) {
-		//EMPUJAR HACIA FUERA
-		double angulo = atan2(dy, dx);
-		j.setX(o.return_X() + (o.return_Radio() + 0.81) * cos(angulo));
-		j.setY(o.return_Y() + (o.return_Radio() + 0.81) * sin(angulo));
+	//AJUSTAR PA QUE EL OBTACULO NO SE META DENTRO DEL PERSONAJE
+	double radioSuma = o.return_Radio() + 0.5;
+
+	if (dist < radioSuma)
+	{
+		double solapamiento = radioSuma - dist;
+		double nx = dx / dist;
+		double ny = dy / dist;
+
+		//REPOSICIONAMIENTO INMEDIATO
+		j.setX(j.return_X() + nx * solapamiento);
+		j.setY(j.return_Y() + ny * solapamiento);
+
+		std::cout << "CHOQUE" << std::endl;
+
+		return true;
 	}
 	return false;
 }
 
 bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o)
 {
-	if (d.return_Activo()) {
-		double dx = d.return_X() - o.return_X();
-		double dy = d.return_Y() - o.return_Y();
-		double dist = sqrt(dx * dx + dy * dy);
+	if (!d.return_Activo()) return false;
 
-		if (dist < o.return_Radio())
-		{
-			//INVERTIR SEGÚN DONDE GOLPEE
-			if (std::abs(dx) > std::abs(dy))	//SI GOLPEA MAS POR LOS LADOS QUE POR ARRIBA
-				d.setVX(-d.return_VX());		//REBOTE HORIZONTAL
-			else
-				d.setVY(-d.return_VY());		//REBOTE VERTICAL
+    double dx = d.return_X() - o.return_X();
+    double dy = d.return_Y() - o.return_Y();
+    double dist = sqrt(dx * dx + dy * dy);
 
-			//NUEVA VELOCIDAD
-			d.setX(d.return_X() + d.return_VX());
-			d.setY(d.return_Y() + d.return_VY());
+    if (dist < o.return_Radio())
+    {
+        if (std::abs(dx) > std::abs(dy)) d.setVX(-d.return_VX());
+        else d.setVY(-d.return_VY());
 
-			return true;
-		}
-	}
-	else return false;
+        d.setRebotes(d.return_Rebotes() + 1);
+		std::cout << "Rebote (obtaculo). TOTAL: " << d.return_Rebotes() << "/2" << std::endl;
+
+        if (d.return_Rebotes() > 2) {
+			std::cout << "[SISTEMA] Disparo agotado (obtaculo)" << std::endl;
+            d.setActivo(false);
+        }
+
+        d.setX(d.return_X() + d.return_VX() * 2);
+        d.setY(d.return_Y() + d.return_VY() * 2);
+        return true;
+    }
+    return false;
 }
 
 void Batalla::limites_d(Disparo& d, Caja& c)
