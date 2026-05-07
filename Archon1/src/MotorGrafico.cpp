@@ -125,7 +125,7 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 	glTranslated(personaje.x,personaje.y, 0.5);
 	if (personaje.bando == HUMANO) glColor3ub(0, 0, 255);
 	else glColor3ub(255, 0, 0);
-	glutSolidSphere(1.0, 20, 20);
+	glutSolidSphere(0.5, 20, 20);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
 
@@ -139,7 +139,7 @@ void MotorGrafico::dibujarDisparo(Disparo* disparo)
 	glTranslated(disparo->x, disparo->y, 0.5);
 	glDisable(GL_LIGHTING);
 	glColor3ub(255, 255, 0);
-	glutSolidSphere(0.4, 10, 10);
+	glutSolidSphere(0.2, 10, 10);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
 }

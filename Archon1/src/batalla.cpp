@@ -94,6 +94,8 @@ int Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacul
 	limites_p(j1, caja);
 	limites_p(j2, caja);
 
+	entrePersonajes(j1, j2);
+
 	for (int k = 0; k < 5; k++) {
 		if (lista[k] != nullptr) {
 			choqueObstaculo(j1, *lista[k]);
@@ -204,6 +206,28 @@ void Batalla::eliminarRestos()
 	}
 }
 
+void Batalla::entrePersonajes(Personaje& j1, Personaje& j2)
+{
+	double dx = j1.return_X() - j2.return_X();
+	double dy = j1.return_Y() - j2.return_Y();
+	double dist = sqrt(dx * dx + dy * dy);
+	double radioChoque = 0.7;
+
+	
+	if (dist < radioChoque)
+	{
+		double juntos = radioChoque - dist;
+		double normalx = dx / dist;
+		double normaly = dy / dist;
+
+		j1.setX(j1.return_X() + normalx * 0.3);
+		j1.setY(j1.return_Y() + normaly * 0.3);
+
+		j2.setX(j2.return_X() - normalx * 0.3);
+		j2.setY(j2.return_Y() - normaly * 0.3);
+	}
+}
+
 bool Batalla::NoMover(Personaje& j, const Pared& p)
 {
 	if (p.distancia(j.return_X(), j.return_Y()) < 1.0)
@@ -248,17 +272,17 @@ bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o)
 	double dist = sqrt(dx * dx + dy * dy);
 
 	//AJUSTAR PA QUE EL OBTACULO NO SE META DENTRO DEL PERSONAJE
-	double radioSuma = o.return_Radio() + 0.5;
+	double radioSuma = o.return_Radio() + 0.3;
 
 	if (dist < radioSuma)
 	{
-		double solapamiento = radioSuma - dist;
-		double nx = dx / dist;
-		double ny = dy / dist;
+		double juntos = radioSuma - dist;
+		double normalx = dx / dist;
+		double normaly = dy / dist;
 
-		//REPOSICIONAMIENTO INMEDIATO
-		j.setX(j.return_X() + nx * solapamiento);
-		j.setY(j.return_Y() + ny * solapamiento);
+		//POSICIONAMIENTO
+		j.setX(j.return_X() + normalx * juntos);
+		j.setY(j.return_Y() + normaly * juntos);
 
 		std::cout << "CHOQUE" << std::endl;
 

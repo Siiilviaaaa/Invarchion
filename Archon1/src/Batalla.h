@@ -30,6 +30,7 @@ public:
 	void eliminarRestos();
 
 	/////////INTERACCION CON LOS ELEMENTOS////////////
+	void entrePersonajes(Personaje& j1, Personaje& j2);
 	static bool NoMover(Personaje& j, const Pared& p);
 	static bool reboteDisparos(Disparo& d, const Pared& p);
 	static bool choqueObstaculo(Personaje& j, const Obstaculo& o);
