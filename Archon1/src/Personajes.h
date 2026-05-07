@@ -18,6 +18,7 @@ class Personaje
 	double v;
 	double vel_base;
 	double x, y;
+	bool moviendose{ false };
 
 	//DIRECCION
 	double dirX, dirY;
@@ -25,6 +26,8 @@ class Personaje
 	//HECHIZOS
 	double t_paralisis;
 	double t_hiperVelocidad;
+
+
 
 public:
 	//void sumarPuntos(int puntos);   METER EN JUEGO.H

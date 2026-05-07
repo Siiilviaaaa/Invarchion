@@ -75,7 +75,6 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    dibujo_tablero.dibuja();
 
     switch (estado) {
     case MENU:
@@ -142,6 +141,7 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         if (key == 'h') {
             std::cout << "[SISTEMA] Has elegido: HUMANOS. Iniciando despliegue..." << std::endl;
             juego.setBandoJugador(Bando_jugador_es_Humano);
+            pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
             estado = JUEGO;
         }
         else if (key == 'a') {
@@ -159,7 +159,7 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         if (estado == JUEGO) {
             estado = BATALLA;
         }
-        pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
+        pj1 = Personaje::crearPieza(EXCAVADOR, HUMANO, 5.0, 7.5);
         pj1.direccion(1.0, 0.0);
         pj2 = Personaje::crearPieza(LUCHADOR, ALIEN, 15.0, 7.5);
         pj2.direccion(-1.0, 0.0);
@@ -197,7 +197,7 @@ int main(int argc, char** argv) {
     //esto todo habrá q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
     cout << "Reproduciendo..." << std::endl;
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
-    ETSIDI::play("extra/mi_musica.mp3");
+    //ETSIDI::play("extra/mi_musica.mp3");
 
     //aqui he añadido alguna mia
     glutMouseFunc(mouse);

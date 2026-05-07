@@ -2,10 +2,11 @@
 #include "freeglut.h"
 #include <ctime>
 #include <cstdlib>
+#include <iostream>
 
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
-	luchador("Recursos/luchador.png", numColumnasSpritePersonaje, numFilasSpritePersonaje), 	
+	luchador("Recursos/luchador.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	soldado("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	volador("Recursos/volador.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	minero("Recursos/minero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -17,10 +18,10 @@ MotorGrafico::MotorGrafico() :
 	gusano("Recursos/gusano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	mago("Recursos/mago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
-	barraVida("Recursos/barra.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	calavera("Recursos/calavera.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	Paralisis("Recursos/hechizo1.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	Velocidad("Recursos/hechizo2.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	barraVida("Recursos/barra.png"),
+	calavera("Recursos/calavera.png"),
+	Paralisis("Recursos/hechizo1.png"),
+	Velocidad("Recursos/hechizo2.png"),
 	Pocion("Recursos/pocion.png")
 {
 	for (int i = 0; i < 5; i++) {
@@ -133,14 +134,51 @@ void MotorGrafico::dibujarCursor(Cursor cursor)
 }
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
-	glPushMatrix();
-	glDisable(GL_LIGHTING);
-	glTranslated(personaje.x,personaje.y, 0.5);
-	if (personaje.bando == HUMANO) glColor3ub(0, 0, 255);
-	else glColor3ub(255, 0, 0);
-	glutSolidSphere(1.0, 20, 20);
-	glEnable(GL_LIGHTING);
-	glPopMatrix();
+	ETSIDI::SpriteSequence* SpriteActual = nullptr;
+	switch (personaje.tipo) {
+	case LUCHADOR:
+		SpriteActual = (personaje.bando == HUMANO) ? &luchador : &golem;
+		break;
+	case ARQUERO:
+		SpriteActual = (personaje.bando == HUMANO) ? &soldado : &arquero;
+		break;
+	case VOLADOR:
+		SpriteActual = (personaje.bando == HUMANO) ? &volador : &murcielago;
+		break;
+	case EXCAVADOR:
+		SpriteActual = (personaje.bando == HUMANO) ? &minero : &gusano;
+		break;
+	case HECHICERO:
+		SpriteActual = (personaje.bando == HUMANO) ? &hechicero : &mago;
+		break;
+	default:
+		break;
+	}
+
+	if (SpriteActual) {//si existe un sprite
+		glPushMatrix();
+		glDisable(GL_LIGHTING);//la luz para q no haga sombra
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//para la transparencia
+		glTranslated(personaje.x, personaje.y, 0.5);
+		//SpriteActual->setPos(personaje.x, personaje.y);
+		SpriteActual->setCenter(0.5, 0.5);
+		SpriteActual->setSize(2, 2);
+		if (personaje.moviendose) {
+			///SpriteActual -> setState(1, false);
+			//SpriteActual->loop();
+
+		}
+		else {
+			SpriteActual->setState(0);
+		}
+		SpriteActual->draw();
+		glDisable(GL_BLEND);
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+	}
+
+	
 
 }
 
@@ -161,7 +199,7 @@ void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)
 {
 	if (hechizo.activo)
 	{
-		if (hechizo.tipo == Hechizo::PARALISIS)
+		if (hechizo.tipo == Hechizo::PARALISIS) //esto mejor con un swithc no?
 		{
 			Paralisis.setPos(hechizo.posX, hechizo.posY);
 			Paralisis.draw();
