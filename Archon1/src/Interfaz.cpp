@@ -81,10 +81,12 @@ void OnDraw(void) {
             Disparo* d = miBatalla.return_nDisparos()[i];
             if (d) motor.dibujarDisparo(d);
         }
-        for (int i = 0; i < 3; i++) {
-            Hechizo* h = miBatalla.return_nHechizos()[i];
-            if (h) motor.dibujarHechizo(h);
-        }
+        for (int b = 0; b < 2; b++)
+            for (int i = 0; i < 3; i++) {
+                Hechizo* h = miBatalla.return_nHechizos()[b][i];
+                if (h != nullptr)
+                    motor.dibujarHechizo(h);
+            }
         break;
     }
     //no borrar esta linea ni poner nada despues
