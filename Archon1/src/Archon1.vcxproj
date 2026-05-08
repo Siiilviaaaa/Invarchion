@@ -28,6 +28,7 @@
     <ClInclude Include="Disparos.h" />
     <ClInclude Include="Hechizos.h" />
     <ClInclude Include="Informacion Casilla.h" />
+    <ClInclude Include="Interfaz.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="MotorGrafico.h" />
     <ClInclude Include="Obstaculo.h" />
@@ -45,6 +46,7 @@
     <ClCompile Include="dibujo_tablero.cpp" />
     <ClCompile Include="Disparos.cpp" />
     <ClCompile Include="Hechizos.cpp" />
+    <ClCompile Include="Interfaz.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="MotorGrafico.cpp" />
     <ClCompile Include="Obstaculo.cpp" />
