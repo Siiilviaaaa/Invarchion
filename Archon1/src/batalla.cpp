@@ -10,8 +10,9 @@ Batalla::Batalla()
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		nDisparos[i] = nullptr;
 
-	for (int i = 0; i < MAX_HECHIZOS; i++)
-		nHechizos[i] = nullptr;
+	for (int i = 0; i < 2; i++)
+		for (int j = 0; j < 3; j++)
+			nHechizos[i][j] = nullptr;
 }
 
 Batalla::~Batalla()
@@ -25,51 +26,21 @@ Batalla::~Batalla()
 			nDisparos[i] = nullptr;   //VACIAR
 		}
 
-	for (int i = 0; i < MAX_HECHIZOS; i++)
-		if (nHechizos[i] != nullptr) {
-			delete nHechizos[i];
-			nHechizos[i] = nullptr;
+	for (int b = 0; b < 2; b++) {        //RECORRE 2 BANDOS
+		for (int i = 0; i < 3; i++) {    //RECORRE 3 HECHIZOS
+			if (nHechizos[b][i] != nullptr) {
+				delete nHechizos[b][i];
+				nHechizos[b][i] = nullptr;
+			}
 		}
+	}
 }
 
 void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 {
 	switch (key)
 	{
-	case ' ': //HUMANOS PELEAN, DISPARAN O HECHIZAN CON EL ESPACIO
-		if (j1.return_Tipo() == ARQUERO) {
-			lanzarDisparo(j1);
-			std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
-		}
-		else if (j1.return_Tipo() == HECHICERO) {
-			lanzarHechizo(j1, j2, 0);
-			std::cout << "J1 lanza hechizo: " << std::endl;
-		}
-		else
-		{
-			pegar(j2, j1);
-			std::cout << "J2 pegando... " << std::endl;
-		}
-		break;
-	case 13: //ALIENS PELEAN, DISPARAN O HECHIZAN CON ENTER
-		if (j2.return_Tipo() == ARQUERO) {
-			lanzarDisparo(j2);
-			std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
-		}
-		else if (j2.return_Tipo() == HECHICERO) {
-			lanzarHechizo(j2, j1, 0);
-			std::cout << "J2 lanza hechizo: " << std::endl;
-		}
-		else
-		{
-			pegar(j2, j1);
-			std::cout << "J2 pegando... " << std::endl;
-		}
-		break;
-	}
-
-	switch (key)
-	{
+	//MOVIMIENTO
 		//JUGADOR 1
 	case 'w': j1.direccion(0, 1);  break;
 	case 's': j1.direccion(0, -1); break;
@@ -81,6 +52,40 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 	case 'k': j2.direccion(0, -1); break;
 	case 'j': j2.direccion(-1, 0); break;
 	case 'l': j2.direccion(1, 0);  break;
+
+	//DAÑAR
+	case ' ': //HUMANOS PELEAN, DISPARAN O HECHIZAN CON EL ESPACIO
+		if (j1.return_Tipo() == ARQUERO) {
+			lanzarDisparo(j1);
+			std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
+		}
+		else if (j1.return_Tipo() == HECHICERO) {
+			lanzarHechizo(j1, j2, j1.HechizoUtilizado());
+			j1.siguienteHechizo();
+			std::cout << "J1 lanza hechizo: " << std::endl;
+		}
+		else
+		{
+			pegar(j2, j1);
+			std::cout << "J1 pegando... " << std::endl;
+		}
+		break;
+	case 13: //ALIENS PELEAN, DISPARAN O HECHIZAN CON ENTER
+		if (j2.return_Tipo() == ARQUERO) {
+			lanzarDisparo(j2);
+			std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
+		}
+		else if (j2.return_Tipo() == HECHICERO) {
+			lanzarHechizo(j2, j1, j2.HechizoUtilizado());
+			j2.siguienteHechizo();
+			std::cout << "J2 lanza hechizo: " << std::endl;
+		}
+		else
+		{
+			pegar(j2, j1);
+			std::cout << "J2 pegando... " << std::endl;
+		}
+		break;
 	}
 }
 
@@ -144,21 +149,39 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 		}
 	}
 		
-	//////////////// HECHIZOS //////////////////
-	for (int i = 0; i < MAX_HECHIZOS; i++) {
-		if (nHechizos[i] != nullptr) {
+	for (int b = 0; b < 2; b++) {
+		for (int i = 0; i < 3; i++) {
 
-			if (nHechizos[i]->return_Activo()) {
-				nHechizos[i]->mover();
+			if (nHechizos[b][i] != nullptr) {
+				nHechizos[b][i]->mover();
 
-				Personaje* victima = nHechizos[i]->return_Obj();
-				if (victima != nullptr && nHechizos[i]->Impacta(victima->return_X(), victima->return_Y(), 0.05)) {
+				Personaje* victima = nHechizos[b][i]->return_Obj();
 
-					std::cout << "Hechizo: impacto detectado" << i << std::endl;
+				if (victima != nullptr && nHechizos[b][i]->Impacta(victima->return_X(), victima->return_Y(), 0.1)) {
 
-					delete nHechizos[i];
-					nHechizos[i] = nullptr;
-					continue;
+					//IDENTIFICAMOS EL TIPO PARA APLICAR EL EFECTO ---
+					int tipo = nHechizos[b][i]->return_Tipo();
+
+					switch (tipo) {
+					case 0: // PARÁLISIS
+						std::cout << "Efecto: Personaje congelado" << std::endl;
+						victima->setVelocidad(0); // SU VELOCIDAD ACTUAL PASA 0
+						break;
+
+					case 1: // TELETRANSPORTE
+						std::cout << "Efecto: Empuje" << std::endl;
+						// Lo mandamos a una posición aleatoria o lo alejamos
+						victima->setX(victima->return_X() + 2.0);
+						break;
+
+					case 2: // CURA / DAÑO EXTRA
+						std::cout << "Efecto: Alteracion de vida" << std::endl;
+						victima->setVida(victima->return_Vida()/2);
+						break;
+					}
+
+					delete nHechizos[b][i];
+					nHechizos[b][i] = nullptr;
 				}
 			}
 		}
@@ -260,17 +283,30 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 
 void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo)
 {
-	if (nHechizos[tipo] != nullptr) delete nHechizos[tipo];
+	if (mago.return_HechizosRestantes() <= 0) {
+		std::cout << "No te quedan hechizos en esta ronda" << std::endl;
+		return;
+	}
 
-	nHechizos[tipo] = new Hechizo();
-	nHechizos[tipo]->configurar((Hechizo::TipoHechizo)tipo);
+	bool hueco = false;
+	for (int i = 0; i < 3; i++) // Recorremos solo los 3 slots de ESE bando
+	{
+		if (nHechizos[mago.return_Bando()][i] == nullptr) {
+			nHechizos[mago.return_Bando()][i] = new Hechizo();
+			nHechizos[mago.return_Bando()][i]->setObj(&objetivo);
 
-	nHechizos[tipo]->setObj(&objetivo);
+			nHechizos[mago.return_Bando()][i]->setBando(mago.return_Bando());
 
-	double dX = objetivo.return_X() - mago.return_X();
-	double dY = objetivo.return_Y() - mago.return_Y();
+			nHechizos[mago.return_Bando()][i]->activar(mago.return_X(), mago.return_Y(), 0, 0);
+			mago.usarHechizo();
 
-	nHechizos[tipo]->activar(mago.return_X(), mago.return_Y(), dX, dY);
+			hueco = true;
+			break;
+		}
+	}
+	if (!hueco) {
+		std::cout << "Maximo de hechizos alcanzado" << std::endl;
+	}
 }
 
 void Batalla::entrePersonajes(Personaje& j1, Personaje& j2)
@@ -358,7 +394,7 @@ bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o)
 	double dist = sqrt(dx * dx + dy * dy);
 
 	//AJUSTAR PA QUE EL OBTACULO NO SE META DENTRO DEL PERSONAJE
-	double radioSuma = o.return_Radio() + 0.3;
+	double radioSuma = o.return_Radio() * 1.1;
 
 	if (dist < radioSuma)
 	{

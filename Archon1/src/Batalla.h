@@ -13,15 +13,14 @@
 class Batalla
 {
 	static const int MAX_DISPAROS = 20;
-	static const int MAX_HECHIZOS = 3;
 	Disparo* nDisparos[MAX_DISPAROS];
-	Hechizo* nHechizos[MAX_HECHIZOS];
+	Hechizo* nHechizos[2][3];
 	
 public:
 	Batalla();
 	~Batalla();
 	Disparo* (&return_nDisparos())[20] { return nDisparos; }
-	Hechizo* (&return_nHechizos())[3] { return nHechizos; }
+	Hechizo* (&return_nHechizos())[2][3] { return nHechizos; }
 
 	/////////ACTUALIZACIONES//////////////
 	void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2);

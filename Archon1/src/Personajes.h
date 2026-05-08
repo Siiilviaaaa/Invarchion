@@ -20,6 +20,8 @@ class Personaje
 	double x, y;
 
 	int disparosRealizados; //CONTADOR DE DISPAROS
+	int hechizoUtilizado = 0;
+	int hechizosRestantes = 3;
 	double dirX, dirY; //DIRECCION
 
 
@@ -40,6 +42,15 @@ public:
 	void resetMunicion() { disparosRealizados = 0; }
 	void sumarDisparo() { disparosRealizados++; }
 	int return_Disparos() { return disparosRealizados; }
+
+	//CONTROL DE LOS HECHIZOS
+	int return_HechizosRestantes() { return hechizosRestantes; }
+	void usarHechizo() { hechizosRestantes--; }
+	int HechizoUtilizado() { return hechizoUtilizado; }
+	void siguienteHechizo() {
+		hechizoUtilizado++;
+		if (hechizoUtilizado > 2) hechizoUtilizado = 0;
+	}
 
 	//////////METODOS//////////////
 	Tipo_figura return_Tipo() const { return tipo; }

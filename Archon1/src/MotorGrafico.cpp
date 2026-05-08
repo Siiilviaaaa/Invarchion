@@ -165,7 +165,11 @@ void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 	glPushMatrix();
 	glTranslated(hechizo->posX, hechizo->posY, 0.5);
 	glDisable(GL_LIGHTING);
-	glColor3ub(255, 255, 255);
+	switch (hechizo->tipo) {
+	case 0: glColor3f(0.0f, 1.0f, 1.0f); break; //PARALISIS
+	case 1: glColor3f(1.0f, 0.0f, 1.0f); break; //TELETRANSPORTE
+	case 2: glColor3f(0.0f, 1.0f, 0.0f); break; //CURA
+	}
 	glutSolidSphere(0.2, 10, 10);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();

@@ -1,6 +1,5 @@
 #pragma once
-
-class Personaje;
+#include "Personajes.h"
 
 class Hechizo
 {
@@ -14,8 +13,8 @@ private:
 	double posX, posY;
 	double vx, vy;
 	Personaje* objetivo;
+	Bando bando;
 
-	int usos_restantes;
 	double t_recarga;
 	double t_restante;
 
@@ -25,17 +24,17 @@ public:
 	void mover();
 	bool Impacta(double Obx, double Oby, double Obr);
 
-	void configurar(TipoHechizo t);
-	void efectos(Personaje& objetivo);
-
 	/////////METODOS///////////////
+	TipoHechizo return_Tipo() const { return tipo; }
 	bool return_Activo() const { return activo; }
 	double return_X() const { return posX; }
 	double return_Y() const { return posY; }
 	Personaje* return_Obj() const { return objetivo; }
+	Bando return_Bando() const { return bando; }
 
 	void setActivo(bool estado) { activo = estado; }
 	void setX(double nuevaX) { posX = nuevaX; }
 	void setY(double nuevaY) { posY = nuevaY; }
 	void setObj(Personaje* obj) { objetivo = obj; }
+	void setBando(Bando b) { bando = b; }
 };

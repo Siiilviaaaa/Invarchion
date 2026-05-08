@@ -114,12 +114,12 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
                 motor.dibujarDisparo(d); //SE PASA EL PUNTERO
             }
         }
-        for (int i = 0; i < 3; i++) {
-            Hechizo* h = miBatalla.return_nHechizos()[i];
-            if (h != nullptr) {
-                motor.dibujarHechizo(h); //SE PASA EL PUNTERO
+        for (int b = 0; b < 2; b++)
+            for (int i = 0; i < 3; i++){
+               Hechizo* h = miBatalla.return_nHechizos()[b][i];
+               if (h != nullptr)
+                 motor.dibujarHechizo(h);
             }
-        }
         break;
     }
     //no borrar esta linea ni poner nada despues
