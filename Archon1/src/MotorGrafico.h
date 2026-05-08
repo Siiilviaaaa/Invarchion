@@ -35,6 +35,7 @@ class MotorGrafico
 	Obstaculo* listaObstaculos[5];
 	int numObstaculos;
 
+	void recortarBarra(float vida, float x, float y, float ancho, float alto);
 	////TABLERO////
 
 	////MENU////
@@ -51,8 +52,9 @@ public:
 	void dibujarDisparo(Disparo* disparo);
 	void dibujarHechizo(Hechizo* hechizo);
 	void dibujarPersonaje(const Personaje& personaje);
-	void dibujarVida_Muerte(const Personaje& humano, const Personaje& alien);
-	
+	void dibujarVida_Muerte(const Personaje& humano, const Personaje& alien);	
+	void dibujarBarraVida(Personaje& j1, Personaje& j2);
+
 	/////////METODOS////////////
 	//DIRECCION QUE APUNTA A OTRA DIRECCION
 	Obstaculo* (&obtenerObstaculos())[5] {return listaObstaculos;}

@@ -79,47 +79,47 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 		}
 	}
 
-	//////////////// DISPAROS //////////////////
-	//CHOQUE ENTRE DISPAROS:
-	for (int i = 0; i < MAX_DISPAROS; i++) {
-		if (nDisparos[i] == nullptr || !nDisparos[i]->return_Activo()) continue;
-		for (int j = i + 1; j < MAX_DISPAROS; j++)
-			if (nDisparos[j] != nullptr && nDisparos[j]->return_Activo())
-				entreDisparos(*nDisparos[i], *nDisparos[j]);
-	}
-	//DEMAS CHOQUES
-	for (int i = 0; i < MAX_DISPAROS; i++)
+//////////////// DISPAROS //////////////////
+//CHOQUE ENTRE DISPAROS:
+for (int i = 0; i < MAX_DISPAROS; i++) {
+	if (nDisparos[i] == nullptr || !nDisparos[i]->return_Activo()) continue;
+	for (int j = i + 1; j < MAX_DISPAROS; j++)
+		if (nDisparos[j] != nullptr && nDisparos[j]->return_Activo())
+			entreDisparos(*nDisparos[i], *nDisparos[j]);
+}
+//DEMAS CHOQUES
+for (int i = 0; i < MAX_DISPAROS; i++)
+{
+	if (nDisparos[i] == nullptr) continue;
+
+	if (nDisparos[i]->return_Activo())
 	{
-		if (nDisparos[i] == nullptr) continue;
+		nDisparos[i]->moverDisparo();
+		limites_d(*nDisparos[i], caja); //CON LA CAJA
 
-		if (nDisparos[i]->return_Activo())
-		{
-			nDisparos[i]->moverDisparo();
-			limites_d(*nDisparos[i], caja); //CON LA CAJA
-
-			for (int k = 0; k < 5; k++) {
-				if (lista[k] != nullptr)
-					choqueObstaculo(*nDisparos[i], *lista[k]); //CON LOS OBSTACULOS
-			}
-			
-			if (nDisparos[i]->return_Bando() == HUMANO) {
-				//SI ES HUMANO, SOLO DAÑAR ALIEN
-				nDisparos[i]->Impacto(j2, true);
-				nDisparos[i]->Impacto(j1, false);
-			}
-			else {
-				//SI ES ALIEN, SOLO DAÑAR HUMANO
-				nDisparos[i]->Impacto(j1, true);
-				nDisparos[i]->Impacto(j2, false);
-			}
+		for (int k = 0; k < 5; k++) {
+			if (lista[k] != nullptr)
+				choqueObstaculo(*nDisparos[i], *lista[k]); //CON LOS OBSTACULOS
 		}
-
-		if (!nDisparos[i]->return_Activo())
-		{
-			delete nDisparos[i];
-			nDisparos[i] = nullptr;
+		
+		if (nDisparos[i]->return_Bando() == HUMANO) {
+			//SI ES HUMANO, SOLO DAÑAR ALIEN
+			nDisparos[i]->Impacto(j2, true);
+			nDisparos[i]->Impacto(j1, false);
+		}
+		else {
+			//SI ES ALIEN, SOLO DAÑAR HUMANO
+			nDisparos[i]->Impacto(j1, true);
+			nDisparos[i]->Impacto(j2, false);
 		}
 	}
+  
+	if (!nDisparos[i]->return_Activo())
+	{
+		delete nDisparos[i];
+		nDisparos[i] = nullptr;
+	}
+}
 		
 	////////////////HECHIZOS//////////////////
 	for (int i = 0; i < MAX_HECHIZOS; i++) {

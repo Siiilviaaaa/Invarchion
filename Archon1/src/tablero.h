@@ -1,7 +1,7 @@
 #pragma once
 //declaracion del tablero a partir de las casillas
 #include "casilla.h"
-
+#include "Informacion Casilla.h"
 
 
 //ELENA CREO QUE ESTO VA AQUI, LO DEJO TODO COMENTADO POR SI ACASO, SOY SILVIA ;)
@@ -19,11 +19,17 @@ public:
 
     // Funciones principales
     void inicializa();
-    const Casilla* getCasilla(int f, int c) const { //mirar si esta funcion le sirve a sofia y juli
+    const Casilla* getCasilla(int f, int c) const { 
         return &matriz[f][c];
     }
     Casilla* casillaModificable(int f, int c) {
         return &matriz[f][c];
+    }
+    InfoCasilla* getInfoCasilla(int fila, int columna) {
+        if (fila >= 0 && fila < 5 && columna >= 0 && columna < 7) {
+            return &datos[fila][columna];
+        }
+        return nullptr;
     }
     void cambiarTurno() { turno = (turno == 0) ? 1 : 0; }
     int getTurno() const { return turno; }
@@ -38,3 +44,4 @@ public:
     
 
 };
+extern Tablero miTablero;

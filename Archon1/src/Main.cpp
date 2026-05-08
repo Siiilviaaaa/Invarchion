@@ -104,9 +104,9 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
     case BATALLA:
         miCamara.vistaBatalla();
         motor.dibujarCaja(miCaja);
-
         motor.dibujarPersonaje(pj1);
         motor.dibujarPersonaje(pj2);
+        motor.dibujarBarraVida(pj1, pj2);
 
         for (int i = 0; i < 20; i++) {
             Disparo* d = miBatalla.return_nDisparos()[i];
@@ -114,7 +114,6 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
                 motor.dibujarDisparo(d); //SE PASA EL PUNTERO
             }
         }
-
         for (int i = 0; i < 3; i++) {
             Hechizo* h = miBatalla.return_nHechizos()[i];
             if (h != nullptr) {
@@ -131,6 +130,9 @@ void OnTimer(int value)
 {
     if (estado == BATALLA) {
        miBatalla.actualizarCombate(pj1, pj2, miCaja, motor.obtenerObstaculos());
+      if (fin_ == true) {
+            estado = JUEGO;
+        }
     }
 
     glutPostRedisplay();
@@ -174,9 +176,7 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
     if (estado == BATALLA) {
         miBatalla.KeyBatalla(key, pj1, pj2);
     }
-    if (fin_ == true) {
-        estado = JUEGO;
-    }
+    
 }
 
 int main(int argc, char** argv) {
