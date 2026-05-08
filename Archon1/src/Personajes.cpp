@@ -1,15 +1,7 @@
 #include "Batalla.h"
 #include "Hechizos.h"
 #include "Disparos.h"
-
-//METER EN JUEGO.CPP
-//void Personaje::sumarPuntos(int puntos)
-//{
-//	if (bando == HUMANO)
-//		puntuacionHumanos += puntos;
-//	else
-//		puntuacionAliens += puntos;
-//}
+#include <iostream>
 
 Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double posY)
 {
@@ -19,8 +11,6 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 	pieza.setBando(b);
 	pieza.setX(posX);
 	pieza.setY(posY);
-	pieza.set_paralisis(0.0);
-	pieza.set_hiperVelocidad(0.0);
 
 	//SPRITES
 	/*if (tipo == LUCHADOR)
@@ -40,32 +30,32 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 	case LUCHADOR:
 		pieza.setVida(100);
 		pieza.setVidaMax(100);
-		pieza.setDanio(10);
-		pieza.setV_base(0.8);
+		pieza.setDanio(15);
+		pieza.setV_base(1.8);
 		break;
 	case ARQUERO:
 		pieza.setVida(80);
 		pieza.setVidaMax(80);
 		pieza.setDanio(15);
-		pieza.setV_base(1.2);
+		pieza.setV_base(2.4);
 		break;
 	case VOLADOR:
-		pieza.setVida(140);
-		pieza.setVidaMax(140);
-		pieza.setDanio(8);
-		pieza.setV_base(1.5);
+		pieza.setVida(120);
+		pieza.setVidaMax(120);
+		pieza.setDanio(20);
+		pieza.setV_base(2.9);
 		break;
 	case EXCAVADOR:
-		pieza.setVida(60);
-		pieza.setVidaMax(60);
-		pieza.setDanio(30);
-		pieza.setV_base(1.0);
+		pieza.setVida(200);
+		pieza.setVidaMax(200);
+		pieza.setDanio(40);
+		pieza.setV_base(1);
 		break;
 	case HECHICERO:
 		pieza.setVida(90);
 		pieza.setVidaMax(90);
-		pieza.setDanio(25);
-		pieza.setV_base(1.3);
+		pieza.setDanio(10);
+		pieza.setV_base(1.5);
 		break;
 	}
 	pieza.setVelocidad(pieza.return_Vbase());
@@ -81,27 +71,29 @@ void Personaje::direccion(double dx, double dy)
 	}
 }
 
+void Personaje::moverEnBatalla()
+{
+	x += dirX * v * 0.05;
+	y += dirY * v * 0.05;
+
+	dirX = 0;
+	dirY = 0;
+}
+
 void Personaje::actualizarEfectos()
 {
-	if (t_paralisis > 0)
+	if (t_paralisis > 0) //SIGUE CONGELADO
 	{
-		t_paralisis -= 0.1; //DISMINUIR TIEMPO DE PARALISIS
-		if (t_paralisis < 0)
-			t_paralisis = 0;
-	}
+		t_paralisis -= 0.025;
 
-	if (t_hiperVelocidad > 0)
-	{
-		t_hiperVelocidad -= 0.1; //DISMINUIR TIEMPO DE HIPER VELOCIDAD
-		if (t_hiperVelocidad < 0)
-			t_hiperVelocidad = 0;
-	}
+		//SI EL TIEMPO SE AGOTA
+		if (t_paralisis <= 0)
+		{
+			t_paralisis = 0; //RESET PARA EVITAR NEGATIVOS
 
-	//RECALCULAR LA VELOCIDAD ACTUAL
-	if (t_paralisis > 0)
-		setVelocidad(return_Vbase() * 0.5); //PARALISIS REDUCE VELOCIDAD A LA MITAD
-	else if (t_hiperVelocidad > 0)
-		setVelocidad(return_Vbase() * 1.5); //HIPER VELOCIDAD AUMENTA VELOCIDAD EN UN 50%
-	else
-		setVelocidad(return_Vbase()); //VELOCIDAD NORMAL
+			this->v = this->vel_base; //DESCONGELAR
+
+			std::cout << "JUGADOR DESCONGELADO" << std::endl;
+		}
+	}
 }

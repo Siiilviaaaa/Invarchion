@@ -1,47 +1,11 @@
-#include "Hechizos.h"
 #include <cmath>
 #include <iostream>
+#include "Hechizos.h"
 
-Hechizo::Hechizo()
+Hechizo::Hechizo(TipoHechizo t, Bando b)
 {
-	tipo = PARALISIS;
-	usos_restantes = 0;
-	activo = false;
-	posX = 0.0;
-	posY = 0.0;
-	t_recarga = 0.0;
-	t_restante = 0.0;
-	vx = 0.0;
-	vy = 0.0;
-}
-
-void Hechizo::mover()
-{
-	if (activo) {
-		posX += vx;
-		posY += vy;
-	}
-}
-
-void Hechizo::configurar(TipoHechizo t)
-{
-	tipo = t;
-
-	switch (tipo)
-	{
-	case PARALISIS:
-		t_recarga = 5.0;
-		usos_restantes = 2;
-		break;
-	case HIPERVELOCIDAD:
-		t_recarga = 5.0;
-		usos_restantes = 2;
-		break;
-	case POCION:
-		t_recarga = 0.0; //LA POCION NO TIENE RECARGA, SOLO USOS LIMITADOS
-		usos_restantes = 1;
-		break;
-	}
+	this->tipo = t;
+	this->bando = b;
 }
 
 void Hechizo::activar(double x, double y, double dirX, double dirY)
@@ -61,18 +25,32 @@ void Hechizo::activar(double x, double y, double dirX, double dirY)
 		this->vx = velBase;
 		this->vy = 0;
 	}
-
-	std::cout << "[HECHIZO] Posicion " << posX << "," << posY << std::endl;
 }
 
-void Hechizo::efectos(Personaje& objetivo)
+void Hechizo::mover()
 {
-	if (tipo == PARALISIS) {
+	if (!activo || objetivo == nullptr) return;
 
-	}
-	else if (tipo == HIPERVELOCIDAD) {
-	
-	}
+	//DISTANCIA ACTUAL AL OBJETIVO
+	double dirX = objetivo->return_X() - posX;
+	double dirY = objetivo->return_Y() - posY;
+	double dist = sqrt(dirX * dirX + dirY * dirY);
 
-	this->activo = false;
+	//AJUSTAR VELOCIDAD
+	double velBase = 0.12;
+	vx = (dirX / dist) * velBase;
+	vy = (dirY / dist) * velBase;
+
+	//MOVIMIENTO
+	posX += vx;
+	posY += vy;
+}
+
+bool Hechizo::Impacta(double Obx, double Oby, double Obr)
+{
+	if (!activo) return false;
+
+	double dx = posX - Obx;
+	double dy = posY - Oby;
+	return (sqrt(dx * dx + dy * dy) < Obr);
 }

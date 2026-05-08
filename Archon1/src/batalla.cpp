@@ -10,8 +10,9 @@ Batalla::Batalla()
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		nDisparos[i] = nullptr;
 
-	for (int i = 0; i < MAX_HECHIZOS; i++)
-		nHechizos[i] = nullptr;
+	for (int i = 0; i < 2; i++)
+		for (int j = 0; j < 3; j++)
+			nHechizos[i][j] = nullptr;
 }
 
 Batalla::~Batalla()
@@ -25,52 +26,87 @@ Batalla::~Batalla()
 			nDisparos[i] = nullptr;   //VACIAR
 		}
 
-	for (int i = 0; i < MAX_HECHIZOS; i++)
-		if (nHechizos[i] != nullptr) {
-			delete nHechizos[i];
-			nHechizos[i] = nullptr;
+	for (int b = 0; b < 2; b++) {        //RECORRE 2 BANDOS
+		for (int i = 0; i < 3; i++) {    //RECORRE 3 HECHIZOS
+			if (nHechizos[b][i] != nullptr) {
+				delete nHechizos[b][i];
+				nHechizos[b][i] = nullptr;
+			}
 		}
+	}
 }
 
 void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 {
 	switch (key)
 	{
-	case ' ': //HUMANOS PELEAN O DISPARAN CON EL ESPACIO
-		std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
-		if (j1.return_Tipo() == ARQUERO) lanzarDisparo(j1);
+	///////////////HUMANOS////////////////
+	//MOVIMIENTO
+	case 'w': j1.direccion(0, 1);  break;
+	case 's': j1.direccion(0, -1); break;
+	case 'a': j1.direccion(-1, 0); break;
+	case 'd': j1.direccion(1, 0);  break;
+
+	case ' ': //PELEAN/DISPARAN
+		if (j1.return_Tipo() == ARQUERO) {
+			lanzarDisparo(j1);
+			std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
+		}
 		else
-			pegar(j1, j2);
-		break;
-	case 13: //ALIENS PELEAN O DISPARAN CON ENTER
-		std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
-		if (j2.return_Tipo() == ARQUERO) lanzarDisparo(j2);
-		else
+		{
 			pegar(j2, j1);
+			std::cout << "J1 pegando... " << std::endl;
+		}
 		break;
-	case 'h':
-		lanzarHechizo(j1, j2, 0);
+	case 'c': //HECHIZAN
+		if (j1.return_Tipo() == HECHICERO) {
+			lanzarHechizo(j1, j2, j1.HechizoUtilizado(), j1.return_Bando());
+			j1.siguienteHechizo();
+			std::cout << "J1 lanza hechizo: " << std::endl;
+		}
+		break;
+
+	///////////////ALIENS////////////////
+	//MOVIMIENTO
+	case 'i': j2.direccion(0, 1);  break;
+	case 'k': j2.direccion(0, -1); break;
+	case 'j': j2.direccion(-1, 0); break;
+	case 'l': j2.direccion(1, 0);  break;
+
+	case 13: //PELEAN/DISPARAN
+		if (j2.return_Tipo() == ARQUERO) {
+			lanzarDisparo(j2);
+			std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
+		}
+		else
+		{
+			pegar(j2, j1);
+			std::cout << "J2 pegando... " << std::endl;
+		}
+		break;
+	case'n': //HECHIZAN
+		if (j2.return_Tipo() == HECHICERO) {
+			lanzarHechizo(j2, j1, j2.HechizoUtilizado(), j2.return_Bando());
+			j2.siguienteHechizo();
+			std::cout << "J2 lanza hechizo: " << std::endl;
+		}
 		break;
 	}
-
-	if (key == 'w') { j1.setY(j1.return_Y() + j1.return_Vbase()); j1.direccion(0, 1); }
-	if (key == 's') { j1.setY(j1.return_Y() - j1.return_Vbase()); j1.direccion(0, -1); }
-	if (key == 'a') { j1.setX(j1.return_X() - j1.return_Vbase()); j1.direccion(-1, 0); }
-	if (key == 'd') { j1.setX(j1.return_X() + j1.return_Vbase()); j1.direccion(1, 0); }
-	
-	if (key == 'i') { j2.setY(j2.return_Y() + j2.return_Vbase()); j2.direccion(0, 1); }
-	if (key == 'k') { j2.setY(j2.return_Y() - j2.return_Vbase()); j2.direccion(0, -1); }
-	if (key == 'j') { j2.setX(j2.return_X() - j2.return_Vbase()); j2.direccion(-1, 0); }
-	if (key == 'l') { j2.setX(j2.return_X() + j2.return_Vbase()); j2.direccion(1, 0); }
 }
 
 void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo* lista[5])
 {
 	////////////////PERSONAJES//////////////////
+	j1.moverEnBatalla();
+	j2.moverEnBatalla();
+
 	limites_p(j1, caja);
 	limites_p(j2, caja);
 
 	entrePersonajes(j1, j2);
+
+	j1.actualizarEfectos();
+	j2.actualizarEfectos();
 
 	for (int k = 0; k < 5; k++) {
 		if (lista[k] != nullptr) {
@@ -79,55 +115,92 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 		}
 	}
 
-//////////////// DISPAROS //////////////////
-//CHOQUE ENTRE DISPAROS:
-for (int i = 0; i < MAX_DISPAROS; i++) {
-	if (nDisparos[i] == nullptr || !nDisparos[i]->return_Activo()) continue;
-	for (int j = i + 1; j < MAX_DISPAROS; j++)
-		if (nDisparos[j] != nullptr && nDisparos[j]->return_Activo())
-			entreDisparos(*nDisparos[i], *nDisparos[j]);
-}
-//DEMAS CHOQUES
-for (int i = 0; i < MAX_DISPAROS; i++)
-{
-	if (nDisparos[i] == nullptr) continue;
-
-	if (nDisparos[i]->return_Activo())
-	{
-		nDisparos[i]->moverDisparo();
-		limites_d(*nDisparos[i], caja); //CON LA CAJA
-
-		for (int k = 0; k < 5; k++) {
-			if (lista[k] != nullptr)
-				choqueObstaculo(*nDisparos[i], *lista[k]); //CON LOS OBSTACULOS
-		}
-		
-		if (nDisparos[i]->return_Bando() == HUMANO) {
-			//SI ES HUMANO, SOLO DAÑAR ALIEN
-			nDisparos[i]->Impacto(j2, true);
-			nDisparos[i]->Impacto(j1, false);
-		}
-		else {
-			//SI ES ALIEN, SOLO DAÑAR HUMANO
-			nDisparos[i]->Impacto(j1, true);
-			nDisparos[i]->Impacto(j2, false);
-		}
+	//////////////// DISPAROS //////////////////
+	//CHOQUE ENTRE DISPAROS:
+	for (int i = 0; i < MAX_DISPAROS; i++) {
+		if (nDisparos[i] == nullptr || !nDisparos[i]->return_Activo()) continue;
+			for (int j = i + 1; j < MAX_DISPAROS; j++)
+				if (nDisparos[j] != nullptr && nDisparos[j]->return_Activo())
+					entreDisparos(*nDisparos[i], *nDisparos[j]);
 	}
+	//DEMAS CHOQUES
+	for (int i = 0; i < MAX_DISPAROS; i++)
+	{
+		if (nDisparos[i] == nullptr) continue;
+
+		if (nDisparos[i]->return_Activo())
+		{
+			nDisparos[i]->moverDisparo();
+			limites_d(*nDisparos[i], caja); //CON LA CAJA
+
+			for (int k = 0; k < 5; k++) {
+				if (lista[k] != nullptr)
+					choqueObstaculo(*nDisparos[i], *lista[k]); //CON LOS OBSTACULOS
+			}
+		
+			if (nDisparos[i]->return_Bando() == HUMANO) {
+				//SI ES HUMANO, SOLO DAÑAR ALIEN
+				nDisparos[i]->Impacto(j2, true);
+				nDisparos[i]->Impacto(j1, false);
+			}
+			else {
+				//SI ES ALIEN, SOLO DAÑAR HUMANO
+				nDisparos[i]->Impacto(j1, true);
+				nDisparos[i]->Impacto(j2, false);
+			}
+		}
   
-	if (!nDisparos[i]->return_Activo())
-	{
-		delete nDisparos[i];
-		nDisparos[i] = nullptr;
-	}
-}
-		
-	////////////////HECHIZOS//////////////////
-	for (int i = 0; i < MAX_HECHIZOS; i++) {
-		if (nHechizos[i] != nullptr && nHechizos[i]->return_Activo())
-			nHechizos[i]->mover();
+		if (!nDisparos[i]->return_Activo())
+		{
+			delete nDisparos[i];
+			nDisparos[i] = nullptr;
+		}
 	}
 
-		////////////////FINAL//////////////////
+	//////////////// HECHIZOS //////////////////		
+	for (int b = 0; b < 2; b++) {
+		for (int i = 0; i < 3; i++) {
+
+			if (nHechizos[b][i] != nullptr) {
+				nHechizos[b][i]->mover();
+
+				Personaje* victima = nHechizos[b][i]->return_Obj();
+
+				if (victima != nullptr && nHechizos[b][i]->Impacta(victima->return_X(), victima->return_Y(), 0.1)) {
+
+					//IDENTIFICAMOS EL TIPO
+					int tipo = nHechizos[b][i]->return_Tipo();
+
+					switch (tipo) {
+					case 0: { //PARALISIS
+						std::cout << "Efecto: Personaje congelado" << std::endl;
+						victima->setVelocidad(0);
+						victima->set_paralisis(3.0);
+						break;
+					}
+					case 1://DAÑO EXTRA
+						std::cout << "Efecto: Mitad de la vida" << std::endl;
+						victima->setVida(victima->return_Vida() / 2);
+						break;
+					case 2: {//TELETRANSPORTE
+						std::cout << "Efecto: Teletransporte aleatorio" << std::endl;
+						double nuevaX = 1.5f + (float)(rand() % 170) / 10.0f;
+						double nuevaY = 1.5f + (float)(rand() % 120) / 10.0f;
+
+						victima->setX(nuevaX);
+						victima->setY(nuevaY);
+						break;
+						}
+					}
+
+					delete nHechizos[b][i];
+					nHechizos[b][i] = nullptr;
+				}
+			}
+		}
+	}
+
+	////////////////FINAL//////////////////
 	int resultado = FinCombate(j1, j2);
 	if (resultado != 0) {
 		j1.resetMunicion();
@@ -221,17 +294,37 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 	}
 }
 
-void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo)
+void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int equipo)
 {
-	if (nHechizos[tipo] != nullptr) delete nHechizos[tipo];
+	if (equipo < 0 || equipo > 1) return;
 
-	nHechizos[tipo] = new Hechizo();
-	nHechizos[tipo]->configurar((Hechizo::TipoHechizo)tipo);
+	if (mago.return_HechizosRestantes() <= 0) {
+		std::cout << "No te quedan hechizos en esta ronda" << std::endl;
+		return;
+	}
 
-	double dX = objetivo.return_X() - mago.return_X();
-	double dY = objetivo.return_Y() - mago.return_Y();
+	bool hueco = false;
+	for (int i = 0; i < 3; i++)
+	{
+		if (nHechizos[equipo][i] == nullptr) {
+			nHechizos[equipo][i] = new Hechizo((Hechizo::TipoHechizo)tipo, mago.return_Bando());
 
-	nHechizos[tipo]->activar(mago.return_X(), mago.return_Y(), dX, dY);
+			nHechizos[equipo][i]->setObj(&objetivo);
+
+			double dX = objetivo.return_X() - mago.return_X();
+			double dY = objetivo.return_Y() - mago.return_Y();
+
+			nHechizos[equipo][i]->activar(mago.return_X(), mago.return_Y(), dX, dY);
+
+			mago.usarHechizo();
+
+			hueco = true;
+            break; 
+        }
+    }
+	if (!hueco) {
+		std::cout << "Maximo de hechizos alcanzado" << std::endl;
+	}
 }
 
 void Batalla::entrePersonajes(Personaje& j1, Personaje& j2)
@@ -319,7 +412,7 @@ bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o)
 	double dist = sqrt(dx * dx + dy * dy);
 
 	//AJUSTAR PA QUE EL OBTACULO NO SE META DENTRO DEL PERSONAJE
-	double radioSuma = o.return_Radio() + 0.3;
+	double radioSuma = o.return_Radio() * 1.1;
 
 	if (dist < radioSuma)
 	{

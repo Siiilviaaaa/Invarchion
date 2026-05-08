@@ -12,23 +12,29 @@ private:
 	bool activo;
 	double posX, posY;
 	double vx, vy;
+	Personaje* objetivo;
 	Bando bando;
 
-	int usos_restantes;
 	double t_recarga;
 	double t_restante;
 
 public:
-	double return_RESTANTE() const { return t_restante; }
+	Hechizo(TipoHechizo tipo_recibido, Bando bando_recibido); //CONSTRUCTOR 
+	void activar(double x, double y, double dirX, double dirY);
+	void mover();
+	bool Impacta(double Obx, double Oby, double Obr);
+
+	/////////METODOS///////////////
+	TipoHechizo return_Tipo() const { return tipo; }
 	bool return_Activo() const { return activo; }
 	double return_X() const { return posX; }
 	double return_Y() const { return posY; }
-	void setPosicion(double x, double y) { posX = x; posY = y; }
-	void setVelocidad(double velX, double velY) { vx = velX; vy = velY; }
+	Personaje* return_Obj() const { return objetivo; }
+	Bando return_Bando() const { return bando; }
 
-	Hechizo(); //CONSTRUCTOR 
-	void mover();
-	void configurar(TipoHechizo t);
-	void activar(double x, double y, double dirX, double dirY);
-	void efectos(Personaje& objetivo);
+	void setActivo(bool estado) { activo = estado; }
+	void setX(double nuevaX) { posX = nuevaX; }
+	void setY(double nuevaY) { posY = nuevaY; }
+	void setObj(Personaje* obj) { objetivo = obj; }
+	void setBando(Bando b) { bando = b; }
 };
