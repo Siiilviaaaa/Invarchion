@@ -30,7 +30,7 @@ public:
 	/////////DAÑAR AL OPONENTE////////////
 	void pegar(Personaje& atacante, Personaje& objetivo);
 	void lanzarDisparo(Personaje& aliado);
-	void lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo);
+	void lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int equipo);
 
 	/////////INTERACCION CON LOS ELEMENTOS////////////
 	void entrePersonajes(Personaje& j1, Personaje& j2);

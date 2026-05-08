@@ -60,7 +60,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 			std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
 		}
 		else if (j1.return_Tipo() == HECHICERO) {
-			lanzarHechizo(j1, j2, j1.HechizoUtilizado());
+			lanzarHechizo(j1, j2, j1.HechizoUtilizado(), j1.return_Bando());
 			j1.siguienteHechizo();
 			std::cout << "J1 lanza hechizo: " << std::endl;
 		}
@@ -76,7 +76,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 			std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
 		}
 		else if (j2.return_Tipo() == HECHICERO) {
-			lanzarHechizo(j2, j1, j2.HechizoUtilizado());
+			lanzarHechizo(j2, j1, j2.HechizoUtilizado(), j2.return_Bando());
 			j2.siguienteHechizo();
 			std::cout << "J2 lanza hechizo: " << std::endl;
 		}
@@ -148,7 +148,8 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 			nDisparos[i] = nullptr;
 		}
 	}
-		
+
+	//////////////// HECHIZOS //////////////////		
 	for (int b = 0; b < 2; b++) {
 		for (int i = 0; i < 3; i++) {
 
@@ -159,23 +160,26 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 
 				if (victima != nullptr && nHechizos[b][i]->Impacta(victima->return_X(), victima->return_Y(), 0.1)) {
 
-					//IDENTIFICAMOS EL TIPO PARA APLICAR EL EFECTO ---
+					//IDENTIFICAMOS EL TIPO
 					int tipo = nHechizos[b][i]->return_Tipo();
 
 					switch (tipo) {
-					case 0: // PARÁLISIS
+					case 0: { //PARALISIS
 						std::cout << "Efecto: Personaje congelado" << std::endl;
-						victima->setVelocidad(0); // SU VELOCIDAD ACTUAL PASA 0
+						victima->setVelocidad(0);
 						break;
+					}
+					case 1: {//TELETRANSPORTE
+						std::cout << "Efecto: Teletransporte aleatorio" << std::endl;
+						double nuevaX = 1.5f + (float)(rand() % 170) / 10.0f;
+						double nuevaY = 1.5f + (float)(rand() % 120) / 10.0f;
 
-					case 1: // TELETRANSPORTE
-						std::cout << "Efecto: Empuje" << std::endl;
-						// Lo mandamos a una posición aleatoria o lo alejamos
-						victima->setX(victima->return_X() + 2.0);
+						victima->setX(nuevaX);
+						victima->setY(nuevaY);
 						break;
-
-					case 2: // CURA / DAÑO EXTRA
-						std::cout << "Efecto: Alteracion de vida" << std::endl;
+					}
+					case 2: //DAÑO EXTRA
+						std::cout << "Efecto: Mitad de la vida" << std::endl;
 						victima->setVida(victima->return_Vida()/2);
 						break;
 					}
@@ -281,29 +285,34 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 	}
 }
 
-void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo)
+void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int equipo)
 {
+	if (equipo < 0 || equipo > 1) return;
+
 	if (mago.return_HechizosRestantes() <= 0) {
 		std::cout << "No te quedan hechizos en esta ronda" << std::endl;
 		return;
 	}
 
 	bool hueco = false;
-	for (int i = 0; i < 3; i++) // Recorremos solo los 3 slots de ESE bando
+	for (int i = 0; i < 3; i++)
 	{
-		if (nHechizos[mago.return_Bando()][i] == nullptr) {
-			nHechizos[mago.return_Bando()][i] = new Hechizo();
-			nHechizos[mago.return_Bando()][i]->setObj(&objetivo);
+		if (nHechizos[equipo][i] == nullptr) {
+			nHechizos[equipo][i] = new Hechizo((Hechizo::TipoHechizo)tipo, mago.return_Bando());
 
-			nHechizos[mago.return_Bando()][i]->setBando(mago.return_Bando());
+			nHechizos[equipo][i]->setObj(&objetivo);
 
-			nHechizos[mago.return_Bando()][i]->activar(mago.return_X(), mago.return_Y(), 0, 0);
+			double dX = objetivo.return_X() - mago.return_X();
+			double dY = objetivo.return_Y() - mago.return_Y();
+
+			nHechizos[equipo][i]->activar(mago.return_X(), mago.return_Y(), dX, dY);
+
 			mago.usarHechizo();
 
 			hueco = true;
-			break;
-		}
-	}
+            break; 
+        }
+    }
 	if (!hueco) {
 		std::cout << "Maximo de hechizos alcanzado" << std::endl;
 	}

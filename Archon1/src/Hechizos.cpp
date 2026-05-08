@@ -2,16 +2,10 @@
 #include <iostream>
 #include "Hechizos.h"
 
-Hechizo::Hechizo()
+Hechizo::Hechizo(TipoHechizo t, Bando b)
 {
-	tipo = PARALISIS;
-	activo = false;
-	posX = 0.0;
-	posY = 0.0;
-	t_recarga = 0.0;
-	t_restante = 0.0;
-	vx = 0.0;
-	vy = 0.0;
+	this->tipo = t;
+	this->bando = b;
 }
 
 void Hechizo::activar(double x, double y, double dirX, double dirY)

@@ -19,7 +19,7 @@ private:
 	double t_restante;
 
 public:
-	Hechizo(); //CONSTRUCTOR 
+	Hechizo(TipoHechizo tipo_recibido, Bando bando_recibido); //CONSTRUCTOR 
 	void activar(double x, double y, double dirX, double dirY);
 	void mover();
 	bool Impacta(double Obx, double Oby, double Obr);

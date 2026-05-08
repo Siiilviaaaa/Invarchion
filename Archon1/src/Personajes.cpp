@@ -19,8 +19,6 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 	pieza.setBando(b);
 	pieza.setX(posX);
 	pieza.setY(posY);
-	pieza.set_paralisis(0.0);
-	pieza.set_hiperVelocidad(0.0);
 
 	//SPRITES
 	/*if (tipo == LUCHADOR)
@@ -88,29 +86,4 @@ void Personaje::moverEnBatalla()
 
 	dirX = 0;
 	dirY = 0;
-}
-
-void Personaje::actualizarEfectos()
-{
-	if (t_paralisis > 0)
-	{
-		t_paralisis -= 0.1; //DISMINUIR TIEMPO DE PARALISIS
-		if (t_paralisis < 0)
-			t_paralisis = 0;
-	}
-
-	if (t_hiperVelocidad > 0)
-	{
-		t_hiperVelocidad -= 0.1; //DISMINUIR TIEMPO DE HIPER VELOCIDAD
-		if (t_hiperVelocidad < 0)
-			t_hiperVelocidad = 0;
-	}
-
-	//RECALCULAR LA VELOCIDAD ACTUAL
-	if (t_paralisis > 0)
-		setVelocidad(return_Vbase() * 0.5); //PARALISIS REDUCE VELOCIDAD A LA MITAD
-	else if (t_hiperVelocidad > 0)
-		setVelocidad(return_Vbase() * 1.5); //HIPER VELOCIDAD AUMENTA VELOCIDAD EN UN 50%
-	else
-		setVelocidad(return_Vbase()); //VELOCIDAD NORMAL
 }

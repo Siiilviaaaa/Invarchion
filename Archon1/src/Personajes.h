@@ -13,21 +13,17 @@ class Personaje
 	Tipo_figura tipo;
 	Bando bando;
 	int movimientos;
-	int vida, vida_max; //VARIABLE PARA COMPROBAR SI USAR POCION
+	int vida, vida_max;
 	int danio;
 	double v;
 	double vel_base;
 	double x, y;
+	double dirX, dirY; //DIRECCION
 
 	int disparosRealizados; //CONTADOR DE DISPAROS
 	int hechizoUtilizado = 0;
 	int hechizosRestantes = 3;
-	double dirX, dirY; //DIRECCION
 
-
-	//HECHIZOS
-	double t_paralisis;
-	double t_hiperVelocidad;
 
 public:
 	Personaje() { this->disparosRealizados = 0; }
@@ -36,7 +32,6 @@ public:
 	static Personaje crearPieza(Tipo_figura tipo, Bando b, double posX, double posY);
 	void direccion(double dx, double dy);
 	void moverEnBatalla();
-	void actualizarEfectos();
 
 	//CONTROL DE LOS DISPAROS
 	void resetMunicion() { disparosRealizados = 0; }
@@ -71,8 +66,6 @@ public:
 	void setV_base(double nuevaVBase) { vel_base = nuevaVBase; }
 	void setX(double nuevaX) { x = nuevaX; }
 	void setY(double nuevaY) { y = nuevaY; }
-	void set_paralisis(double nuevoTiempo) { t_paralisis = nuevoTiempo; }
-	void set_hiperVelocidad(double nuevoTiempo) { t_hiperVelocidad = nuevoTiempo; }
 	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
 	void setBando(Bando nuevo) { bando = nuevo; }
 };
