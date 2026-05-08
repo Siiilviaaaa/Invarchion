@@ -29,7 +29,13 @@ public:
         if (fila >= 0 && fila < 5 && columna >= 0 && columna < 7) {
             return &datos[fila][columna];
         }
-        return nullptr;
+      return nullptr;
+    }
+    void setInfoCasilla(int fila, int columna,  Personaje* personaje)
+    {
+        if (fila >= 0 && fila < 5 && columna >= 0 && columna < 7) {
+            datos[fila][columna].setPersonaje(personaje);
+        }
     }
     void cambiarTurno() { turno = (turno == 0) ? 1 : 0; }
     int getTurno() const { return turno; }
