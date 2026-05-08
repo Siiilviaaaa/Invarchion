@@ -73,6 +73,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 	return pieza;
 }
 
+
 void Personaje::direccion(double dx, double dy)
 {
 	if (dx != 0 || dy != 0) { //SOLO ACTUALIZAMOS SI SE MUEVE

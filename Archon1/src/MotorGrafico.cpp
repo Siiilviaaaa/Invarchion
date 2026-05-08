@@ -132,6 +132,8 @@ void MotorGrafico::dibujarCursor(Cursor cursor)
 	glEnd();
 	glLineWidth(1.0f); // volver al grosor normal
 }
+
+
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
 	ETSIDI::SpriteSequence* SpriteActual = nullptr;

@@ -3,6 +3,7 @@
 #include "tablero.h"
 #include "Personajes.h"
 #include <iostream>
+#include "MotorGrafico.h"
 
 ///VARIABLE GLOBAL DEFINIDA EN HECHIZOS.CPP
 extern bool usoPocion;
@@ -14,11 +15,28 @@ Juego::Juego(Tablero* t) :
     for (int i = 0; i < MAX_PERSONAJES;i++) {
         figuras[i] = nullptr;
     }
+    inicializarPartida();
 
 }
 void Juego::setBandoJugador(bando_jugador b)
 {
     bandoJugador = b;
+}
+
+Personaje* Juego::getPersonajeEnCasilla(int fila, int columna) const {
+    if (ptrTablero != nullptr) {
+        const Casilla* c = ptrTablero->getCasilla(fila, columna);
+        if (c != nullptr && c->getInfo() != nullptr) {
+            return c->getInfo()->getPersonaje();
+        }
+    }
+    return nullptr; // Si no se encuentra el personaje o el tablero es nulo
+}
+Personaje* Juego::getPersonaje(int index) const {
+    if (index >= 0 && index < MAX_PERSONAJES) {
+        return figuras[index];
+    }
+    return nullptr; // Si el índice está fuera de rango
 }
 
 
@@ -77,13 +95,37 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
     //condicion de que estan las casillas guays ocuapadas (necesito que se añadan esas casillas)
 }
 
-void Juego::spawnPersonaje(Tipo_figura t, Bando e, int x, int y)
+void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 {
-    for (int i = 0; i < MAX_PERSONAJES;i++) {
-        if (figuras[i] == nullptr) {
-            figuras[i] = new Personaje();
+	//Personaje* nuevo = new Personaje(Personaje::crearPieza(t, e, x, y));
+    for (int i = 0; i < MAX_PERSONAJES; i++) {
+        if (figuras[i] == nullptr) {//si esta posición está vacía
+            figuras[i] = new Personaje(Personaje::crearPieza(t, e, columna, fila));
+			
+			Casilla* c = ptrTablero->casillaModificable(fila, columna);
+            if (c != nullptr && c->getInfo() != nullptr) //verificar que la casilla y su información no sean nulas
+            {
+                c->getInfo()->setPersonaje(figuras[i]); //colocamos el personaje en la casilla correspondiente
+            }
+
         }
-    }
+	}
+}
+
+void Juego::inicializarPartida()
+{
+    spawnPersonaje(LUCHADOR, HUMANO, 0, 0); // se puede hacer con un bucle, pero bueno asi lo edito mejor, el motor grafico lo dibuja sin q haya que llamarlo aqui, epicoo
+    spawnPersonaje(ARQUERO, HUMANO, 0, 1);
+    spawnPersonaje(VOLADOR, HUMANO, 0, 2);
+    spawnPersonaje(EXCAVADOR, HUMANO, 0, 3);
+    spawnPersonaje(HECHICERO, HUMANO, 0, 4);
+    spawnPersonaje(LUCHADOR, ALIEN, 4, 6);
+    spawnPersonaje(ARQUERO, ALIEN, 4, 5);
+    spawnPersonaje(VOLADOR, ALIEN, 4, 4);
+    spawnPersonaje(EXCAVADOR, ALIEN, 4, 3);
+    spawnPersonaje(HECHICERO, ALIEN, 4, 2);
+
+    
 }
 
 //JULI NO SE DONDE PONER QUE LA BATALLA SIGUE EN CURSO, TE LO DEJO POR AQUI

@@ -86,6 +86,12 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
     case JUEGO:
         miCamara.vistaJuego();
         dibujo_tablero.dibuja();
+        for (int i = 0; i < MAX_PERSONAJES; i++) {
+            Personaje* p = juego.getPersonaje(i);
+            if (p != nullptr && p->return_Vida() > 0) {
+                motor.dibujarPersonaje(*p);
+            }
+        }
         break;
     case RANKING:
         //pantallaRanking.draw();
