@@ -114,6 +114,13 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
                 motor.dibujarDisparo(d); //SE PASA EL PUNTERO
             }
         }
+
+        for (int i = 0; i < 3; i++) {
+            Hechizo* h = miBatalla.return_nHechizos()[i];
+            if (h != nullptr) {
+                motor.dibujarHechizo(h); //SE PASA EL PUNTERO
+            }
+        }
         break;
     }
     //no borrar esta linea ni poner nada despues
@@ -157,7 +164,7 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         if (estado == JUEGO) {
             estado = BATALLA;
         }
-        pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
+        pj1 = Personaje::crearPieza(HECHICERO, HUMANO, 5.0, 7.5);
         pj1.direccion(1.0, 0.0);
         pj2 = Personaje::crearPieza(ARQUERO, ALIEN, 15.0, 7.5);
         pj2.direccion(-1.0, 0.0);

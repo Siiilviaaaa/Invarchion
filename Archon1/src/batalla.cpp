@@ -9,6 +9,9 @@ Batalla::Batalla()
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		nDisparos[i] = nullptr;
+
+	for (int i = 0; i < MAX_HECHIZOS; i++)
+		nHechizos[i] = nullptr;
 }
 
 Batalla::~Batalla()
@@ -16,13 +19,17 @@ Batalla::~Batalla()
 	std::cout << "Limpiando escenario..." << std::endl;
 
 	for (int i = 0; i < MAX_DISPAROS; i++)
-	{
 		if (nDisparos[i] != nullptr)
 		{
-			delete nDisparos[i];      // Liberamos la memoria
-			nDisparos[i] = nullptr;   // Marcamos como vac�o
+			delete nDisparos[i];      //LIBERAR MEMORIA
+			nDisparos[i] = nullptr;   //VACIAR
 		}
-	}
+
+	for (int i = 0; i < MAX_HECHIZOS; i++)
+		if (nHechizos[i] != nullptr) {
+			delete nHechizos[i];
+			nHechizos[i] = nullptr;
+		}
 }
 
 void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
@@ -41,13 +48,8 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 		else
 			pegar(j2, j1);
 		break;
-	case 'h': //HUMANOS USAN HECHIZO
-		juego.getTurno() == 0 ? hechizos[0].usar_Hechizo(0, j2) : hechizos[0].usar_Hechizo(0, j1);
-		break;
-	case 'v': //HUMANOS USAN HECHIZO
-		juego.getTurno() == 0 ? hechizos[1].usar_Hechizo(1, j2) : hechizos[1].usar_Hechizo(1, j1);
-		break;
-	default:
+	case 'h':
+		lanzarHechizo(j1, j2, 0);
 		break;
 	}
 
@@ -85,7 +87,7 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 			if (nDisparos[j] != nullptr && nDisparos[j]->return_Activo())
 				entreDisparos(*nDisparos[i], *nDisparos[j]);
 	}
-	//CHOQUE CON PAREDES, OBSTACULOS Y PERSONAJES:
+	//DEMAS CHOQUES
 	for (int i = 0; i < MAX_DISPAROS; i++)
 	{
 		if (nDisparos[i] == nullptr) continue;
@@ -93,11 +95,11 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 		if (nDisparos[i]->return_Activo())
 		{
 			nDisparos[i]->moverDisparo();
-			limites_d(*nDisparos[i], caja);
+			limites_d(*nDisparos[i], caja); //CON LA CAJA
 
 			for (int k = 0; k < 5; k++) {
 				if (lista[k] != nullptr)
-					choqueObstaculo(*nDisparos[i], *lista[k]);
+					choqueObstaculo(*nDisparos[i], *lista[k]); //CON LOS OBSTACULOS
 			}
 			
 			if (nDisparos[i]->return_Bando() == HUMANO) {
@@ -120,13 +122,12 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 	}
 		
 	////////////////HECHIZOS//////////////////
-	for (int i = 0;i < 3;i++)
-		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
+	for (int i = 0; i < MAX_HECHIZOS; i++) {
+		if (nHechizos[i] != nullptr && nHechizos[i]->return_Activo())
+			nHechizos[i]->mover();
+	}
 
-	j1.actualizarEfectos();
-	j2.actualizarEfectos();
-
-	////////////////FINAL//////////////////
+		////////////////FINAL//////////////////
 	int resultado = FinCombate(j1, j2);
 	if (resultado != 0) {
 		j1.resetMunicion();
@@ -218,6 +219,19 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 	if (!hueco) {
 		std::cout << "Maximo de disparos alcanzado" << std::endl;
 	}
+}
+
+void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo)
+{
+	if (nHechizos[tipo] != nullptr) delete nHechizos[tipo];
+
+	nHechizos[tipo] = new Hechizo();
+	nHechizos[tipo]->configurar((Hechizo::TipoHechizo)tipo);
+
+	double dX = objetivo.return_X() - mago.return_X();
+	double dY = objetivo.return_Y() - mago.return_Y();
+
+	nHechizos[tipo]->activar(mago.return_X(), mago.return_Y(), dX, dY);
 }
 
 void Batalla::entrePersonajes(Personaje& j1, Personaje& j2)

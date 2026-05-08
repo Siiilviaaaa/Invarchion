@@ -1,6 +1,5 @@
 #pragma once
-
-class Personaje; //DECLARACION ANTICIPADA
+#include "Personajes.h"
 
 class Hechizo
 {
@@ -10,27 +9,26 @@ public:
 	enum TipoHechizo : int { PARALISIS, HIPERVELOCIDAD, POCION };
 private:
 	TipoHechizo tipo;
-	int usos_restantes;
-	bool activo; // "HECHIZO LANZADO DE MANERA VISUAL"
-	double posX, posY; // POSICION DEL HECHIZO EN PANTALLA
+	bool activo;
+	double posX, posY;
+	double vx, vy;
+	Bando bando;
 
-	double t_recarga; // TIEMPO TOTAL DE RECARGA
-	double t_restante; // TIEMPO RESTANTE PARA USAR DE NUEVO
+	int usos_restantes;
+	double t_recarga;
+	double t_restante;
 
 public:
 	double return_RESTANTE() const { return t_restante; }
 	bool return_Activo() const { return activo; }
-	TipoHechizo return_Tipo() const { return tipo; }
 	double return_X() const { return posX; }
 	double return_Y() const { return posY; }
+	void setPosicion(double x, double y) { posX = x; posY = y; }
+	void setVelocidad(double velX, double velY) { vx = velX; vy = velY; }
 
 	Hechizo(); //CONSTRUCTOR 
+	void mover();
 	void configurar(TipoHechizo t);
-	void usar_Hechizo(int tipoHechizo, Personaje& objetivo);
-	void usar_Pocion(Personaje& aliado);
-	void actualizarTiempos(double Time);  //ACTUALIZA TIEMPOS DE RECARGA
+	void activar(double x, double y, double dirX, double dirY);
+	void efectos(Personaje& objetivo);
 };
-
-//////VARIABLES GLOBALES DEFINIDAS EN HECHIZOS.CPP
-extern Hechizo hechizos[3];
-extern bool usoPocion;

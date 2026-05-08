@@ -13,11 +13,15 @@
 class Batalla
 {
 	static const int MAX_DISPAROS = 20;
+	static const int MAX_HECHIZOS = 3;
 	Disparo* nDisparos[MAX_DISPAROS];
+	Hechizo* nHechizos[MAX_HECHIZOS];
+	
 public:
 	Batalla();
 	~Batalla();
 	Disparo* (&return_nDisparos())[20] { return nDisparos; }
+	Hechizo* (&return_nHechizos())[3] { return nHechizos; }
 
 	/////////ACTUALIZACIONES//////////////
 	void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2);
@@ -27,6 +31,7 @@ public:
 	/////////DAÑAR AL OPONENTE////////////
 	void pegar(Personaje& atacante, Personaje& objetivo);
 	void lanzarDisparo(Personaje& aliado);
+	void lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo);
 
 	/////////INTERACCION CON LOS ELEMENTOS////////////
 	void entrePersonajes(Personaje& j1, Personaje& j2);

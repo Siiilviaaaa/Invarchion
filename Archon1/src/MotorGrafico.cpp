@@ -151,32 +151,25 @@ void MotorGrafico::dibujarDisparo(Disparo* disparo)
 	glPushMatrix();
 	glTranslated(disparo->x, disparo->y, 0.5);
 	glDisable(GL_LIGHTING);
-	glColor3ub(255, 255, 0);
+	if (disparo->bando == HUMANO) glColor3ub(255, 255, 255);
+	else glColor3ub(0, 255, 0);
 	glutSolidSphere(0.2, 10, 10);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
 }
 
-void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)
+void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 {
-	if (hechizo.activo)
-	{
-		if (hechizo.tipo == Hechizo::PARALISIS)
-		{
-			Paralisis.setPos(hechizo.posX, hechizo.posY);
-			Paralisis.draw();
-		}
-		else if(hechizo.tipo == Hechizo::HIPERVELOCIDAD)
-		{
-			Velocidad.setPos(hechizo.posX, hechizo.posY);
-			Velocidad.draw();
-		}
-		else if(hechizo.tipo == Hechizo::POCION)
-		{
-			Pocion.setPos(hechizo.posX, hechizo.posY);
-			Pocion.draw();
-		}
-	}
+	if (hechizo == nullptr)return;
+
+	glPushMatrix();
+	glTranslated(hechizo->posX, hechizo->posY, 0.5);
+	glDisable(GL_LIGHTING);
+	if (hechizo->bando == HUMANO) glColor3ub(255, 255, 255);
+	else glColor3ub(0, 255, 0);
+	glutSolidSphere(0.2, 10, 10);
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
 }
 
 void MotorGrafico::dibujarVida_Muerte(const Personaje& humano, const Personaje& alien)

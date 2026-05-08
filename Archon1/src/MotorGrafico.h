@@ -49,11 +49,10 @@ public:
 	void dibujarCaja(const Caja& c);
 	
 	void dibujarDisparo(Disparo* disparo);
-	void dibujarHechizo(const Hechizo& hechizo);
+	void dibujarHechizo(Hechizo* hechizo);
 	void dibujarPersonaje(const Personaje& personaje);
 	void dibujarVida_Muerte(const Personaje& humano, const Personaje& alien);
 	
-
 	/////////METODOS////////////
 	//DIRECCION QUE APUNTA A OTRA DIRECCION
 	Obstaculo* (&obtenerObstaculos())[5] {return listaObstaculos;}
