@@ -68,20 +68,28 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 		break;
 	}
 
-	if (key == 'w') { j1.setY(j1.return_Y() + j1.return_Vbase()); j1.direccion(0, 1); }
-	if (key == 's') { j1.setY(j1.return_Y() - j1.return_Vbase()); j1.direccion(0, -1); }
-	if (key == 'a') { j1.setX(j1.return_X() - j1.return_Vbase()); j1.direccion(-1, 0); }
-	if (key == 'd') { j1.setX(j1.return_X() + j1.return_Vbase()); j1.direccion(1, 0); }
-	
-	if (key == 'i') { j2.setY(j2.return_Y() + j2.return_Vbase()); j2.direccion(0, 1); }
-	if (key == 'k') { j2.setY(j2.return_Y() - j2.return_Vbase()); j2.direccion(0, -1); }
-	if (key == 'j') { j2.setX(j2.return_X() - j2.return_Vbase()); j2.direccion(-1, 0); }
-	if (key == 'l') { j2.setX(j2.return_X() + j2.return_Vbase()); j2.direccion(1, 0); }
+	switch (key)
+	{
+		//JUGADOR 1
+	case 'w': j1.direccion(0, 1);  break;
+	case 's': j1.direccion(0, -1); break;
+	case 'a': j1.direccion(-1, 0); break;
+	case 'd': j1.direccion(1, 0);  break;
+
+		// JUGADOR 2
+	case 'i': j2.direccion(0, 1);  break;
+	case 'k': j2.direccion(0, -1); break;
+	case 'j': j2.direccion(-1, 0); break;
+	case 'l': j2.direccion(1, 0);  break;
+	}
 }
 
 void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo* lista[5])
 {
 	////////////////PERSONAJES//////////////////
+	j1.moverEnBatalla();
+	j2.moverEnBatalla();
+
 	limites_p(j1, caja);
 	limites_p(j2, caja);
 

@@ -37,5 +37,5 @@ public:
 	void setActivo(bool estado) { activo = estado; }
 	void setX(double nuevaX) { posX = nuevaX; }
 	void setY(double nuevaY) { posY = nuevaY; }
-	void setObj(Personaje* nuevo) { objetivo = nuevo; }
+	void setObj(Personaje* obj) { objetivo = obj; }
 };

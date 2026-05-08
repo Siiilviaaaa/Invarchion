@@ -1,6 +1,7 @@
-#include "Hechizos.h"
 #include <cmath>
 #include <iostream>
+#include "Hechizos.h"
+#include "Personajes.h"
 
 Hechizo::Hechizo()
 {
@@ -38,10 +39,21 @@ void Hechizo::activar(double x, double y, double dirX, double dirY)
 
 void Hechizo::mover()
 {
-	if (activo) {
-		posX += vx;
-		posY += vy;
-	}
+	if (!activo || objetivo == nullptr) return;
+
+	//DISTANCIA ACTUAL AL OBJETIVO
+	double dirX = objetivo->return_X() - posX;
+	double dirY = objetivo->return_Y() - posY;
+	double dist = sqrt(dirX * dirX + dirY * dirY);
+
+	//AJUSTAR VELOCIDAD
+	double velBase = 0.12;
+	vx = (dirX / dist) * velBase;
+	vy = (dirY / dist) * velBase;
+
+	//MOVIMIENTO
+	posX += vx;
+	posY += vy;
 }
 
 bool Hechizo::Impacta(double Obx, double Oby, double Obr)

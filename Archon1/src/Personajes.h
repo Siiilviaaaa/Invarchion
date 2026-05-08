@@ -33,6 +33,7 @@ public:
 	//void sumarPuntos(int puntos);   METER EN JUEGO.H
 	static Personaje crearPieza(Tipo_figura tipo, Bando b, double posX, double posY);
 	void direccion(double dx, double dy);
+	void moverEnBatalla();
 	void actualizarEfectos();
 
 	//CONTROL DE LOS DISPAROS
