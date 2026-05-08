@@ -58,7 +58,6 @@ void MotorGrafico::inicializarBatalla()
 			aceptados++;
 		}
 	}
-	
 }
 
 void MotorGrafico::dibujarPared(const Pared& p)
@@ -116,8 +115,8 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
-
 }
+
 void MotorGrafico::dibujarCursor(Cursor cursor)
 {
 	float ancho=1.0;//lo que mide cada lado del cuadraro-tablero
@@ -132,6 +131,7 @@ void MotorGrafico::dibujarCursor(Cursor cursor)
 	glEnd();
 	glLineWidth(1.0f); // volver al grosor normal
 }
+
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
 	glPushMatrix();
@@ -142,7 +142,6 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 	glutSolidSphere(0.5, 20, 20);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
-
 }
 
 void MotorGrafico::dibujarDisparo(Disparo* disparo)
@@ -166,8 +165,7 @@ void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 	glPushMatrix();
 	glTranslated(hechizo->posX, hechizo->posY, 0.5);
 	glDisable(GL_LIGHTING);
-	if (hechizo->bando == HUMANO) glColor3ub(255, 255, 255);
-	else glColor3ub(0, 255, 0);
+	glColor3ub(255, 255, 255);
 	glutSolidSphere(0.2, 10, 10);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
@@ -180,6 +178,7 @@ void MotorGrafico::dibujarBarraVida(Personaje& j1, Personaje& j2)
 	recortarBarra(porcentaje1, 1.0f, 1.0f, 4.5f, 0.8f);
 	recortarBarra(porcentaje2, 14.5f, 1.0f, 4.5f, 0.8f);
 }
+
 void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho, float alto)
 {
 	glDisable(GL_LIGHTING);
@@ -196,7 +195,6 @@ void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho
 	float vSup = (float)indice * paso;
 	float vInf = vSup + 0.1f;
 
-	
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBegin(GL_POLYGON);
 		glTexCoord2f(0.0f, vSup); glVertex2f(x, y + alto);        
@@ -209,5 +207,4 @@ void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_TEXTURE_2D);
-	
 }

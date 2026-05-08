@@ -52,7 +52,6 @@ public:
 	double return_dirX() const { return dirX; }
 	double return_dirY() const { return dirY; }
 
-	///////////SETTERS/////////////////
 	void setTipo(Tipo_figura nuevoTipo) { tipo = nuevoTipo; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }
 	void setDanio(int nuevoDanio) { danio = nuevoDanio; }

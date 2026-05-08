@@ -36,20 +36,35 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 {
 	switch (key)
 	{
-	case ' ': //HUMANOS PELEAN O DISPARAN CON EL ESPACIO
-		std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
-		if (j1.return_Tipo() == ARQUERO) lanzarDisparo(j1);
+	case ' ': //HUMANOS PELEAN, DISPARAN O HECHIZAN CON EL ESPACIO
+		if (j1.return_Tipo() == ARQUERO) {
+			lanzarDisparo(j1);
+			std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
+		}
+		else if (j1.return_Tipo() == HECHICERO) {
+			lanzarHechizo(j1, j2, 0);
+			std::cout << "J1 lanza hechizo: " << std::endl;
+		}
 		else
-			pegar(j1, j2);
-		break;
-	case 13: //ALIENS PELEAN O DISPARAN CON ENTER
-		std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
-		if (j2.return_Tipo() == ARQUERO) lanzarDisparo(j2);
-		else
+		{
 			pegar(j2, j1);
+			std::cout << "J2 pegando... " << std::endl;
+		}
 		break;
-	case 'h':
-		lanzarHechizo(j1, j2, 0);
+	case 13: //ALIENS PELEAN, DISPARAN O HECHIZAN CON ENTER
+		if (j2.return_Tipo() == ARQUERO) {
+			lanzarDisparo(j2);
+			std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
+		}
+		else if (j2.return_Tipo() == HECHICERO) {
+			lanzarHechizo(j2, j1, 0);
+			std::cout << "J2 lanza hechizo: " << std::endl;
+		}
+		else
+		{
+			pegar(j2, j1);
+			std::cout << "J2 pegando... " << std::endl;
+		}
 		break;
 	}
 
@@ -79,55 +94,69 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 		}
 	}
 
-//////////////// DISPAROS //////////////////
-//CHOQUE ENTRE DISPAROS:
-for (int i = 0; i < MAX_DISPAROS; i++) {
-	if (nDisparos[i] == nullptr || !nDisparos[i]->return_Activo()) continue;
-	for (int j = i + 1; j < MAX_DISPAROS; j++)
-		if (nDisparos[j] != nullptr && nDisparos[j]->return_Activo())
-			entreDisparos(*nDisparos[i], *nDisparos[j]);
-}
-//DEMAS CHOQUES
-for (int i = 0; i < MAX_DISPAROS; i++)
-{
-	if (nDisparos[i] == nullptr) continue;
-
-	if (nDisparos[i]->return_Activo())
-	{
-		nDisparos[i]->moverDisparo();
-		limites_d(*nDisparos[i], caja); //CON LA CAJA
-
-		for (int k = 0; k < 5; k++) {
-			if (lista[k] != nullptr)
-				choqueObstaculo(*nDisparos[i], *lista[k]); //CON LOS OBSTACULOS
-		}
-		
-		if (nDisparos[i]->return_Bando() == HUMANO) {
-			//SI ES HUMANO, SOLO DAÑAR ALIEN
-			nDisparos[i]->Impacto(j2, true);
-			nDisparos[i]->Impacto(j1, false);
-		}
-		else {
-			//SI ES ALIEN, SOLO DAÑAR HUMANO
-			nDisparos[i]->Impacto(j1, true);
-			nDisparos[i]->Impacto(j2, false);
-		}
+	//////////////// DISPAROS //////////////////
+	//CHOQUE ENTRE DISPAROS:
+	for (int i = 0; i < MAX_DISPAROS; i++) {
+		if (nDisparos[i] == nullptr || !nDisparos[i]->return_Activo()) continue;
+			for (int j = i + 1; j < MAX_DISPAROS; j++)
+				if (nDisparos[j] != nullptr && nDisparos[j]->return_Activo())
+					entreDisparos(*nDisparos[i], *nDisparos[j]);
 	}
+	//DEMAS CHOQUES
+	for (int i = 0; i < MAX_DISPAROS; i++)
+	{
+		if (nDisparos[i] == nullptr) continue;
+
+		if (nDisparos[i]->return_Activo())
+		{
+			nDisparos[i]->moverDisparo();
+			limites_d(*nDisparos[i], caja); //CON LA CAJA
+
+			for (int k = 0; k < 5; k++) {
+				if (lista[k] != nullptr)
+					choqueObstaculo(*nDisparos[i], *lista[k]); //CON LOS OBSTACULOS
+			}
+		
+			if (nDisparos[i]->return_Bando() == HUMANO) {
+				//SI ES HUMANO, SOLO DAÑAR ALIEN
+				nDisparos[i]->Impacto(j2, true);
+				nDisparos[i]->Impacto(j1, false);
+			}
+			else {
+				//SI ES ALIEN, SOLO DAÑAR HUMANO
+				nDisparos[i]->Impacto(j1, true);
+				nDisparos[i]->Impacto(j2, false);
+			}
+		}
   
-	if (!nDisparos[i]->return_Activo())
-	{
-		delete nDisparos[i];
-		nDisparos[i] = nullptr;
+		if (!nDisparos[i]->return_Activo())
+		{
+			delete nDisparos[i];
+			nDisparos[i] = nullptr;
+		}
 	}
-}
 		
-	////////////////HECHIZOS//////////////////
+	//////////////// HECHIZOS //////////////////
 	for (int i = 0; i < MAX_HECHIZOS; i++) {
-		if (nHechizos[i] != nullptr && nHechizos[i]->return_Activo())
-			nHechizos[i]->mover();
+		if (nHechizos[i] != nullptr) {
+
+			if (nHechizos[i]->return_Activo()) {
+				nHechizos[i]->mover();
+
+				Personaje* victima = nHechizos[i]->return_Obj();
+				if (victima != nullptr && nHechizos[i]->Impacta(victima->return_X(), victima->return_Y(), 0.05)) {
+
+					std::cout << "Hechizo: impacto detectado" << i << std::endl;
+
+					delete nHechizos[i];
+					nHechizos[i] = nullptr;
+					continue;
+				}
+			}
+		}
 	}
 
-		////////////////FINAL//////////////////
+	////////////////FINAL//////////////////
 	int resultado = FinCombate(j1, j2);
 	if (resultado != 0) {
 		j1.resetMunicion();
@@ -227,6 +256,8 @@ void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo)
 
 	nHechizos[tipo] = new Hechizo();
 	nHechizos[tipo]->configurar((Hechizo::TipoHechizo)tipo);
+
+	nHechizos[tipo]->setObj(&objetivo);
 
 	double dX = objetivo.return_X() - mago.return_X();
 	double dY = objetivo.return_Y() - mago.return_Y();
