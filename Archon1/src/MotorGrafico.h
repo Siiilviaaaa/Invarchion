@@ -52,7 +52,6 @@ public:
 	void dibujarDisparo(Disparo* disparo);
 	void dibujarHechizo(Hechizo* hechizo);
 	void dibujarPersonaje(const Personaje& personaje);
-	void dibujarVida_Muerte(const Personaje& humano, const Personaje& alien);	
 	void dibujarBarraVida(Personaje& j1, Personaje& j2);
 
 	/////////METODOS////////////
