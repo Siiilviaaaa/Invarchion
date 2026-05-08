@@ -23,12 +23,11 @@ class Personaje
 	int disparosRealizados; //CONTADOR DE DISPAROS
 	int hechizoUtilizado = 0;
 	int hechizosRestantes = 3;
+	double t_paralisis;
 
 
 public:
 	Personaje() { this->disparosRealizados = 0; }
-
-	//void sumarPuntos(int puntos);   METER EN JUEGO.H
 	static Personaje crearPieza(Tipo_figura tipo, Bando b, double posX, double posY);
 	void direccion(double dx, double dy);
 	void moverEnBatalla();
@@ -46,6 +45,7 @@ public:
 		hechizoUtilizado++;
 		if (hechizoUtilizado > 2) hechizoUtilizado = 0;
 	}
+	void actualizarEfectos();
 
 	//////////METODOS//////////////
 	Tipo_figura return_Tipo() const { return tipo; }
@@ -58,6 +58,7 @@ public:
 	int return_VidaMax() const { return vida_max; }
 	double return_dirX() const { return dirX; }
 	double return_dirY() const { return dirY; }
+	double return_paralisis() const { return t_paralisis; }
 
 	void setTipo(Tipo_figura nuevoTipo) { tipo = nuevoTipo; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }
@@ -68,4 +69,5 @@ public:
 	void setY(double nuevaY) { y = nuevaY; }
 	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
 	void setBando(Bando nuevo) { bando = nuevo; }
+	void set_paralisis(double tiempo) { t_paralisis = tiempo; }
 };

@@ -1,15 +1,7 @@
 #include "Batalla.h"
 #include "Hechizos.h"
 #include "Disparos.h"
-
-//METER EN JUEGO.CPP
-//void Personaje::sumarPuntos(int puntos)
-//{
-//	if (bando == HUMANO)
-//		puntuacionHumanos += puntos;
-//	else
-//		puntuacionAliens += puntos;
-//}
+#include <iostream>
 
 Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double posY)
 {
@@ -50,7 +42,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 	case VOLADOR:
 		pieza.setVida(120);
 		pieza.setVidaMax(120);
-		pieza.setDanio(10);
+		pieza.setDanio(20);
 		pieza.setV_base(2.9);
 		break;
 	case EXCAVADOR:
@@ -62,7 +54,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 	case HECHICERO:
 		pieza.setVida(90);
 		pieza.setVidaMax(90);
-		pieza.setDanio(25);
+		pieza.setDanio(10);
 		pieza.setV_base(1.5);
 		break;
 	}
@@ -86,4 +78,22 @@ void Personaje::moverEnBatalla()
 
 	dirX = 0;
 	dirY = 0;
+}
+
+void Personaje::actualizarEfectos()
+{
+	if (t_paralisis > 0) //SIGUE CONGELADO
+	{
+		t_paralisis -= 0.025;
+
+		//SI EL TIEMPO SE AGOTA
+		if (t_paralisis <= 0)
+		{
+			t_paralisis = 0; //RESET PARA EVITAR NEGATIVOS
+
+			this->v = this->vel_base; //DESCONGELAR
+
+			std::cout << "JUGADOR DESCONGELADO" << std::endl;
+		}
+	}
 }

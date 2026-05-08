@@ -40,29 +40,17 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 {
 	switch (key)
 	{
+	///////////////HUMANOS////////////////
 	//MOVIMIENTO
-		//JUGADOR 1
 	case 'w': j1.direccion(0, 1);  break;
 	case 's': j1.direccion(0, -1); break;
 	case 'a': j1.direccion(-1, 0); break;
 	case 'd': j1.direccion(1, 0);  break;
 
-		// JUGADOR 2
-	case 'i': j2.direccion(0, 1);  break;
-	case 'k': j2.direccion(0, -1); break;
-	case 'j': j2.direccion(-1, 0); break;
-	case 'l': j2.direccion(1, 0);  break;
-
-	//DAÑAR
-	case ' ': //HUMANOS PELEAN, DISPARAN O HECHIZAN CON EL ESPACIO
+	case ' ': //PELEAN/DISPARAN
 		if (j1.return_Tipo() == ARQUERO) {
 			lanzarDisparo(j1);
 			std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
-		}
-		else if (j1.return_Tipo() == HECHICERO) {
-			lanzarHechizo(j1, j2, j1.HechizoUtilizado(), j1.return_Bando());
-			j1.siguienteHechizo();
-			std::cout << "J1 lanza hechizo: " << std::endl;
 		}
 		else
 		{
@@ -70,20 +58,37 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 			std::cout << "J1 pegando... " << std::endl;
 		}
 		break;
-	case 13: //ALIENS PELEAN, DISPARAN O HECHIZAN CON ENTER
+	case 'c': //HECHIZAN
+		if (j1.return_Tipo() == HECHICERO) {
+			lanzarHechizo(j1, j2, j1.HechizoUtilizado(), j1.return_Bando());
+			j1.siguienteHechizo();
+			std::cout << "J1 lanza hechizo: " << std::endl;
+		}
+		break;
+
+	///////////////ALIENS////////////////
+	//MOVIMIENTO
+	case 'i': j2.direccion(0, 1);  break;
+	case 'k': j2.direccion(0, -1); break;
+	case 'j': j2.direccion(-1, 0); break;
+	case 'l': j2.direccion(1, 0);  break;
+
+	case 13: //PELEAN/DISPARAN
 		if (j2.return_Tipo() == ARQUERO) {
 			lanzarDisparo(j2);
 			std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
-		}
-		else if (j2.return_Tipo() == HECHICERO) {
-			lanzarHechizo(j2, j1, j2.HechizoUtilizado(), j2.return_Bando());
-			j2.siguienteHechizo();
-			std::cout << "J2 lanza hechizo: " << std::endl;
 		}
 		else
 		{
 			pegar(j2, j1);
 			std::cout << "J2 pegando... " << std::endl;
+		}
+		break;
+	case'n': //HECHIZAN
+		if (j2.return_Tipo() == HECHICERO) {
+			lanzarHechizo(j2, j1, j2.HechizoUtilizado(), j2.return_Bando());
+			j2.siguienteHechizo();
+			std::cout << "J2 lanza hechizo: " << std::endl;
 		}
 		break;
 	}
@@ -99,6 +104,9 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 	limites_p(j2, caja);
 
 	entrePersonajes(j1, j2);
+
+	j1.actualizarEfectos();
+	j2.actualizarEfectos();
 
 	for (int k = 0; k < 5; k++) {
 		if (lista[k] != nullptr) {
@@ -167,9 +175,14 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 					case 0: { //PARALISIS
 						std::cout << "Efecto: Personaje congelado" << std::endl;
 						victima->setVelocidad(0);
+						victima->set_paralisis(3.0);
 						break;
 					}
-					case 1: {//TELETRANSPORTE
+					case 1://DAÑO EXTRA
+						std::cout << "Efecto: Mitad de la vida" << std::endl;
+						victima->setVida(victima->return_Vida() / 2);
+						break;
+					case 2: {//TELETRANSPORTE
 						std::cout << "Efecto: Teletransporte aleatorio" << std::endl;
 						double nuevaX = 1.5f + (float)(rand() % 170) / 10.0f;
 						double nuevaY = 1.5f + (float)(rand() % 120) / 10.0f;
@@ -177,11 +190,7 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 						victima->setX(nuevaX);
 						victima->setY(nuevaY);
 						break;
-					}
-					case 2: //DAÑO EXTRA
-						std::cout << "Efecto: Mitad de la vida" << std::endl;
-						victima->setVida(victima->return_Vida()/2);
-						break;
+						}
 					}
 
 					delete nHechizos[b][i];
