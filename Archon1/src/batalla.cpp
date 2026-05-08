@@ -4,23 +4,32 @@
 
 using std::cout, std::cin, std::endl;
 extern bool fin_;
+
 Batalla::Batalla()
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		nDisparos[i] = nullptr;
+
+	for (int i = 0; i < MAX_HECHIZOS; i++)
+		nHechizos[i] = nullptr;
 }
 
 Batalla::~Batalla()
 {
-	//LIMPIAR MEMORIA DE LOS DISPAROS CUANDO EL PERSOANJE MUERE
+	std::cout << "Limpiando escenario..." << std::endl;
+
 	for (int i = 0; i < MAX_DISPAROS; i++)
-	{
 		if (nDisparos[i] != nullptr)
 		{
-			delete nDisparos[i];
-			nDisparos[i] = nullptr;
+			delete nDisparos[i];      //LIBERAR MEMORIA
+			nDisparos[i] = nullptr;   //VACIAR
 		}
-	}
+
+	for (int i = 0; i < MAX_HECHIZOS; i++)
+		if (nHechizos[i] != nullptr) {
+			delete nHechizos[i];
+			nHechizos[i] = nullptr;
+		}
 }
 
 void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
@@ -28,22 +37,19 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 	switch (key)
 	{
 	case ' ': //HUMANOS PELEAN O DISPARAN CON EL ESPACIO
+		std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
 		if (j1.return_Tipo() == ARQUERO) lanzarDisparo(j1);
 		else
 			pegar(j1, j2);
 		break;
 	case 13: //ALIENS PELEAN O DISPARAN CON ENTER
+		std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
 		if (j2.return_Tipo() == ARQUERO) lanzarDisparo(j2);
 		else
 			pegar(j2, j1);
 		break;
-	case 'h': //HUMANOS USAN HECHIZO
-		juego.getTurno() == 0 ? hechizos[0].usar_Hechizo(0, j2) : hechizos[0].usar_Hechizo(0, j1);
-		break;
-	case 'v': //HUMANOS USAN HECHIZO
-		juego.getTurno() == 0 ? hechizos[1].usar_Hechizo(1, j2) : hechizos[1].usar_Hechizo(1, j1);
-		break;
-	default:
+	case 'h':
+		lanzarHechizo(j1, j2, 0);
 		break;
 	}
 
@@ -58,54 +64,8 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 	if (key == 'l') { j2.setX(j2.return_X() + j2.return_Vbase()); j2.direccion(1, 0); }
 }
 
-void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstaculo* lista[5])
+void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo* lista[5])
 {
-	for (int i = 0;i < 3;i++)
-		hechizos[i].actualizarTiempos(0.1); //ACTUALIZAR TIEMPOS DE RECARGA DE HECHIZOS
-
-	j1.actualizarEfectos();
-	j2.actualizarEfectos();
-
-	////////////////DISPAROS//////////////////
-	for (int i = 0;i < MAX_DISPAROS;i++)
-	{
-		if (nDisparos[i] != nullptr) {
-			nDisparos[i]->moverDisparo();
-			
-			//COLISION CONTRA LA CAJA
-			limites_d(*nDisparos[i], caja);
-
-			//COLISION OBSTACULOS
-			for (int k = 0; k < 5; k++) {
-				if (lista[k] != nullptr) {
-					choqueObstaculo(*nDisparos[i], *lista[k]);
-				}
-			}
-			
-			//ELIMINAR SI IMPACTA
-			if (nDisparos[i]->Impacto(j1, j2)) {
-				std::cout << "¡J1 ha sido golpeado! Vida: " << j1.return_Vida() << std::endl;
-				delete nDisparos[i];
-				nDisparos[i] = nullptr;
-			}
-			else if (nDisparos[i]->Impacto(j2, j1)) {
-				std::cout << "¡J2 ha sido golpeado! Vida: " << j2.return_Vida() << std::endl;
-				delete nDisparos[i];
-				nDisparos[i] = nullptr;
-			}
-			else if (!nDisparos[i]->return_Activo()) {
-				delete nDisparos[i];
-				nDisparos[i] = nullptr;
-			}
-			/*if (nDisparos[i]->Impacto(j1, j2) || nDisparos[i]->Impacto(j2, j1) || !nDisparos[i]->return_Activo()) {
-				delete nDisparos[i];
-				nDisparos[i] = nullptr;
-				std::cout << "VIDA ACTUAL J1: " << j1.return_Vida() << std::endl;
-				std::cout << "VIDA ACTUAL J2: " << j2.return_Vida() << std::endl;
-			}*/
-		}
-	}
-
 	////////////////PERSONAJES//////////////////
 	limites_p(j1, caja);
 	limites_p(j2, caja);
@@ -119,9 +79,61 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2,Caja &caja, Obstacu
 		}
 	}
 
+//////////////// DISPAROS //////////////////
+//CHOQUE ENTRE DISPAROS:
+for (int i = 0; i < MAX_DISPAROS; i++) {
+	if (nDisparos[i] == nullptr || !nDisparos[i]->return_Activo()) continue;
+	for (int j = i + 1; j < MAX_DISPAROS; j++)
+		if (nDisparos[j] != nullptr && nDisparos[j]->return_Activo())
+			entreDisparos(*nDisparos[i], *nDisparos[j]);
+}
+//DEMAS CHOQUES
+for (int i = 0; i < MAX_DISPAROS; i++)
+{
+	if (nDisparos[i] == nullptr) continue;
+
+	if (nDisparos[i]->return_Activo())
+	{
+		nDisparos[i]->moverDisparo();
+		limites_d(*nDisparos[i], caja); //CON LA CAJA
+
+		for (int k = 0; k < 5; k++) {
+			if (lista[k] != nullptr)
+				choqueObstaculo(*nDisparos[i], *lista[k]); //CON LOS OBSTACULOS
+		}
+		
+		if (nDisparos[i]->return_Bando() == HUMANO) {
+			//SI ES HUMANO, SOLO DAÑAR ALIEN
+			nDisparos[i]->Impacto(j2, true);
+			nDisparos[i]->Impacto(j1, false);
+		}
+		else {
+			//SI ES ALIEN, SOLO DAÑAR HUMANO
+			nDisparos[i]->Impacto(j1, true);
+			nDisparos[i]->Impacto(j2, false);
+		}
+	}
+  
+	if (!nDisparos[i]->return_Activo())
+	{
+		delete nDisparos[i];
+		nDisparos[i] = nullptr;
+	}
+}
+		
+	////////////////HECHIZOS//////////////////
+	for (int i = 0; i < MAX_HECHIZOS; i++) {
+		if (nHechizos[i] != nullptr && nHechizos[i]->return_Activo())
+			nHechizos[i]->mover();
+	}
+
+		////////////////FINAL//////////////////
 	int resultado = FinCombate(j1, j2);
 	if (resultado != 0) {
-		eliminarRestos();
+		j1.resetMunicion();
+		j2.resetMunicion();
+
+		this->~Batalla();
 		fin_ = true;
 	}
 }
@@ -174,12 +186,11 @@ void Batalla::pegar(Personaje& atacante, Personaje& objetivo)
 
 void Batalla::lanzarDisparo(Personaje& aliado)
 {
-	std::cout << "Disparando..." << std::endl;
-
-	if (aliado.return_Tipo() != ARQUERO) {
-		std::cout << "No es arquero, no puede disparar" << std::endl;
+	if (aliado.return_Disparos() >= 10) {
+		std::cout << "Sin municion para esta ronda" << std::endl;
 		return;
 	}
+	std::cout << "Disparando..." << std::endl;
 
 	bool hueco = false; //PARA VER SI HAY CAPACIDAD EN EL ARRAY
 	for (int i = 0;i < MAX_DISPAROS;i++)
@@ -187,6 +198,8 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 		if (nDisparos[i] == nullptr)
 		{
 			nDisparos[i] = new Disparo(); //RESERVA MEMORIA
+			aliado.sumarDisparo();
+			nDisparos[i]->setBando(aliado.return_Bando());
 
 			double margen = 1.2; //EVITAMOS EL SUICIDIO
 			nDisparos[i]->setX(aliado.return_X() + aliado.return_dirX() * margen);
@@ -208,18 +221,17 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 	}
 }
 
-void Batalla::eliminarRestos()
+void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo)
 {
-	std::cout << "Limpiando escenario..." << std::endl;
+	if (nHechizos[tipo] != nullptr) delete nHechizos[tipo];
 
-	for (int i = 0; i < MAX_DISPAROS; i++)
-	{
-		if (nDisparos[i] != nullptr)
-		{
-			delete nDisparos[i];      // Liberamos la memoria
-			nDisparos[i] = nullptr;   // Marcamos como vac�o
-		}
-	}
+	nHechizos[tipo] = new Hechizo();
+	nHechizos[tipo]->configurar((Hechizo::TipoHechizo)tipo);
+
+	double dX = objetivo.return_X() - mago.return_X();
+	double dY = objetivo.return_Y() - mago.return_Y();
+
+	nHechizos[tipo]->activar(mago.return_X(), mago.return_Y(), dX, dY);
 }
 
 void Batalla::entrePersonajes(Personaje& j1, Personaje& j2)
@@ -242,6 +254,25 @@ void Batalla::entrePersonajes(Personaje& j1, Personaje& j2)
 		j2.setX(j2.return_X() - normalx * 0.3);
 		j2.setY(j2.return_Y() - normaly * 0.3);
 	}
+}
+
+bool Batalla::entreDisparos(Disparo& d1, Disparo& d2)
+{
+	//SI SON DEL MISMO BANDO
+	if (d1.return_Bando() == d2.return_Bando()) return false;
+
+	double dx = d1.return_X() - d2.return_X();
+	double dy = d1.return_Y() - d2.return_Y();
+	double dist = sqrt(dx * dx + dy * dy);
+
+	if (dist < 0.3)
+	{
+		d1.setActivo(false);
+		d2.setActivo(false);
+		std::cout << "[SISTEMA] Choque entre aliado y enemigo" << std::endl;
+		return true;
+	}
+	return false;
 }
 
 bool Batalla::NoMover(Personaje& j, const Pared& p)
@@ -315,7 +346,7 @@ bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o)
     double dy = d.return_Y() - o.return_Y();
     double dist = sqrt(dx * dx + dy * dy);
 
-    if (dist < o.return_Radio())
+    if (dist < o.return_Radio()*0.5)
     {
         if (std::abs(dx) > std::abs(dy)) d.setVX(-d.return_VX());
         else d.setVY(-d.return_VY());
@@ -323,7 +354,7 @@ bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o)
         d.setRebotes(d.return_Rebotes() + 1);
 		std::cout << "Rebote (obtaculo). TOTAL: " << d.return_Rebotes() << "/2" << std::endl;
 
-        if (d.return_Rebotes() > 2) {
+        if (d.return_Rebotes() >= 2) {
 			std::cout << "[SISTEMA] Disparo agotado (obtaculo)" << std::endl;
             d.setActivo(false);
         }

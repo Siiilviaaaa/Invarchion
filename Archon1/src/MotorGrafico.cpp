@@ -152,60 +152,25 @@ void MotorGrafico::dibujarDisparo(Disparo* disparo)
 	glPushMatrix();
 	glTranslated(disparo->x, disparo->y, 0.5);
 	glDisable(GL_LIGHTING);
-	glColor3ub(255, 255, 0);
+	if (disparo->bando == HUMANO) glColor3ub(255, 255, 255);
+	else glColor3ub(0, 255, 0);
 	glutSolidSphere(0.2, 10, 10);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
 }
 
-void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)
+void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 {
-	if (hechizo.activo)
-	{
-		if (hechizo.tipo == Hechizo::PARALISIS)
-		{
-			Paralisis.setPos(hechizo.posX, hechizo.posY);
-			Paralisis.draw();
-		}
-		else if(hechizo.tipo == Hechizo::HIPERVELOCIDAD)
-		{
-			Velocidad.setPos(hechizo.posX, hechizo.posY);
-			Velocidad.draw();
-		}
-		else if(hechizo.tipo == Hechizo::POCION)
-		{
-			Pocion.setPos(hechizo.posX, hechizo.posY);
-			Pocion.draw();
-		}
-	}
-}
+	if (hechizo == nullptr)return;
 
-void MotorGrafico::dibujarVida_Muerte(const Personaje& humano, const Personaje& alien)
-{
-	//BARRA HUMANOS (IZQ)
-	float porcentaje_h = (float)humano.vida / humano.vida_max;
-	int frame = 10; //NO SE MUY BIEN COMO AJUSTAR LOS FRAMES
-
-	barraVida.setPos(5.0, 18.0);
-	barraVida.draw();
-
-	//BARRA ALIENS (DCH)
-	float porcentaje_a = (float)alien.vida / alien.vida_max;
-
-	barraVida.setPos(15.0, 18.0);
-	barraVida.draw();
-
-	if (humano.vida <= 0) //SI MUERE, DIBUJAR CALAVERA
-	{
-		calavera.setPos(humano.x, humano.y + 1.2); //DIBUJAR CALAVERA ENCIMA DEL PERSONAJE
-		calavera.draw();
-	}
-
-	if (alien.vida <= 0)
-	{
-		calavera.setPos(alien.x, alien.y + 1.2);
-		calavera.draw();
-	}
+	glPushMatrix();
+	glTranslated(hechizo->posX, hechizo->posY, 0.5);
+	glDisable(GL_LIGHTING);
+	if (hechizo->bando == HUMANO) glColor3ub(255, 255, 255);
+	else glColor3ub(0, 255, 0);
+	glutSolidSphere(0.2, 10, 10);
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
 }
 
 void MotorGrafico::dibujarBarraVida(Personaje& j1, Personaje& j2)

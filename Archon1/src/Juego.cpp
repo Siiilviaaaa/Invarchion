@@ -4,9 +4,6 @@
 #include "Personajes.h"
 #include <iostream>
 
-///VARIABLE GLOBAL DEFINIDA EN HECHIZOS.CPP
-extern bool usoPocion;
-
 Juego::Juego(Tablero* t) :
     ptrTablero(t)
 {
@@ -25,9 +22,6 @@ void Juego::setBandoJugador(bando_jugador b)
 void Juego::cambiarTurno() {
     if (turnoActual == TurnoHumanos) turnoActual = TurnoAliens;
     else turnoActual = TurnoHumanos;
-
-    //RESET FLAG PARA EL USO DE LA POCION
-	usoPocion = false;
 }
 
 int Juego::getTurno() {
@@ -85,17 +79,3 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int x, int y)
         }
     }
 }
-
-//JULI NO SE DONDE PONER QUE LA BATALLA SIGUE EN CURSO, TE LO DEJO POR AQUI
-//int estado = batalla.FinCombate(jugador1, jugador2);
-//
-//if (estado == 1) {
-//    // Ganan humanos y sumar puntos extra por victoria
-//    jugador1.sumarPuntos(100);
-//        // Cambiar estado del juego a "TABLERO"
-//}
-//else if (estado == 2) {
-//    // Ganan aliens y sumar puntos
-//    jugador2.sumarPuntos(100);
-//        // Cambiar estado del juego a "TABLERO"
-//}

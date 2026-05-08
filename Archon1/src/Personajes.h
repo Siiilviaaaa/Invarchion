@@ -13,24 +13,32 @@ class Personaje
 	Tipo_figura tipo;
 	Bando bando;
 	int movimientos;
-	int vida, vida_max; //VARIABLE PARA COMPROBAR SU USAR POCION
+	int vida, vida_max; //VARIABLE PARA COMPROBAR SI USAR POCION
 	int danio;
 	double v;
 	double vel_base;
 	double x, y;
 
-	//DIRECCION
-	double dirX, dirY;
+	int disparosRealizados; //CONTADOR DE DISPAROS
+	double dirX, dirY; //DIRECCION
+
 
 	//HECHIZOS
 	double t_paralisis;
 	double t_hiperVelocidad;
 
 public:
+	Personaje() { this->disparosRealizados = 0; }
+
 	//void sumarPuntos(int puntos);   METER EN JUEGO.H
 	static Personaje crearPieza(Tipo_figura tipo, Bando b, double posX, double posY);
 	void direccion(double dx, double dy);
 	void actualizarEfectos();
+
+	//CONTROL DE LOS DISPAROS
+	void resetMunicion() { disparosRealizados = 0; }
+	void sumarDisparo() { disparosRealizados++; }
+	int return_Disparos() { return disparosRealizados; }
 
 	//////////METODOS//////////////
 	Tipo_figura return_Tipo() const { return tipo; }
