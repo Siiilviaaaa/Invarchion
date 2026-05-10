@@ -53,8 +53,10 @@ int main(int argc, char** argv) {
     miMenu.inicializa_menu();
     miTablero.inicializa();  // Configuramos las vistas de Elena y Diego que son las hechas hasta ahora
 
-    std::cout << "Reproduciendo..." << std::endl;
-    ETSIDI::play("extra/mi_musica.mp3");
+    //esto todo habrá q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
+    cout << "Reproduciendo..." << std::endl;
+    // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
+    //ETSIDI::play("extra/mi_musica.mp3");
 
     // --- REGISTRO DE CALLBACKS ---
     // Estas funciones las he puesto en Interfaz.cpp

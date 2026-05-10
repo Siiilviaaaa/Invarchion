@@ -18,12 +18,15 @@ class Personaje
 	double v;
 	double vel_base;
 	double x, y;
+	bool moviendose{ false };
 	double dirX, dirY; //DIRECCION
 
 	int disparosRealizados; //CONTADOR DE DISPAROS
 	int hechizoUtilizado = 0;
 	int hechizosRestantes = 3;
 	double t_paralisis;
+
+
 
 
 public:

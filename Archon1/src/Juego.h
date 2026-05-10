@@ -35,11 +35,21 @@ public:
 
 	Juego(Tablero* t);
 
+	//getters
 	int getTurno();
+	Personaje* getPersonajeEnCasilla(int fila, int columna) const;
+	Personaje* getPersonaje(int index) const;
 
+	//setters
 	void setBandoJugador(bando_jugador b);
-
 	void cambiarTurno();
+
+
+	HanGanado DeterminarSiJuegoHaTerminado();
+
+	void spawnPersonaje(Tipo_figura t, Bando e, int x, int y);
+	void inicializarPartida();
+
 
 	//void procesarEntradas(); //teclas y tal
 
@@ -51,12 +61,6 @@ public:
 	//void dibujarCampoBatalla();
 
 	//void dibujarMenu();
-
-	HanGanado DeterminarSiJuegoHaTerminado();
-
-	void spawnPersonaje(Tipo_figura t, Bando e, int x, int y);
-
-
 
 };
 
