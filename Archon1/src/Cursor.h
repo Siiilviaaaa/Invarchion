@@ -4,7 +4,7 @@
 class Cursor {
 	int fila, columna;
 	int filaAntes, columnaAntes;
-	InfoCasilla* informacion;
+	InfoCasilla informacion;
 	int contador_selecciones;//indica si se ha dado ya a coger y soltar personajes
 	int movimientos_restantes;
 public:

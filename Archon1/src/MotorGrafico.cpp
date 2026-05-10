@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <iostream>
 
+
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
 	luchador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -58,7 +59,6 @@ void MotorGrafico::inicializarBatalla()
 			aceptados++;
 		}
 	}
-	
 }
 
 void MotorGrafico::dibujarPared(const Pared& p)
@@ -116,8 +116,8 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
-
 }
+
 void MotorGrafico::dibujarCursor(Cursor cursor)
 {
 	float ancho=1.0;//lo que mide cada lado del cuadraro-tablero
@@ -133,60 +133,16 @@ void MotorGrafico::dibujarCursor(Cursor cursor)
 	glLineWidth(1.0f); // volver al grosor normal
 }
 
-
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
-	ETSIDI::SpriteSequence* SpriteActual = nullptr;
-	switch (personaje.tipo) {
-	case LUCHADOR:
-		SpriteActual = (personaje.bando == HUMANO) ? &luchador : &golem;
-		break;
-	case ARQUERO:
-		SpriteActual = (personaje.bando == HUMANO) ? &soldado : &arquero;
-		break;
-	case VOLADOR:
-		SpriteActual = (personaje.bando == HUMANO) ? &volador : &murcielago;
-		break;
-	case EXCAVADOR:
-		SpriteActual = (personaje.bando == HUMANO) ? &minero : &gusano;
-		break;
-	case HECHICERO:
-		SpriteActual = (personaje.bando == HUMANO) ? &hechicero : &mago;
-		break;
-	default:
-		break;
-	}
-
-	if (SpriteActual) {//si existe un sprite
-		glPushMatrix();
-		glDisable(GL_LIGHTING);//la luz para q no haga sombra
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//para la transparencia
-		glTranslated(personaje.x, personaje.y, 0.5);
-		//SpriteActual->setPos(personaje.x, personaje.y);
-		SpriteActual->setCenter(0, 0);
-		SpriteActual->setSize(1.8, 1.8);
-		if (personaje.bando == ALIEN) {
-			
-			SpriteActual->flip(true, false); //así miran a la izq
-			glTranslated(1.95, 0, 0); 
-		}
-		if (personaje.moviendose) {
-			///SpriteActual -> setState(1, false);
-			//SpriteActual->loop();
-
-		}
-		else {
-			SpriteActual->setState(0);
-		}
-		SpriteActual->draw();
-		glDisable(GL_BLEND);
-		glEnable(GL_LIGHTING);
-		glPopMatrix();
-	}
-
-	return;
-
+	glPushMatrix();
+	glDisable(GL_LIGHTING);
+	glTranslated(personaje.x,personaje.y, 0.5);
+	if (personaje.bando == HUMANO) glColor3ub(0, 0, 255);
+	else glColor3ub(255, 0, 0);
+	glutSolidSphere(0.5, 20, 20);
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
 }
 
 void MotorGrafico::dibujarDisparo(Disparo* disparo)
@@ -196,13 +152,14 @@ void MotorGrafico::dibujarDisparo(Disparo* disparo)
 	glPushMatrix();
 	glTranslated(disparo->x, disparo->y, 0.5);
 	glDisable(GL_LIGHTING);
-	glColor3ub(255, 255, 0);
-	glutSolidSphere(0.4, 10, 10);
+	if (disparo->bando == HUMANO) glColor3ub(255, 255, 255);
+	else glColor3ub(0, 255, 0);
+	glutSolidSphere(0.2, 10, 10);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
 }
 
-void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)
+void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 {
 	if (hechizo.activo)
 	{
@@ -222,32 +179,45 @@ void MotorGrafico::dibujarHechizo(const Hechizo& hechizo)
 			Pocion.draw();
 		}
 	}
+	glutSolidSphere(0.2, 10, 10);
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
 }
 
-void MotorGrafico::dibujarVida_Muerte(const Personaje& humano, const Personaje& alien)
+void MotorGrafico::dibujarBarraVida(Personaje& j1, Personaje& j2)
 {
-	//BARRA HUMANOS (IZQ)
-	float porcentaje_h = (float)humano.vida / humano.vida_max;
-	int frame = 10; //NO SE MUY BIEN COMO AJUSTAR LOS FRAMES
+	float porcentaje1 = (float)j1.return_Vida() / (float)j1.return_VidaMax();
+	float porcentaje2 = (float)j2.return_Vida() / (float)j2.return_VidaMax();
+	recortarBarra(porcentaje1, 1.0f, 1.0f, 4.5f, 0.8f);
+	recortarBarra(porcentaje2, 14.5f, 1.0f, 4.5f, 0.8f);
+}
 
-	barraVida.setPos(5.0, 18.0);
-	barraVida.draw();
+void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho, float alto)
+{
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/barra.png").id);
+	if (porcentaje < 0) porcentaje = 0;
+	if (porcentaje > 1) porcentaje = 1;
+	int indice = (int)((1.0f - porcentaje) * 9.0f);
+	if (indice > 9) indice = 9;
+	float paso = 1.0f/10.0f;
+	float vSup = (float)indice * paso;
+	float vInf = vSup + 0.1f;
 
-	//BARRA ALIENS (DCH)
-	float porcentaje_a = (float)alien.vida / alien.vida_max;
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBegin(GL_POLYGON);
+		glTexCoord2f(0.0f, vSup); glVertex2f(x, y + alto);        
+		glTexCoord2f(1.0f, vSup); glVertex2f(x + ancho, y + alto); 
+		glTexCoord2f(1.0f, vInf); glVertex2f(x + ancho, y);        
+		glTexCoord2f(0.0f, vInf); glVertex2f(x, y);               
+	glEnd();
 
-	barraVida.setPos(15.0, 18.0);
-	barraVida.draw();
-
-	if (humano.vida <= 0) //SI MUERE, DIBUJAR CALAVERA
-	{
-		calavera.setPos(humano.x, humano.y + 1.2); //DIBUJAR CALAVERA ENCIMA DEL PERSONAJE
-		calavera.draw();
-	}
-
-	if (alien.vida <= 0)
-	{
-		calavera.setPos(alien.x, alien.y + 1.2);
-		calavera.draw();
-	}
+	glDisable(GL_BLEND);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_TEXTURE_2D);
 }

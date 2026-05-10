@@ -14,21 +14,27 @@ class Batalla
 {
 	static const int MAX_DISPAROS = 20;
 	Disparo* nDisparos[MAX_DISPAROS];
+	Hechizo* nHechizos[2][3];
+	
 public:
 	Batalla();
 	~Batalla();
 	Disparo* (&return_nDisparos())[20] { return nDisparos; }
+	Hechizo* (&return_nHechizos())[2][3] { return nHechizos; }
 
 	/////////ACTUALIZACIONES//////////////
 	void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2);
-	void actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo& obs);
+	void actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo* lista[5]);
 	int FinCombate(Personaje& humanos, Personaje& aliens);
 
 	/////////DAÑAR AL OPONENTE////////////
-	void pegar(Personaje& atacante, Personaje& objetivo, double x1, double y1, double x2, double y2);
+	void pegar(Personaje& atacante, Personaje& objetivo);
 	void lanzarDisparo(Personaje& aliado);
-	
+	void lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int equipo);
+
 	/////////INTERACCION CON LOS ELEMENTOS////////////
+	void entrePersonajes(Personaje& j1, Personaje& j2);
+	bool entreDisparos(Disparo& d1, Disparo& d2);
 	static bool NoMover(Personaje& j, const Pared& p);
 	static bool reboteDisparos(Disparo& d, const Pared& p);
 	static bool choqueObstaculo(Personaje& j, const Obstaculo& o);

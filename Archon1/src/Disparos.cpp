@@ -10,6 +10,7 @@ Disparo::Disparo()
 	velo_y = 0.0;
 	danio = 15;
 	activo = false;
+	rebotes = 0;
 }
 
 void Disparo::moverDisparo()
@@ -19,19 +20,19 @@ void Disparo::moverDisparo()
 	y += velo_y;
 }
 
-bool Disparo::Impacto(Personaje& objetivo, Personaje& atacante)
+bool Disparo::Impacto(Personaje& objetivo, bool haceDano)
 {
 	if (!activo) return false;
 
 	double dx = x - objetivo.return_X();
 	double dy = y - objetivo.return_Y();
 
-	if (sqrt(dx * dx + dy * dy) < 1.0) //SI EL DISPARO IMPACTA AL ENEMIGO
+	if (sqrt(dx * dx + dy * dy) < 0.6) //SI EL DISPARO IMPACTA AL ENEMIGO
 	{
-		objetivo.setVida(objetivo.return_Vida() - danio); //REDUCIR VIDA DEL ENEMIGO
-		
-		//atacante.sumarPuntos(15); //15 PUNTOS SI ACIERTA
-		activo = false; //DESACTIVAR DISPARO AL CHOCAR
+		if (haceDano == true) //SOLO DAÑA SI LE PASAMOS TRUE
+			objetivo.setVida(objetivo.return_Vida() - danio); //REDUCIR VIDA DEL ENEMIGO
+
+		this->activo = false; //DESACTIVAR DISPARO AL CHOCAR
 		return true;
 	}
 	return false;

@@ -1,11 +1,8 @@
 #include "Cursor.h"
 #include "Casilla.h"
 #include "freeglut.h"
+#include "tablero.h"
 #include <iostream>
-
-//extern MATRIZ_GLOBAL;
-//de momento se coge esta
-Casilla matriz_global[5][7];//esta realmente es una matriz global externa del main que guarda toda la informacion del juego actualizado
 
 void Cursor::inicializar_tablero(int turno)
 {
@@ -15,7 +12,6 @@ void Cursor::inicializar_tablero(int turno)
 		columna = 0;
 		contador_selecciones = 2;
 		movimientos_restantes = 0;
-		informacion = nullptr;
 	}
 	else 
 	{
@@ -25,7 +21,6 @@ void Cursor::inicializar_tablero(int turno)
 			columna = 6;
 			contador_selecciones = 2;
 			movimientos_restantes = 0;
-			informacion = nullptr;
 		}
 	}
 }
@@ -200,7 +195,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 				contador_selecciones -= 1;
 			}break;
 			}
-			// si coger nos devuelve un ok, le restamos uno a contador_selecciones
+			 //si coger nos devuelve un ok, le restamos uno a contador_selecciones
 			//A PARTIR DE AHORA HAY QUE CONTAR MOVIMIENTOS!
 		}
 		else
@@ -235,7 +230,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 				contador_selecciones -= 1;
 			}break;
 			}
-			// si coger nos devuelve un ok, le restamos uno a contador_selecciones
+			///// si coger nos devuelve un ok, le restamos uno a contador_selecciones
 			//A PARTIR DE AHORA HAY QUE CONTAR MOVIMIENTOS!
 		}
 		else
@@ -266,7 +261,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 int Cursor::coger(int turno)
 {
 	//crear variable que llame a elena: tablero.h get y modificar casilla
-	InfoCasilla* infoCasillaActual = matriz_global[fila][columna].info;//copiamos el valor de la matriz
+	const InfoCasilla* infoCasillaActual = miTablero.getInfoCasilla(fila,columna);//copiamos el valor de la matriz global
 
 	if (infoCasillaActual == nullptr)//comprobar que la casilla tiene informacion-evitar fallos del programa
 	{
@@ -278,7 +273,7 @@ int Cursor::coger(int turno)
 	}
 	if (infoCasillaActual->personajeEncima->bando == turno)//comprueba que el personaje es de nuestro bando
 	{
-		informacion = infoCasillaActual;//asignamos informacion
+		informacion = *infoCasillaActual;//copia la informacion del puntero que apunta al tablero original
 		movimientos_restantes = infoCasillaActual->personajeEncima->movimientos;//copiamos los movimientos
 		//guarda la informacion de la casilla, por si hay que eliminarla luego de aqui, no eliminamos pq no sbemos is la va a soltar
 		filaAntes = fila;
@@ -290,40 +285,33 @@ int Cursor::coger(int turno)
 
 int Cursor::soltar()
 {
-	if (informacion == nullptr)//si no hemosguardado nada no suleta nada
-	{
-		return 0;
-	}
-	if (informacion->personajeEncima == nullptr)//si hay error al guardar y no hay nada, no soltamos nada
+	
+	if (informacion.personajeEncima == nullptr)//si no hemos guardado ningun perosnaje no lo podremos soltar nunca
 	{
 		return 0;
 	}
 	//punteros que modifican directamente
-	InfoCasilla* infoAhora = matriz_global[fila][columna].info;
-	InfoCasilla* infoAntes = matriz_global[filaAntes][columnaAntes].info;
+	InfoCasilla* infoAhora = miTablero.getInfoCasilla(fila,columna);//le retorna lo qu ehay en la casilla que queremos soltar
 
-	if (infoAhora == nullptr || infoAntes == nullptr)//si alguna casilla esta vacia, no soltamos nada
+	if (infoAhora == nullptr)//si la casilla esta vacia, no soltamos nada
 	{
 		return 0;
 	}
 
 	if (infoAhora->personajeEncima == nullptr)//si esta libre la casilla
 	{
-		infoAhora->personajeEncima = informacion->personajeEncima;
-		infoAntes->personajeEncima = nullptr;//borramos de antes
-
-		informacion = nullptr;
-
+		miTablero.setInfoCasilla(fila, columna, informacion.personajeEncima);//le hemos dicho a la casilla del tablero que se rellene con lo que teniamos guardado
+		miTablero.setInfoCasilla(filaAntes, columnaAntes, nullptr);
 		return 1;
 	}
 
-	if (infoAhora->personajeEncima->bando == informacion->personajeEncima->bando)//hay alguien de mi bando
+	if (infoAhora->personajeEncima->bando == informacion.personajeEncima->bando)//hay alguien de mi bando
 	{
 		// No se puede soltar encima de uno de mi equipo
 		return 0;
 	}
 
-	if (infoAhora->personajeEncima->bando != informacion->personajeEncima->bando)//hay un enemigo
+	if (infoAhora->personajeEncima->bando != informacion.personajeEncima->bando)//hay un enemigo
 	{
 		// Avisamos de que hay que empezar batalla
 		return 2;

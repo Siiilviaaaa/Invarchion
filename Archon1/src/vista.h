@@ -28,6 +28,13 @@ public:
 			10.0, 7.5, 0.0,
 			0.0, 1.0, 0.0);
 	}
+	void vistaRanking() {
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		gluLookAt(200.0, 200.0, 20.0,
+			200.0, 200.0, 0.0,
+			0.0, 1.0, 0.0);
+	}
 	
 
 };
