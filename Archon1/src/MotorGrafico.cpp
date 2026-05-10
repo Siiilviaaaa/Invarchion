@@ -161,23 +161,15 @@ void MotorGrafico::dibujarDisparo(Disparo* disparo)
 
 void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 {
-	if (hechizo.activo)
-	{
-		if (hechizo.tipo == Hechizo::PARALISIS) //esto mejor con un swithc no?
-		{
-			Paralisis.setPos(hechizo.posX, hechizo.posY);
-			Paralisis.draw();
-		}
-		else if(hechizo.tipo == Hechizo::HIPERVELOCIDAD)
-		{
-			Velocidad.setPos(hechizo.posX, hechizo.posY);
-			Velocidad.draw();
-		}
-		else if(hechizo.tipo == Hechizo::POCION)
-		{
-			Pocion.setPos(hechizo.posX, hechizo.posY);
-			Pocion.draw();
-		}
+	if (hechizo == nullptr)return;
+
+	glPushMatrix();
+	glTranslated(hechizo->posX, hechizo->posY, 0.5);
+	glDisable(GL_LIGHTING);
+	switch (hechizo->tipo) {
+	case 0: glColor3f(0.0f, 1.0f, 1.0f); break; //PARALISIS
+	case 1: glColor3f(1.0f, 0.0f, 1.0f); break; //TELETRANSPORTE
+	case 2: glColor3f(0.0f, 1.0f, 0.0f); break; //DAÑO
 	}
 	glutSolidSphere(0.2, 10, 10);
 	glEnable(GL_LIGHTING);
