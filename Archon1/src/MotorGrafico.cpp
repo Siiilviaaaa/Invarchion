@@ -6,11 +6,11 @@
 
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
-	luchador("Recursos/luchador.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	soldado("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	volador("Recursos/volador.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	minero("Recursos/minero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	hechicero("Recursos/hechicero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	luchador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	soldado("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	volador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	minero("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	hechicero("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	golem("Recursos/golem.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	arquero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -164,8 +164,13 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//para la transparencia
 		glTranslated(personaje.x, personaje.y, 0.5);
 		//SpriteActual->setPos(personaje.x, personaje.y);
-		SpriteActual->setCenter(0.5, 0.5);
-		SpriteActual->setSize(2, 2);
+		SpriteActual->setCenter(0, 0);
+		SpriteActual->setSize(1.8, 1.8);
+		if (personaje.bando == ALIEN) {
+			
+			SpriteActual->flip(true, false); //así miran a la izq
+			glTranslated(1.95, 0, 0); 
+		}
 		if (personaje.moviendose) {
 			///SpriteActual -> setState(1, false);
 			//SpriteActual->loop();
@@ -180,7 +185,7 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 		glPopMatrix();
 	}
 
-	
+	return;
 
 }
 

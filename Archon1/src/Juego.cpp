@@ -4,6 +4,7 @@
 #include "Personajes.h"
 #include <iostream>
 #include "MotorGrafico.h"
+#include "casilla.h"
 
 ///VARIABLE GLOBAL DEFINIDA EN HECHIZOS.CPP
 extern bool usoPocion;
@@ -32,6 +33,7 @@ Personaje* Juego::getPersonajeEnCasilla(int fila, int columna) const {
     }
     return nullptr; // Si no se encuentra el personaje o el tablero es nulo
 }
+
 Personaje* Juego::getPersonaje(int index) const {
     if (index >= 0 && index < MAX_PERSONAJES) {
         return figuras[index];
@@ -97,16 +99,21 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
 
 void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 {
+    float ladoCasilla = 1.95;//esto imagino que debería de usar la variable que ya se hayadefinido, solo que no la encuentro
+	float offsetTableroX = columna * ladoCasilla + 0.2; //el 0.1 es por los mini margenes
+    float offsetTableroY = ladoCasilla * (4 - fila) +0.2; //creo que las coordenadas empiezan abajo, ashora lo veo, y ns que son filas y que columans
 	//Personaje* nuevo = new Personaje(Personaje::crearPieza(t, e, x, y));
     for (int i = 0; i < MAX_PERSONAJES; i++) {
         if (figuras[i] == nullptr) {//si esta posición está vacía
-            figuras[i] = new Personaje(Personaje::crearPieza(t, e, columna, fila));
-			
+            figuras[i] = new Personaje(Personaje::crearPieza(t, e, 0, 0));
+            figuras[i]->setX(offsetTableroX);
+			figuras[i]->setY(offsetTableroY);
 			Casilla* c = ptrTablero->casillaModificable(fila, columna);
             if (c != nullptr && c->getInfo() != nullptr) //verificar que la casilla y su información no sean nulas
             {
                 c->getInfo()->setPersonaje(figuras[i]); //colocamos el personaje en la casilla correspondiente
             }
+			return; //salimos del bucle una vez que hemos colocado el personaje, que si no solo se pinta uno
 
         }
 	}
@@ -115,16 +122,15 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 void Juego::inicializarPartida()
 {
     spawnPersonaje(LUCHADOR, HUMANO, 0, 0); // se puede hacer con un bucle, pero bueno asi lo edito mejor, el motor grafico lo dibuja sin q haya que llamarlo aqui, epicoo
-    spawnPersonaje(ARQUERO, HUMANO, 0, 1);
-    spawnPersonaje(VOLADOR, HUMANO, 0, 2);
-    spawnPersonaje(EXCAVADOR, HUMANO, 0, 3);
-    spawnPersonaje(HECHICERO, HUMANO, 0, 4);
-    spawnPersonaje(LUCHADOR, ALIEN, 4, 6);
-    spawnPersonaje(ARQUERO, ALIEN, 4, 5);
-    spawnPersonaje(VOLADOR, ALIEN, 4, 4);
-    spawnPersonaje(EXCAVADOR, ALIEN, 4, 3);
-    spawnPersonaje(HECHICERO, ALIEN, 4, 2);
-
+    spawnPersonaje(ARQUERO, HUMANO, 1, 0);
+    spawnPersonaje(VOLADOR, HUMANO, 2, 0);
+    spawnPersonaje(EXCAVADOR, HUMANO, 3, 0);
+    spawnPersonaje(HECHICERO, HUMANO, 4, 0);
+    spawnPersonaje(LUCHADOR, ALIEN, 0, 6);
+    spawnPersonaje(ARQUERO, ALIEN, 1, 6);
+    spawnPersonaje(VOLADOR, ALIEN, 2, 6);
+    spawnPersonaje(EXCAVADOR, ALIEN, 3, 6);
+    spawnPersonaje(HECHICERO, ALIEN, 4, 6);
     
 }
 
