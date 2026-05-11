@@ -31,31 +31,31 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 		pieza.setVida(100);
 		pieza.setVidaMax(100);
 		pieza.setDanio(15);
-		pieza.setV_base(1.8);
+		pieza.setV_base(2);
 		break;
 	case ARQUERO:
 		pieza.setVida(80);
 		pieza.setVidaMax(80);
 		pieza.setDanio(15);
-		pieza.setV_base(2.4);
+		pieza.setV_base(2.6);
 		break;
 	case VOLADOR:
 		pieza.setVida(120);
 		pieza.setVidaMax(120);
 		pieza.setDanio(20);
-		pieza.setV_base(2.9);
+		pieza.setV_base(3.1);
 		break;
 	case EXCAVADOR:
 		pieza.setVida(200);
 		pieza.setVidaMax(200);
 		pieza.setDanio(40);
-		pieza.setV_base(1);
+		pieza.setV_base(1.2);
 		break;
 	case HECHICERO:
 		pieza.setVida(90);
 		pieza.setVidaMax(90);
 		pieza.setDanio(10);
-		pieza.setV_base(1.5);
+		pieza.setV_base(1.7);
 		break;
 	}
 	pieza.setVelocidad(pieza.return_Vbase());
@@ -85,7 +85,7 @@ void Personaje::actualizarEfectos()
 {
 	if (t_paralisis > 0) //SIGUE CONGELADO
 	{
-		t_paralisis -= 0.025;
+		t_paralisis -= 0.02;
 
 		//SI EL TIEMPO SE AGOTA
 		if (t_paralisis <= 0)

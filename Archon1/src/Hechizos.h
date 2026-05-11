@@ -6,7 +6,7 @@ class Hechizo
 	friend class MotorGrafico;
 
 public:
-	enum TipoHechizo : int { PARALISIS, HIPERVELOCIDAD, POCION };
+	enum TipoHechizo : int { PARALISIS, DANIO, TELETRANSPORTE };
 private:
 	TipoHechizo tipo;
 	bool activo;
@@ -14,9 +14,6 @@ private:
 	double vx, vy;
 	Personaje* objetivo;
 	Bando bando;
-
-	double t_recarga;
-	double t_restante;
 
 public:
 	Hechizo(TipoHechizo tipo_recibido, Bando bando_recibido); //CONSTRUCTOR 

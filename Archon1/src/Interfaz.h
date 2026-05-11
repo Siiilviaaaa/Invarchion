@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "freeglut.h"
 #include "Juego.h" 
 

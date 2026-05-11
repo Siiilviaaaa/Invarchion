@@ -54,7 +54,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 		}
 		else
 		{
-			pegar(j2, j1);
+			pegar(j1, j2);
 			std::cout << "J1 pegando... " << std::endl;
 		}
 		break;
@@ -175,7 +175,7 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 					case 0: { //PARALISIS
 						std::cout << "Efecto: Personaje congelado" << std::endl;
 						victima->setVelocidad(0);
-						victima->set_paralisis(3.0);
+						victima->set_paralisis(5.0);
 						break;
 					}
 					case 1://DAÑO EXTRA

@@ -112,3 +112,7 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
         }
     }
 }
+
+void Juego::inicializarPartida()
+{
+}

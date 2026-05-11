@@ -19,11 +19,7 @@ MotorGrafico::MotorGrafico() :
 	gusano("Recursos/gusano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	mago("Recursos/mago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
-	barraVida("Recursos/barra.png"),
-	calavera("Recursos/calavera.png"),
-	Paralisis("Recursos/hechizo1.png"),
-	Velocidad("Recursos/hechizo2.png"),
-	Pocion("Recursos/pocion.png")
+	barraVida("Recursos/barra.png")
 {
 	for (int i = 0; i < 5; i++) {
 		listaObstaculos[i] = nullptr;
@@ -168,8 +164,8 @@ void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 	glDisable(GL_LIGHTING);
 	switch (hechizo->tipo) {
 	case 0: glColor3f(0.0f, 1.0f, 1.0f); break; //PARALISIS
-	case 1: glColor3f(1.0f, 0.0f, 1.0f); break; //TELETRANSPORTE
-	case 2: glColor3f(0.0f, 1.0f, 0.0f); break; //DAÑO
+	case 1: glColor3f(1.0f, 0.0f, 1.0f); break; //DANIO
+	case 2: glColor3f(0.0f, 1.0f, 0.0f); break; //TELETRANSPORTE
 	}
 	glutSolidSphere(0.2, 10, 10);
 	glEnable(GL_LIGHTING);

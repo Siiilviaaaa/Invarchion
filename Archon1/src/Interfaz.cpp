@@ -26,7 +26,6 @@ extern Personaje pj1, pj2;
 extern bool fin_;
 
 
-
 //HE MOVIDO AQUI LOS CALLBACKSSS MIRADLO PORFII
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {

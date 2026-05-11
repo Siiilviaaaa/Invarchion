@@ -3,8 +3,6 @@
 #include <iostream>
 #include "freeglut.h"
 #include "ETSIDI.h"      
-
-
 #include "Interfaz.h"
 #include "menu.h"        
 #include "vista.h"       
