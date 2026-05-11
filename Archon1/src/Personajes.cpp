@@ -76,9 +76,6 @@ void Personaje::moverEnBatalla()
 {
 	x += dirX * v * 0.05;
 	y += dirY * v * 0.05;
-
-	dirX = 0;
-	dirY = 0;
 }
 
 void Personaje::actualizarEfectos()

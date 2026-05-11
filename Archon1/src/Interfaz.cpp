@@ -163,9 +163,9 @@ if (key == 'b') {
      if (estado == JUEGO) {
      estado = BATALLA;
      }
-    pj1 = Personaje::crearPieza(HECHICERO, HUMANO, 5.0, 7.5);
+    pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
     pj1.direccion(1.0, 0.0);
-    pj2 = Personaje::crearPieza(ARQUERO, ALIEN, 15.0, 7.5);
+    pj2 = Personaje::crearPieza(HECHICERO, ALIEN, 15.0, 7.5);
     pj2.direccion(-1.0, 0.0);
     motor.inicializarBatalla();
     }

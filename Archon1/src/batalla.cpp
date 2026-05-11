@@ -42,10 +42,10 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 	{
 	///////////////HUMANOS////////////////
 	//MOVIMIENTO
-	case 'w': j1.direccion(0, 1);  break;
-	case 's': j1.direccion(0, -1); break;
-	case 'a': j1.direccion(-1, 0); break;
-	case 'd': j1.direccion(1, 0);  break;
+	case 'w': j1.direccion(0, 1);  j1.moverEnBatalla(); break;
+	case 's': j1.direccion(0, -1); j1.moverEnBatalla(); break;
+	case 'a': j1.direccion(-1, 0); j1.moverEnBatalla(); break;
+	case 'd': j1.direccion(1, 0);  j1.moverEnBatalla(); break;
 
 	case ' ': //PELEAN/DISPARAN
 		if (j1.return_Tipo() == ARQUERO) {
@@ -68,10 +68,10 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 
 	///////////////ALIENS////////////////
 	//MOVIMIENTO
-	case 'i': j2.direccion(0, 1);  break;
-	case 'k': j2.direccion(0, -1); break;
-	case 'j': j2.direccion(-1, 0); break;
-	case 'l': j2.direccion(1, 0);  break;
+	case 'i': j2.direccion(0, 1);  j2.moverEnBatalla(); break;
+	case 'k': j2.direccion(0, -1); j2.moverEnBatalla(); break;
+	case 'j': j2.direccion(-1, 0); j2.moverEnBatalla(); break;
+	case 'l': j2.direccion(1, 0);  j2.moverEnBatalla(); break;
 
 	case 13: //PELEAN/DISPARAN
 		if (j2.return_Tipo() == ARQUERO) {
@@ -97,9 +97,6 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo* lista[5])
 {
 	////////////////PERSONAJES//////////////////
-	j1.moverEnBatalla();
-	j2.moverEnBatalla();
-
 	limites_p(j1, caja);
 	limites_p(j2, caja);
 
@@ -266,23 +263,27 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 	std::cout << "Disparando..." << std::endl;
 
 	bool hueco = false; //PARA VER SI HAY CAPACIDAD EN EL ARRAY
-	for (int i = 0;i < MAX_DISPAROS;i++)
+	for (int i = 0; i < MAX_DISPAROS; i++)
 	{
 		if (nDisparos[i] == nullptr)
 		{
-			nDisparos[i] = new Disparo(); //RESERVA MEMORIA
+			nDisparos[i] = new Disparo();
 			aliado.sumarDisparo();
 			nDisparos[i]->setBando(aliado.return_Bando());
 
-			double margen = 1.2; //EVITAMOS EL SUICIDIO
-			nDisparos[i]->setX(aliado.return_X() + aliado.return_dirX() * margen);
-			nDisparos[i]->setY(aliado.return_Y() + aliado.return_dirY() * margen);
+			double dX = aliado.return_dirX();
+			double dY = aliado.return_dirY();
 
-			double vx = aliado.return_dirX() * 0.1;
-			double vy = aliado.return_dirY() * 0.1;
+			if (dX == 0 && dY == 0) {
+				dX = (aliado.return_Bando() == HUMANO) ? 1.0 : -1.0;
+			}
 
-			nDisparos[i]->setVX(vx);
-			nDisparos[i]->setVY(vy);
+			double margen = 1.2;
+			nDisparos[i]->setX(aliado.return_X() + dX * margen);
+			nDisparos[i]->setY(aliado.return_Y() + dY * margen);
+
+			nDisparos[i]->setVX(dX * 0.1);
+			nDisparos[i]->setVY(dY * 0.1);
 			nDisparos[i]->setActivo(true);
 
 			hueco = true;
