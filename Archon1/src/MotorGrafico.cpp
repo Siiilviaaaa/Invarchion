@@ -7,11 +7,11 @@
 
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
-	luchador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	soldado("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	volador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	minero("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	hechicero("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	soldado("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	volador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	minero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	hechicero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	golem("Recursos/golem.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	arquero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -20,6 +20,11 @@ MotorGrafico::MotorGrafico() :
 	mago("Recursos/mago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	barraVida("Recursos/barra.png")
+	/*calavera("Recursos/calavera.png"),
+	Paralisis("Recursos/hechizo1.png"),
+	Velocidad("Recursos/hechizo2.png"),
+	Pocion("Recursos/pocion.png")*/
+
 {
 	for (int i = 0; i < 5; i++) {
 		listaObstaculos[i] = nullptr;
@@ -129,16 +134,57 @@ void MotorGrafico::dibujarCursor(Cursor cursor)
 	glLineWidth(1.0f); // volver al grosor normal
 }
 
+
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
-	glPushMatrix();
-	glDisable(GL_LIGHTING);
-	glTranslated(personaje.x,personaje.y, 0.5);
-	if (personaje.bando == HUMANO) glColor3ub(0, 0, 255);
-	else glColor3ub(255, 0, 0);
-	glutSolidSphere(0.5, 20, 20);
-	glEnable(GL_LIGHTING);
-	glPopMatrix();
+	ETSIDI::SpriteSequence* SpriteActual = nullptr;
+	switch (personaje.tipo) {
+	case LUCHADOR:
+		SpriteActual = (personaje.bando == HUMANO) ? &luchador : &golem;
+		break;
+	case ARQUERO:
+		SpriteActual = (personaje.bando == HUMANO) ? &soldado : &arquero;
+		break;
+	case VOLADOR:
+		SpriteActual = (personaje.bando == HUMANO) ? &volador : &murcielago;
+		break;
+	case EXCAVADOR:
+		SpriteActual = (personaje.bando == HUMANO) ? &minero : &gusano;
+		break;
+	case HECHICERO:
+		SpriteActual = (personaje.bando == HUMANO) ? &hechicero : &mago;
+		break;
+	default:
+		break;
+	}
+
+	if (SpriteActual) {//si existe un sprite
+		glPushMatrix();
+		glDisable(GL_LIGHTING);//la luz para q no haga sombra
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//para la transparencia
+		glTranslated(personaje.x, personaje.y, 0.5);
+		//SpriteActual->setPos(personaje.x, personaje.y);
+		SpriteActual->setCenter(0, 0);
+		SpriteActual->setSize(1.8, 1.8);
+		if (personaje.bando == ALIEN) {
+
+			SpriteActual->flip(true, false); //así miran a la izq
+			glTranslated(1.95, 0, 0);
+		}
+		if (personaje.moviendose) {
+			///SpriteActual -> setState(1, false);
+			//SpriteActual->loop();
+
+		}
+		else {
+			SpriteActual->setState(0);
+		}
+		SpriteActual->draw();
+		glDisable(GL_BLEND);
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+	}
 }
 
 void MotorGrafico::dibujarDisparo(Disparo* disparo)

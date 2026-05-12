@@ -58,6 +58,12 @@ void OnDraw(void) {
     case JUEGO:
         miCamara.vistaJuego();
         dibujo_tablero.dibuja();
+        for (int i = 0; i < MAX_PERSONAJES; i++) {
+            Personaje* p = juego.getPersonaje(i);
+            if (p != nullptr && p->return_Vida() > 0) {
+                motor.dibujarPersonaje(*p);
+            }
+        }
         fin_ = false;
         break;
     case RANKING:

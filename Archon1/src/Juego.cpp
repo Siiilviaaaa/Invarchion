@@ -94,7 +94,7 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
 void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 {
     float ladoCasilla = 1.95;//esto imagino que debería de usar la variable que ya se hayadefinido, solo que no la encuentro
-	float offsetTableroX = columna * ladoCasilla + 0.2; //el 0.1 es por los mini margenes
+	float offsetTableroX = columna * ladoCasilla + 0.2; //el 0.2 es por los mini margenes
     float offsetTableroY = ladoCasilla * (4 - fila) +0.2; //creo que las coordenadas empiezan abajo, ashora lo veo, y ns que son filas y que columans
 	//Personaje* nuevo = new Personaje(Personaje::crearPieza(t, e, x, y));
     for (int i = 0; i < MAX_PERSONAJES; i++) {
@@ -115,4 +115,30 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 
 void Juego::inicializarPartida()
 {
+    spawnPersonaje(LUCHADOR, HUMANO, 0, 0); // se puede hacer con un bucle, pero bueno asi lo edito mejor, el motor grafico lo dibuja sin q haya que llamarlo aqui, epicoo
+    spawnPersonaje(ARQUERO, HUMANO, 1, 0);
+    spawnPersonaje(VOLADOR, HUMANO, 2, 0);
+    spawnPersonaje(EXCAVADOR, HUMANO, 3, 0);
+    spawnPersonaje(HECHICERO, HUMANO, 4, 0);
+    spawnPersonaje(LUCHADOR, ALIEN, 0, 6);
+    spawnPersonaje(ARQUERO, ALIEN, 1, 6);
+    spawnPersonaje(VOLADOR, ALIEN, 2, 6);
+    spawnPersonaje(EXCAVADOR, ALIEN, 3, 6);
+    spawnPersonaje(HECHICERO, ALIEN, 4, 6);
+
 }
+
+
+//JULI NO SE DONDE PONER QUE LA BATALLA SIGUE EN CURSO, TE LO DEJO POR AQUI
+//int estado = batalla.FinCombate(jugador1, jugador2);
+//
+//if (estado == 1) {
+//    // Ganan humanos y sumar puntos extra por victoria
+//    jugador1.sumarPuntos(100);
+//        // Cambiar estado del juego a "TABLERO"
+//}
+//else if (estado == 2) {
+//    // Ganan aliens y sumar puntos
+//    jugador2.sumarPuntos(100);
+//        // Cambiar estado del juego a "TABLERO"
+//}
