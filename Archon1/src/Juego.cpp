@@ -94,7 +94,7 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
 void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 {
     float ladoCasilla = 1.95;//esto imagino que debería de usar la variable que ya se hayadefinido, solo que no la encuentro
-	float offsetTableroX = columna * ladoCasilla + 0.2; //el 0.1 es por los mini margenes
+	float offsetTableroX = columna * ladoCasilla + 0.2; //el 0.2 es por los mini margenes
     float offsetTableroY = ladoCasilla * (4 - fila) +0.2; //creo que las coordenadas empiezan abajo, ashora lo veo, y ns que son filas y que columans
 	//Personaje* nuevo = new Personaje(Personaje::crearPieza(t, e, x, y));
     for (int i = 0; i < MAX_PERSONAJES; i++) {

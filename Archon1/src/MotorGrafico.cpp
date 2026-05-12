@@ -7,7 +7,7 @@
 
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
-	luchador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	soldado("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	volador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	minero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
