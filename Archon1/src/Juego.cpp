@@ -115,4 +115,30 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 
 void Juego::inicializarPartida()
 {
+    spawnPersonaje(LUCHADOR, HUMANO, 0, 0); // se puede hacer con un bucle, pero bueno asi lo edito mejor, el motor grafico lo dibuja sin q haya que llamarlo aqui, epicoo
+    spawnPersonaje(ARQUERO, HUMANO, 1, 0);
+    spawnPersonaje(VOLADOR, HUMANO, 2, 0);
+    spawnPersonaje(EXCAVADOR, HUMANO, 3, 0);
+    spawnPersonaje(HECHICERO, HUMANO, 4, 0);
+    spawnPersonaje(LUCHADOR, ALIEN, 0, 6);
+    spawnPersonaje(ARQUERO, ALIEN, 1, 6);
+    spawnPersonaje(VOLADOR, ALIEN, 2, 6);
+    spawnPersonaje(EXCAVADOR, ALIEN, 3, 6);
+    spawnPersonaje(HECHICERO, ALIEN, 4, 6);
+
 }
+
+
+//JULI NO SE DONDE PONER QUE LA BATALLA SIGUE EN CURSO, TE LO DEJO POR AQUI
+//int estado = batalla.FinCombate(jugador1, jugador2);
+//
+//if (estado == 1) {
+//    // Ganan humanos y sumar puntos extra por victoria
+//    jugador1.sumarPuntos(100);
+//        // Cambiar estado del juego a "TABLERO"
+//}
+//else if (estado == 2) {
+//    // Ganan aliens y sumar puntos
+//    jugador2.sumarPuntos(100);
+//        // Cambiar estado del juego a "TABLERO"
+//}

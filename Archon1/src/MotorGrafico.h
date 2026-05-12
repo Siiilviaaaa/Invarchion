@@ -29,6 +29,10 @@ class MotorGrafico
 	
 	////ELEMENTOS BATALLA////
 	ETSIDI::Sprite barraVida;
+	/*ETSIDI::Sprite calavera;
+	ETSIDI::Sprite Paralisis;
+	ETSIDI::Sprite Velocidad;
+	ETSIDI::Sprite Pocion;*/
 
 	Obstaculo* listaObstaculos[5];
 	int numObstaculos;
