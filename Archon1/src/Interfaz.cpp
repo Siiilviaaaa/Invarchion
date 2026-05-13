@@ -25,23 +25,24 @@ extern Batalla miBatalla;
 extern Personaje pj1, pj2;
 extern bool fin_;
 
+//variables globales
+float tiempoMensajeSelecciondeBando = 0.0f;
+std::string textoBando = "";
+
 
 //HE MOVIDO AQUI LOS CALLBACKSSS MIRADLO PORFII
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        // Obtener dimensiones actuales de la ventana
+        //Obtener dimensiones actuales de la ventana
         float width = glutGet(GLUT_WINDOW_WIDTH);
         float height = glutGet(GLUT_WINDOW_HEIGHT);
 
-        // Convertir clic a coordenadas normalizadas (0.0 a 1.0)
+        //Convertir clic a coordenadas normalizadas (0.0 a 1.0)
         float nx = x / width;
         float ny = y / height;
 
         if (estado == MENU) {
-            // Ejemplo: Botón Salir (Originalmente x:100-250, y:120-250 en ventana de 800x600)
-            // Rangos normalizados: x(0.125 a 0.312), y(0.2 a 0.416)
-
-            // Botón Salir
+            // Botón Salir (Originalmente x:100-250, y:120-250)
             if (nx > 0.125f && nx < 0.312f && ny > 0.2f && ny < 0.416f) {
                 exit(0);
             }
@@ -65,10 +66,7 @@ void OnDraw(void) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    //he quitado lo q ponia aqui:
-    //
-    //dibujo_tablero.dibuja();
-    //
+    
     switch (estado) { //aqui dentro no he tocando nada
     case MENU:
         miCamara.vistaMenu();
@@ -84,6 +82,64 @@ void OnDraw(void) {
             }
         }
         fin_ = false;
+        
+        //HE PROGRAMADO UN MENSAJE POR PANTALLA DE QUE BANDO SE HA SELECCIONADO PARA EL JUGADOR 1
+        if (tiempoMensajeSelecciondeBando > 0) {
+
+                //Guardar las matrices
+                glMatrixMode(GL_PROJECTION);
+                glPushMatrix();
+                glLoadIdentity();
+                //Defino un sist de coords de 0 a 100 en x e y para q me sea mas facil centrar, ojala haber sabido para los botones
+                gluOrtho2D(0, 100, 0, 100);
+
+                //comandos del openGL para dibujar
+                glMatrixMode(GL_MODELVIEW);
+                glPushMatrix();
+                glLoadIdentity();
+
+                glDisable(GL_LIGHTING);
+                glDisable(GL_DEPTH_TEST);
+
+                //Dibujar el recuadro negro centrado
+                float cx = 50.0f;
+                float cy = 50.0f;
+                float ancho = 15.0f;
+                float alto = 4.0f;
+
+                glColor3f(0.0f, 0.0f, 0.0f); //color
+                glBegin(GL_QUADS); //poligono como hicimos en los labs
+                glVertex2f(cx - ancho, cy - alto);
+                glVertex2f(cx + ancho, cy - alto);
+                glVertex2f(cx + ancho, cy + alto);
+                glVertex2f(cx - ancho, cy + alto);
+                glEnd();
+
+                //Borde blanco
+                glColor3f(1.0f, 1.0f, 1.0f);
+                glBegin(GL_LINE_LOOP); //este comando es para lineas en vez de poligonos pero es parecido
+                glVertex2f(cx - ancho, cy - alto);
+                glVertex2f(cx + ancho, cy - alto);
+                glVertex2f(cx + ancho, cy + alto);
+                glVertex2f(cx - ancho, cy + alto);
+                glEnd();
+
+                //escribo el texto
+                glColor3f(1.0f, 1.0f, 0.0f);
+                glRasterPos2f(cx - 12.0f, cy - 1.0f);//posicion de inicio de los pixeles, para centrar (es la punta del lapiz)
+                for (char c : textoBando) {
+                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+                    //creo q es la fuente mas grande q encontré
+                }
+
+                //vuelvo a poner las cosas de tablero pq sino he comprobado q lo rompo y no puedo
+                glEnable(GL_DEPTH_TEST);
+                glEnable(GL_LIGHTING);
+                glMatrixMode(GL_PROJECTION);
+                glPopMatrix();
+                glMatrixMode(GL_MODELVIEW);
+                glPopMatrix();
+            }
         break;
     case RANKING:
         miCamara.vistaRanking();
@@ -123,7 +179,11 @@ void OnTimer(int value) {
         if (fin_) estado = JUEGO;
     }
     glutPostRedisplay();
-    
+
+    //esta funcion es para q el mensaje de info de bando dure 4 segs, se tiene q ir reduciendo
+    if (tiempoMensajeSelecciondeBando > 0) {
+        tiempoMensajeSelecciondeBando -= 20.0f;
+    }
     //Se vuelve a llamar a sí misma cada 20ms (unos 50 FPS)
     glutTimerFunc(20, OnTimer, 0);
 }
@@ -170,15 +230,18 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
     //Selección de bando
     if (estado == SELECCION) {
         key = tolower(key);
-        if (key == 'h') {
-           juego.setBandoJugador(Bando_jugador_es_Humano);
-           estado = JUEGO;
+        if (key == 'h' || key == 'a') {
+            if (key == 'h') {
+                juego.setBandoJugador(Bando_jugador_es_Humano);
+                textoBando = "Jugador 1: Humanos";
+            }
+            else {
+                juego.setBandoJugador(Bando_jugador_es_Alien);
+                textoBando = "Jugador 1: Aliens";
+            }
+            estado = JUEGO;
+            tiempoMensajeSelecciondeBando = 4000.0f; // 4 segundos de vida
         }
-        else if (key == 'a') {
-           juego.setBandoJugador(Bando_jugador_es_Alien);
-           estado = JUEGO;
-        }
-        // Refresco de pantalla para q se pinte
         glutPostRedisplay();
     }
 
