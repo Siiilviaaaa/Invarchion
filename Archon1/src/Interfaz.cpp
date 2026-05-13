@@ -29,11 +29,30 @@ extern bool fin_;
 //HE MOVIDO AQUI LOS CALLBACKSSS MIRADLO PORFII
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        // Obtener dimensiones actuales de la ventana
+        float width = glutGet(GLUT_WINDOW_WIDTH);
+        float height = glutGet(GLUT_WINDOW_HEIGHT);
+
+        // Convertir clic a coordenadas normalizadas (0.0 a 1.0)
+        float nx = x / width;
+        float ny = y / height;
+
         if (estado == MENU) {
-            // Lógica de botones del menú comprimida pa q ver luego si puedo solucionar lo de modo ventana o modo fullscreen
-            if (x > 100 && x < 250 && y > 120 && y < 250) exit(0);
-            if (x > 270 && x < 530 && y > 290 && y < 510) estado = SELECCION;
-            if (x > 550 && x < 700 && y > 120 && y < 250) {
+            // Ejemplo: Botón Salir (Originalmente x:100-250, y:120-250 en ventana de 800x600)
+            // Rangos normalizados: x(0.125 a 0.312), y(0.2 a 0.416)
+
+            // Botón Salir
+            if (nx > 0.125f && nx < 0.312f && ny > 0.2f && ny < 0.416f) {
+                exit(0);
+            }
+
+            // Botón Selección (Originalmente x:270-530, y:290-510)
+            if (nx > 0.337f && nx < 0.662f && ny > 0.483f && ny < 0.85f) {
+                estado = SELECCION;
+            }
+
+            // Botón Ranking (Originalmente x:550-700, y:120-250)
+            if (nx > 0.687f && nx < 0.875f && ny > 0.2f && ny < 0.416f) {
                 miMenu.cargar_ranking();
                 estado = RANKING;
             }
