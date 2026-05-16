@@ -25,7 +25,7 @@ class Juego
 private:
 	Tablero* ptrTablero;
 	
-	Turno turnoActual{ TurnoHumanos };
+	Turno turnoActual{ TurnoHumanos};
 	bool ejecutandose{ 0 };
 	bando_jugador bandoJugador{};
 	HanGanado estado_victoria;

@@ -196,10 +196,12 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         key = tolower(key);
         if (key == 'h') {
            juego.setBandoJugador(Bando_jugador_es_Humano);
+           micursor.inicializar_tablero(juego.getTurno());//de esta forma siempre actualizara el cursor, cuando se seleccione
            estado = JUEGO;
         }
         else if (key == 'a') {
            juego.setBandoJugador(Bando_jugador_es_Alien);
+           micursor.inicializar_tablero(juego.getTurno());
            estado = JUEGO;
         }
         // Refresco de pantalla para q se pinte
