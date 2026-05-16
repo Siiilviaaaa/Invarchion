@@ -1,5 +1,6 @@
 #pragma once
 #include "Informacion Casilla.h"
+#include <string>
 
 class Juego; //declaro clase anticipadamente para eviatr conflictos
 
@@ -14,6 +15,8 @@ class Cursor {
 	int color_r{}, color_v{}, color_a{};
 
 	Juego* ptrJuego;//para avisar al juego del cambio de turno
+
+	std::string mensaje = "JUEGO INICIADO";//para imprimir la situacion del juego actual
 public:
 	int obt_fila() const { return fila; }
 	int obt_columna() const { return columna; }
@@ -21,15 +24,17 @@ public:
 	int obt_color_v() const { return color_v; }
 	int obt_color_a() const { return color_a; }
 	int obt_contador_selecciones() const { return contador_selecciones; }
+	int obt_movimientos_restantes() const { return movimientos_restantes; }
+	std::string obt_mensaje() const { return mensaje; }
+
 
 	void inicializar_tablero(int turno);
-
 	void mover_cursor_tablero(unsigned char key, int turno);
 
 	void seleccion_personaje_tablero(unsigned char key, int turno);
-
 	int coger(int turno);
 	int soltar(int turno);
 
 	void setJuego(Juego* j) { ptrJuego = j; }
+	void insertar_mensaje(std::string nuevo_msg) { mensaje = nuevo_msg; }
  };

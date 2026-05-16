@@ -1,9 +1,11 @@
 #include "freeglut.h"
 #include <iostream>
+//#include <string>
 #include "Cursor.h"
 #include "Casilla.h"
 #include "tablero.h"
 #include "Juego.h"
+#include "ETSIDI.h"
 
 void Cursor::inicializar_tablero(int turno)
 {
@@ -44,18 +46,19 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
 				if (movimientos_restantes > 0)
 				{
 					columna -= 1;
 					movimientos_restantes -= 1;
-					//print te qyuedan x movimientos DIEGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes)+ " movimientos");
 				}
-			}
 				break;
 
-			case 2:  columna -= 1;
-				break;//estamos buscando casilla a coger
+			case 2:  
+				columna -= 1;
+				insertar_mensaje("Selecciona un personaje");
+				break;
+
 			default: break;
 			}
 		}
@@ -63,18 +66,18 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
 				if (movimientos_restantes > 0)
 				{
-					columna +=1;
+					columna += 1;
 					movimientos_restantes -= 1;
-					//print te qyuedan x movimientos DIEGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
-				else //aqui nos hemos quedado sin movimientos, nos quedamos en la ultima casilla posible
 				break;
-			}
+			
 			case 2:  columna += 1;
-				break;//estamos buscando casilla a coger
+				insertar_mensaje("Selecciona un personaje");
+				break;
+
 			default: break;
 			}
 		}
@@ -82,19 +85,19 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 		if ((key == 's') && (fila > 0)) {
 			switch (contador_selecciones)
 			{
-			case 1:
-			{
+			case 1:			
 				if (movimientos_restantes > 0)
 				{
 					fila -=1;
 					movimientos_restantes -= 1;
-					//print te qyuedan x movimientos DIEGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
-				else //aqui nos hemos quedado sin movimientos, nos quedamos en la ultima casilla posible
 				break;
-			}
+			
 			case 2:  fila -= 1;
-				break;//estamos buscando casilla a coger
+				insertar_mensaje("Selecciona un personaje");
+				break;
+
 			default: break;
 			}
 		}
@@ -102,18 +105,18 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
 				if (movimientos_restantes > 0)
 				{
-					fila +=1;
+					fila += 1;
 					movimientos_restantes -= 1;
-					//print te qyuedan x movimientos DIEGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-				}
-				else //aqui nos hemos quedado sin movimientos, nos quedamos en la ultima casilla posible
+					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
+				} 
 				break;
-			}
+
 			case 2:  fila += 1;
+				insertar_mensaje("Selecciona un personaje");
 				break;
+
 			default: break;
 			}
 		}
@@ -126,18 +129,18 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
 				if (movimientos_restantes > 0)
 				{
 					columna -=1;
 					movimientos_restantes -= 1;
-					//print te qyuedan x movimientos DIEGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
-				else //aqui nos hemos quedado sin movimientos, nos quedamos en la ultima casilla posible
 				break;
-			}
+			
 			case 2:  columna -= 1;
+				insertar_mensaje("Selecciona un personaje");
 				break;
+
 			default: break;
 			}
 		}
@@ -145,18 +148,18 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
 				if (movimientos_restantes > 0)
 				{
 					columna += 1;
 					movimientos_restantes -= 1;
-					//print te qyuedan x movimientos DIEGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
-				else //aqui nos hemos quedado sin movimientos, nos quedamos en la ultima casilla posible
 				break;
-			}
+	
 			case 2:  columna += 1;
+				insertar_mensaje("Selecciona un personaje");
 				break;
+
 			default: break;
 			}
 		}
@@ -165,18 +168,19 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
+			
 				if (movimientos_restantes > 0)
 				{
 					fila -= 1;
 					movimientos_restantes -= 1;
-					//print te qyuedan x movimientos DIEGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
-				else //aqui nos hemos quedado sin movimientos, nos quedamos en la ultima casilla posible
 				break;
-			}
+			
 			case 2:  fila -= 1;
+				insertar_mensaje("Selecciona un personaje");
 				break;
+
 			default: break;
 			}
 		}
@@ -184,18 +188,19 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
+			
 				if (movimientos_restantes > 0)
 				{
 					fila += 1;
 					movimientos_restantes -= 1;
-					//print te qyuedan x movimientos DIEGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
-				else //aqui nos hemos quedado sin movimientos, nos quedamos en la ultima casilla posible
 				break;
-			}
+	
 			case 2:  fila += 1;
+				insertar_mensaje("Selecciona un personaje");
 				break;
+
 			default: break;
 			}
 		}
@@ -214,9 +219,11 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			case 1:
 			{
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
+				insertar_mensaje("Personaje seleccionado. Movimientos limitados a: " + std::to_string(movimientos_restantes));
 				contador_selecciones = 1;
 			}break;
 			default:  std::cout << "no se ha podido coger" << std::endl;break;
+			
 			}
 		}
 		else
@@ -262,9 +269,11 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			case 1:
 			{
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
+				insertar_mensaje("Personaje seleccionado. Movimientos limitados a: " + std::to_string(movimientos_restantes));
 				contador_selecciones = 1;
 			}break;
-			default:  std::cout << "no se ha podido coger" << std::endl;break;
+			default:  std::cout << "no se ha podido coger" << std::endl;
+				break;
 			}
 		}
 		else

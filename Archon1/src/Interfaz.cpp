@@ -1,6 +1,7 @@
 #include "Interfaz.h"
 #include <iostream>
 #include <cctype>
+#include "ETSIDI.h"
 
 #include "freeglut.h"
 #include "Juego.h"
@@ -58,6 +59,7 @@ void OnDraw(void) {
         miMenu.dibuja_menu();
         break;
     case JUEGO:
+    {
         miCamara.vistaJuego();
         motor.dibujaTablero();
         for (int i = 0; i < MAX_PERSONAJES; i++) {
@@ -68,7 +70,73 @@ void OnDraw(void) {
         }
         fin_ = false;
         motor.dibujarCursor(micursor);
+        //dibujar mensajes
+
+
+
+
+
+
+
+
+
+
+        glDisable(GL_LIGHTING);
+        glDisable(GL_TEXTURE_2D);
+
+        // 1. Guardamos la perspectiva 3D actual en una mochila para no romper el tablero
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glLoadIdentity();
+        // Creamos un plano fijo que mide exactamente 800x600 píxeles (el tamaño de tu ventana)
+        gluOrtho2D(0, 800, 0, 600);
+
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+        glLoadIdentity();
+
+        // 2. Color de la letra (Blanco puro)
+        glColor3ub(153, 50, 204);
+
+        std::string mensajeTablero = micursor.obt_mensaje();//varia en funcion de la situacion del tablero actual
+      
+        // 3. ¡ESTA ES LA SUSTITUCIÓN REAL! 
+        // Coloca el texto a 220 píxeles desde la izquierda y a 35 píxeles desde el suelo de la ventana
+        glRasterPos2i(220, 45);
+
+        // Imprimimos el texto letra a letra (estilo ranking)
+        for (char c : mensajeTablero) {
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+        }
+
+        // 4. Sacamos la perspectiva 3D de la mochila para que el tablero se siga viendo bien
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix();
+
+        glEnable(GL_TEXTURE_2D);
+        glEnable(GL_LIGHTING);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
         break;
+    }
     case RANKING:
         miCamara.vistaRanking();
         miMenu.dibuja_ranking();
