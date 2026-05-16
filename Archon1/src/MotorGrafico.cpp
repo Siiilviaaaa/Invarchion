@@ -255,3 +255,119 @@ void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_TEXTURE_2D);
 }
+
+void MotorGrafico::dibujarMensajeBando(const std::string& textoBando)
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, 100, 0, 100);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+
+	float cx = 50.0f;
+	float cy = 82.0f;
+	float ancho = 15.0f;
+	float alto = 3.5f;
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glBegin(GL_QUADS);
+	glVertex2f(cx - ancho, cy - alto);
+	glVertex2f(cx + ancho, cy - alto);
+	glVertex2f(cx + ancho, cy + alto);
+	glVertex2f(cx - ancho, cy + alto);
+	glEnd();
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(cx - ancho, cy - alto);
+	glVertex2f(cx + ancho, cy - alto);
+	glVertex2f(cx + ancho, cy + alto);
+	glVertex2f(cx - ancho, cy + alto);
+	glEnd();
+
+	glColor3f(1.0f, 1.0f, 0.0f);
+	glRasterPos2f(cx - 12.0f, cy - 1.0f);
+	for (char c : textoBando) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+	}
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
+
+void MotorGrafico::dibujarInstruccionesTablero()
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, 100, 0, 100);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+
+	// Caja negra translúcida de fondo
+	glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_QUADS);
+	glVertex2f(15.0f, 15.0f);
+	glVertex2f(85.0f, 15.0f);
+	glVertex2f(85.0f, 75.0f);
+	glVertex2f(15.0f, 75.0f);
+	glEnd();
+	glDisable(GL_BLEND);
+
+	// Borde blanco de la caja
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(15.0f, 15.0f);
+	glVertex2f(85.0f, 15.0f);
+	glVertex2f(85.0f, 75.0f);
+	glVertex2f(15.0f, 75.0f);
+	glEnd();
+
+	// Líneas de texto de los controles
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glRasterPos2f(20.0f, 68.0f);
+	for (char c : "CONTROLES DEL JUEGO")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+
+	glRasterPos2f(20.0f, 58.0f);
+	for (char c : "ESCENARIO DE TABLERO: Mover el cursor con WASD")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+	glRasterPos2f(20.0f, 48.0f);
+	for (char c : "ESCENARIO DE BATALLA - HUMANOS: Mover con WASD | Disparar con ESPACIO")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+	glRasterPos2f(20.0f, 40.0f);
+	for (char c : "ESCENARIO DE BATALLA - ALIENS: Mover con IJKL | Disparar con ENTER")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+	// Mensaje inferior para salir
+	glColor3f(0.0f, 1.0f, 1.0f);
+	glRasterPos2f(20.0f, 22.0f);
+	for (char c : "Pulsa ESPACIO para omitir INSTRUCCIONES")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}

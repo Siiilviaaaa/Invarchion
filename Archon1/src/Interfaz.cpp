@@ -28,6 +28,8 @@ extern bool fin_;
 //variables globales
 float tiempoMensajeSelecciondeBando = 0.0f;
 std::string textoBando = "";
+bool mostrandoInstruccionesTablero = false;
+float tiempoInstruccionesTablero = 0.0f;
 
 
 //HE MOVIDO AQUI LOS CALLBACKSSS MIRADLO PORFII
@@ -82,64 +84,16 @@ void OnDraw(void) {
             }
         }
         fin_ = false;
-        
-        //HE PROGRAMADO UN MENSAJE POR PANTALLA DE QUE BANDO SE HA SELECCIONADO PARA EL JUGADOR 1
+
+        // 1. Dibuja el mensaje del bando seleccionado usando el motor gráfico
         if (tiempoMensajeSelecciondeBando > 0) {
+            motor.dibujarMensajeBando(textoBando);
+        }
 
-                //Guardar las matrices
-                glMatrixMode(GL_PROJECTION);
-                glPushMatrix();
-                glLoadIdentity();
-                //Defino un sist de coords de 0 a 100 en x e y para q me sea mas facil centrar, ojala haber sabido para los botones
-                gluOrtho2D(0, 100, 0, 100);
-
-                //comandos del openGL para dibujar
-                glMatrixMode(GL_MODELVIEW);
-                glPushMatrix();
-                glLoadIdentity();
-
-                glDisable(GL_LIGHTING);
-                glDisable(GL_DEPTH_TEST);
-
-                //Dibujar el recuadro negro centrado
-                float cx = 50.0f;
-                float cy = 50.0f;
-                float ancho = 15.0f;
-                float alto = 4.0f;
-
-                glColor3f(0.0f, 0.0f, 0.0f); //color
-                glBegin(GL_QUADS); //poligono como hicimos en los labs
-                glVertex2f(cx - ancho, cy - alto);
-                glVertex2f(cx + ancho, cy - alto);
-                glVertex2f(cx + ancho, cy + alto);
-                glVertex2f(cx - ancho, cy + alto);
-                glEnd();
-
-                //Borde blanco
-                glColor3f(1.0f, 1.0f, 1.0f);
-                glBegin(GL_LINE_LOOP); //este comando es para lineas en vez de poligonos pero es parecido
-                glVertex2f(cx - ancho, cy - alto);
-                glVertex2f(cx + ancho, cy - alto);
-                glVertex2f(cx + ancho, cy + alto);
-                glVertex2f(cx - ancho, cy + alto);
-                glEnd();
-
-                //escribo el texto
-                glColor3f(1.0f, 1.0f, 0.0f);
-                glRasterPos2f(cx - 12.0f, cy - 1.0f);//posicion de inicio de los pixeles, para centrar (es la punta del lapiz)
-                for (char c : textoBando) {
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-                    //creo q es la fuente mas grande q encontré
-                }
-
-                //vuelvo a poner las cosas de tablero pq sino he comprobado q lo rompo y no puedo
-                glEnable(GL_DEPTH_TEST);
-                glEnable(GL_LIGHTING);
-                glMatrixMode(GL_PROJECTION);
-                glPopMatrix();
-                glMatrixMode(GL_MODELVIEW);
-                glPopMatrix();
-            }
+        // 2. Dibuja la pantalla de instrucciones usando el motor gráfico
+        if (mostrandoInstruccionesTablero) {
+            motor.dibujarInstruccionesTablero();
+        }
         break;
     case RANKING:
         miCamara.vistaRanking();
@@ -174,22 +128,50 @@ void OnDraw(void) {
 }
 
 void OnTimer(int value) {
+    // 1. Reducir tiempo de las instrucciones primero (para que no se quede congelado el reloj)
+    if (mostrandoInstruccionesTablero && tiempoInstruccionesTablero > 0) {
+        tiempoInstruccionesTablero -= 20.0f;
+        if (tiempoInstruccionesTablero <= 0) {
+            mostrandoInstruccionesTablero = false;
+            tiempoMensajeSelecciondeBando = 0.0f; // Limpiamos también el bando si expira el tiempo
+        }
+    }
+
+    // 2. CONGELACIÓN DEL JUEGO: Si siguen activas, frena el resto de la lógica
+    if (estado == JUEGO && mostrandoInstruccionesTablero) {
+        glutPostRedisplay();
+        glutTimerFunc(20, OnTimer, 0);
+        return;
+    }
+
+    // 3. Lógica normal del juego (solo se ejecuta si no hay instrucciones en pantalla)
     if (estado == BATALLA) {
         miBatalla.actualizarCombate(pj1, pj2, miCaja, motor.obtenerObstaculos());
         if (fin_) estado = JUEGO;
     }
     glutPostRedisplay();
 
-    //esta funcion es para q el mensaje de info de bando dure 4 segs, se tiene q ir reduciendo
+    // Reducir tiempo del mensaje de bando cuando el juego ya está corriendo
     if (tiempoMensajeSelecciondeBando > 0) {
         tiempoMensajeSelecciondeBando -= 20.0f;
     }
-    //Se vuelve a llamar a sí misma cada 20ms (unos 50 FPS)
+
     glutTimerFunc(20, OnTimer, 0);
 }
 
 void OnKeyboardDown(unsigned char key, int x, int y) {
     unsigned char c = std::tolower(key);
+
+    // NUEVO BLOQUE: Control estricto de entrada durante las instrucciones
+    if (estado == JUEGO && mostrandoInstruccionesTablero) {
+        if (key == ' ') { // Solo el ESPACIO quita los carteles y descongela
+            mostrandoInstruccionesTablero = false;
+            tiempoInstruccionesTablero = 0.0f;
+            tiempoMensajeSelecciondeBando = 0.0f;
+            glutPostRedisplay();
+        }
+        return; // BLOQUEO: Cualquier otra tecla ('b', WASD, etc.) se ignora por completo
+    }
 
     if (key == 27) { // ESC es la 27
         if (estado == MENU) exit(0);
@@ -200,27 +182,20 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         std::string nombre;
         int puntos;
 
-        //parte de la CMD win
         std::cout << "\n--- REGISTRO DE PUNTUACION ---" << std::endl;
         std::cin.clear();
-        std::cin.ignore(1000, '\n'); 
-        //fflush(stdin);
+        std::cin.ignore(1000, '\n');
 
-        // <---- Limpieza de buffer
-
-        //CMD
         std::cout << "TRES LETRAS: ";
         std::cin >> nombre;
-        if (nombre.size() > 3) nombre = nombre.substr(0, 3);//he editado esto
-        //ahora lo q hace es q si escribes mas de 3 se queda con las 3 primeras y te jodes
+        if (nombre.size() > 3) nombre = nombre.substr(0, 3);
 
         std::cout << "Puntuacion (solo numeros): ";
         if (!(std::cin >> puntos)) {
-            //Si el usuario mete letras en vez de números, evitamos el bucle infinito
-             std::cout << "Error: Puntos invalidos." << std::endl;
-             std::cin.clear();
-             std::cin.ignore(1000, '\n');
-             puntos = 0;
+            std::cout << "Error: Puntos invalidos." << std::endl;
+            std::cin.clear();
+            std::cin.ignore(1000, '\n');
+            puntos = 0;
         }
 
         miMenu.actualizar_ranking(nombre, puntos);
@@ -240,26 +215,29 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
                 textoBando = "Jugador 1: Aliens";
             }
             estado = JUEGO;
-            tiempoMensajeSelecciondeBando = 4000.0f; // 4 segundos de vida
+
+            // Sincronización de tiempos a 15 segundos
+            tiempoMensajeSelecciondeBando = 15000.0f;
+            mostrandoInstruccionesTablero = true;
+            tiempoInstruccionesTablero = 15000.0f;
         }
         glutPostRedisplay();
     }
 
-
-if (key == 'b') {
-     std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
-     if (estado == JUEGO) {
-     estado = BATALLA;
-     }
-    pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
-    pj1.direccion(1.0, 0.0);
-    pj2 = Personaje::crearPieza(HECHICERO, ALIEN, 15.0, 7.5);
-    pj2.direccion(-1.0, 0.0);
-    motor.inicializarBatalla();
+    if (key == 'b') {
+        std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
+        if (estado == JUEGO) {
+            estado = BATALLA;
+        }
+        pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
+        pj1.direccion(1.0, 0.0);
+        pj2 = Personaje::crearPieza(HECHICERO, ALIEN, 15.0, 7.5);
+        pj2.direccion(-1.0, 0.0);
+        motor.inicializarBatalla();
     }
-        
+
     if (estado == BATALLA) {
-       miBatalla.KeyBatalla(key, pj1, pj2);
+        miBatalla.KeyBatalla(key, pj1, pj2);
     }
 
     glutPostRedisplay();

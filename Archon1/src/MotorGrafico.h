@@ -7,6 +7,8 @@
 #include "Obstaculo.h"
 #include "Cursor.h"
 
+#include <string>
+
 //RELACION DE AMISTAD DE PERSONAJES, HECHIZOS, DISPAROS PARA PODER ACCEDER A SUS ATRIBUTOS PRIVADOS
 
 class MotorGrafico
@@ -55,6 +57,11 @@ public:
 	void dibujarHechizo(Hechizo* hechizo);
 	void dibujarPersonaje(const Personaje& personaje);
 	void dibujarBarraVida(Personaje& j1, Personaje& j2);
+
+
+	//nuevos mios de dibujo de instrucciones
+	void dibujarMensajeBando(const std::string& textoBando);
+	void dibujarInstruccionesTablero();
 
 	/////////METODOS////////////
 	//DIRECCION QUE APUNTA A OTRA DIRECCION
