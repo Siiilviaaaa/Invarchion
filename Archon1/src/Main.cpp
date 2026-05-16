@@ -28,8 +28,9 @@ Menu miMenu;
 Tablero miTablero;
 Camara miCamara;
 MotorGrafico motor;
+
 Caja miCaja;
-Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
+//Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
 Juego juego(&miTablero);
 
 //PRUEBAS
@@ -75,7 +76,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    dibujo_tablero.dibuja();
+    motor.dibujaTablero();
 
     switch (estado) {
     case MENU:
@@ -86,7 +87,7 @@ void OnDraw(void) //aqui dentro está el switch al que hay q añadir el estado d
         break;
     case JUEGO:
         miCamara.vistaJuego();
-        dibujo_tablero.dibuja();
+        motor.dibujaTablero();
         fin_ = false;
         break;
     case RANKING:
@@ -175,6 +176,7 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
 }
 
 int main(int argc, char** argv) {
+    
     //INICIAR JUEGO
    // Invarchion.IniciarJuego(); //esto cambia el valor del bool ejecutandose a 1, por lo que podeis poner las funciones como la de dibujar el tablero en basse a esto
 
@@ -186,8 +188,10 @@ int main(int argc, char** argv) {
     //se pude hacer una funcion con esta para cmabiar el color en funcion del turno
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f); // Fondo de ventana gris
 
+    
     miMenu.inicializa_menu();
     miTablero.inicializa(); // Configuramos las vistas de Elena y Diego que son las hechas hasta ahora
+    motor.setTablero(&miTablero);
 
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHTING);

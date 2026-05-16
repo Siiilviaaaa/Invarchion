@@ -24,7 +24,6 @@
     <ClInclude Include="Caja.h" />
     <ClInclude Include="casilla.h" />
     <ClInclude Include="Cursor.h" />
-    <ClInclude Include="dibujo_tablero.h" />
     <ClInclude Include="Disparos.h" />
     <ClInclude Include="Hechizos.h" />
     <ClInclude Include="Informacion Casilla.h" />
@@ -42,7 +41,6 @@
     <ClCompile Include="Batalla.cpp" />
     <ClCompile Include="Caja.cpp" />
     <ClCompile Include="Cursor.cpp" />
-    <ClCompile Include="dibujo_tablero.cpp" />
     <ClCompile Include="Disparos.cpp" />
     <ClCompile Include="Hechizos.cpp" />
     <ClCompile Include="menu.cpp" />

@@ -6,6 +6,7 @@
 #include "Caja.h"
 #include "Obstaculo.h"
 #include "Cursor.h"
+#include "tablero.h"
 
 //RELACION DE AMISTAD DE PERSONAJES, HECHIZOS, DISPAROS PARA PODER ACCEDER A SUS ATRIBUTOS PRIVADOS
 
@@ -37,12 +38,16 @@ class MotorGrafico
 
 	void recortarBarra(float vida, float x, float y, float ancho, float alto);
 	////TABLERO////
-
+	Tablero* tablero = nullptr;
+	float lado = 2.0f;
 	////MENU////
 
 public:
 	MotorGrafico();
 	
+	// Método para conectar el tablero si el motor se creó vacío
+	void setTablero(Tablero* t) { tablero = t; }
+
 	void inicializarBatalla();
 	void dibujarPared(const Pared& p);
 	void dibujarCursor(Cursor cursor);
@@ -54,6 +59,12 @@ public:
 	void dibujarPersonaje(const Personaje& personaje);
 	void dibujarVida_Muerte(const Personaje& humano, const Personaje& alien);
 	void dibujarBarraVida(Personaje& j1, Personaje& j2);
+	/////////TABLERO/////////////
+	void dibujaTablero();
+	void dibujarFondo();
+	void dibujarBordeTurno();
+	void dibujarCasilla(const Casilla* c);
+	
 
 	/////////METODOS////////////
 	//DIRECCION QUE APUNTA A OTRA DIRECCION
