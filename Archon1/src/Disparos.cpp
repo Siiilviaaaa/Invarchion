@@ -27,12 +27,13 @@ bool Disparo::Impacto(Personaje& objetivo, bool haceDano)
 	double dx = x - objetivo.return_X();
 	double dy = y - objetivo.return_Y();
 
-	if (sqrt(dx * dx + dy * dy) < 0.6) //SI EL DISPARO IMPACTA AL ENEMIGO
+	if (sqrt(dx * dx + dy * dy) < 0.6)
 	{
-		if (haceDano == true) //SOLO DAÑA SI LE PASAMOS TRUE
-			objetivo.setVida(objetivo.return_Vida() - danio); //REDUCIR VIDA DEL ENEMIGO
+		if (haceDano == true)  //SOLO QUITAMOS VIDA AL ENEMIGO
+			objetivo.setVida(objetivo.return_Vida() - danio);
 
-		this->activo = false; //DESACTIVAR DISPARO AL CHOCAR
+		//DESAPARECER
+		this->activo = false;
 		return true;
 	}
 	return false;

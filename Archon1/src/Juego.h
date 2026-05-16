@@ -3,6 +3,7 @@
 #include "tablero.h"
 
 #define MAX_PERSONAJES 20
+enum Estado { MENU, SELECCION, JUEGO, RANKING, BATALLA };
 
 enum Turno : int {
 	TurnoHumanos,
@@ -34,11 +35,21 @@ public:
 
 	Juego(Tablero* t);
 
+	//getters
 	int getTurno();
+	Personaje* getPersonajeEnCasilla(int fila, int columna) const;
+	Personaje* getPersonaje(int index) const;
 
+	//setters
 	void setBandoJugador(bando_jugador b);
-
 	void cambiarTurno();
+
+
+	HanGanado DeterminarSiJuegoHaTerminado();
+
+	void spawnPersonaje(Tipo_figura t, Bando e, int x, int y);
+	void inicializarPartida();
+
 
 	//void procesarEntradas(); //teclas y tal
 
@@ -51,14 +62,4 @@ public:
 
 	//void dibujarMenu();
 
-	HanGanado DeterminarSiJuegoHaTerminado();
-
-	void spawnPersonaje(Tipo_figura t, Bando e, int x, int y);
-
-
-
 };
-
-//DEFINIDA AQUI PARA NO HACER COPIAS
-//ASI CADA VEZ QUE #INCLUDE JUEGO.H UTILIZAMOS MISMO JUEGO
-extern Juego juego;

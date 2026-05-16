@@ -2,27 +2,29 @@
 #include "freeglut.h"
 #include <ctime>
 #include <cstdlib>
+#include <iostream>
 
 
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
-	luchador("Recursos/luchador.png"), 	
-	soldado("Recursos/soldado.png"),	
-	volador("Recursos/volador.png"),
-	minero("Recursos/minero.png"),	
-	hechicero("Recursos/hechicero.png"),
+	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	soldado("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	volador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	minero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	hechicero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
-	golem("Recursos/golem.png"),	
-	arquero("Recursos/arquero.png"),
-	murcielago("Recursos/murcielago.png"),
-	gusano("Recursos/gusano.png"),
-	mago("Recursos/mago.png"),
+	golem("Recursos/golem.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	arquero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	murcielago("Recursos/murcielago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	gusano("Recursos/gusano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	mago("Recursos/mago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
-	barraVida("Recursos/barra.png"),
-	calavera("Recursos/calavera.png"),
+	barraVida("Recursos/barra.png")
+	/*calavera("Recursos/calavera.png"),
 	Paralisis("Recursos/hechizo1.png"),
 	Velocidad("Recursos/hechizo2.png"),
-	Pocion("Recursos/pocion.png")
+	Pocion("Recursos/pocion.png")*/
+
 {
 	for (int i = 0; i < 5; i++) {
 		listaObstaculos[i] = nullptr;
@@ -58,7 +60,6 @@ void MotorGrafico::inicializarBatalla()
 			aceptados++;
 		}
 	}
-	
 }
 
 void MotorGrafico::dibujarPared(const Pared& p)
@@ -116,8 +117,8 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
-
 }
+
 void MotorGrafico::dibujarCursor(Cursor cursor)
 {
 	float ancho=1.0;//lo que mide cada lado del cuadraro-tablero
@@ -132,17 +133,58 @@ void MotorGrafico::dibujarCursor(Cursor cursor)
 	glEnd();
 	glLineWidth(1.0f); // volver al grosor normal
 }
+
+
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
-	glPushMatrix();
-	glDisable(GL_LIGHTING);
-	glTranslated(personaje.x,personaje.y, 0.5);
-	if (personaje.bando == HUMANO) glColor3ub(0, 0, 255);
-	else glColor3ub(255, 0, 0);
-	glutSolidSphere(0.5, 20, 20);
-	glEnable(GL_LIGHTING);
-	glPopMatrix();
+	ETSIDI::SpriteSequence* SpriteActual = nullptr;
+	switch (personaje.tipo) {
+	case LUCHADOR:
+		SpriteActual = (personaje.bando == HUMANO) ? &luchador : &golem;
+		break;
+	case ARQUERO:
+		SpriteActual = (personaje.bando == HUMANO) ? &soldado : &arquero;
+		break;
+	case VOLADOR:
+		SpriteActual = (personaje.bando == HUMANO) ? &volador : &murcielago;
+		break;
+	case EXCAVADOR:
+		SpriteActual = (personaje.bando == HUMANO) ? &minero : &gusano;
+		break;
+	case HECHICERO:
+		SpriteActual = (personaje.bando == HUMANO) ? &hechicero : &mago;
+		break;
+	default:
+		break;
+	}
 
+	if (SpriteActual) {//si existe un sprite
+		glPushMatrix();
+		glDisable(GL_LIGHTING);//la luz para q no haga sombra
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//para la transparencia
+		glTranslated(personaje.x, personaje.y, 0.5);
+		//SpriteActual->setPos(personaje.x, personaje.y);
+		SpriteActual->setCenter(0, 0);
+		SpriteActual->setSize(1.8, 1.8);
+		if (personaje.bando == ALIEN) {
+
+			SpriteActual->flip(true, false); //así miran a la izq
+			glTranslated(1.95, 0, 0);
+		}
+		if (personaje.moviendose) {
+			///SpriteActual -> setState(1, false);
+			//SpriteActual->loop();
+
+		}
+		else {
+			SpriteActual->setState(0);
+		}
+		SpriteActual->draw();
+		glDisable(GL_BLEND);
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+	}
 }
 
 void MotorGrafico::dibujarDisparo(Disparo* disparo)
@@ -166,8 +208,11 @@ void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 	glPushMatrix();
 	glTranslated(hechizo->posX, hechizo->posY, 0.5);
 	glDisable(GL_LIGHTING);
-	if (hechizo->bando == HUMANO) glColor3ub(255, 255, 255);
-	else glColor3ub(0, 255, 0);
+	switch (hechizo->tipo) {
+	case 0: glColor3f(0.0f, 1.0f, 1.0f); break; //PARALISIS
+	case 1: glColor3f(1.0f, 0.0f, 1.0f); break; //DANIO
+	case 2: glColor3f(0.0f, 1.0f, 0.0f); break; //TELETRANSPORTE
+	}
 	glutSolidSphere(0.2, 10, 10);
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
@@ -180,6 +225,7 @@ void MotorGrafico::dibujarBarraVida(Personaje& j1, Personaje& j2)
 	recortarBarra(porcentaje1, 1.0f, 1.0f, 4.5f, 0.8f);
 	recortarBarra(porcentaje2, 14.5f, 1.0f, 4.5f, 0.8f);
 }
+
 void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho, float alto)
 {
 	glDisable(GL_LIGHTING);
@@ -196,7 +242,6 @@ void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho
 	float vSup = (float)indice * paso;
 	float vInf = vSup + 0.1f;
 
-	
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBegin(GL_POLYGON);
 		glTexCoord2f(0.0f, vSup); glVertex2f(x, y + alto);        
@@ -209,5 +254,88 @@ void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_TEXTURE_2D);
-	
+}
+void MotorGrafico::dibujaTablero() {
+	// SEGURIDAD: Si no hay tablero, no intentamos leer datos (evita el crash)
+	if (tablero == nullptr) return;
+
+	dibujarFondo();
+	dibujarBordeTurno();
+
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 7; j++) {
+			const Casilla* c = tablero->getCasilla(i, j);
+			dibujarCasilla(c);
+		}
+	}
+}
+
+void MotorGrafico::dibujarFondo() {
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/fondotablero.png").id);
+	glDisable(GL_LIGHTING);
+	glColor3f(1, 1, 1);
+
+	float m = 2.0f;
+	float ancho = 7 * lado;
+	float alto = 5 * lado;
+
+	glBegin(GL_POLYGON);
+	glTexCoord2d(1, 1); glVertex3f(-m, -m, -0.1f);
+	glTexCoord2d(0, 1); glVertex3f(ancho + m, -m, -0.1f);
+	glTexCoord2d(0, 0); glVertex3f(ancho + m, alto + m, -0.1f);
+	glTexCoord2d(1, 0); glVertex3f(-m, alto + m, -0.1f);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
+}
+
+void MotorGrafico::dibujarBordeTurno() {
+	// Usamos el tablero guardado para saber el turno
+	if (tablero->getTurno() == 0)
+		glColor3f(0.0f, 0.3f, 0.6f);
+	else
+		glColor3f(0.6f, 0.0f, 0.0f);
+
+	float anchoTotal = 7 * lado;
+	float altoTotal = 5 * lado;
+	glLineWidth(7.0f);
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(0, 0, 0.05f);
+	glVertex3f(anchoTotal, 0, 0.05f);
+	glVertex3f(anchoTotal, altoTotal, 0.05f);
+	glVertex3f(0, altoTotal, 0.05f);
+	glEnd();
+}
+
+void MotorGrafico::dibujarCasilla(const Casilla* c) {
+	if (c == nullptr) return;
+
+	float x = c->getcolumna() * lado;
+	float y = c->getfila() * lado;
+
+	switch (c->getInfo()->getColor()) {
+	case blanca: glColor3f(1.0f, 1.0f, 1.0f); break;
+	case negra:  glColor3f(0.1f, 0.1f, 0.1f); break;
+	case lila:   glColor3f(0.5f, 0.0f, 0.5f); break;
+	}
+
+	if (c->getInfo()->getColor() != lila) {
+		glBegin(GL_QUADS);
+		glVertex3f(x, y, 0.0f);
+		glVertex3f(x + lado, y, 0.0f);
+		glVertex3f(x + lado, y + lado, 0.0f);
+		glVertex3f(x, y + lado, 0.0f);
+		glEnd();
+	}
+
+	glColor3f(0.2f, 0.2f, 0.2f);
+	glLineWidth(2.0f);
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(x, y, 0.005f);
+	glVertex3f(x + lado, y, 0.005f);
+	glVertex3f(x + lado, y + lado, 0.005f);
+	glVertex3f(x, y + lado, 0.005f);
+	glEnd();
 }

@@ -13,7 +13,12 @@ class Disparo
 	Bando bando;
 
 public:
-	//////////GETTERS Y SETTERS///////////
+	Disparo();//COSNTRUCTOR
+	void moverDisparo();
+	bool Impacto(Personaje& objetivo, bool haceDano);
+	void sumarRebote() { rebotes++; }
+
+	/////////METODOS///////////////
 	bool return_Activo() const { return activo; }
 	double return_X() const { return x; }
 	double return_Y() const { return y; }
@@ -28,11 +33,5 @@ public:
 	void setActivo(bool nuevoActivo) { activo = nuevoActivo; }
 	void setRebotes(int r) { rebotes = r; }
 	void setBando(Bando nuevo) { bando = nuevo; }
-
-	////////////////METODOS///////////////
-	Disparo();//COSNTRUCTOR
-	void moverDisparo();
-	bool Impacto(Personaje& objetivo, bool haceDano);
-	void sumarRebote() { rebotes++; }
 };
 

@@ -195,7 +195,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 				contador_selecciones -= 1;
 			}break;
 			}
-			// si coger nos devuelve un ok, le restamos uno a contador_selecciones
+			 //si coger nos devuelve un ok, le restamos uno a contador_selecciones
 			//A PARTIR DE AHORA HAY QUE CONTAR MOVIMIENTOS!
 		}
 		else
@@ -230,7 +230,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 				contador_selecciones -= 1;
 			}break;
 			}
-			// si coger nos devuelve un ok, le restamos uno a contador_selecciones
+			///// si coger nos devuelve un ok, le restamos uno a contador_selecciones
 			//A PARTIR DE AHORA HAY QUE CONTAR MOVIMIENTOS!
 		}
 		else

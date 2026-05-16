@@ -13,15 +13,14 @@
 class Batalla
 {
 	static const int MAX_DISPAROS = 20;
-	static const int MAX_HECHIZOS = 3;
 	Disparo* nDisparos[MAX_DISPAROS];
-	Hechizo* nHechizos[MAX_HECHIZOS];
+	Hechizo* nHechizos[2][3];
 	
 public:
 	Batalla();
 	~Batalla();
 	Disparo* (&return_nDisparos())[20] { return nDisparos; }
-	Hechizo* (&return_nHechizos())[3] { return nHechizos; }
+	Hechizo* (&return_nHechizos())[2][3] { return nHechizos; }
 
 	/////////ACTUALIZACIONES//////////////
 	void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2);
@@ -31,7 +30,7 @@ public:
 	/////////DAÑAR AL OPONENTE////////////
 	void pegar(Personaje& atacante, Personaje& objetivo);
 	void lanzarDisparo(Personaje& aliado);
-	void lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo);
+	void lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int equipo);
 
 	/////////INTERACCION CON LOS ELEMENTOS////////////
 	void entrePersonajes(Personaje& j1, Personaje& j2);
@@ -43,7 +42,4 @@ public:
 
 	static void limites_d(Disparo& d, Caja& c);
 	static void limites_p(Personaje& j, Caja& c);
-
-	//para hacer la barra de vida
-	void dibujarInterfaz(Personaje& j1, Personaje& j2);
 };
