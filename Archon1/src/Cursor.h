@@ -13,7 +13,7 @@ class Cursor {
 	Personaje* atacante;
 	Personaje* defensor;
 	int color_r{}, color_v{}, color_a{};
-
+	Personaje* personajeSeleccionado; // Guarda el PUNTERO original, no una copia
 	Juego* ptrJuego;//para avisar al juego del cambio de turno
 
 	std::string mensaje = "JUEGO INICIADO";//para imprimir la situacion del juego actual

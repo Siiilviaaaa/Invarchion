@@ -313,7 +313,7 @@ int Cursor::coger(int turno)
 {
 	//crear variable que llame a elena: tablero.h get y modificar casilla
 	const InfoCasilla* infoCasillaActual = miTablero.getInfoCasilla(fila,columna);//copiamos el valor de la matriz global
-
+	
 	if (infoCasillaActual == nullptr)//comprobar que la casilla tiene informacion-evitar fallos del programa
 	{
 		std::cout << "CASILLA VACIA" << std::endl;
@@ -358,7 +358,7 @@ int Cursor::soltar(int turno)
 		//modifcamos la posicion del perosnaje para q dibuje (TELETRANSPORTE) donde debe
 		casillaAnterior->personajeEncima->setX(columna);
 		casillaAnterior->personajeEncima->setY(fila);
-		std::cout << "teoricamente personaje en:" << casillaAnterior->personajeEncima->x <<","<< casillaAnterior->personajeEncima->y;
+		std::cout << "teoricamente personaje en:" << casillaAnterior->personajeEncima->x <<"," <<casillaAnterior->personajeEncima->y;
 		casillaActual->personajeEncima = casillaAnterior->personajeEncima;
 		casillaAnterior->personajeEncima = nullptr;
 		return 1;
