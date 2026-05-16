@@ -69,8 +69,24 @@ public:
 	void setDanio(int nuevoDanio) { danio = nuevoDanio; }
 	void setVelocidad(double V) { v = V;}
 	void setV_base(double nuevaVBase) { vel_base = nuevaVBase; }
-	void setX(double nuevaX) { x = nuevaX; }
-	void setY(double nuevaY) { y = nuevaY; }
+	void setX(double nuevaX) 
+	{
+		double ladoCasilla = 1.95;//esto imagino que debería de usar la variable que ya se hayadefinido, solo que no la encuentro
+		double offsetTableroX = nuevaX* ladoCasilla + 0.2;
+		x = offsetTableroX;
+	}
+	void setY(double nuevaY)
+	{ 
+		double ladoCasilla = 1.95;//esto imagino que debería de usar la variable que ya se hayadefinido, solo que no la encuentro
+		double offsetTableroY = ladoCasilla * (4 - nuevaY) + 0.2; //creo que las coordenadas empiezan abajo, ashora lo veo, y ns que son filas y que columans
+		y = offsetTableroY;
+	}
+	double getY(void) const//para solucionar el prblema de espejo en las y
+	{
+		double ladoCasilla = 1.95f;
+		double yCorregidaMirror = (4.2f * ladoCasilla) - y;
+		return yCorregidaMirror;
+	}
 	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
 	void setBando(Bando nuevo) { bando = nuevo; }
 	void set_paralisis(double tiempo) { t_paralisis = tiempo; }

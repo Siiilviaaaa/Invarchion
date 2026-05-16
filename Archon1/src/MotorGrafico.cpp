@@ -170,7 +170,7 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 		glDisable(GL_LIGHTING);//la luz para q no haga sombra
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//para la transparencia
-		glTranslated(personaje.x, personaje.y, 0.5);
+		glTranslated(personaje.x, personaje.getY(), 0.5);
 		//SpriteActual->setPos(personaje.x, personaje.y);
 		SpriteActual->setCenter(0, 0);
 		SpriteActual->setSize(1.8, 1.8);

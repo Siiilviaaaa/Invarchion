@@ -263,7 +263,6 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 		if (key == 'u' && contador_selecciones == 2)//si equipo humanos presiona "espacio" por primera vez
 		{
 			int cogerOK = coger(turno);
-			insertar_mensaje("U num de selecciones: " + std::to_string(contador_selecciones));//PRUEBAS
 			switch (cogerOK)
 			{
 			case 1:
@@ -332,6 +331,7 @@ int Cursor::coger(int turno)
 		//guarda la informacion de la casilla, por si hay que eliminarla luego de aqui, no eliminamos pq no sbemos is la va a soltar
 		filaAntes = fila;
 		columnaAntes = columna;
+		std::cout << "inicialmente personaje en:" << infoCasillaActual->personajeEncima->x <<"," << infoCasillaActual->personajeEncima->y;
 		return 1;
 	}
 	return 0;
@@ -356,9 +356,9 @@ int Cursor::soltar(int turno)
 	if (casillaActual->personajeEncima == nullptr)
 	{
 		//modifcamos la posicion del perosnaje para q dibuje (TELETRANSPORTE) donde debe
-		casillaAnterior->personajeEncima->setX(filaAntes);
-		casillaAnterior->personajeEncima->setY(columnaAntes);
-
+		casillaAnterior->personajeEncima->setX(columna);
+		casillaAnterior->personajeEncima->setY(fila);
+		std::cout << "teoricamente personaje en:" << casillaAnterior->personajeEncima->x <<","<< casillaAnterior->personajeEncima->y;
 		casillaActual->personajeEncima = casillaAnterior->personajeEncima;
 		casillaAnterior->personajeEncima = nullptr;
 		return 1;
