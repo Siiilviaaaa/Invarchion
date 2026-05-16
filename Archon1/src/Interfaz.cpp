@@ -9,6 +9,8 @@
 #include "MotorGrafico.h"
 #include "tablero.h"
 #include "Batalla.h"
+#include "Cursor.h"
+
 
 
 //los extern son para q los busque en el main, me ha ayudado la IA en esta parte
@@ -23,6 +25,7 @@ extern Juego juego;
 extern Batalla miBatalla;
 extern Personaje pj1, pj2;
 extern bool fin_;
+extern Cursor micursor;
 
 
 //HE MOVIDO AQUI LOS CALLBACKSSS MIRADLO PORFII
@@ -64,6 +67,7 @@ void OnDraw(void) {
             }
         }
         fin_ = false;
+        motor.dibujarCursor(micursor);
         break;
     case RANKING:
         miCamara.vistaRanking();
@@ -162,6 +166,10 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         glutPostRedisplay();
     }
 
+    if (estado == JUEGO)
+    {
+        micursor.seleccion_personaje_tablero(c, miTablero.getTurno());
+    }
 
 if (key == 'b') {
      std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;

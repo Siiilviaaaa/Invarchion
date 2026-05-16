@@ -121,19 +121,26 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 
 void MotorGrafico::dibujarCursor(Cursor cursor)
 {
-	float ancho=1.0;//lo que mide cada lado del cuadraro-tablero
-	//se añade en el motor grafico la funcion de que el cursor se dibuje, para que cuando se modifiquen las corrdenadas se repinte
-	glLineWidth(0.2f); //grosor del delineado de 0.2, que se vea pero no excesivo 
-	glColor3ub(255, 128, 0);//color naranja llamativo
-	glBegin(GL_LINE_LOOP);
-	glVertex2f(cursor.obt_columna(), cursor.obt_fila());
-	glVertex2f(cursor.obt_columna() + ancho, cursor.obt_fila());
-	glVertex2f(cursor.obt_columna() + ancho, cursor.obt_fila() + ancho);
-	glVertex2f(cursor.obt_columna(), cursor.obt_fila() + ancho);
-	glEnd();
-	glLineWidth(1.0f); // volver al grosor normal
-}
 
+	float x = cursor.obt_columna() * lado;
+	float y = cursor.obt_fila() * lado;
+
+	glDisable(GL_LIGHTING);
+
+	glLineWidth(5.0f);
+	glColor3ub(cursor.obt_color_r(), cursor.obt_color_v(), cursor.obt_color_a();
+
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(x, y, 0.1f);
+	glVertex3f(x + lado, y, 0.1f);
+	glVertex3f(x + lado, y + lado, 0.1f);
+	glVertex3f(x, y + lado, 0.1f);
+	glEnd();
+
+	glLineWidth(1.0f);
+
+	glEnable(GL_LIGHTING);
+}
 
 void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 {
@@ -255,6 +262,7 @@ void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_TEXTURE_2D);
 }
+
 void MotorGrafico::dibujaTablero() {
 	// SEGURIDAD: Si no hay tablero, no intentamos leer datos (evita el crash)
 	if (tablero == nullptr) return;
