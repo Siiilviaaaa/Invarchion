@@ -1,6 +1,8 @@
 #pragma once
 #include "Informacion Casilla.h"
 
+class Juego; //declaro clase anticipadamente para eviatr conflictos
+
 class Cursor {
 	int fila, columna;
 	int filaAntes, columnaAntes;
@@ -10,12 +12,15 @@ class Cursor {
 	Personaje* atacante;
 	Personaje* defensor;
 	int color_r{}, color_v{}, color_a{};
+
+	Juego* ptrJuego;//para avisar al juego del cambio de turno
 public:
 	int obt_fila() const { return fila; }
 	int obt_columna() const { return columna; }
 	int obt_color_r() const { return color_r; }
 	int obt_color_v() const { return color_v; }
 	int obt_color_a() const { return color_a; }
+	int obt_contador_selecciones() const { return contador_selecciones; }
 
 	void inicializar_tablero(int turno);
 
@@ -25,4 +30,6 @@ public:
 
 	int coger(int turno);
 	int soltar(int turno);
+
+	void setJuego(Juego* j) { ptrJuego = j; }
  };

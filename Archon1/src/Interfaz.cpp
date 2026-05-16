@@ -169,6 +169,9 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
     if (estado == JUEGO)
     {
         micursor.seleccion_personaje_tablero(c, miTablero.getTurno());
+        if (micursor.obt_contador_selecciones() == 0) {
+            micursor.inicializar_tablero(juego.getTurno());
+        }
     }
 
 if (key == 'b') {

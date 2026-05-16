@@ -1,8 +1,9 @@
+#include "freeglut.h"
+#include <iostream>
 #include "Cursor.h"
 #include "Casilla.h"
-#include "freeglut.h"
 #include "tablero.h"
-#include <iostream>
+#include "Juego.h"
 
 void Cursor::inicializar_tablero(int turno)
 {
@@ -213,7 +214,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			case 1:
 			{
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
-				contador_selecciones -= 1;
+				contador_selecciones = 1;
 			}break;
 			default:  std::cout << "no se ha podido coger" << std::endl;break;
 			}
@@ -231,7 +232,11 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					std::cout << "casilla libre_nos hemos movido ahi" << std::endl;
 					contador_selecciones = 0;//para no poder volver a entrar ni a soltar ni cogr si no cambia el turno
 					movimientos_restantes = 0;//para no poder movernos
-					//llamada cambio de turno
+				
+					if (ptrJuego != nullptr) {
+						ptrJuego->cambiarTurno();//cambaimos el turno de la partida
+					}
+
 					break;
 				case 2:
 					std::cout << "hay un enemigo, avisamos a batalla" << std::endl;
@@ -257,7 +262,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			case 1:
 			{
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
-				contador_selecciones -= 1;
+				contador_selecciones = 1;
 			}break;
 			default:  std::cout << "no se ha podido coger" << std::endl;break;
 			}
@@ -272,9 +277,13 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 				case 0: std::cout << "no se ha podido soltar" << std::endl; break;
 				case 1: { 
 					std::cout << "casilla libre_nos hemos movido ahi" << std::endl; 
-					contador_selecciones -= 1;
+					contador_selecciones = 0;
 					movimientos_restantes = 0;
-					//llamada cambio de turno
+					
+					if (ptrJuego != nullptr) {
+						ptrJuego->cambiarTurno();
+					}
+
 					break; 
 				}
 				case 2: std::cout << "hay un enemigo, avisamos a batalla" << std::endl;

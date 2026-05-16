@@ -51,7 +51,8 @@ int main(int argc, char** argv) {
     miMenu.inicializa_menu();
     miTablero.inicializa();  // Configuramos las vistas de Elena y Diego que son las hechas hasta ahora
     motor.setTablero(&miTablero);
-    micursor.inicializar_tablero(miTablero.getTurno());
+    micursor.inicializar_tablero(miTablero.getTurno());//iniciliza colores y sitios del cursor
+    micursor.setJuego(&juego);//actualiza de quien es el turno
     //esto todo habrá q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
     std::cout << "Reproduciendo..." << std::endl;
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra

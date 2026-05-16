@@ -119,7 +119,7 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void MotorGrafico::dibujarCursor(Cursor cursor)
+void MotorGrafico::dibujarCursor(Cursor cursor) const
 {
 
 	float x = cursor.obt_columna() * lado;
