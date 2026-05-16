@@ -12,9 +12,9 @@ void Cursor::inicializar_tablero(int turno)
 		columna = 0;
 		contador_selecciones = 2;
 		movimientos_restantes = 0;
-		color_r = 255;
-		color_v = 106;
-		color_a = 180;
+		color_r = 0;//color verde para humanos
+		color_v = 250;
+		color_a = 154;
 	}
 	else 
 	{
@@ -24,9 +24,10 @@ void Cursor::inicializar_tablero(int turno)
 			columna = 6;
 			contador_selecciones = 2;
 			movimientos_restantes = 0;
-			color_r = 127;
-			color_v = 255;
-			color_a = 212;
+			color_r = 255;//color galaxia para alines
+			color_v = 106;
+			color_a = 180;
+			
 		}
 	}
 }
@@ -45,13 +46,13 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			{
 				if (movimientos_restantes > 0)
 				{
-					columna -=1;
+					columna -= 1;
 					movimientos_restantes -= 1;
 					//print te qyuedan x movimientos DIEGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 				}
-				else //aqui nos hemos quedado sin movimientos, nos quedamos en la ultima casilla posible
-				break;
 			}
+				break;
+
 			case 2:  columna -= 1;
 				break;//estamos buscando casilla a coger
 			default: break;
@@ -77,7 +78,7 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			}
 		}
 
-		if ((key == 'w') && (fila > 0)) {
+		if ((key == 's') && (fila > 0)) {
 			switch (contador_selecciones)
 			{
 			case 1:
@@ -96,7 +97,7 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			default: break;
 			}
 		}
-		if ((key == 's') && (fila < 4)) {
+		if ((key == 'w') && (fila < 4)) {
 			switch (contador_selecciones)
 			{
 			case 1:
@@ -159,7 +160,7 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			}
 		}
 
-		if ((key == 'i') && (fila > 0)) {
+		if ((key == 'k') && (fila > 0)) {
 			switch (contador_selecciones)
 			{
 			case 1:
@@ -178,7 +179,7 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			default: break;
 			}
 		}
-		if ((key == 'k') && (fila < 4)) {
+		if ((key == 'i') && (fila < 4)) {
 			switch (contador_selecciones)
 			{
 			case 1:

@@ -128,7 +128,7 @@ void MotorGrafico::dibujarCursor(Cursor cursor)
 	glDisable(GL_LIGHTING);
 
 	glLineWidth(5.0f);
-	glColor3ub(cursor.obt_color_r(), cursor.obt_color_v(), cursor.obt_color_a();
+	glColor3ub(cursor.obt_color_r(), cursor.obt_color_v(), cursor.obt_color_a());
 
 	glBegin(GL_LINE_LOOP);
 	glVertex3f(x, y, 0.1f);
