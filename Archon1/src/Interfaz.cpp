@@ -9,7 +9,7 @@
 #include "MotorGrafico.h"
 #include "tablero.h"
 #include "Batalla.h"
-#include "dibujo_tablero.h"
+
 
 //los extern son para q los busque en el main, me ha ayudado la IA en esta parte
 //basicamente es un: "oye usa el [extern] q declare en el main
@@ -19,7 +19,6 @@ extern Tablero miTablero;
 extern Camara miCamara;
 extern MotorGrafico motor;
 extern Caja miCaja;
-extern Dibujar_tablero dibujo_tablero;
 extern Juego juego;
 extern Batalla miBatalla;
 extern Personaje pj1, pj2;
@@ -57,7 +56,7 @@ void OnDraw(void) {
         break;
     case JUEGO:
         miCamara.vistaJuego();
-        dibujo_tablero.dibuja();
+        motor.dibujaTablero();
         for (int i = 0; i < MAX_PERSONAJES; i++) {
             Personaje* p = juego.getPersonaje(i);
             if (p != nullptr && p->return_Vida() > 0) {

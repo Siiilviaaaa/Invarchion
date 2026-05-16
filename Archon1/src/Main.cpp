@@ -10,7 +10,7 @@
 #include "tablero.h"     
 #include "Batalla.h"     
 #include "Juego.h"   
-#include "dibujo_tablero.h"
+
 
 //cuidado he quitado el using std::
 
@@ -21,7 +21,6 @@ Tablero miTablero;
 Camara miCamara;
 MotorGrafico motor;
 Caja miCaja;
-Dibujar_tablero dibujo_tablero(&miTablero, 2.0f);
 Juego juego(&miTablero);
 
 //PRUEBAS
@@ -50,7 +49,7 @@ int main(int argc, char** argv) {
     //he movido esto aqui abajo para q este lo otro todo juntito
     miMenu.inicializa_menu();
     miTablero.inicializa();  // Configuramos las vistas de Elena y Diego que son las hechas hasta ahora
-
+    motor.setTablero(&miTablero);
     //esto todo habrá q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
     std::cout << "Reproduciendo..." << std::endl;
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
