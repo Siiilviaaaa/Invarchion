@@ -221,7 +221,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 				insertar_mensaje("Personaje seleccionado. Movimientos limitados a: " + std::to_string(movimientos_restantes));
 				contador_selecciones = 1;
 			}break;
-			default:  std::cout << "no se ha podido coger" << std::endl;break;
+			default: break;
 			
 			}
 		}
@@ -263,15 +263,16 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 		if (key == 'u' && contador_selecciones == 2)//si equipo humanos presiona "espacio" por primera vez
 		{
 			int cogerOK = coger(turno);
+			insertar_mensaje("U num de selecciones: " + std::to_string(contador_selecciones));//PRUEBAS
 			switch (cogerOK)
 			{
 			case 1:
 			{
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
-				insertar_mensaje("Personaje seleccionado. Movimientos limitados a: " + std::to_string(movimientos_restantes));
+				insertar_mensaje("SELECCIONASTE Movimientos: " + std::to_string(movimientos_restantes));
 				contador_selecciones = 1;
 			}break;
-			default:  std::cout << "no se ha podido coger" << std::endl;
+			default:  
 				break;
 			}
 		}
@@ -316,10 +317,12 @@ int Cursor::coger(int turno)
 
 	if (infoCasillaActual == nullptr)//comprobar que la casilla tiene informacion-evitar fallos del programa
 	{
+		std::cout << "CASILLA VACIA" << std::endl;
 		return 0;
 	}
 	if (infoCasillaActual->personajeEncima == nullptr)//comprueba si hay personaje en la casilla o esta libre
 	{
+		std::cout << "CASILLA SIN PERSONAJE" << std::endl;
 		return 0;
 	}
 	if (infoCasillaActual->personajeEncima->bando == turno)//comprueba que el personaje es de nuestro bando
@@ -352,6 +355,10 @@ int Cursor::soltar(int turno)
 	// CASO 1: la casilla actual está vacía
 	if (casillaActual->personajeEncima == nullptr)
 	{
+		//modifcamos la posicion del perosnaje para q dibuje (TELETRANSPORTE) donde debe
+		casillaAnterior->personajeEncima->setX(filaAntes);
+		casillaAnterior->personajeEncima->setY(columnaAntes);
+
 		casillaActual->personajeEncima = casillaAnterior->personajeEncima;
 		casillaAnterior->personajeEncima = nullptr;
 		return 1;
@@ -371,6 +378,7 @@ int Cursor::soltar(int turno)
 		//copiamos en prsonaje batalla el de la casilla nueva
 		defensor = casillaActual->personajeEncima;
 		//y eso son los que se pasan a la batlla, esos punteros
+
 		return 2;
 	}
 

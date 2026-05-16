@@ -50,9 +50,6 @@ int Juego::getTurno() {
     return turnoActual;
 }
 
-
-
-
 //void Juego::dibujarTablero() {
 //
 //}
@@ -64,7 +61,6 @@ int Juego::getTurno() {
 //void Juego::dibujarMenu() {
 //
 //}
-
 
 
 HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp de cada movimiento

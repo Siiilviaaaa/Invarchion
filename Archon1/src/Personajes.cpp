@@ -32,30 +32,35 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 		pieza.setVidaMax(100);
 		pieza.setDanio(15);
 		pieza.setV_base(2);
+		pieza.setMovimientos(1);
 		break;
 	case ARQUERO:
 		pieza.setVida(80);
 		pieza.setVidaMax(80);
 		pieza.setDanio(15);
 		pieza.setV_base(2.6);
+		pieza.setMovimientos(2);
 		break;
 	case VOLADOR:
 		pieza.setVida(120);
 		pieza.setVidaMax(120);
 		pieza.setDanio(20);
 		pieza.setV_base(3.1);
+		pieza.setMovimientos(2);
 		break;
 	case EXCAVADOR:
 		pieza.setVida(200);
 		pieza.setVidaMax(200);
 		pieza.setDanio(40);
 		pieza.setV_base(1.2);
+		pieza.setMovimientos(3);
 		break;
 	case HECHICERO:
 		pieza.setVida(90);
 		pieza.setVidaMax(90);
 		pieza.setDanio(10);
 		pieza.setV_base(1.7);
+		pieza.setMovimientos(1);
 		break;
 	}
 	pieza.setVelocidad(pieza.return_Vbase());
@@ -95,3 +100,4 @@ void Personaje::actualizarEfectos()
 		}
 	}
 }
+

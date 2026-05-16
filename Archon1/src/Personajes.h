@@ -64,6 +64,7 @@ public:
 	double return_paralisis() const { return t_paralisis; }
 
 	void setTipo(Tipo_figura nuevoTipo) { tipo = nuevoTipo; }
+	void setMovimientos(int mov) { movimientos = mov; }
 	void setVida(int nuevaVida) { vida = nuevaVida; }
 	void setDanio(int nuevoDanio) { danio = nuevoDanio; }
 	void setVelocidad(double V) { v = V;}
@@ -73,4 +74,5 @@ public:
 	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
 	void setBando(Bando nuevo) { bando = nuevo; }
 	void set_paralisis(double tiempo) { t_paralisis = tiempo; }
+
 };
