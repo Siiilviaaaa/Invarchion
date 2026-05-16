@@ -1,8 +1,11 @@
+#include "freeglut.h"
+#include <iostream>
+//#include <string>
 #include "Cursor.h"
 #include "Casilla.h"
-#include "freeglut.h"
 #include "tablero.h"
-#include <iostream>
+#include "Juego.h"
+#include "ETSIDI.h"
 
 void Cursor::inicializar_tablero(int turno)
 {
@@ -12,6 +15,9 @@ void Cursor::inicializar_tablero(int turno)
 		columna = 0;
 		contador_selecciones = 2;
 		movimientos_restantes = 0;
+		color_r = 0;//color verde para humanos
+		color_v = 250;
+		color_a = 154;
 	}
 	else 
 	{
@@ -21,6 +27,10 @@ void Cursor::inicializar_tablero(int turno)
 			columna = 6;
 			contador_selecciones = 2;
 			movimientos_restantes = 0;
+			color_r = 255;//color galaxia para alines
+			color_v = 106;
+			color_a = 180;
+			
 		}
 	}
 }
@@ -36,16 +46,19 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
 				if (movimientos_restantes > 0)
 				{
-					columna -=1;
+					columna -= 1;
 					movimientos_restantes -= 1;
+					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes)+ " movimientos");
 				}
 				break;
-			}
-			case 2:  columna -= 1;
-				break;//estamos buscando casilla a coger
+
+			case 2:  
+				columna -= 1;
+				insertar_mensaje("Selecciona un personaje");
+				break;
+
 			default: break;
 			}
 		}
@@ -53,52 +66,57 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
 				if (movimientos_restantes > 0)
 				{
-					columna +=1;
+					columna += 1;
 					movimientos_restantes -= 1;
+					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
 				break;
-			}
+			
 			case 2:  columna += 1;
-				break;//estamos buscando casilla a coger
+				insertar_mensaje("Selecciona un personaje");
+				break;
+
 			default: break;
 			}
 		}
 
-		if ((key == 'w') && (fila > 0)) {
+		if ((key == 's') && (fila > 0)) {
 			switch (contador_selecciones)
 			{
-			case 1:
-			{
+			case 1:			
 				if (movimientos_restantes > 0)
 				{
 					fila -=1;
 					movimientos_restantes -= 1;
+					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
 				break;
-			}
+			
 			case 2:  fila -= 1;
-				break;//estamos buscando casilla a coger
+				insertar_mensaje("Selecciona un personaje");
+				break;
+
 			default: break;
 			}
 		}
-		if ((key == 's') && (fila < 4)) {
+		if ((key == 'w') && (fila < 4)) {
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
 				if (movimientos_restantes > 0)
 				{
-					fila +=1;
+					fila += 1;
 					movimientos_restantes -= 1;
-					//print te qyuedan x movimientos DIEGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-				}
+					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
+				} 
 				break;
-			}
+
 			case 2:  fila += 1;
-				break;//estamos buscando casilla a coger
+				insertar_mensaje("Selecciona un personaje");
+				break;
+
 			default: break;
 			}
 		}
@@ -111,16 +129,18 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
 				if (movimientos_restantes > 0)
 				{
 					columna -=1;
 					movimientos_restantes -= 1;
+					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
 				break;
-			}
+			
 			case 2:  columna -= 1;
-				break;//estamos buscando casilla a coger
+				insertar_mensaje("Selecciona un personaje");
+				break;
+
 			default: break;
 			}
 		}
@@ -128,51 +148,59 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
 				if (movimientos_restantes > 0)
 				{
 					columna += 1;
 					movimientos_restantes -= 1;
+					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
 				break;
-			}
+	
 			case 2:  columna += 1;
-				break;//estamos buscando casilla a coger
+				insertar_mensaje("Selecciona un personaje");
+				break;
+
 			default: break;
 			}
 		}
 
-		if ((key == 'i') && (fila > 0)) {
+		if ((key == 'k') && (fila > 0)) {
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
+			
 				if (movimientos_restantes > 0)
 				{
 					fila -= 1;
 					movimientos_restantes -= 1;
+					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
 				break;
-			}
+			
 			case 2:  fila -= 1;
-				break;//estamos buscando casilla a coger
+				insertar_mensaje("Selecciona un personaje");
+				break;
+
 			default: break;
 			}
 		}
-		if ((key == 'k') && (fila < 4)) {
+		if ((key == 'i') && (fila < 4)) {
 			switch (contador_selecciones)
 			{
 			case 1:
-			{
+			
 				if (movimientos_restantes > 0)
 				{
 					fila += 1;
 					movimientos_restantes -= 1;
+					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
 				}
 				break;
-			}
+	
 			case 2:  fila += 1;
-				break;//estamos buscando casilla a coger
+				insertar_mensaje("Selecciona un personaje");
+				break;
+
 			default: break;
 			}
 		}
@@ -188,26 +216,41 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			int cogerOK = coger(turno);
 			switch (cogerOK)
 			{
-			case 0: std::cout << "no se ha podido coger" << std::endl;break;
 			case 1:
 			{
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
-				contador_selecciones -= 1;
+				insertar_mensaje("Personaje seleccionado. Movimientos limitados a: " + std::to_string(movimientos_restantes));
+				contador_selecciones = 1;
 			}break;
+			default:  std::cout << "no se ha podido coger" << std::endl;break;
+			
 			}
-			 //si coger nos devuelve un ok, le restamos uno a contador_selecciones
-			//A PARTIR DE AHORA HAY QUE CONTAR MOVIMIENTOS!
 		}
 		else
 		{
 			if (key == 'e' && contador_selecciones == 1)
 			{
-				int soltarOK = soltar();
+				int soltarOK = soltar(turno);
 				switch (soltarOK)
 				{
-				case 0: std::cout << "no se ha podido soltar" << std::endl;break;
-				case 1: std::cout << "casilla libre_nos hemos movido ahi" << std::endl;break;
-				case 2: std::cout << "hay un enemigo, avisamos a batalla" << std::endl; break;
+				case 0: 
+					std::cout << "no se ha podido soltar" << std::endl;break;
+				case 1:
+					std::cout << "casilla libre_nos hemos movido ahi" << std::endl;
+					contador_selecciones = 0;//para no poder volver a entrar ni a soltar ni cogr si no cambia el turno
+					movimientos_restantes = 0;//para no poder movernos
+				
+					if (ptrJuego != nullptr) {
+						ptrJuego->cambiarTurno();//cambaimos el turno de la partida
+					}
+
+					break;
+				case 2:
+					std::cout << "hay un enemigo, avisamos a batalla" << std::endl;
+					contador_selecciones = 0;
+					movimientos_restantes = 0;
+					//llamada a batalla pasandole mi personaje y el personaje actual de la casilla del tablero
+					break;
 				}
 			}
 			else
@@ -223,31 +266,40 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			int cogerOK = coger(turno);
 			switch (cogerOK)
 			{
-			case 0: std::cout << "no se ha podido coger" << std::endl; break;
 			case 1:
 			{
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
-				contador_selecciones -= 1;
+				insertar_mensaje("Personaje seleccionado. Movimientos limitados a: " + std::to_string(movimientos_restantes));
+				contador_selecciones = 1;
 			}break;
+			default:  std::cout << "no se ha podido coger" << std::endl;
+				break;
 			}
-			///// si coger nos devuelve un ok, le restamos uno a contador_selecciones
-			//A PARTIR DE AHORA HAY QUE CONTAR MOVIMIENTOS!
 		}
 		else
 		{
 			if (key == 'o' && contador_selecciones == 1)
 			{
-				int soltarOK=soltar();
+				int soltarOK=soltar(turno);
 				switch (soltarOK)
 				{
 				case 0: std::cout << "no se ha podido soltar" << std::endl; break;
 				case 1: { 
 					std::cout << "casilla libre_nos hemos movido ahi" << std::endl; 
-					contador_selecciones -= 1;//le restamos ara que no pueda entrar en nada mas
-					//AVISAR AL CAMMBIO DE TURNO 
+					contador_selecciones = 0;
+					movimientos_restantes = 0;
+					
+					if (ptrJuego != nullptr) {
+						ptrJuego->cambiarTurno();
+					}
+
 					break; 
 				}
-				case 2: std::cout << "hay un enemigo, avisamos a batalla" << std::endl; break;//meter una variable externa y moifica el main
+				case 2: std::cout << "hay un enemigo, avisamos a batalla" << std::endl;
+					contador_selecciones = 0;
+					movimientos_restantes = 0;
+					//llamada a batalla pasandole mi personaje y el personaje actual de la casilla del tablero
+					break;
 				}
 			}
 			else
@@ -283,37 +335,43 @@ int Cursor::coger(int turno)
 	return 0;
 }
 
-int Cursor::soltar()
+int Cursor::soltar(int turno)
 {
-	
-	if (informacion.personajeEncima == nullptr)//si no hemos guardado ningun perosnaje no lo podremos soltar nunca
-	{
-		return 0;
-	}
-	//punteros que modifican directamente
-	InfoCasilla* infoAhora = miTablero.getInfoCasilla(fila,columna);//le retorna lo qu ehay en la casilla que queremos soltar
+	InfoCasilla* casillaAnterior = miTablero.getInfoCasilla(filaAntes, columnaAntes);
+	InfoCasilla* casillaActual = miTablero.getInfoCasilla(fila, columna);
 
-	if (infoAhora == nullptr)//si la casilla esta vacia, no soltamos nada
+	if (casillaAnterior == nullptr || casillaActual == nullptr)
 	{
 		return 0;
 	}
 
-	if (infoAhora->personajeEncima == nullptr)//si esta libre la casilla
+	if (casillaAnterior->personajeEncima == nullptr)
 	{
-		miTablero.setInfoCasilla(fila, columna, informacion.personajeEncima);//le hemos dicho a la casilla del tablero que se rellene con lo que teniamos guardado
-		miTablero.setInfoCasilla(filaAntes, columnaAntes, nullptr);
+		return 0;
+	}
+
+	// CASO 1: la casilla actual está vacía
+	if (casillaActual->personajeEncima == nullptr)
+	{
+		casillaActual->personajeEncima = casillaAnterior->personajeEncima;
+		casillaAnterior->personajeEncima = nullptr;
 		return 1;
 	}
 
-	if (infoAhora->personajeEncima->bando == informacion.personajeEncima->bando)//hay alguien de mi bando
+	// CASO 2: la casilla actual tiene un personaje de mi mismo bando
+	if (casillaActual->personajeEncima->bando == turno)
 	{
-		// No se puede soltar encima de uno de mi equipo
 		return 0;
 	}
 
-	if (infoAhora->personajeEncima->bando != informacion.personajeEncima->bando)//hay un enemigo
+	// CASO 3: la casilla actual tiene un personaje enemigo
+	if (casillaActual->personajeEncima->bando != turno)
 	{
-		// Avisamos de que hay que empezar batalla
+		//copiamos en perosnaje mio el de la casilla anterior
+		atacante = casillaAnterior->personajeEncima;
+		//copiamos en prsonaje batalla el de la casilla nueva
+		defensor = casillaActual->personajeEncima;
+		//y eso son los que se pasan a la batlla, esos punteros
 		return 2;
 	}
 

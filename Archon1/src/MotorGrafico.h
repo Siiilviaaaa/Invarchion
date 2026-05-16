@@ -52,7 +52,7 @@ public:
 
 	void inicializarBatalla();
 	void dibujarPared(const Pared& p);
-	void dibujarCursor(Cursor cursor);
+	void dibujarCursor(Cursor cursor) const;
 	void dibujarObstaculo(const Obstaculo& obs);
 	void dibujarCaja(const Caja& c);
 	

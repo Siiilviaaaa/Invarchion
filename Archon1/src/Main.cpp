@@ -9,7 +9,8 @@
 #include "MotorGrafico.h"
 #include "tablero.h"     
 #include "Batalla.h"     
-#include "Juego.h"   
+#include "Juego.h"  
+#include "Cursor.h"
 
 
 //cuidado he quitado el using std::
@@ -22,7 +23,7 @@ Camara miCamara;
 MotorGrafico motor;
 Caja miCaja;
 Juego juego(&miTablero);
-
+Cursor micursor;
 //PRUEBAS
 Batalla miBatalla;
 Personaje pj1, pj2;
@@ -50,6 +51,8 @@ int main(int argc, char** argv) {
     miMenu.inicializa_menu();
     miTablero.inicializa();  // Configuramos las vistas de Elena y Diego que son las hechas hasta ahora
     motor.setTablero(&miTablero);
+    micursor.inicializar_tablero(miTablero.getTurno());//iniciliza colores y sitios del cursor
+    micursor.setJuego(&juego);//actualiza de quien es el turno
     //esto todo habrá q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
     std::cout << "Reproduciendo..." << std::endl;
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
