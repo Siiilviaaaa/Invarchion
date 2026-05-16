@@ -1,6 +1,5 @@
 #include "freeglut.h"
 #include <iostream>
-//#include <string>
 #include "Cursor.h"
 #include "Casilla.h"
 #include "tablero.h"

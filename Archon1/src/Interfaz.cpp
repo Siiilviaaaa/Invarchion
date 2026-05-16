@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cctype>
 #include "ETSIDI.h"
-
 #include "freeglut.h"
 #include "Juego.h"
 #include "menu.h"
@@ -71,16 +70,6 @@ void OnDraw(void) {
         fin_ = false;
         motor.dibujarCursor(micursor);
         //dibujar mensajes
-
-
-
-
-
-
-
-
-
-
         glDisable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
 
@@ -117,24 +106,7 @@ void OnDraw(void) {
 
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_LIGHTING);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-       
+              
         break;
     }
     case RANKING:
@@ -236,7 +208,7 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
 
     if (estado == JUEGO)
     {
-        micursor.seleccion_personaje_tablero(c, miTablero.getTurno());
+        micursor.seleccion_personaje_tablero(c, juego.getTurno());
         if (micursor.obt_contador_selecciones() == 0) {
             micursor.inicializar_tablero(juego.getTurno());
         }
