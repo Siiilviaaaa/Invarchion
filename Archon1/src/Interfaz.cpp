@@ -32,6 +32,11 @@ bool mostrandoInstruccionesTablero = false;
 float tiempoInstruccionesTablero = 0.0f;
 
 
+//Variables globales para controlar el hover
+bool hoverSalir = false;
+bool hoverSeleccion = false;
+bool hoverRanking = false;
+
 //HE MOVIDO AQUI LOS CALLBACKSSS MIRADLO PORFII
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
@@ -72,7 +77,8 @@ void OnDraw(void) {
     switch (estado) { //aqui dentro no he tocando nada
     case MENU:
         miCamara.vistaMenu();
-        miMenu.dibuja_menu();
+        // Mapeamos las variables en orden: hJugar (hoverSeleccion), hRanking (hoverRanking), hSalir (hoverSalir)
+        miMenu.dibuja_menu(hoverSeleccion, hoverRanking, hoverSalir);
         break;
     case JUEGO:
         miCamara.vistaJuego();
@@ -101,7 +107,7 @@ void OnDraw(void) {
         break;
     case SELECCION:
         miCamara.vistaMenu();
-        miMenu.dibuja_menu();
+        miMenu.dibuja_menu(hoverSeleccion, hoverRanking, hoverSalir);
         miMenu.dibuja_capa_seleccion();
         break;
     case BATALLA:
@@ -241,4 +247,31 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
     }
 
     glutPostRedisplay();
+}
+
+
+void mousePassive(int x, int y) {
+    float width = glutGet(GLUT_WINDOW_WIDTH);
+    float height = glutGet(GLUT_WINDOW_HEIGHT);
+
+    float nx = x / width;
+    float ny = y / height;
+
+    if (estado == MENU) {
+        // Resetear estados
+        hoverSalir = false;
+        hoverSeleccion = false;
+        hoverRanking = false;
+
+        // Botón Salir
+        if (nx > 0.125f && nx < 0.312f && ny > 0.2f && ny < 0.416f) hoverSalir = true;
+
+        // Botón Selección
+        if (nx > 0.337f && nx < 0.662f && ny > 0.483f && ny < 0.85f) hoverSeleccion = true;
+
+        // Botón Ranking
+        if (nx > 0.687f && nx < 0.875f && ny > 0.2f && ny < 0.416f) hoverRanking = true;
+
+        glutPostRedisplay(); // Forzar redibujado para ver el cambio de color
+    }
 }
