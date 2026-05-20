@@ -276,6 +276,7 @@ void MotorGrafico::dibujarMensajeBando(const std::string& textoBando)
 
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_TEXTURE_2D); // Evita arrastrar texturas previas
 
 	float cx = 50.0f;
 	float cy = 82.0f;
@@ -325,11 +326,13 @@ void MotorGrafico::dibujarInstruccionesTablero()
 
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_TEXTURE_2D); // Desactivar texturas para pintar colores solidos planos
 
 	// Caja negra translúcida de fondo
-	glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
+
 	glBegin(GL_QUADS);
 	glVertex2f(15.0f, 15.0f);
 	glVertex2f(85.0f, 15.0f);
@@ -377,7 +380,6 @@ void MotorGrafico::dibujarInstruccionesTablero()
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
-}
 }
 
 void MotorGrafico::dibujaTablero() {

@@ -330,3 +330,34 @@ void mousePassive(int x, int y) {
         glutPostRedisplay(); // Forzar redibujado para ver el cambio de color
     }
 }
+
+void redimensionar(int width, int height) {
+    float aspect_deseado = 800.0f / 600.0f;
+    float aspect_actual = (float)width / (float)height;
+
+    int vp_x = 0, vp_y = 0;
+    int vp_width = width;
+    int vp_height = height;
+
+    // 1. Calculamos las barras negras según la deformación de la ventana
+    if (aspect_actual >= aspect_deseado) {
+        vp_width = (int)(height * aspect_deseado);
+        vp_x = (width - vp_width) / 2;
+    }
+    else {
+        vp_height = (int)(width / aspect_deseado);
+        vp_y = (height - vp_height) / 2;
+    }
+
+    // 2. Aplicamos el Viewport protegido para no deformar nada
+    glViewport(vp_x, vp_y, vp_width, vp_height);
+
+    // 3. NO forzamos gluOrtho2D aquí. Dejamos que OnDraw aplique la vista necesaria
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    // Dejamos la perspectiva por defecto del Main como base inicial
+    gluPerspective(40.0, aspect_deseado, 0.1, 150);
+
+    glMatrixMode(GL_MODELVIEW);
+}
