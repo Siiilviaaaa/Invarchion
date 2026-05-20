@@ -27,7 +27,8 @@ public:
     Menu();
 
     void inicializa_menu();
-    void dibuja_menu();
+    // Cambia la línea actual por esta en la sección pública de tu clase Menu:
+    void dibuja_menu(bool hJugar = false, bool hRanking = false, bool hSalir = false);
     void dibuja_capa_seleccion();
 
     void dibuja_ranking();

@@ -27,15 +27,42 @@ extern Personaje pj1, pj2;
 extern bool fin_;
 extern Cursor micursor;
 
+//variables globales
+float tiempoMensajeSelecciondeBando = 0.0f;
+std::string textoBando = "";
+bool mostrandoInstruccionesTablero = false;
+float tiempoInstruccionesTablero = 0.0f;
+
+
+//Variables globales para controlar el hover
+bool hoverSalir = false;
+bool hoverSeleccion = false;
+bool hoverRanking = false;
 
 //HE MOVIDO AQUI LOS CALLBACKSSS MIRADLO PORFII
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        //Obtener dimensiones actuales de la ventana
+        float width = glutGet(GLUT_WINDOW_WIDTH);
+        float height = glutGet(GLUT_WINDOW_HEIGHT);
+
+        //Convertir clic a coordenadas normalizadas (0.0 a 1.0)
+        float nx = x / width;
+        float ny = y / height;
+
         if (estado == MENU) {
-            // Lógica de botones del menú comprimida pa q ver luego si puedo solucionar lo de modo ventana o modo fullscreen
-            if (x > 100 && x < 250 && y > 120 && y < 250) exit(0);
-            if (x > 270 && x < 530 && y > 290 && y < 510) estado = SELECCION;
-            if (x > 550 && x < 700 && y > 120 && y < 250) {
+            // Botón Salir (Originalmente x:100-250, y:120-250)
+            if (nx > 0.125f && nx < 0.312f && ny > 0.2f && ny < 0.416f) {
+                exit(0);
+            }
+
+            // Botón Selección (Originalmente x:270-530, y:290-510)
+            if (nx > 0.337f && nx < 0.662f && ny > 0.483f && ny < 0.85f) {
+                estado = SELECCION;
+            }
+
+            // Botón Ranking (Originalmente x:550-700, y:120-250)
+            if (nx > 0.687f && nx < 0.875f && ny > 0.2f && ny < 0.416f) {
                 miMenu.cargar_ranking();
                 estado = RANKING;
             }
@@ -48,14 +75,12 @@ void OnDraw(void) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    //he quitado lo q ponia aqui:
-    //
-    //dibujo_tablero.dibuja();
-    //
+    
     switch (estado) { //aqui dentro no he tocando nada
     case MENU:
         miCamara.vistaMenu();
-        miMenu.dibuja_menu();
+        // Mapeamos las variables en orden: hJugar (hoverSeleccion), hRanking (hoverRanking), hSalir (hoverSalir)
+        miMenu.dibuja_menu(hoverSeleccion, hoverRanking, hoverSalir);
         break;
     case JUEGO:
     {
@@ -69,6 +94,7 @@ void OnDraw(void) {
         }
         fin_ = false;
         motor.dibujarCursor(micursor);
+
         //dibujar mensajes
         glDisable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
@@ -107,6 +133,16 @@ void OnDraw(void) {
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_LIGHTING);
               
+        /////Menu integracion merge
+        // 1. Dibuja el mensaje del bando seleccionado usando el motor gráfico
+        if (tiempoMensajeSelecciondeBando > 0) {
+            motor.dibujarMensajeBando(textoBando);
+        }
+
+        // 2. Dibuja la pantalla de instrucciones usando el motor gráfico
+        if (mostrandoInstruccionesTablero) {
+            motor.dibujarInstruccionesTablero();
+        }
         break;
     }
     case RANKING:
@@ -115,7 +151,7 @@ void OnDraw(void) {
         break;
     case SELECCION:
         miCamara.vistaMenu();
-        miMenu.dibuja_menu();
+        miMenu.dibuja_menu(hoverSeleccion, hoverRanking, hoverSalir);
         miMenu.dibuja_capa_seleccion();
         break;
     case BATALLA:
@@ -142,18 +178,50 @@ void OnDraw(void) {
 }
 
 void OnTimer(int value) {
+    // 1. Reducir tiempo de las instrucciones primero (para que no se quede congelado el reloj)
+    if (mostrandoInstruccionesTablero && tiempoInstruccionesTablero > 0) {
+        tiempoInstruccionesTablero -= 20.0f;
+        if (tiempoInstruccionesTablero <= 0) {
+            mostrandoInstruccionesTablero = false;
+            tiempoMensajeSelecciondeBando = 0.0f; // Limpiamos también el bando si expira el tiempo
+        }
+    }
+
+    // 2. CONGELACIÓN DEL JUEGO: Si siguen activas, frena el resto de la lógica
+    if (estado == JUEGO && mostrandoInstruccionesTablero) {
+        glutPostRedisplay();
+        glutTimerFunc(20, OnTimer, 0);
+        return;
+    }
+
+    // 3. Lógica normal del juego (solo se ejecuta si no hay instrucciones en pantalla)
     if (estado == BATALLA) {
         miBatalla.actualizarCombate(pj1, pj2, miCaja, motor.obtenerObstaculos());
         if (fin_) estado = JUEGO;
     }
     glutPostRedisplay();
-    
-    //Se vuelve a llamar a sí misma cada 20ms (unos 50 FPS)
+
+    // Reducir tiempo del mensaje de bando cuando el juego ya está corriendo
+    if (tiempoMensajeSelecciondeBando > 0) {
+        tiempoMensajeSelecciondeBando -= 20.0f;
+    }
+
     glutTimerFunc(20, OnTimer, 0);
 }
 
 void OnKeyboardDown(unsigned char key, int x, int y) {
     unsigned char c = std::tolower(key);
+
+    // NUEVO BLOQUE: Control estricto de entrada durante las instrucciones
+    if (estado == JUEGO && mostrandoInstruccionesTablero) {
+        if (key == ' ') { // Solo el ESPACIO quita los carteles y descongela
+            mostrandoInstruccionesTablero = false;
+            tiempoInstruccionesTablero = 0.0f;
+            tiempoMensajeSelecciondeBando = 0.0f;
+            glutPostRedisplay();
+        }
+        return; // BLOQUEO: Cualquier otra tecla ('b', WASD, etc.) se ignora por completo
+    }
 
     if (key == 27) { // ESC es la 27
         if (estado == MENU) exit(0);
@@ -164,27 +232,20 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         std::string nombre;
         int puntos;
 
-        //parte de la CMD win
         std::cout << "\n--- REGISTRO DE PUNTUACION ---" << std::endl;
         std::cin.clear();
-        std::cin.ignore(1000, '\n'); 
-        //fflush(stdin);
+        std::cin.ignore(1000, '\n');
 
-        // <---- Limpieza de buffer
-
-        //CMD
         std::cout << "TRES LETRAS: ";
         std::cin >> nombre;
-        if (nombre.size() > 3) nombre = nombre.substr(0, 3);//he editado esto
-        //ahora lo q hace es q si escribes mas de 3 se queda con las 3 primeras y te jodes
+        if (nombre.size() > 3) nombre = nombre.substr(0, 3);
 
         std::cout << "Puntuacion (solo numeros): ";
         if (!(std::cin >> puntos)) {
-            //Si el usuario mete letras en vez de números, evitamos el bucle infinito
-             std::cout << "Error: Puntos invalidos." << std::endl;
-             std::cin.clear();
-             std::cin.ignore(1000, '\n');
-             puntos = 0;
+            std::cout << "Error: Puntos invalidos." << std::endl;
+            std::cin.clear();
+            std::cin.ignore(1000, '\n');
+            puntos = 0;
         }
 
         miMenu.actualizar_ranking(nombre, puntos);
@@ -194,17 +255,25 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
     //Selección de bando
     if (estado == SELECCION) {
         key = tolower(key);
-        if (key == 'h') {
-           juego.setBandoJugador(Bando_jugador_es_Humano);
-           micursor.inicializar_tablero(juego.getTurno());//de esta forma siempre actualizara el cursor, cuando se seleccione
-           estado = JUEGO;
+        if (key == 'h' || key == 'a') {
+            if (key == 'h') {
+                juego.setBandoJugador(Bando_jugador_es_Humano);
+                textoBando = "Jugador 1: Humanos";
+                micursor.inicializar_tablero(juego.getTurno());//de esta forma siempre actualizara el cursor, cuando se seleccione
+
+            }
+            else {
+                juego.setBandoJugador(Bando_jugador_es_Alien);
+                textoBando = "Jugador 1: Aliens";
+                micursor.inicializar_tablero(juego.getTurno());
+            }
+            estado = JUEGO;
+
+            // Sincronización de tiempos a 15 segundos
+            tiempoMensajeSelecciondeBando = 15000.0f;
+            mostrandoInstruccionesTablero = true;
+            tiempoInstruccionesTablero = 15000.0f;
         }
-        else if (key == 'a') {
-           juego.setBandoJugador(Bando_jugador_es_Alien);
-           micursor.inicializar_tablero(juego.getTurno());
-           estado = JUEGO;
-        }
-        // Refresco de pantalla para q se pinte
         glutPostRedisplay();
     }
 
@@ -227,10 +296,37 @@ if (key == 'b') {
     pj2.direccion(-1.0, 0.0);
     motor.inicializarBatalla();
     }
-        
+
     if (estado == BATALLA) {
-       miBatalla.KeyBatalla(key, pj1, pj2);
+        miBatalla.KeyBatalla(key, pj1, pj2);
     }
 
     glutPostRedisplay();
+}
+
+
+void mousePassive(int x, int y) {
+    float width = glutGet(GLUT_WINDOW_WIDTH);
+    float height = glutGet(GLUT_WINDOW_HEIGHT);
+
+    float nx = x / width;
+    float ny = y / height;
+
+    if (estado == MENU) {
+        // Resetear estados
+        hoverSalir = false;
+        hoverSeleccion = false;
+        hoverRanking = false;
+
+        // Botón Salir
+        if (nx > 0.125f && nx < 0.312f && ny > 0.2f && ny < 0.416f) hoverSalir = true;
+
+        // Botón Selección
+        if (nx > 0.337f && nx < 0.662f && ny > 0.483f && ny < 0.85f) hoverSeleccion = true;
+
+        // Botón Ranking
+        if (nx > 0.687f && nx < 0.875f && ny > 0.2f && ny < 0.416f) hoverRanking = true;
+
+        glutPostRedisplay(); // Forzar redibujado para ver el cambio de color
+    }
 }
