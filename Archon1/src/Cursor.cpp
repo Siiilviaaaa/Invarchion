@@ -17,6 +17,7 @@ void Cursor::inicializar_tablero(int turno)
 		color_r = 0;//color verde para humanos
 		color_v = 250;
 		color_a = 154;
+		insertar_mensaje("Turno HUMANOS");
 	}
 	else 
 	{
@@ -29,7 +30,7 @@ void Cursor::inicializar_tablero(int turno)
 			color_r = 255;//color galaxia para alines
 			color_v = 106;
 			color_a = 180;
-			
+			insertar_mensaje("Turno ALIENS");
 		}
 	}
 }
@@ -250,6 +251,10 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					movimientos_restantes = 0;
 					//llamada a batalla pasandole mi personaje y el personaje actual de la casilla del tablero
 					break;
+				case 3:
+					std::cout << "Sois del mismo equipo, movimiento extra por compasión" << std::endl;
+					insertar_mensaje("Movimiento Extra 'por compasion'");
+					movimientos_restantes = 1;
 				}
 			}
 			else
@@ -367,7 +372,7 @@ int Cursor::soltar(int turno)
 	// CASO 2: la casilla actual tiene un personaje de mi mismo bando
 	if (casillaActual->personajeEncima->bando == turno)
 	{
-		return 0;
+		return 3;
 	}
 
 	// CASO 3: la casilla actual tiene un personaje enemigo
