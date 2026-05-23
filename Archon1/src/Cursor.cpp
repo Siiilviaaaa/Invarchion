@@ -361,11 +361,20 @@ int Cursor::soltar(int turno)
 	if (casillaActual->personajeEncima == nullptr)
 	{
 		//modifcamos la posicion del perosnaje para q dibuje (TELETRANSPORTE) donde debe
-		casillaAnterior->personajeEncima->setX(columna);
+	/*	casillaAnterior->personajeEncima->setX(columna);
 		casillaAnterior->personajeEncima->setY(fila);
 		std::cout << "teoricamente personaje en:" << casillaAnterior->personajeEncima->x <<"," <<casillaAnterior->personajeEncima->y;
 		casillaActual->personajeEncima = casillaAnterior->personajeEncima;
+		casillaAnterior->personajeEncima = nullptr;*/
+
+		Personaje* personajeMovido = casillaAnterior->personajeEncima;
+
+		personajeMovido->setX(columna);
+		personajeMovido->setY(fila);
+
+		casillaActual->personajeEncima = personajeMovido;
 		casillaAnterior->personajeEncima = nullptr;
+
 		return 1;
 	}
 

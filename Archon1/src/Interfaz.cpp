@@ -86,12 +86,19 @@ void OnDraw(void) {
     {
         miCamara.vistaJuego();
         motor.dibujaTablero();
-        for (int i = 0; i < MAX_PERSONAJES; i++) {
-            Personaje* p = juego.getPersonaje(i);
-            if (p != nullptr && p->return_Vida() > 0) {
-                motor.dibujarPersonaje(*p);
+
+        for (int f = 0; f < 5; f++) {
+            for (int c = 0; c < 7; c++) {
+                InfoCasilla* info = miTablero.getInfoCasilla(f, c);
+
+                if (info != nullptr && info->getPersonaje() != nullptr) {
+                    if (info->getPersonaje()->return_Vida() > 0) {
+                        motor.dibujarPersonaje(*(info->getPersonaje()));
+                    }
+                }
             }
         }
+
         fin_ = false;
         motor.dibujarCursor(micursor);
 

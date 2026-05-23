@@ -18,10 +18,8 @@ Juego::Juego(Tablero* t) :
 }
 void Juego::setBandoJugador(bando_jugador b)
 {
-    bandoJugador = b;
     if (b == Bando_jugador_es_Humano) turnoActual =TurnoHumanos;
     if(b==Bando_jugador_es_Alien)turnoActual = TurnoAliens;
-    //sofia: asi cunado se seleccione un equipo sera el que primero empieza
 }
 
 Personaje* Juego::getPersonajeEnCasilla(int fila, int columna) const {
