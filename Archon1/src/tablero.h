@@ -2,7 +2,7 @@
 //declaracion del tablero a partir de las casillas
 #include "casilla.h"
 #include "Informacion Casilla.h"
-
+class Juego;
 
 //ELENA CREO QUE ESTO VA AQUI, LO DEJO TODO COMENTADO POR SI ACASO, SOY SILVIA ;)
 //#include "Personajes.h" //PARA PODER POSICIONAR LAS PIEZAS
@@ -11,7 +11,6 @@ class Tablero {
     InfoCasilla datos[5][7]; //para la informacion
     Casilla matriz[5][7]; 
     
-    int turno; //por ejemplo 0 para humanos y 1 para aliens
 
 public:
     // Constructor
@@ -37,8 +36,8 @@ public:
             datos[fila][columna].setPersonaje(personaje);
         }
     }
-    void cambiarTurno() { turno = (turno == 0) ? 1 : 0; }
-    int getTurno() const { return turno; }
+    
+    int getTurno(Juego* juego) const;
     //INCIALIZAR POSICIONES PIEZAS
 	//void inicializarPiezas();
 

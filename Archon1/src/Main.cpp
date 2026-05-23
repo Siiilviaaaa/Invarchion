@@ -62,6 +62,10 @@ int main(int argc, char** argv) {
     // --- REGISTRO DE CALLBACKS ---
     // Estas funciones las he puesto en Interfaz.cpp
     glutMouseFunc(mouse);
+    glutPassiveMotionFunc(mousePassive);
+
+    glutReshapeFunc(redimensionar);
+
     glutTimerFunc(20, OnTimer, 0);
     glutDisplayFunc(OnDraw);
     glutKeyboardFunc(OnKeyboardDown);

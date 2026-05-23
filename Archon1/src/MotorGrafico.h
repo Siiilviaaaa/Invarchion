@@ -8,6 +8,8 @@
 #include "Cursor.h"
 #include "tablero.h"
 
+#include <string>
+
 //RELACION DE AMISTAD DE PERSONAJES, HECHIZOS, DISPAROS PARA PODER ACCEDER A SUS ATRIBUTOS PRIVADOS
 
 class MotorGrafico
@@ -41,12 +43,13 @@ class MotorGrafico
 	void recortarBarra(float vida, float x, float y, float ancho, float alto);
 	////TABLERO////
 	Tablero* tablero = nullptr;
+	
 	float lado = 2.0f;
 	////MENU////
 
 public:
 	MotorGrafico();
-	
+	Juego* juego;
 	// Método para conectar el tablero si el motor se creó vacío
 	void setTablero(Tablero* t) { tablero = t; }
 
@@ -66,6 +69,11 @@ public:
 	void dibujarBordeTurno();
 	void dibujarCasilla(const Casilla* c);
 	
+
+
+	//nuevos mios de dibujo de instrucciones
+	void dibujarMensajeBando(const std::string& textoBando);
+	void dibujarInstruccionesTablero();
 
 	/////////METODOS////////////
 	//DIRECCION QUE APUNTA A OTRA DIRECCION

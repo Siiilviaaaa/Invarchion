@@ -3,8 +3,8 @@
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
-
-
+#include "Juego.h"
+extern Juego juego;
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
 	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -263,12 +263,139 @@ void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho
 	glDisable(GL_TEXTURE_2D);
 }
 
+void MotorGrafico::dibujarMensajeBando(const std::string& textoBando)
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, 100, 0, 100);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_TEXTURE_2D); // Evita arrastrar texturas previas
+
+	float cx = 50.0f;
+	float cy = 82.0f;
+	float ancho = 15.0f;
+	float alto = 3.5f;
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glBegin(GL_QUADS);
+	glVertex2f(cx - ancho, cy - alto);
+	glVertex2f(cx + ancho, cy - alto);
+	glVertex2f(cx + ancho, cy + alto);
+	glVertex2f(cx - ancho, cy + alto);
+	glEnd();
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(cx - ancho, cy - alto);
+	glVertex2f(cx + ancho, cy - alto);
+	glVertex2f(cx + ancho, cy + alto);
+	glVertex2f(cx - ancho, cy + alto);
+	glEnd();
+
+	glColor3f(1.0f, 1.0f, 0.0f);
+	glRasterPos2f(cx - 12.0f, cy - 1.0f);
+	for (char c : textoBando) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+	}
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
+
+void MotorGrafico::dibujarInstruccionesTablero()
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, 100, 0, 100);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_TEXTURE_2D); // Desactivar texturas para pintar colores solidos planos
+
+	// Caja negra translúcida de fondo
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
+
+	glBegin(GL_QUADS);
+	glVertex2f(15.0f, 15.0f);
+	glVertex2f(85.0f, 15.0f);
+	glVertex2f(85.0f, 75.0f);
+	glVertex2f(15.0f, 75.0f);
+	glEnd();
+	glDisable(GL_BLEND);
+
+	// Borde blanco de la caja
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(15.0f, 15.0f);
+	glVertex2f(85.0f, 15.0f);
+	glVertex2f(85.0f, 75.0f);
+	glVertex2f(15.0f, 75.0f);
+	glEnd();
+
+	// Líneas de texto de los controles
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glRasterPos2f(20.0f, 68.0f);
+	for (char c : "CONTROLES DEL JUEGO")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+
+	glRasterPos2f(20.0f, 58.0f);
+	for (char c : "ESCENARIO DE TABLERO: Mover el cursor con WASD")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+	glRasterPos2f(20.0f, 48.0f);
+	for (char c : "ESCENARIO DE BATALLA - HUMANOS: Mover con WASD | Disparar con ESPACIO")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+	glRasterPos2f(20.0f, 40.0f);
+	for (char c : "ESCENARIO DE BATALLA - ALIENS: Mover con IJKL | Disparar con ENTER")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+	// Mensaje inferior para salir
+	glColor3f(0.0f, 1.0f, 1.0f);
+	glRasterPos2f(20.0f, 22.0f);
+	for (char c : "Pulsa ESPACIO para omitir INSTRUCCIONES")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
+
 void MotorGrafico::dibujaTablero() {
 	// SEGURIDAD: Si no hay tablero, no intentamos leer datos (evita el crash)
 	if (tablero == nullptr) return;
 
 	dibujarFondo();
 	dibujarBordeTurno();
+	//if (juego != nullptr) {
+	//	dibujarBordeTurno(juego->getTurno());
+	//}
+	//else {
+	//	// Color por defecto (gris o azul) si el juego aún no ha empezado
+	//	glColor3f(0.5f, 0.5f, 0.5f);
+	//	dibujarBordeTurno(0);
+	//}
 
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 7; j++) {
@@ -280,7 +407,12 @@ void MotorGrafico::dibujaTablero() {
 
 void MotorGrafico::dibujarFondo() {
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/fondotablero.png").id);
+	
+	int t1 = juego->getTurno();
+	if (t1==0)
+		glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/fondotablerohumanos.png").id);
+	else
+		glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/fondotableroaliens.png").id);
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
 
@@ -300,8 +432,10 @@ void MotorGrafico::dibujarFondo() {
 }
 
 void MotorGrafico::dibujarBordeTurno() {
+	
+	int t = juego->getTurno();
 	// Usamos el tablero guardado para saber el turno
-	if (tablero->getTurno() == 0)
+	if (t == 0)
 		glColor3f(0.0f, 0.3f, 0.6f);
 	else
 		glColor3f(0.6f, 0.0f, 0.0f);

@@ -40,20 +40,51 @@ void Menu::inicializa_menu() {
 
 }
 
-void Menu::dibuja_menu() {
+void Menu::dibuja_menu(bool hJugar, bool hRanking, bool hSalir) {
     glDisable(GL_LIGHTING);
 
     glPushMatrix();
-    // Nos movemos al "espacio vacío" 4.8, 8 porfavor construir lo demas en otros espacios
-    //glTranslatef(4.8f, 8.0f, 0.0f);
+    // Traslación base del menú (fija)
     glTranslatef(39.8f, 41.0f, 0.0f);
 
+    // 1. Dibujar el fondo estático primero sin ninguna alteración
     _fondo.draw();
 
+    // Capa ligeramente al frente para evitar Z-fighting
     glTranslatef(0.0f, 0.0f, 0.5f);
+
+    // 2. BOTÓN EXIT
+    glPushMatrix();
+    if (hSalir) {
+        // Centro local: pos_x + (width/2) = 2 + 2.5 = 4.5f | pos_y + (height/2) = 9 + 2.25 = 11.25f
+        glTranslatef(4.5f, 11.25f, 0.0f);
+        glScalef(1.1f, 1.1f, 1.0f);
+        glTranslatef(-4.5f, -11.25f, 0.0f);
+    }
     _boton_exit.draw();
+    glPopMatrix();
+
+    // 3. BOTÓN JUGAR (Selección)
+    glPushMatrix();
+    if (hJugar) {
+        // Centro local: 6.25 + 3.5 = 9.75f | 2.9 + 3.25 = 6.15f
+        glTranslatef(9.75f, 6.15f, 0.0f);
+        glScalef(1.1f, 1.1f, 1.0f);
+        glTranslatef(-9.75f, -6.15f, 0.0f);
+    }
     _boton_jugar.draw();
+    glPopMatrix();
+
+    // 4. BOTÓN RANKING
+    glPushMatrix();
+    if (hRanking) {
+        // Centro local: 12.5 + 2.5 = 15.0f | 9 + 2.25 = 11.25f
+        glTranslatef(15.0f, 11.25f, 0.0f);
+        glScalef(1.1f, 1.1f, 1.0f);
+        glTranslatef(-15.0f, -11.25f, 0.0f);
+    }
     _boton_ranking.draw();
+    glPopMatrix();
 
     glPopMatrix();
     glEnable(GL_LIGHTING);

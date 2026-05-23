@@ -1,6 +1,7 @@
 #include <vector>
 #include "tablero.h"
 #include "freeglut.h"
+#include "Juego.h"
 #include"ETSIDI.h"
 //declaracion matriz, constructor y funciones
 int matrizArchon[5][7] = {
@@ -13,7 +14,7 @@ int matrizArchon[5][7] = {
 
 };
 Tablero::Tablero() {
-    turno = 0;
+  
     inicializa();//llamamos a q se inicialice la casilla
 }
 
@@ -33,6 +34,14 @@ void Tablero::inicializa() {
                         
         }
     }
+}
+
+int Tablero::getTurno(Juego* juego) const
+{
+   if (juego != nullptr) {
+       return juego->getTurno();
+   }
+   return 0;
 }
 
 
