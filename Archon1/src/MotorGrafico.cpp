@@ -3,8 +3,8 @@
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
-
-
+#include "Juego.h"
+extern Juego juego;
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
 	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -388,6 +388,14 @@ void MotorGrafico::dibujaTablero() {
 
 	dibujarFondo();
 	dibujarBordeTurno();
+	//if (juego != nullptr) {
+	//	dibujarBordeTurno(juego->getTurno());
+	//}
+	//else {
+	//	// Color por defecto (gris o azul) si el juego aún no ha empezado
+	//	glColor3f(0.5f, 0.5f, 0.5f);
+	//	dibujarBordeTurno(0);
+	//}
 
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 7; j++) {
@@ -399,7 +407,12 @@ void MotorGrafico::dibujaTablero() {
 
 void MotorGrafico::dibujarFondo() {
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/fondotablero.png").id);
+	
+	int t1 = juego->getTurno();
+	if (t1==0)
+		glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/fondotablerohumanos.png").id);
+	else
+		glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/fondotableroaliens.png").id);
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
 
@@ -419,8 +432,10 @@ void MotorGrafico::dibujarFondo() {
 }
 
 void MotorGrafico::dibujarBordeTurno() {
+	
+	int t = juego->getTurno();
 	// Usamos el tablero guardado para saber el turno
-	if (tablero->getTurno() == 0)
+	if (t == 0)
 		glColor3f(0.0f, 0.3f, 0.6f);
 	else
 		glColor3f(0.6f, 0.0f, 0.0f);

@@ -43,12 +43,13 @@ class MotorGrafico
 	void recortarBarra(float vida, float x, float y, float ancho, float alto);
 	////TABLERO////
 	Tablero* tablero = nullptr;
+	
 	float lado = 2.0f;
 	////MENU////
 
 public:
 	MotorGrafico();
-	
+	Juego* juego;
 	// Método para conectar el tablero si el motor se creó vacío
 	void setTablero(Tablero* t) { tablero = t; }
 

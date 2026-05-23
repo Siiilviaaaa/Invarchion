@@ -268,7 +268,7 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
                 micursor.inicializar_tablero(juego.getTurno());
             }
             estado = JUEGO;
-
+            motor.juego = &juego;
             // Sincronización de tiempos a 15 segundos
             tiempoMensajeSelecciondeBando = 15000.0f;
             mostrandoInstruccionesTablero = true;

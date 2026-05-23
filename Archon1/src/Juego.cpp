@@ -44,6 +44,7 @@ Personaje* Juego::getPersonaje(int index) const {
 void Juego::cambiarTurno() {
     if (turnoActual == TurnoHumanos) turnoActual = TurnoAliens;
     else turnoActual = TurnoHumanos;
+    std::cout << "Turno cambiado a: " << turnoActual << std::endl;
 }
 
 int Juego::getTurno() {
