@@ -67,11 +67,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 		break;
 
 	///////////////ALIENS////////////////
-	//MOVIMIENTO
-	case 'i': j2.direccion(0, 1);  j2.moverEnBatalla(); break;
-	case 'k': j2.direccion(0, -1); j2.moverEnBatalla(); break;
-	case 'j': j2.direccion(-1, 0); j2.moverEnBatalla(); break;
-	case 'l': j2.direccion(1, 0);  j2.moverEnBatalla(); break;
+	////MOVIMIENTO EN CON TECLA ESPECIAL (FLECHAS)
 
 	case 13: //PELEAN/DISPARAN
 		if (j2.return_Tipo() == ARQUERO) {
@@ -91,6 +87,17 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 			std::cout << "J2 lanza hechizo: " << std::endl;
 		}
 		break;
+	}
+}
+
+void Batalla::tecla_especial(int key, Personaje& alien)
+{
+	switch (key)
+	{
+		case GLUT_KEY_UP: alien.direccion(0, 1);  alien.moverEnBatalla(); break;
+		case GLUT_KEY_DOWN: alien.direccion(0, -1); alien.moverEnBatalla(); break;
+		case GLUT_KEY_LEFT: alien.direccion(-1, 0); alien.moverEnBatalla(); break;
+		case GLUT_KEY_RIGHT: alien.direccion(1, 0);  alien.moverEnBatalla(); break;
 	}
 }
 

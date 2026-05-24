@@ -292,25 +292,34 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         }
     }
 
-if (key == 'b') {
-     std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
-     if (estado == JUEGO) {
-     estado = BATALLA;
-     }
-    pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
-    pj1.direccion(1.0, 0.0);
-    pj2 = Personaje::crearPieza(HECHICERO, ALIEN, 15.0, 7.5);
-    pj2.direccion(-1.0, 0.0);
-    motor.inicializarBatalla();
+    if (key == 'b') {
+        std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
+        if (estado == JUEGO) {
+        estado = BATALLA;
+        }
+
+        pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
+        pj1.direccion(1.0, 0.0);
+        pj2 = Personaje::crearPieza(HECHICERO, ALIEN, 15.0, 7.5);
+        pj2.direccion(-1.0, 0.0);
+        motor.inicializarBatalla();
     }
 
-    if (estado == BATALLA) {
-        miBatalla.KeyBatalla(key, pj1, pj2);
-    }
+        if (estado == BATALLA) {
+            miBatalla.KeyBatalla(key, pj1, pj2);
+        }
 
     glutPostRedisplay();
 }
 
+void OnSpecialKeyboardDown(int key, int x, int y) {
+
+    if (estado == BATALLA) {
+        miBatalla.tecla_especial(key, pj2);
+    }
+
+    glutPostRedisplay();
+}
 
 void mousePassive(int x, int y) {
     float width = glutGet(GLUT_WINDOW_WIDTH);
