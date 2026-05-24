@@ -283,7 +283,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			}
 			else
 			{
-				mover_cursor_tablero(key, turno);
+				mover_humanos(key, turno);
 			}
 		}
 	}
@@ -338,7 +338,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			}
 			else
 			{
-				mover_cursor_tablero(key, turno);
+				mover_aliens(key);
 			}
 		}
 	}
