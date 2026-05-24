@@ -32,20 +32,16 @@ class MotorGrafico
 	
 	////ELEMENTOS BATALLA////
 	ETSIDI::Sprite barraVida;
-	/*ETSIDI::Sprite calavera;
-	ETSIDI::Sprite Paralisis;
-	ETSIDI::Sprite Velocidad;
-	ETSIDI::Sprite Pocion;*/
-
+	
 	Obstaculo* listaObstaculos[5];
 	int numObstaculos;
 
 	void recortarBarra(float vida, float x, float y, float ancho, float alto);
+	
 	////TABLERO////
 	Tablero* tablero = nullptr;
-	
 	float lado = 2.0f;
-	////MENU////
+
 
 public:
 	MotorGrafico();
@@ -63,14 +59,13 @@ public:
 	void dibujarHechizo(Hechizo* hechizo);
 	void dibujarPersonaje(const Personaje& personaje);
 	void dibujarBarraVida(Personaje& j1, Personaje& j2);
+
 	/////////TABLERO/////////////
 	void dibujaTablero();
 	void dibujarFondo();
 	void dibujarBordeTurno();
 	void dibujarCasilla(const Casilla* c);
 	
-
-
 	//nuevos mios de dibujo de instrucciones
 	void dibujarMensajeBando(const std::string& textoBando);
 	void dibujarInstruccionesTablero();
