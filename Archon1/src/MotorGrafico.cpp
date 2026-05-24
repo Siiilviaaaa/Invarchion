@@ -4,7 +4,9 @@
 #include <cstdlib>
 #include <iostream>
 #include "Juego.h"
+
 extern Juego juego;
+
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
 	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -20,11 +22,6 @@ MotorGrafico::MotorGrafico() :
 	mago("Recursos/mago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	barraVida("Recursos/barra.png")
-	/*calavera("Recursos/calavera.png"),
-	Paralisis("Recursos/hechizo1.png"),
-	Velocidad("Recursos/hechizo2.png"),
-	Pocion("Recursos/pocion.png")*/
-
 {
 	for (int i = 0; i < 5; i++) {
 		listaObstaculos[i] = nullptr;

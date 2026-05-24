@@ -257,6 +257,12 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					movimientos_restantes = 1;
 				}
 			}
+			//HECHIZO EN TABLERO HUMANO
+			else if (key == 'c' && contador_selecciones == 1)
+			{
+				Personaje* mago = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje();
+				aplicarCuracionMasiva(turno, mago);
+			}
 			else
 			{
 				mover_cursor_tablero(key, turno);
@@ -305,6 +311,12 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					//llamada a batalla pasandole mi personaje y el personaje actual de la casilla del tablero
 					break;
 				}
+			}
+			//HECHIZO EN TABLERO ALIENS
+			else if (key == 'n' && contador_selecciones == 1)
+			{
+				Personaje* mago = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje();
+				aplicarCuracionMasiva(turno, mago);
 			}
 			else
 			{
@@ -397,4 +409,37 @@ int Cursor::soltar(int turno)
 	}
 
 	return 0;
+}
+
+void Cursor::aplicarCuracionMasiva(int turno, Personaje* mago)
+{
+	if (mago != nullptr && mago->return_Tipo() == HECHICERO) {
+		if (mago->return_HechizosRestantes() > 0) {
+
+			//RECORREMOS LOS PERSONAJES BUSCANDO ALIADOS
+			for (int i = 0; i < 20; i++) {
+				Personaje* aliado = ptrJuego->getPersonaje(i);
+				if (aliado != nullptr && aliado->return_Bando() == turno && aliado->return_Vida() > 0) {
+
+					//CURAMOS UN TERCIO DE LA VIDA
+					int cura = aliado->return_VidaMax() / 3;
+					int nuevaVida = aliado->return_Vida() + cura;
+
+					//SIN SUPERAR EL MAXIMO
+					if (nuevaVida > aliado->return_VidaMax()) {
+						nuevaVida = aliado->return_VidaMax();
+					}
+					aliado->setVida(nuevaVida);
+				}
+			}
+			mago->usarHechizo();
+			insertar_mensaje("Curacion masiva! Turno finalizado.");
+
+			//RESET CURSOR Y CAMBIO DE TURNO
+			contador_selecciones = 0;
+			movimientos_restantes = 0;
+			if (ptrJuego != nullptr) ptrJuego->cambiarTurno();
+
+		}
+	}
 }
