@@ -29,7 +29,8 @@ public:
 
 
 	void inicializar_tablero(int turno);
-	void mover_cursor_tablero(unsigned char key, int turno);
+	void mover_humanos(unsigned char key, int turno);
+	void mover_aliens(int key);
 
 	void seleccion_personaje_tablero(unsigned char key, int turno);
 	int coger(int turno);

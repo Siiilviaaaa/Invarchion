@@ -317,7 +317,16 @@ void OnSpecialKeyboardDown(int key, int x, int y) {
     if (estado == BATALLA) {
         miBatalla.tecla_especial(key, pj2);
     }
+    if (estado == JUEGO && juego.getTurno() == 1)
+    {
+        micursor.mover_aliens(key);
 
+        if (micursor.obt_contador_selecciones() == 0) {
+            micursor.inicializar_tablero(juego.getTurno());
+        }
+
+        glutPostRedisplay();
+    }
     glutPostRedisplay();
 }
 

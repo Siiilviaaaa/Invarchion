@@ -71,7 +71,6 @@ int main(int argc, char** argv) {
     glutKeyboardFunc(OnKeyboardDown);
     glutSpecialFunc(OnSpecialKeyboardDown);
 
-
     glutMainLoop();
 
     return 0;

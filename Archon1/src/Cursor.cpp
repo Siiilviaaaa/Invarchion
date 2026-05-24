@@ -35,7 +35,7 @@ void Cursor::inicializar_tablero(int turno)
 	}
 }
 
-void Cursor::mover_cursor_tablero(unsigned char key,int turno)
+void Cursor::mover_humanos(unsigned char key,int turno)
 {
 	//movimiento exclusivo del cursor 
 	if (turno == 0)//turno de humanos
@@ -121,92 +121,110 @@ void Cursor::mover_cursor_tablero(unsigned char key,int turno)
 			}
 		}
 	}
-	if (turno == 1)//turno de aliens
-	{
-		//si presionamos tecla y no estamos en el limite...
-		if ((key == 'j') && (columna > 0))
-		{
-			switch (contador_selecciones)
-			{
-			case 1:
-				if (movimientos_restantes > 0)
-				{
-					columna -=1;
-					movimientos_restantes -= 1;
-					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-				}
-				break;
-			
-			case 2:  columna -= 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
-
-			default: break;
-			}
-		}
-		if ((key == 'l') && (columna < 6)) {
-			switch (contador_selecciones)
-			{
-			case 1:
-				if (movimientos_restantes > 0)
-				{
-					columna += 1;
-					movimientos_restantes -= 1;
-					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-				}
-				break;
-	
-			case 2:  columna += 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
-
-			default: break;
-			}
-		}
-
-		if ((key == 'k') && (fila > 0)) {
-			switch (contador_selecciones)
-			{
-			case 1:
-			
-				if (movimientos_restantes > 0)
-				{
-					fila -= 1;
-					movimientos_restantes -= 1;
-					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-				}
-				break;
-			
-			case 2:  fila -= 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
-
-			default: break;
-			}
-		}
-		if ((key == 'i') && (fila < 4)) {
-			switch (contador_selecciones)
-			{
-			case 1:
-			
-				if (movimientos_restantes > 0)
-				{
-					fila += 1;
-					movimientos_restantes -= 1;
-					insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-				}
-				break;
-	
-			case 2:  fila += 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
-
-			default: break;
-			}
-		}
-	}
 }
+void Cursor::mover_aliens(int key)
+{
+	
+		switch (key)
+		{
+		case GLUT_KEY_UP: {
+			if (fila < 4)
+			{
+				switch (contador_selecciones)
+				{
+				case 1:
 
+					if (movimientos_restantes > 0)
+					{
+						fila += 1;
+						movimientos_restantes -= 1;
+						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
+					}
+					break;
+
+				case 2:  fila += 1;
+					insertar_mensaje("Selecciona un personaje");
+					break;
+
+				default: break;
+				}
+			}break;
+		}
+		case GLUT_KEY_DOWN:
+		{
+			if (fila > 0)
+			{
+				switch (contador_selecciones)
+				{
+				case 1:
+
+					if (movimientos_restantes > 0)
+					{
+						fila -= 1;
+						movimientos_restantes -= 1;
+						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
+					}
+					break;
+
+				case 2:  fila -= 1;
+					insertar_mensaje("Selecciona un personaje");
+					break;
+
+				default: break;
+				}
+			}
+			break;
+		}
+		case GLUT_KEY_LEFT:
+		{
+			if (columna > 0)
+			{
+				switch (contador_selecciones)
+				{
+				case 1:
+					if (movimientos_restantes > 0)
+					{
+						columna -= 1;
+						movimientos_restantes -= 1;
+						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
+					}
+					break;
+
+				case 2:  columna -= 1;
+					insertar_mensaje("Selecciona un personaje");
+					break;
+
+				default: break;
+				}
+			}
+			break;
+		}
+		case GLUT_KEY_RIGHT:
+		{
+			if (columna < 6)
+			{
+				switch (contador_selecciones)
+				{
+				case 1:
+					if (movimientos_restantes > 0)
+					{
+						columna += 1;
+						movimientos_restantes -= 1;
+						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
+					}
+					break;
+
+				case 2:  columna += 1;
+					insertar_mensaje("Selecciona un personaje");
+					break;
+
+				default: break;
+				}
+			}
+			break;
+		}
+		}
+}
 void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 {
 	if (turno == 0)
@@ -228,7 +246,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 		}
 		else
 		{
-			if (key == 'e' && contador_selecciones == 1)
+			if (key == 'q' && contador_selecciones == 1)
 			{
 				int soltarOK = soltar(turno);
 				switch (soltarOK)
@@ -271,7 +289,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 	}
 	if (turno == 1)
 	{
-		if (key == 'u' && contador_selecciones == 2)//si equipo humanos presiona "espacio" por primera vez
+		if (key == 'm' && contador_selecciones == 2)//si equipo humanos presiona "espacio" por primera vez
 		{
 			int cogerOK = coger(turno);
 			switch (cogerOK)
@@ -288,7 +306,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 		}
 		else
 		{
-			if (key == 'o' && contador_selecciones == 1)
+			if (key == 'm' && contador_selecciones == 1)
 			{
 				int soltarOK=soltar(turno);
 				switch (soltarOK)
