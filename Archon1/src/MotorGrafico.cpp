@@ -377,15 +377,19 @@ void MotorGrafico::dibujarInstruccionesTablero()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
 	glRasterPos2f(20.0f, 58.0f);
-	for (char c : "ESCENARIO DE TABLERO: Mover el cursor con WASD")
+	for (char c : "ESCENARIO DE TABLERO - HUMANOS:	Mover con WASD | Seleccionar con Q")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
-	glRasterPos2f(20.0f, 48.0f);
+	glRasterPos2f(20.0f, 50.0f);
+	for (char c : "ESCENARIO DE TABLERO - ALIENS: Mover con Flechas | Seleccionar con M")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+	glRasterPos2f(20.0f, 42.0f);
 	for (char c : "ESCENARIO DE BATALLA - HUMANOS: Mover con WASD | Disparar con ESPACIO")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
-	glRasterPos2f(20.0f, 40.0f);
-	for (char c : "ESCENARIO DE BATALLA - ALIENS: Mover con IJKL | Disparar con ENTER")
+	glRasterPos2f(20.0f, 34.0f);
+	for (char c : "ESCENARIO DE BATALLA - ALIENS: Mover con Flechas | Disparar con ENTER")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	// Mensaje inferior para salir
