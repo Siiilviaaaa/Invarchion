@@ -107,7 +107,7 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 {
 	int desplazamiento_fila = fila + mov_filas;
 	int desplazamiento_columna = columna + mov_columnas;
-	InfoCasilla* casillaDestino = miTablero.getInfoCasilla(desplazamiento_fila, desplazamiento_columna);
+	InfoCasilla* casillaDestino = miTablero.getInfoCasilla(desplazamiento_fila, desplazamiento_columna);//para que guarde la casilla actual en cada momento
 
 	if (desplazamiento_fila < 0 || desplazamiento_fila > 4 || desplazamiento_columna < 0 || desplazamiento_columna > 6)
 	{
@@ -120,14 +120,14 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 		{
 			Personaje* personajeDestino = casillaDestino->getPersonaje();
 
-			// CASO 1: hay un aliado. Actúa como muro.
+			//hay un personaje de nuestro bando, no podemos saltarle
 			if (personajeDestino->return_Bando() == turno)
 			{
 				insertar_mensaje("No puedes pasar por una casilla ocupada por un aliado");
 				return;
 			}
 
-			// CASO 2: hay un enemigo. Entramos directamente en batalla.
+			//Hay un persoanje del otro equipo, entramos directamente en batalla.
 			if (personajeDestino->return_Bando() != turno)
 			{
 				fila = desplazamiento_fila;
@@ -145,8 +145,6 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 				contador_selecciones = 0;
 				movimientos_restantes = 0;
 				personajeSeleccionado = nullptr;
-
-				insertar_mensaje("Enemigo encontrado. Entrando en batalla.");
 
 				if (ptrJuego != nullptr)
 				{
