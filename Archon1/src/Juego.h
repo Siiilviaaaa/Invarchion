@@ -56,4 +56,6 @@ public:
 	Personaje* getDefensorBatalla() const { return defensorBatalla; }
 	void cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor);
 	void finalizarBatalla();
+
+	bool casillaFavorable(Personaje* p, Tipocasilla colorCasilla);
 };

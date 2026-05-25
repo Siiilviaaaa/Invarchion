@@ -39,32 +39,36 @@ void MotorGrafico::inicializarBatalla()
 	double r = 1.3;
 	const double limite_max_x = 20.0;
 	const double limite_max_y = 15.0;
-	const double margen = 1.0;
+	const double margen_pared = 1.0;
+	const double margen_personaje = 3.5;
 	const float dist_min = 3.5f;
-	while (aceptados < numObstaculos) {
-		double minX = margen + r;
-		double maxX = limite_max_x - margen - r;
-		double minY = margen + r;
-		double maxY = limite_max_y - margen - r;
-		double rx = minX+ ((double)rand()/RAND_MAX) *(maxX - minX);
-		double ry = minY + ((double)rand() / RAND_MAX) * (maxY -minY);
+	double p1x = 5.0, p1y = 7.5, p2x = 15.0, p2y = 7.5;
+	int intentos = 0;
+	while (aceptados < numObstaculos && intentos <1000){
+		intentos++;
+		
+		double rx = (margen_pared + r) + ((double)rand() / RAND_MAX) * (limite_max_x - 2 * (margen_pared + r));
+		double ry = (margen_pared + r) + ((double)rand() / RAND_MAX) * (limite_max_y - 2 * (margen_pared + r));
 		bool colision = false;
 		//posciones iniciales de los personajes en batalla
-		bool zonaJ1 = (rx < 5.0 && ry > 4.5 && ry < 10.5);
-		bool zonaJ2 = (rx > 15.0 && ry > 4.5 && ry < 10.5);
-		if (zonaJ1 || zonaJ2) {
+		double distP1 = sqrt(pow(rx - p1x, 2) + pow(ry - p1y, 2));
+		double distP2 = sqrt(pow(rx - p2x, 2) + pow(ry - p2y, 2));
+		if (distP1<margen_personaje || distP2<margen_personaje) {
 			colision = true;
 		}
-		for (int j = 0; j < aceptados; j++) {
-			Obstaculo* existente = listaObstaculos[j];
-			float dx = (float)(rx - existente->return_X());
-			float dy = (float)(ry - existente->return_Y());
-			float distancia = sqrtf(powf(dx, 2) + powf(dy, 2));
-			if (distancia < (r*dist_min)) {
-				colision = true;
-				break;
+		if (!colision) {
+			for (int j = 0; j < aceptados; j++) {
+				Obstaculo* existente = listaObstaculos[j];
+				float dx = (float)(rx - existente->return_X());
+				float dy = (float)(ry - existente->return_Y());
+				float distancia = sqrtf(powf(dx, 2) + powf(dy, 2));
+				if (distancia < (r * dist_min)) {
+					colision = true;
+					break;
+				}
 			}
 		}
+		
 		if (!colision) {
 			listaObstaculos[aceptados] = new Obstaculo(rx, ry, r);
 			aceptados++;
