@@ -36,7 +36,7 @@ void MotorGrafico::inicializarBatalla()
 		if (listaObstaculos[i]) delete listaObstaculos[i];
 		listaObstaculos[i] = nullptr;
 	}
-	double r = 1.0;
+	double r = 1.3;
 	const float dist_min = 3.5f;
 	while (aceptados < numObstaculos) {
 		double rx = r + ((double)rand()/RAND_MAX) *(20 - 2 * r);
