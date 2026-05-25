@@ -34,4 +34,5 @@ public:
     void dibuja_ranking();
     void cargar_ranking();
     void actualizar_ranking(std::string nombre);
+    void dibuja_fin();
 };

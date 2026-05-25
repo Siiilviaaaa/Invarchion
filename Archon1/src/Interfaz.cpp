@@ -32,7 +32,7 @@ float tiempoMensajeSelecciondeBando = 0.0f;
 std::string textoBando = "";
 bool mostrandoInstruccionesTablero = false;
 float tiempoInstruccionesTablero = 0.0f;
-
+int puntuacion_actual = 0;
 //Variables globales para controlar el hover
 bool hoverSalir = false;
 bool hoverSeleccion = false;
@@ -76,6 +76,12 @@ void OnDraw(void) {
 
     
     switch (estado) { //aqui dentro no he tocando nada
+    case FIN_PARTIDA:
+        miCamara.vistaRanking();
+        miMenu.dibuja_fin();
+        break;
+    
+    
     case MENU:
         miCamara.vistaMenu();
         // Mapeamos las variables en orden: hJugar (hoverSeleccion), hRanking (hoverRanking), hSalir (hoverSalir)
@@ -252,8 +258,13 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
         if (estado == MENU) exit(0);
         else estado = MENU;
     }
+    if (c == 'r' && estado != FIN_PARTIDA) {
+        estado = FIN_PARTIDA;
+        glutPostRedisplay(); // Fuerza a OnDraw() a pintar la pantalla negra de dibuja_fin()
+        return;
+    }
 
-    if (c == 'r') {
+    if (estado == FIN_PARTIDA) {
         std::string nombre;
         int puntos;
 

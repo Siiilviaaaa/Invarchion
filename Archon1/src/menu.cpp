@@ -16,6 +16,8 @@ Menu::Menu() :
     inicializa_menu();
 }
 
+//Variable global externa
+extern int puntuacion_actual;
 void Menu::inicializa_menu() {
 
     _fondo.setPos(0, 0);
@@ -193,8 +195,6 @@ void Menu::cargar_ranking() {
     }
 }
 
-//Aariable global externa
-extern int puntuacion_actual;
 
 void Menu::actualizar_ranking(std::string nombre) {
 
@@ -268,4 +268,51 @@ void Menu::actualizar_ranking(std::string nombre) {
 
     //Fuerzo la recarga de las strings en el buffer del menú para que el cambio se refleje inmediatamente en pantalla
     cargar_ranking();
+}
+
+void Menu::dibuja_fin() {
+    glDisable(GL_LIGHTING);
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_DEPTH_TEST);
+
+    // 1. FORZAR MATRIZ PROPIA EN 2D (Aislamiento total de cámaras)
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, 800, 0, 600); // Plano de 800x600 píxeles reales
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    // 2. DIBUJAR EL FONDO NEGRO (Ajustado a coordenadas de pantalla completa)
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(0.0f, 0.0f);
+    glVertex2f(800.0f, 0.0f);
+    glVertex2f(800.0f, 600.0f);
+    glVertex2f(0.0f, 600.0f);
+    glEnd();
+
+    // 3. DIBUJAR EL TEXTO EN COORDENADAS DE PANTALLA REALES (X, Y)
+    ETSIDI::setTextColor(1.0f, 1.0f, 0.0f); // Amarillo
+    ETSIDI::setFont("fuentes/Bitwise.ttf", 24); // Tamaño un poco más grande para debug
+
+    //300 píxeles de la izquierda y 400 píxeles desde abajo.
+    ETSIDI::printxy("ENHORABUENA", 210.0f, 400.0f);
+
+    ETSIDI::setFont("fuentes/Bitwise.ttf", 14);
+    ETSIDI::printxy("HAS GANADO", 300.0f, 250.0f); // VE A LA CMD PARA DEJAR TU NOMBRE GRABADO EN LA HISTORIA
+    ETSIDI::printxy(" PRESIONA ENTER Y", 200.0f, 120.0f);
+    ETSIDI::printxy(" VE A LA CMD PARA DEJAR TU NOMBRE GRABADO EN LA HISTORIA", 50.0f, 100.0f);
+
+    // 4. RESTAURAR MATRICES ORIGINALES (Para no romper el resto del juego)
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
 }
