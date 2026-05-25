@@ -67,7 +67,7 @@ void Cursor::mover_humanos(unsigned char key, int turno)
 		return;
 	}
 
-	movimiento(cambioFila, cambioColumna, "Humano");
+	movimiento(cambioFila, cambioColumna, "Humano",turno);
 }
 void Cursor::mover_aliens(int key, int turno)
 {
@@ -101,17 +101,61 @@ void Cursor::mover_aliens(int key, int turno)
 		return;
 	}
 
-	movimiento(cambioFila, cambioColumna, "Alien");
+	movimiento(cambioFila, cambioColumna, "Alien",turno);
 }
-void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mensaje)
+void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mensaje, int turno)
 {
 	int desplazamiento_fila = fila + mov_filas;
 	int desplazamiento_columna = columna + mov_columnas;
+	InfoCasilla* casillaDestino = miTablero.getInfoCasilla(desplazamiento_fila, desplazamiento_columna);
 
 	if (desplazamiento_fila < 0 || desplazamiento_fila > 4 || desplazamiento_columna < 0 || desplazamiento_columna > 6)
 	{
 		//si nos encontramos en el limite del tablero, salimos de la función
 		return;
+	}
+	if (contador_selecciones == 1)
+	{
+		if (casillaDestino != nullptr && casillaDestino->getPersonaje() != nullptr)
+		{
+			Personaje* personajeDestino = casillaDestino->getPersonaje();
+
+			// CASO 1: hay un aliado. Actúa como muro.
+			if (personajeDestino->return_Bando() == turno)
+			{
+				insertar_mensaje("No puedes pasar por una casilla ocupada por un aliado");
+				return;
+			}
+
+			// CASO 2: hay un enemigo. Entramos directamente en batalla.
+			if (personajeDestino->return_Bando() != turno)
+			{
+				fila = desplazamiento_fila;
+				columna = desplazamiento_columna;
+
+				if (personajeSeleccionado != nullptr)
+				{
+					personajeSeleccionado->setX(columna);
+					personajeSeleccionado->setY(fila);
+				}
+
+				atacante = personajeSeleccionado;
+				defensor = personajeDestino;
+
+				contador_selecciones = 0;
+				movimientos_restantes = 0;
+				personajeSeleccionado = nullptr;
+
+				insertar_mensaje("Enemigo encontrado. Entrando en batalla.");
+
+				if (ptrJuego != nullptr)
+				{
+					ptrJuego->cambiarEscenarioABatalla(atacante, defensor);
+				}
+
+				return;
+			}
+		}
 	}
 	switch (contador_selecciones)
 	{
@@ -147,6 +191,7 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 		break;
 	}
 }
+
 void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 {
 	if (turno == 0)
@@ -269,7 +314,6 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 		}
 	}
 }
-
 int Cursor::coger(int turno)
 {
 	//crear variable que llame a elena: tablero.h get y modificar casilla
@@ -301,7 +345,6 @@ int Cursor::coger(int turno)
 	}
 	return 0;
 }
-
 int Cursor::soltar(int turno)
 {
 	InfoCasilla* casillaAnterior = miTablero.getInfoCasilla(filaAntes, columnaAntes);
