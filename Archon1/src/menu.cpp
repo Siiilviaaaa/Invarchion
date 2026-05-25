@@ -193,65 +193,79 @@ void Menu::cargar_ranking() {
     }
 }
 
-void Menu::actualizar_ranking(std::string nombre, int puntos) {
-    
-    ///////CARGA DE DATOS PREVIOS
+//Aariable global externa
+extern int puntuacion_actual;
+
+void Menu::actualizar_ranking(std::string nombre) {
+
+    //LIMPIEZA Y APERTURA DEL FICHERO
+    //Vacio el contenedor en memoria para cargar la lista desde cero sin duplicados
     _lista_puntuaciones.clear();
     std::ifstream lectura("extra/ranking.txt");
     std::string linea;
 
-    if (lectura.is_open()) 
+    //LECTURA Y PARSEO (EXTRACCIÓN DE DATOS)
+    if (lectura.is_open())
     {
+        //Leo el archivo línea por línea
         while (std::getline(lectura, linea)) {
-            if (linea.empty()) continue;
+            if (linea.empty()) continue; // Si la línea está vacía, saltamos a la siguiente
 
-            //Buscamos el separador " - "
+            //localizo los delimitadores del formato ("1. NOMBRE - PUNTOS")
             size_t pos_guion = linea.find(" - ");
-            //Buscamos el primer espacio después del número (ej: "1. ")
             size_t pos_espacio_inicial = linea.find(" ");
 
-            if (pos_guion != std::string::npos && pos_espacio_inicial != std::string::npos) 
+            //Si se encuentran ambos delimitadores, procesamos la línea
+            if (pos_guion != std::string::npos && pos_espacio_inicial != std::string::npos)
             {
-                //Nombre: lo que hay entre el primer espacio y el guion
+                //Extraemos el sub原始texto correspondiente al nombre del jugador
                 std::string n = linea.substr(pos_espacio_inicial + 1, pos_guion - pos_espacio_inicial - 1);
-                //Puntos: lo que hay después del guion
-                try 
+                try
                 {
+                    //Extraemos la puntuación y la convertimos de texto (string) a entero (int)
                     int p = std::stoi(linea.substr(pos_guion + 3));
+
+                    //Guardamos la estructura (Nombre, Puntos) en el vector en memoria
                     _lista_puntuaciones.push_back({ n, p });
                 }
-                catch (...) { continue; } //Si falla el número, ignoramos esa línea
+                //Si el formato numérico está corrupto, capturamos la excepción y evitamos que el juego crashee
+                catch (...) { continue; }
             }
         }
-        lectura.close();
+        lectura.close(); //Cerramos el flujo de lectura
     }
 
-    ////////////AÑADIR EL NUEVO
-    _lista_puntuaciones.push_back({ nombre, puntos });
+    //INSERCIÓN DEL NUEVO REGISTRO
+    // Añadimos al vector la nueva partida usando el nombre recibido y la puntuación de la variable global
+    _lista_puntuaciones.push_back({ nombre, puntuacion_actual });
 
-    ///////////ORDENAR (Mayor a menor) LIBRERIA ALGORITHMS
+    //Ordenamos el vector de mayor a menor puntuación utilizando el algoritmo std::sort
+    //Mediante una función lambda comparamos el campo 'puntos' de cada estructura
     std::sort(_lista_puntuaciones.begin(), _lista_puntuaciones.end(),
         [](const EntradaRanking& a, const EntradaRanking& b) {
             return a.puntos > b.puntos;
         });
 
-    ///////////LIMITAR A 9
+    //TRUNCADO (LÍMITE DE CAPACIDAD)
+    //Si al añadir el nuevo récord superamos el tamaño permitido del Top, recortamos el vector a 9 elementos
     if (_lista_puntuaciones.size() > 9) {
         _lista_puntuaciones.resize(9);
     }
 
-    ////////////GUARDAR (Sobrescribe con la lista completa de 9)
+    //PERSISTENCIA (ESCRITURA EN DISCO)
+    //Abro el fichero en modo escritura (sobrescribe el archivo anterior por completo)
     std::ofstream escritura("extra/ranking.txt");
-    if (escritura.is_open()) 
+    if (escritura.is_open())
     {
-        for (int i = 0; i < _lista_puntuaciones.size(); i++) 
+        //Vuelco el vector ordenado aplicando el formato indexado: "Posición. Nombre - Puntos"
+        for (int i = 0; i < _lista_puntuaciones.size(); i++)
         {
             escritura << i + 1 << ". " << _lista_puntuaciones[i].nombre
                 << " - " << _lista_puntuaciones[i].puntos << std::endl;
         }
-        escritura.close();
+        escritura.close(); //Cerramos el flujo de escritura
     }
 
-    /////////////RECARGAR PARA DIBUJAR
+    //Fuerzo la recarga de las strings en el buffer del menú para que el cambio se refleje inmediatamente en pantalla
     cargar_ranking();
 }

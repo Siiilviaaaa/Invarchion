@@ -259,21 +259,13 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
 
         std::cout << "\n--- REGISTRO DE PUNTUACION ---" << std::endl;
         std::cin.clear();
-        std::cin.ignore(1000, '\n');
+        //std::cin.ignore(1000, '\n');
 
         std::cout << "TRES LETRAS: ";
         std::cin >> nombre;
         if (nombre.size() > 3) nombre = nombre.substr(0, 3);
 
-        std::cout << "Puntuacion (solo numeros): ";
-        if (!(std::cin >> puntos)) {
-            std::cout << "Error: Puntos invalidos." << std::endl;
-            std::cin.clear();
-            std::cin.ignore(1000, '\n');
-            puntos = 0;
-        }
-
-        miMenu.actualizar_ranking(nombre, puntos);
+        miMenu.actualizar_ranking(nombre);
         estado = RANKING;
     }
 
