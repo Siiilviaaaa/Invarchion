@@ -8,7 +8,7 @@
 extern Juego juego;
 
 MotorGrafico::MotorGrafico() :
-	numObstaculos(5),
+	numObstaculos(7),
 	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	soldado("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	volador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -23,7 +23,7 @@ MotorGrafico::MotorGrafico() :
 
 	barraVida("Recursos/barra.png")
 {
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 7; i++) {
 		listaObstaculos[i] = nullptr;
 	}
 }
@@ -37,17 +37,30 @@ void MotorGrafico::inicializarBatalla()
 		listaObstaculos[i] = nullptr;
 	}
 	double r = 1.3;
+	const double limite_max_x = 20.0;
+	const double limite_max_y = 15.0;
+	const double margen = 1.0;
 	const float dist_min = 3.5f;
 	while (aceptados < numObstaculos) {
-		double rx = r + ((double)rand()/RAND_MAX) *(20 - 2 * r);
-		double ry = r + ((double)rand() / RAND_MAX) * (10 - 2 * r);
+		double minX = margen + r;
+		double maxX = limite_max_x - margen - r;
+		double minY = margen + r;
+		double maxY = limite_max_y - margen - r;
+		double rx = minX+ ((double)rand()/RAND_MAX) *(maxX - minX);
+		double ry = minY + ((double)rand() / RAND_MAX) * (maxY -minY);
 		bool colision = false;
+		//posciones iniciales de los personajes en batalla
+		bool zonaJ1 = (rx < 5.0 && ry > 4.5 && ry < 10.5);
+		bool zonaJ2 = (rx > 15.0 && ry > 4.5 && ry < 10.5);
+		if (zonaJ1 || zonaJ2) {
+			colision = true;
+		}
 		for (int j = 0; j < aceptados; j++) {
 			Obstaculo* existente = listaObstaculos[j];
 			float dx = (float)(rx - existente->return_X());
 			float dy = (float)(ry - existente->return_Y());
 			float distancia = sqrtf(powf(dx, 2) + powf(dy, 2));
-			if (distancia < dist_min) {
+			if (distancia < (r*dist_min)) {
 				colision = true;
 				break;
 			}

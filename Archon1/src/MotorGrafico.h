@@ -34,7 +34,7 @@ class MotorGrafico
 	////ELEMENTOS BATALLA////
 	ETSIDI::Sprite barraVida;
 	
-	Obstaculo* listaObstaculos[5];
+	Obstaculo* listaObstaculos[7];
 	int numObstaculos;
 
 	void recortarBarra(float vida, float x, float y, float ancho, float alto);
@@ -71,5 +71,5 @@ public:
 
 	/////////METODOS////////////
 	//DIRECCION QUE APUNTA A OTRA DIRECCION
-	Obstaculo* (&obtenerObstaculos())[5] {return listaObstaculos;}
+	Obstaculo* (&obtenerObstaculos())[7] {return listaObstaculos;}
 };
