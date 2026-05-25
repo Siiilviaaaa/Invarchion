@@ -59,7 +59,6 @@ public:
 	void dibujarHechizo(Hechizo* hechizo);
 	void dibujarPersonaje(const Personaje& personaje);
 	void dibujarBarraVida(Personaje& j1, Personaje& j2);
-
 	/////////TABLERO/////////////
 	void dibujaTablero();
 	void dibujarFondo();

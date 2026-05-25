@@ -50,6 +50,10 @@ void Cursor::mover_humanos(unsigned char key,int turno)
 				{
 					columna -= 1;
 					movimientos_restantes -= 1;
+					if (personajeSeleccionado != nullptr) { //asi se teletransporta a medida que se mueve el cursor
+						personajeSeleccionado->setX(columna);
+						personajeSeleccionado->setY(fila);
+					}
 					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes)+ " movimientos");
 				}
 				break;
@@ -267,6 +271,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					std::cout << "hay un enemigo, avisamos a batalla" << std::endl;
 					contador_selecciones = 0;
 					movimientos_restantes = 0;
+					ptrJuego->cambiarEscenarioABatalla(atacante, defensor);
 					//llamada a batalla pasandole mi personaje y el personaje actual de la casilla del tablero
 					break;
 				case 3:
@@ -326,6 +331,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 				case 2: std::cout << "hay un enemigo, avisamos a batalla" << std::endl;
 					contador_selecciones = 0;
 					movimientos_restantes = 0;
+					ptrJuego->cambiarEscenarioABatalla(atacante, defensor);
 					//llamada a batalla pasandole mi personaje y el personaje actual de la casilla del tablero
 					break;
 				}
@@ -359,13 +365,16 @@ int Cursor::coger(int turno)
 		std::cout << "CASILLA SIN PERSONAJE" << std::endl;
 		return 0;
 	}
-	if (infoCasillaActual->personajeEncima->bando == turno)//comprueba que el personaje es de nuestro bando
+	if (infoCasillaActual->personajeEncima->return_Bando() == turno)//comprueba que el personaje es de nuestro bando
 	{
 		informacion = *infoCasillaActual;//copia la informacion del puntero que apunta al tablero original
 		movimientos_restantes = infoCasillaActual->personajeEncima->movimientos;//copiamos los movimientos
 		//guarda la informacion de la casilla, por si hay que eliminarla luego de aqui, no eliminamos pq no sbemos is la va a soltar
 		filaAntes = fila;
 		columnaAntes = columna;
+		
+		InfoCasilla* casillaOrigen = miTablero.getInfoCasilla(filaAntes, columnaAntes);
+
 		std::cout << "inicialmente personaje en:" << infoCasillaActual->personajeEncima->x <<"," << infoCasillaActual->personajeEncima->y;
 		return 1;
 	}
@@ -382,7 +391,7 @@ int Cursor::soltar(int turno)
 		return 0;
 	}
 
-	if (casillaAnterior->personajeEncima == nullptr)
+	if (casillaAnterior->personajeEncima == nullptr) //esto ya lo tienes en la funcion coger
 	{
 		return 0;
 	}
@@ -422,7 +431,7 @@ int Cursor::soltar(int turno)
 		//copiamos en prsonaje batalla el de la casilla nueva
 		defensor = casillaActual->personajeEncima;
 		//y eso son los que se pasan a la batlla, esos punteros
-
+		std::cout << "Atacante: " << atacante->return_Tipo() << " Defensor: " << defensor->return_Tipo() << std::endl;
 		return 2;
 	}
 

@@ -41,6 +41,7 @@ public:
 	static bool choqueObstaculo(Personaje& j, const Obstaculo& o);
 	static bool choqueObstaculo(Disparo& d, const Obstaculo& o);
 
-	static void limites_d(Disparo& d, Caja& c);
-	static void limites_p(Personaje& j, Caja& c);
+
+	static void limites(Disparo& d, Caja& c);
+	static void limites(Personaje& j, Caja& c);//lo he sobrecargado (antes estaba limite_d y limite_p)
 };

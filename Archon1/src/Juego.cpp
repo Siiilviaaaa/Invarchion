@@ -5,7 +5,10 @@
 #include <iostream>
 #include "MotorGrafico.h"
 #include "casilla.h"
-
+#include "Cursor.h"
+#include "MotorGrafico.h"
+extern MotorGrafico motor;
+extern Estado estado;
 Juego::Juego(Tablero* t) :
     ptrTablero(t)
 {
@@ -96,7 +99,7 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 
 void Juego::inicializarPartida()
 {
-    spawnPersonaje(LUCHADOR, HUMANO, 0, 0); // se puede hacer con un bucle, pero bueno asi lo edito mejor, el motor grafico lo dibuja sin q haya que llamarlo aqui, epicoo
+    spawnPersonaje(LUCHADOR, HUMANO, 0, 0); // se puede hacer con un bucle, pero bueno asi lo edito mejor
     spawnPersonaje(ARQUERO, HUMANO, 1, 0);
     spawnPersonaje(VOLADOR, HUMANO, 2, 0);
     spawnPersonaje(EXCAVADOR, HUMANO, 3, 0);
@@ -108,6 +111,37 @@ void Juego::inicializarPartida()
     spawnPersonaje(HECHICERO, ALIEN, 4, 6);
 
 }
+
+void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
+{
+    if (atacante == nullptr || defensor == nullptr) return;
+    std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
+    atacanteBatalla = atacante;
+    defensorBatalla = defensor;
+
+    atacante->x = 5.0;
+    atacante->y = 7.5;
+    atacante->direccion(1.0, 0.0); //el atacante siempre va a la izq
+
+    defensor->x = 15.0;
+    defensor->y = 7.5;
+    defensor->direccion(-1.0, 0.0);//el defensor a la derecha
+
+    motor.inicializarBatalla();
+    estado = BATALLA;
+
+}
+
+void Juego::finalizarBatalla()
+{
+    atacanteBatalla = nullptr;
+    defensorBatalla = nullptr;
+    std::cout << "fin de batalla, se han borrado los punteros a los personajes" << std::endl;
+}
+
+
+
+
 
 
 //JULI NO SE DONDE PONER QUE LA BATALLA SIGUE EN CURSO, TE LO DEJO POR AQUI

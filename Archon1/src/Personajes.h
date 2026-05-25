@@ -9,6 +9,8 @@ class Personaje
 {
 	friend class MotorGrafico;
 	friend class Cursor;
+	friend class Juego;
+	friend class Batalla;
 
 	Tipo_figura tipo;
 	Bando bando;
@@ -87,6 +89,7 @@ public:
 		double yCorregidaMirror = (4.2f * ladoCasilla) - y;
 		return yCorregidaMirror;
 	}
+	
 	void setVidaMax(int nuevaVidaMax) { vida_max = nuevaVidaMax; }
 	void setBando(Bando nuevo) { bando = nuevo; }
 	void set_paralisis(double tiempo) { t_paralisis = tiempo; }
