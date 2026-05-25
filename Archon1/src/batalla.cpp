@@ -104,8 +104,8 @@ void Batalla::tecla_especial(int key, Personaje& alien)
 void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo* lista[5])
 {
 	////////////////PERSONAJES//////////////////
-	limites_p(j1, caja);
-	limites_p(j2, caja);
+	limites(j1, caja);
+	limites(j2, caja);
 
 	entrePersonajes(j1, j2);
 
@@ -135,7 +135,7 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 		if (nDisparos[i]->return_Activo())
 		{
 			nDisparos[i]->moverDisparo();
-			limites_d(*nDisparos[i], caja); //CON LA CAJA
+			limites(*nDisparos[i], caja); //CON LA CAJA
 
 			for (int k = 0; k < 5; k++) {
 				if (lista[k] != nullptr)
@@ -191,8 +191,8 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 						double nuevaX = 1.5f + (float)(rand() % 170) / 10.0f;
 						double nuevaY = 1.5f + (float)(rand() % 120) / 10.0f;
 
-						victima->setX(nuevaX);
-						victima->setY(nuevaY);
+						victima->x =nuevaX;
+						victima->y =nuevaY;
 						break;
 						}
 					}
@@ -349,11 +349,11 @@ void Batalla::entrePersonajes(Personaje& j1, Personaje& j2)
 		double normalx = dx / dist;
 		double normaly = dy / dist;
 
-		j1.setX(j1.return_X() + normalx * 0.3);
-		j1.setY(j1.return_Y() + normaly * 0.3);
+		j1.x = normalx * 0.3;
+		j1.y = normaly * 0.3;
 
-		j2.setX(j2.return_X() - normalx * 0.3);
-		j2.setY(j2.return_Y() - normaly * 0.3);
+		j2.x = normalx * 0.3;
+		j2.y = normaly * 0.3;
 	}
 }
 
@@ -429,8 +429,8 @@ bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o)
 		double normaly = dy / dist;
 
 		//POSICIONAMIENTO
-		j.setX(j.return_X() + normalx * juntos);
-		j.setY(j.return_Y() + normaly * juntos);
+		j.x += normalx * juntos;
+		j.y += normaly * juntos;
 
 		std::cout << "CHOQUE" << std::endl;
 
@@ -467,7 +467,7 @@ bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o)
     return false;
 }
 
-void Batalla::limites_d(Disparo& d, Caja& c)
+void Batalla::limites(Disparo& d, Caja& c)
 {
 	reboteDisparos(d, c.return_suelo());
 	reboteDisparos(d, c.return_techo());
@@ -475,14 +475,15 @@ void Batalla::limites_d(Disparo& d, Caja& c)
 	reboteDisparos(d, c.return_dcha());
 }
 
-void Batalla::limites_p(Personaje& j, Caja& c)
+void Batalla::limites(Personaje& j, Caja& c)
 {
 	double radio = 1.0;
 
 	//COMPROBAR CADA PARED
 	//SI NOMOVER ES TRUE, LIMITE
-	j.setX(NoMover(j, c.return_izq()) ? radio : j.return_X());
-	j.setX(NoMover(j, c.return_dcha()) ? 20.0 - radio : j.return_X());
-	j.setY(NoMover(j, c.return_suelo()) ? radio : j.return_Y());
-	j.setY(NoMover(j, c.return_techo()) ? 15.0 - radio : j.return_Y());
+	j.x = NoMover(j, c.return_izq()) ? radio : j.x;
+	j.x = NoMover(j, c.return_dcha()) ? 20.0 - radio : j.x;
+	j.y = NoMover(j, c.return_suelo()) ? radio : j.y;
+	j.y = NoMover(j, c.return_techo()) ? 15.0 - radio : j.y;
+
 }

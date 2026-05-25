@@ -30,7 +30,8 @@ private:
 	bando_jugador bandoJugador{};
 	HanGanado estado_victoria;
 	Personaje* figuras[MAX_PERSONAJES]; //hay 20 figuritas en el tablero
-
+	Personaje* atacanteBatalla{ nullptr };
+	Personaje* defensorBatalla{ nullptr };
 public:
 
 	Juego(Tablero* t);
@@ -50,16 +51,9 @@ public:
 	void spawnPersonaje(Tipo_figura t, Bando e, int x, int y);
 	void inicializarPartida();
 
-
-	//void procesarEntradas(); //teclas y tal
-
-	//void actualizar();
-
-	//
-	//void dibujarTablero();
-
-	//void dibujarCampoBatalla();
-
-	//void dibujarMenu();
-
+	//batalla
+	Personaje* getAtacanteBatalla() const { return atacanteBatalla; }
+	Personaje* getDefensorBatalla() const { return defensorBatalla; }
+	void cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor);
+	void finalizarBatalla();
 };

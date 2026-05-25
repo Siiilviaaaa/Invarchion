@@ -2,6 +2,7 @@
 #include "Hechizos.h"
 #include "Disparos.h"
 #include <iostream>
+#include "Juego.h"
 
 Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double posY)
 {
@@ -46,7 +47,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 		pieza.setVidaMax(120);
 		pieza.setDanio(20);
 		pieza.setV_base(3.1);
-		pieza.setMovimientos(2);
+		pieza.setMovimientos(10); //momentaneamente para hacer pruebas
 		break;
 	case EXCAVADOR:
 		pieza.setVida(200);

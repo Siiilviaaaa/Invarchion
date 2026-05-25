@@ -11,6 +11,9 @@
 #include "Batalla.h"     
 #include "Juego.h"  
 #include "Cursor.h"
+#include <chrono>
+
+using namespace std::chrono;
 
 
 //cuidado he quitado el using std::
@@ -57,7 +60,7 @@ int main(int argc, char** argv) {
     //esto todo habrá q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
     std::cout << "Reproduciendo..." << std::endl;
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
-    ETSIDI::play("extra/mi_musica.mp3");
+    //ETSIDI::play("extra/mi_musica.mp3");
 
     // --- REGISTRO DE CALLBACKS ---
     // Estas funciones las he puesto en Interfaz.cpp
@@ -75,3 +78,23 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+
+//void OnTimer(int value) 
+//{ 
+//	// calcular dt real entre llamadas usando std::chrono 
+//	static auto last = high_resolution_clock::now(); 
+//	auto now = high_resolution_clock::now(); 
+//	duration<double> elapsed = now - last; 
+//	double dt = elapsed.count(); 
+//	last = now; 
+//	
+//	std::cout << "dt=" << dt << "\n";
+//
+//	// código de animacion usando dt en segundos 
+//	// no borrar estas líneas.indicamos que se vuelva a dibujar la  
+//	//pantalla, para que se vean los cambios 
+//	glutPostRedisplay(); 
+//	// recursivamente, le decimos que dentro de 25ms vuelva a llamar a  
+//	//esta funcion, para que se siga animando 
+//	glutTimerFunc(10, OnTimer, 0); 
+//}

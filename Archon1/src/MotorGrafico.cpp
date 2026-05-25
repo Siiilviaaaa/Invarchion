@@ -11,7 +11,7 @@ MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
 	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	soldado("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	volador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	volador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	minero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	hechicero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
@@ -167,8 +167,12 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 		glDisable(GL_LIGHTING);//la luz para q no haga sombra
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//para la transparencia
-		glTranslated(personaje.x, personaje.getY(), 0.5);
-		//SpriteActual->setPos(personaje.x, personaje.y);
+		
+		extern Estado estado;
+		double posY = (estado == BATALLA) ? personaje.return_Y() : personaje.getY();
+		
+		
+		glTranslated(personaje.x, posY, 0.5);
 		SpriteActual->setCenter(0, 0);
 		SpriteActual->setSize(1.8, 1.8);
 		if (personaje.bando == ALIEN) {
@@ -190,6 +194,7 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 		glPopMatrix();
 	}
 }
+
 
 void MotorGrafico::dibujarDisparo(Disparo* disparo)
 {
@@ -229,6 +234,7 @@ void MotorGrafico::dibujarBarraVida(Personaje& j1, Personaje& j2)
 	recortarBarra(porcentaje1, 1.0f, 1.0f, 4.5f, 0.8f);
 	recortarBarra(porcentaje2, 14.5f, 1.0f, 4.5f, 0.8f);
 }
+
 
 void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho, float alto)
 {

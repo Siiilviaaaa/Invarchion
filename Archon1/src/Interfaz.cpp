@@ -164,9 +164,19 @@ void OnDraw(void) {
     case BATALLA:
         miCamara.vistaBatalla();
         motor.dibujarCaja(miCaja);
-        motor.dibujarPersonaje(pj1);
-        motor.dibujarPersonaje(pj2);
-        motor.dibujarBarraVida(pj1, pj2);
+
+        Personaje* atacante = juego.getAtacanteBatalla();
+        Personaje* defensor = juego.getDefensorBatalla();
+
+        if (atacante != nullptr && defensor != nullptr) {
+            motor.dibujarPersonaje(*atacante);   
+            std::cout << atacante->return_X();
+            std::cout << atacante->return_Y();
+            motor.dibujarPersonaje(*defensor);
+            miBatalla.actualizarCombate(*atacante, *defensor, miCaja, motor.obtenerObstaculos());
+        }
+
+        //motor.dibujarBarraVida(pj1, pj2);
 
         for (int i = 0; i < 20; i++) {
             Disparo* d = miBatalla.return_nDisparos()[i];
@@ -203,8 +213,17 @@ void OnTimer(int value) {
 
     // 3. Lógica normal del juego (solo se ejecuta si no hay instrucciones en pantalla)
     if (estado == BATALLA) {
-        miBatalla.actualizarCombate(pj1, pj2, miCaja, motor.obtenerObstaculos());
-        if (fin_) estado = JUEGO;
+        Personaje* atacante = juego.getAtacanteBatalla();
+        Personaje* defensor = juego.getDefensorBatalla();
+
+        if (atacante != nullptr && defensor != nullptr) {
+            miBatalla.actualizarCombate(*atacante, *defensor, miCaja, motor.obtenerObstaculos());
+
+        }
+        if (fin_) {
+            estado = JUEGO;
+            juego.finalizarBatalla();
+        }
     }
     glutPostRedisplay();
 
@@ -287,27 +306,27 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
     if (estado == JUEGO)
     {
         micursor.seleccion_personaje_tablero(c, juego.getTurno());
+        
         if (micursor.obt_contador_selecciones() == 0) {
             micursor.inicializar_tablero(juego.getTurno());
         }
     }
 
-    if (key == 'b') {
+    /*if (key == 'b') {
         std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
         if (estado == JUEGO) {
         estado = BATALLA;
         }
-
         pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
         pj1.direccion(1.0, 0.0);
         pj2 = Personaje::crearPieza(HECHICERO, ALIEN, 15.0, 7.5);
         pj2.direccion(-1.0, 0.0);
         motor.inicializarBatalla();
-    }
+    }*/
 
-        if (estado == BATALLA) {
+        /*if (estado == BATALLA) {
             miBatalla.KeyBatalla(key, pj1, pj2);
-        }
+        }*/
 
     glutPostRedisplay();
 }
