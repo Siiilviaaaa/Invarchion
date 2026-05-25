@@ -194,7 +194,7 @@ void Menu::cargar_ranking() {
 }
 
 //Aariable global externa
-extern int puntuacion_actual;
+extern int puntuacion_actual=0;
 
 void Menu::actualizar_ranking(std::string nombre) {
 

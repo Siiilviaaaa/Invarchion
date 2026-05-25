@@ -35,199 +35,117 @@ void Cursor::inicializar_tablero(int turno)
 	}
 }
 
-void Cursor::mover_humanos(unsigned char key,int turno)
+void Cursor::mover_humanos(unsigned char key, int turno)
 {
-	//movimiento exclusivo del cursor 
-	if (turno == 0)//turno de humanos
+	if (turno != 0)
 	{
-		//si presionamos tecla y no estamos en el limite...
-		if ((key == 'a') && (columna > 0))
-		{
-			switch (contador_selecciones)
-			{
-			case 1:
-				if (movimientos_restantes > 0)
-				{
-					columna -= 1;
-					movimientos_restantes -= 1;
-					if (personajeSeleccionado != nullptr) { //asi se teletransporta a medida que se mueve el cursor
-						personajeSeleccionado->setX(columna);
-						personajeSeleccionado->setY(fila);
-					}
-					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes)+ " movimientos");
-				}
-				break;
-
-			case 2:  
-				columna -= 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
-
-			default: break;
-			}
-		}
-		if ((key == 'd') && (columna < 6)) {
-			switch (contador_selecciones)
-			{
-			case 1:
-				if (movimientos_restantes > 0)
-				{
-					columna += 1;
-					movimientos_restantes -= 1;
-					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-				}
-				break;
-			
-			case 2:  columna += 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
-
-			default: break;
-			}
-		}
-
-		if ((key == 's') && (fila > 0)) {
-			switch (contador_selecciones)
-			{
-			case 1:			
-				if (movimientos_restantes > 0)
-				{
-					fila -=1;
-					movimientos_restantes -= 1;
-					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-				}
-				break;
-			
-			case 2:  fila -= 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
-
-			default: break;
-			}
-		}
-		if ((key == 'w') && (fila < 4)) {
-			switch (contador_selecciones)
-			{
-			case 1:
-				if (movimientos_restantes > 0)
-				{
-					fila += 1;
-					movimientos_restantes -= 1;
-					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-				} 
-				break;
-
-			case 2:  fila += 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
-
-			default: break;
-			}
-		}
+		return;
 	}
+
+	int cambioFila = 0;
+	int cambioColumna = 0;
+
+	switch (key)
+	{
+	case 'a':
+		cambioColumna = -1;
+		break;
+
+	case 'd':
+		cambioColumna = 1;
+		break;
+
+	case 's':
+		cambioFila = -1;
+		break;
+
+	case 'w':
+		cambioFila = 1;
+		break;
+
+	default:
+		return;
+	}
+
+	movimiento(cambioFila, cambioColumna, "Humano");
 }
-void Cursor::mover_aliens(int key)
+void Cursor::mover_aliens(int key, int turno)
 {
-	
-		switch (key)
+	if (turno != 1)
+	{
+		return;
+	}
+
+	int cambioFila = 0;
+	int cambioColumna = 0;
+
+	switch (key)
+	{
+	case GLUT_KEY_LEFT:
+		cambioColumna = -1;
+		break;
+
+	case GLUT_KEY_RIGHT:
+		cambioColumna = 1;
+		break;
+
+	case GLUT_KEY_DOWN:
+		cambioFila = -1;
+		break;
+
+	case GLUT_KEY_UP:
+		cambioFila = 1;
+		break;
+
+	default:
+		return;
+	}
+
+	movimiento(cambioFila, cambioColumna, "Alien");
+}
+void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mensaje)
+{
+	int desplazamiento_fila = fila + mov_filas;
+	int desplazamiento_columna = columna + mov_columnas;
+
+	if (desplazamiento_fila < 0 || desplazamiento_fila > 4 || desplazamiento_columna < 0 || desplazamiento_columna > 6)
+	{
+		//si nos encontramos en el limite del tablero, salimos de la función
+		return;
+	}
+	switch (contador_selecciones)
+	{
+	case 1:
+		if (movimientos_restantes > 0)
 		{
-		case GLUT_KEY_UP: {
-			if (fila < 4)
+			fila = desplazamiento_fila;
+			columna = desplazamiento_columna;
+			movimientos_restantes--;
+
+			// Actualizar visualmente el personaje en cada movimiento
+			if (personajeSeleccionado != nullptr)
 			{
-				switch (contador_selecciones)
-				{
-				case 1:
-
-					if (movimientos_restantes > 0)
-					{
-						fila += 1;
-						movimientos_restantes -= 1;
-						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-					}
-					break;
-
-				case 2:  fila += 1;
-					insertar_mensaje("Selecciona un personaje");
-					break;
-
-				default: break;
-				}
-			}break;
-		}
-		case GLUT_KEY_DOWN:
-		{
-			if (fila > 0)
-			{
-				switch (contador_selecciones)
-				{
-				case 1:
-
-					if (movimientos_restantes > 0)
-					{
-						fila -= 1;
-						movimientos_restantes -= 1;
-						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-					}
-					break;
-
-				case 2:  fila -= 1;
-					insertar_mensaje("Selecciona un personaje");
-					break;
-
-				default: break;
-				}
+				personajeSeleccionado->setX(columna);
+				personajeSeleccionado->setY(fila);
 			}
-			break;
-		}
-		case GLUT_KEY_LEFT:
-		{
-			if (columna > 0)
-			{
-				switch (contador_selecciones)
-				{
-				case 1:
-					if (movimientos_restantes > 0)
-					{
-						columna -= 1;
-						movimientos_restantes -= 1;
-						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-					}
-					break;
 
-				case 2:  columna -= 1;
-					insertar_mensaje("Selecciona un personaje");
-					break;
-
-				default: break;
-				}
-			}
-			break;
+			insertar_mensaje(
+				mensaje + ", te quedan " +
+				std::to_string(movimientos_restantes) +
+				" movimientos"
+			);
 		}
-		case GLUT_KEY_RIGHT:
-		{
-			if (columna < 6)
-			{
-				switch (contador_selecciones)
-				{
-				case 1:
-					if (movimientos_restantes > 0)
-					{
-						columna += 1;
-						movimientos_restantes -= 1;
-						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-					}
-					break;
+		break;
 
-				case 2:  columna += 1;
-					insertar_mensaje("Selecciona un personaje");
-					break;
+	case 2:
+		fila = desplazamiento_fila;
+		columna = desplazamiento_columna;
+		insertar_mensaje("Selecciona un personaje");
+		break;
 
-				default: break;
-				}
-			}
-			break;
-		}
-		}
+	default:
+		break;
+	}
 }
 void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 {
@@ -346,7 +264,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			}
 			else
 			{
-				mover_aliens(key);
+				mover_aliens(key,turno);
 			}
 		}
 	}
@@ -372,6 +290,7 @@ int Cursor::coger(int turno)
 		informacion = *infoCasillaActual;//copia la informacion del puntero que apunta al tablero original
 		movimientos_restantes = infoCasillaActual->personajeEncima->movimientos;//copiamos los movimientos
 		//guarda la informacion de la casilla, por si hay que eliminarla luego de aqui, no eliminamos pq no sbemos is la va a soltar
+		personajeSeleccionado = infoCasillaActual->personajeEncima;
 		filaAntes = fila;
 		columnaAntes = columna;
 		
@@ -415,6 +334,8 @@ int Cursor::soltar(int turno)
 
 		casillaActual->personajeEncima = personajeMovido;
 		casillaAnterior->personajeEncima = nullptr;
+
+		personajeSeleccionado = nullptr;
 
 		return 1;
 	}
