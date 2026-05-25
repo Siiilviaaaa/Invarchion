@@ -33,7 +33,6 @@ std::string textoBando = "";
 bool mostrandoInstruccionesTablero = false;
 float tiempoInstruccionesTablero = 0.0f;
 
-
 //Variables globales para controlar el hover
 bool hoverSalir = false;
 bool hoverSeleccion = false;
@@ -85,7 +84,7 @@ void OnDraw(void) {
     case JUEGO:
     {
         miCamara.vistaJuego();
-        motor.dibujaTablero();
+        motor.dibujarTablero();
 
         for (int f = 0; f < 5; f++) {
             for (int c = 0; c < 7; c++) {
@@ -343,8 +342,6 @@ void OnSpecialKeyboardDown(int key, int x, int y) {
         if (micursor.obt_contador_selecciones() == 0) {
             micursor.inicializar_tablero(juego.getTurno());
         }
-
-        glutPostRedisplay();
     }
     glutPostRedisplay();
 }

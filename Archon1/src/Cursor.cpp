@@ -285,6 +285,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			{
 				Personaje* mago = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje();
 				aplicarCuracionMasiva(turno, mago);
+				std::cout << "Curacion masiva aplicada. Cambio de turno: " << std::endl;
 			}
 			else
 			{
@@ -341,6 +342,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			{
 				Personaje* mago = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje();
 				aplicarCuracionMasiva(turno, mago);
+				std::cout << "Curacion masiva aplicada. Cambio de turno: " << std::endl;
 			}
 			else
 			{

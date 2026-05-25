@@ -385,7 +385,7 @@ void MotorGrafico::dibujarInstruccionesTablero()
 	glPopMatrix();
 }
 
-void MotorGrafico::dibujaTablero() {
+void MotorGrafico::dibujarTablero() {
 	// SEGURIDAD: Si no hay tablero, no intentamos leer datos (evita el crash)
 	if (tablero == nullptr) return;
 

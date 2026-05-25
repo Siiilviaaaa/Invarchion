@@ -43,5 +43,5 @@ public:
 
 
 	static void limites(Disparo& d, Caja& c);
-	static void limites(Personaje& j, Caja& c);//lo he sobrecargado (antes estaba limite_d y limite_p)
+	static void limites(Personaje& j, Caja& c);
 };

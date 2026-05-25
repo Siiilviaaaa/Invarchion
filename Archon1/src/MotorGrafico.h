@@ -16,8 +16,9 @@ class MotorGrafico
 {
 	const int numColumnasSpritePersonaje{ 3 };
 	const int numFilasSpritePersonaje{ 4 };
+
 	////PERSONAJES HUMANOS////
-	ETSIDI::SpriteSequence luchador; //SIN HACER PERO PARA PODER CREAR LA FUNCION ME LO INVENTO, CAMBIAR LUEGO LOS NORMBRES
+	ETSIDI::SpriteSequence luchador; //SIN HACER
 	ETSIDI::SpriteSequence soldado;
 	ETSIDI::SpriteSequence volador; //SIN HACER
 	ETSIDI::SpriteSequence minero;
@@ -28,7 +29,7 @@ class MotorGrafico
 	ETSIDI::SpriteSequence arquero;
 	ETSIDI::SpriteSequence murcielago;
 	ETSIDI::SpriteSequence gusano; //SIN HACER
-	ETSIDI::SpriteSequence mago; //SIN HACER
+	ETSIDI::SpriteSequence mago;
 	
 	////ELEMENTOS BATALLA////
 	ETSIDI::Sprite barraVida;
@@ -41,7 +42,6 @@ class MotorGrafico
 	////TABLERO////
 	Tablero* tablero = nullptr;
 	float lado = 2.0f;
-
 
 public:
 	MotorGrafico();
@@ -60,7 +60,7 @@ public:
 	void dibujarPersonaje(const Personaje& personaje);
 	void dibujarBarraVida(Personaje& j1, Personaje& j2);
 	/////////TABLERO/////////////
-	void dibujaTablero();
+	void dibujarTablero();
 	void dibujarFondo();
 	void dibujarBordeTurno();
 	void dibujarCasilla(const Casilla* c);
