@@ -9,17 +9,17 @@ extern Juego juego;
 
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
-	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	soldado("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	volador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	minero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	hechicero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje), //falta
+	soldado("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	volador("Recursos/paracaidista.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	minero("Recursos/minero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	hechicero("Recursos/magohumano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	golem("Recursos/golem.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	arquero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	murcielago("Recursos/murcielago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	gusano("Recursos/gusano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	mago("Recursos/mago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	mago("Recursos/magoalien.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	barraVida("Recursos/barra.png")
 {
@@ -186,11 +186,19 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//para la transparencia
 		
 		extern Estado estado;
-		double posY = (estado == BATALLA) ? personaje.y : personaje.getY(); //una es la abs y la otra es respecto a las casillas
+		double posX, posY;
+		if (estado == BATALLA) {
+			posX = personaje.return_X();
+			posY = personaje.return_Y();
+		}
+		else {
+			double ladoCasilla = 2;
+			posX = personaje.return_X() * ladoCasilla + 1;
+			posY = ladoCasilla * (personaje.return_Y()) + 1;
+		}
 		
-		
-		glTranslated(personaje.x, posY, 0.5);
-		SpriteActual->setCenter(0, 0);
+		glTranslated(posX, posY, 0.5);
+		SpriteActual->setCenter(0.9, 0.9);
 		SpriteActual->setSize(1.8, 1.8);
 		switch (estado) {
 		case JUEGO:
@@ -199,19 +207,17 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 			}
 			else {
 				SpriteActual->flip(true, false);  
-				glTranslated(1.95, 0, 0);         // COMPENSACION porque al girarlo se salen de su casillita
 			}
 			SpriteActual->setState(MIRANDO_HORIZONTALMENTE, true);
-			SpriteActual->draw(); 
+			SpriteActual->draw();
 			break;
 		case BATALLA:
-			// 1. Efecto espejo y compensación
+			// se ponen en espejo dependiendo de si va a la derecha o a la izq
 			if (personaje.return_dirX() > 0.01) {
 				SpriteActual->flip(false, false);
 			}
 			else if (personaje.return_dirX() < -0.01) {
 				SpriteActual->flip(true, false);
-				glTranslated(1.8, 0, 0); // COMPENSACIÓN EN BATALLA: Empujarlo para que la 'hitbox' no se desvíe al girar
 			}
 
 			int fila = 1;
@@ -242,26 +248,6 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 
 		
 
-		//para la orientacion
-		if (personaje.return_dirX() > 0.01) SpriteActual->flip(false, false);
-		if (personaje.return_dirX() < -0.01) SpriteActual->flip(true, false);
-		int fila = MIRANDO_ABAJO; //fila del spritesheet
-		if (std::abs(personaje.return_dirX()) > std::abs(personaje.return_dirY())) {
-			fila = MIRANDO_HORIZONTALMENTE; 
-		}
-		else if (abs(personaje.return_dirY()) > 0) {
-			if (personaje.return_dirY() < 0) fila = MIRANDO_ABAJO; 
-			if (personaje.return_dirY() > 0) fila = MIRANDO_ARRIBA; 
-		}
-		if (personaje.moviendose) {
-			///SpriteActual -> setState(1, false);
-			//SpriteActual->loop();
-
-		}
-		else {
-			SpriteActual->setState(0);
-		}
-		SpriteActual->draw();
 		glDisable(GL_BLEND);
 		glEnable(GL_LIGHTING);
 		glPopMatrix();
