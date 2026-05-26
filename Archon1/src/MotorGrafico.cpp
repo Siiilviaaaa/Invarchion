@@ -8,7 +8,7 @@
 extern Juego juego;
 
 MotorGrafico::MotorGrafico() :
-	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje), //falta
+	luchador("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	soldado("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	volador("Recursos/paracaidista.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	minero("Recursos/minero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -17,7 +17,7 @@ MotorGrafico::MotorGrafico() :
 	golem("Recursos/golem.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	arquero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	murcielago("Recursos/murcielago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	gusano("Recursos/gusano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	gusano("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	mago("Recursos/magoalien.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	barraVida("Recursos/barra.png")
@@ -167,11 +167,11 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 				SpriteActual->flip(true, false);
 			}
 
-			int fila = 1;
-			if (std::abs(personaje.return_dirX()) > std::abs(personaje.return_dirY())) {
+			int fila = MIRANDO_ABAJO;
+			if (abs(personaje.return_dirX()) > abs(personaje.return_dirY())) {
 				fila = MIRANDO_HORIZONTALMENTE;
 			}
-			else if (std::abs(personaje.return_dirY()) > 0) {
+			else if (abs(personaje.return_dirY()) > 0) {
 				if (personaje.return_dirY() < 0) fila = MIRANDO_ABAJO;
 				if (personaje.return_dirY() > 0) fila = MIRANDO_ARRIBA;
 			}
@@ -179,11 +179,11 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 			int indexInicial = fila * 3; // 3 columnas en los spritesheets por fila
 
 			//  bucle de animacion
-			if (std::abs(personaje.return_dirX()) < 0.01 && std::abs(personaje.return_dirY()) < 0.01) {
+			if (personaje.return_dirX() == 0 && personaje.return_dirY() == 0) {
 				SpriteActual->setState(indexInicial, true);
 			}
 			else {
-				// Si está fuera de su fila, lo devolvemos al inicio de la misma
+				// Si está fuera de su fila lo devolvemos al inicio 
 				if (SpriteActual->getState() < indexInicial || SpriteActual->getState() >= indexInicial + 3) {
 					SpriteActual->setState(indexInicial, false);
 				}
@@ -192,6 +192,8 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 			SpriteActual->draw(); 
 			break;
 		}
+
+		
 
 		glDisable(GL_BLEND);
 		glEnable(GL_LIGHTING);
