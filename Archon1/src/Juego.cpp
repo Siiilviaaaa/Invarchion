@@ -9,7 +9,6 @@
 #include "MotorGrafico.h"
 extern MotorGrafico motor;
 extern Estado estado;
-extern Cursor micursor;
 Juego::Juego(Tablero* t) :
     ptrTablero(t)
 {
@@ -81,7 +80,6 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
 
 void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 {
- 	////Personaje* nuevo = new Personaje(Personaje::crearPieza(t, e, x, y));
     for (int i = 0; i < MAX_PERSONAJES; i++) {
         if (figuras[i] == nullptr) {//si esta posición está vacía
             figuras[i] = new Personaje(Personaje::crearPieza(t, e, 0, 0));
@@ -100,16 +98,31 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 
 void Juego::inicializarPartida()
 {
-    spawnPersonaje(LUCHADOR, HUMANO, 0, 0); // se puede hacer con un bucle, pero bueno asi lo edito mejor
-    spawnPersonaje(ARQUERO, HUMANO, 1, 0);
-    spawnPersonaje(VOLADOR, HUMANO, 2, 0);
+    for (int i = 0; i < MAX_PERSONAJES; i++) { //borro memoria porq si no se llena el vector y no aparece ninguno xd
+        if (figuras[i] != nullptr) {
+            delete figuras[i];
+            figuras[i] = nullptr;
+        }
+    }
+
+    //HUMANOS
+    spawnPersonaje(ARQUERO, HUMANO, 0, 0); // se puede hacer con un bucle, pero bueno asi lo edito mejor
+    spawnPersonaje(VOLADOR, HUMANO, 1, 0);
+    spawnPersonaje(HECHICERO, HUMANO, 2, 0);
     spawnPersonaje(EXCAVADOR, HUMANO, 3, 0);
-    spawnPersonaje(HECHICERO, HUMANO, 4, 0);
-    spawnPersonaje(LUCHADOR, ALIEN, 0, 6);
-    spawnPersonaje(ARQUERO, ALIEN, 1, 6);
-    spawnPersonaje(VOLADOR, ALIEN, 2, 6);
+    spawnPersonaje(ARQUERO, HUMANO, 4, 0);
+    for (int i = 0; i < 5;i++) {
+        spawnPersonaje(LUCHADOR, HUMANO, i, 1);
+    }
+    //ALIENS
+    spawnPersonaje(ARQUERO, ALIEN, 0, 6);
+    spawnPersonaje(VOLADOR, ALIEN, 1, 6);
+    spawnPersonaje(HECHICERO, ALIEN, 2, 6);
     spawnPersonaje(EXCAVADOR, ALIEN, 3, 6);
-    spawnPersonaje(HECHICERO, ALIEN, 4, 6);
+    spawnPersonaje(ARQUERO, ALIEN, 4, 6);
+    for (int i = 0; i < 5;i++) {
+        spawnPersonaje(ARQUERO, ALIEN, i, 5);
+    }
 
 }
 
@@ -120,21 +133,6 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     atacanteBatalla = atacante;
     defensorBatalla = defensor;
 
-    int f = micursor.obt_fila();
-    int c = micursor.obt_columna();
-    InfoCasilla* info = ptrTablero->getInfoCasilla(f, c);
-    
-    if (info != nullptr) {
-        Tipocasilla color = info->getColor();
-        if (casillaFavorable(atacante, color)) {
-            atacante->setVida(atacante->return_Vida() + 20);
-            std::cout << "[BONO] Atacante en terreno aliado: +20 HP" << std::endl;
-        }
-        if (casillaFavorable(defensor, color)) {
-            defensor->setVida(defensor->return_Vida() + 20);
-            std::cout << "[BONO] Defensor en terreno aliado: +20 HP" << std::endl;
-        }
-    }
     atacante->x = 5.0;
     atacante->y = 7.5;
     atacante->direccion(1.0, 0.0); //el atacante siempre va a la izq
@@ -148,20 +146,12 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
 
 }
 
-void Juego::finalizarBatalla()
+void Juego::cambiarEscenarioATablero(const Personaje& ganador)
 {
-    atacanteBatalla = nullptr;
-    defensorBatalla = nullptr;
-    std::cout << "fin de batalla, se han borrado los punteros a los personajes" << std::endl;
+    
 }
 
-bool Juego::casillaFavorable(Personaje* p, Tipocasilla colorCasilla)
-{
-    if (p == nullptr) return false;
-    if (p->return_Bando() == HUMANO && colorCasilla == blanca) return true;
-    if (p->return_Bando() == ALIEN && colorCasilla == negra) return true;
-    return false;
-}
+
 
 
 

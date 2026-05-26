@@ -9,17 +9,17 @@ extern Juego juego;
 
 MotorGrafico::MotorGrafico() :
 	numObstaculos(5),
-	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	soldado("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	volador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	minero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	hechicero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje), //falta
+	soldado("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	volador("Recursos/paracaidista.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	minero("Recursos/minero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	hechicero("Recursos/magohumano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	golem("Recursos/golem.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	arquero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	murcielago("Recursos/murcielago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	gusano("Recursos/gusano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	mago("Recursos/mago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	mago("Recursos/magoalien.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	barraVida("Recursos/barra.png")
 {
@@ -196,26 +196,58 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 			posX = personaje.return_X() * ladoCasilla + 1;
 			posY = ladoCasilla * (personaje.return_Y()) + 1;
 		}
-		//double posY = (estado == BATALLA) ? personaje.return_Y() : personaje.getY();
-		
 		
 		glTranslated(posX, posY, 0.5);
 		SpriteActual->setCenter(0.9, 0.9);
 		SpriteActual->setSize(1.8, 1.8);
-		if (personaje.bando == ALIEN) {
+		switch (estado) {
+		case JUEGO:
+			if (personaje.return_Bando() == HUMANO) {
+				SpriteActual->flip(false, false); // humanos miran a la derecha
+			}
+			else {
+				SpriteActual->flip(true, false);  
+			}
+			SpriteActual->setState(MIRANDO_HORIZONTALMENTE, true);
+			SpriteActual->draw();
+			break;
+		case BATALLA:
+			// se ponen en espejo dependiendo de si va a la derecha o a la izq
+			if (personaje.return_dirX() > 0.01) {
+				SpriteActual->flip(false, false);
+			}
+			else if (personaje.return_dirX() < -0.01) {
+				SpriteActual->flip(true, false);
+			}
 
-			SpriteActual->flip(true, false); //así miran a la izq
-			//glTranslated(1.95, 0, 0);
-		}
-		if (personaje.moviendose) {
-			///SpriteActual -> setState(1, false);
-			//SpriteActual->loop();
+			int fila = 1;
+			if (std::abs(personaje.return_dirX()) > std::abs(personaje.return_dirY())) {
+				fila = MIRANDO_HORIZONTALMENTE;
+			}
+			else if (std::abs(personaje.return_dirY()) > 0) {
+				if (personaje.return_dirY() < 0) fila = MIRANDO_ABAJO;
+				if (personaje.return_dirY() > 0) fila = MIRANDO_ARRIBA;
+			}
 
+			int indexInicial = fila * 3; // 3 columnas en los spritesheets por fila
+
+			//  bucle de animacion
+			if (std::abs(personaje.return_dirX()) < 0.01 && std::abs(personaje.return_dirY()) < 0.01) {
+				SpriteActual->setState(indexInicial, true);
+			}
+			else {
+				// Si está fuera de su fila, lo devolvemos al inicio de la misma
+				if (SpriteActual->getState() < indexInicial || SpriteActual->getState() >= indexInicial + 3) {
+					SpriteActual->setState(indexInicial, false);
+				}
+				SpriteActual->loop();
+			}
+			SpriteActual->draw(); 
+			break;
 		}
-		else {
-			SpriteActual->setState(0);
-		}
-		SpriteActual->draw();
+
+		
+
 		glDisable(GL_BLEND);
 		glEnable(GL_LIGHTING);
 		glPopMatrix();
