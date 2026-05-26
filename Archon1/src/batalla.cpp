@@ -271,7 +271,7 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 	}
 }
 
-int Batalla::FinCombate(Personaje& humanos, Personaje& aliens)
+HanGanado Batalla::FinCombate(Personaje& humanos, Personaje& aliens)
 {
 	//RETORNA 0 SI SIGUEN PELEANDO
 	//RETORNA 1 SI HUMANOS GANAN
@@ -280,15 +280,15 @@ int Batalla::FinCombate(Personaje& humanos, Personaje& aliens)
 	if (aliens.return_Vida() <= 0)
 	{
 		cout << "HUMANS WIN!" << endl;
-		return 1;
+		return GanaronHumanos;
 	}
 	else if (humanos.return_Vida() <= 0)
 	{
 		cout << "ALIENS WIN!" << endl;
-		return 2;
+		return GanaronAliens;
 	}
 
-	return 0;
+	return AunEnCurso;
 }
 
 void Batalla::pegar(Personaje& atacante, Personaje& objetivo)

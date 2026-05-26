@@ -115,9 +115,9 @@ void Juego::inicializarPartida()
     spawnPersonaje(HECHICERO, HUMANO, 2, 0);
     spawnPersonaje(EXCAVADOR, HUMANO, 3, 0);
     spawnPersonaje(ARQUERO, HUMANO, 4, 0);
-    for (int i = 0; i < 5;i++) {
+    /*for (int i = 0; i < 5;i++) {
         spawnPersonaje(LUCHADOR, HUMANO, i, 1);
-    }
+    }*/
     //ALIENS
     spawnPersonaje(ARQUERO, ALIEN, 0, 6);
     spawnPersonaje(VOLADOR, ALIEN, 1, 6);
@@ -153,11 +153,38 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
 
 }
 
-void Juego::cambiarEscenarioATablero(const Personaje& ganador)
+void Juego::finalizarBatalla()
 {
     std::cout << "[SISTEMA] volviendo a tablero" << std::endl;
+    if (atacanteBatalla == nullptr || defensorBatalla == nullptr || origenAntesDeBatalla == nullptr) return;
 
+    Personaje* ganador = nullptr;
+    Personaje* perdedor = nullptr;
 
+    if (atacanteBatalla->return_Vida() <= 0) {
+        ganador = defensorBatalla;
+        perdedor = atacanteBatalla;
+    }
+    else {
+        ganador = atacanteBatalla;
+        perdedor = defensorBatalla;
+    }
+
+    if (ganador != nullptr) {
+
+        origenAntesDeBatalla->getInfo()->setPersonaje(ganador);
+        ganador->x = origenAntesDeBatalla->getcolumna();
+        ganador->y = origenAntesDeBatalla->getfila();
+        ganador->direccion(0.0, 0.0);
+
+        perdedor->setVida(0);
+
+    }
+
+    atacanteBatalla = nullptr;
+    defensorBatalla = nullptr;
+    origenAntesDeBatalla = nullptr;
+    cambiarTurno();
 }
 
 

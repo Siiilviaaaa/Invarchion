@@ -226,7 +226,7 @@ void OnTimer(int value) {
         }
         if (fin_) {
             estado = JUEGO;
-            //juego.finalizarBatalla();
+            juego.finalizarBatalla();
         }
     }
     glutPostRedisplay();
