@@ -6,7 +6,7 @@ using std::cout, std::cin, std::endl;
 extern bool fin_;
 extern int puntuacion_actual;
 
-Batalla::Batalla()
+Batalla::Batalla():numObstaculos(5)
 {
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		nDisparos[i] = nullptr;
@@ -14,6 +14,10 @@ Batalla::Batalla()
 	for (int i = 0; i < 2; i++)
 		for (int j = 0; j < 3; j++)
 			nHechizos[i][j] = nullptr;
+
+	for (int i = 0; i < 5; i++) {
+		listaObstaculos[i] = nullptr;
+	}
 }
 
 Batalla::~Batalla()
@@ -36,6 +40,55 @@ Batalla::~Batalla()
 		}
 	}
 }
+
+void Batalla::inicializarBatalla()
+{
+	srand((unsigned int)time(NULL));
+	int aceptados = 0;
+	for (int i = 0; i < numObstaculos; i++) {
+		if (listaObstaculos[i]) delete listaObstaculos[i];
+		listaObstaculos[i] = nullptr;
+	}
+	double r = 1.3;
+	const double limite_max_x = 20.0;
+	const double limite_max_y = 15.0;
+	const double margen_pared = 1.0;
+	const double margen_personaje = 3.5;
+	const float dist_min = 3.5f;
+	double p1x = 5.0, p1y = 7.5, p2x = 15.0, p2y = 7.5;
+	int intentos = 0;
+	while (aceptados < numObstaculos && intentos < 1000) {
+		intentos++;
+
+		double rx = (margen_pared + r) + ((double)rand() / RAND_MAX) * (limite_max_x - 2 * (margen_pared + r));
+		double ry = (margen_pared + r) + ((double)rand() / RAND_MAX) * (limite_max_y - 2 * (margen_pared + r));
+		bool colision = false;
+		//posciones iniciales de los personajes en batalla
+		double distP1 = sqrt(pow(rx - p1x, 2) + pow(ry - p1y, 2));
+		double distP2 = sqrt(pow(rx - p2x, 2) + pow(ry - p2y, 2));
+		if (distP1 < margen_personaje || distP2 < margen_personaje) {
+			colision = true;
+		}
+		if (!colision) {
+			for (int j = 0; j < aceptados; j++) {
+				Obstaculo* existente = listaObstaculos[j];
+				float dx = (float)(rx - existente->return_X());
+				float dy = (float)(ry - existente->return_Y());
+				float distancia = sqrtf(powf(dx, 2) + powf(dy, 2));
+				if (distancia < (r * dist_min)) {
+					colision = true;
+					break;
+				}
+			}
+		}
+
+		if (!colision) {
+			listaObstaculos[aceptados] = new Obstaculo(rx, ry, r);
+			aceptados++;
+		}
+	}
+}
+
 
 void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 {

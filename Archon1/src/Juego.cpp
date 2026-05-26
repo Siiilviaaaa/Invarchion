@@ -6,9 +6,13 @@
 #include "MotorGrafico.h"
 #include "casilla.h"
 #include "Cursor.h"
-#include "MotorGrafico.h"
+#include "Batalla.h"
+
 extern MotorGrafico motor;
 extern Estado estado;
+extern Cursor micursor;
+extern Batalla miBatalla;
+
 Juego::Juego(Tablero* t) :
     ptrTablero(t)
 {
@@ -141,7 +145,7 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     defensor->y = 7.5;
     defensor->direccion(-1.0, 0.0);//el defensor a la derecha
 
-    motor.inicializarBatalla();
+    miBatalla.inicializarBatalla();
     estado = BATALLA;
 
 }
