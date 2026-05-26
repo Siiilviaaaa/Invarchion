@@ -168,7 +168,7 @@ void OnDraw(void) {
         break;
     case BATALLA:
         miCamara.vistaBatalla();
-        motor.dibujarCaja(miCaja);
+        motor.dibujarCaja(miCaja, miBatalla);
 
         Personaje* atacante = juego.getAtacanteBatalla();
         Personaje* defensor = juego.getDefensorBatalla();
@@ -178,11 +178,9 @@ void OnDraw(void) {
             //std::cout << atacante->return_X();
             //std::cout << atacante->return_Y();
             motor.dibujarPersonaje(*defensor);
-            miBatalla.actualizarCombate(*atacante, *defensor, miCaja, motor.obtenerObstaculos());
+            miBatalla.actualizarCombate(*atacante, *defensor, miCaja, miBatalla.obtenerObstaculos());
             motor.dibujarBarraVida(*atacante, *defensor);
         }
-
-        
 
         for (int i = 0; i < 20; i++) {
             Disparo* d = miBatalla.return_nDisparos()[i];
@@ -223,7 +221,7 @@ void OnTimer(int value) {
         Personaje* defensor = juego.getDefensorBatalla();
 
         if (atacante != nullptr && defensor != nullptr) {
-            miBatalla.actualizarCombate(*atacante, *defensor, miCaja, motor.obtenerObstaculos());
+            miBatalla.actualizarCombate(*atacante, *defensor, miCaja, miBatalla.obtenerObstaculos());
 
         }
         if (fin_) {

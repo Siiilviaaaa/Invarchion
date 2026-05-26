@@ -7,6 +7,7 @@
 #include "Obstaculo.h"
 #include "Cursor.h"
 #include "tablero.h"
+#include "batalla.h"
 
 #include <string>
 
@@ -33,9 +34,6 @@ class MotorGrafico
 	
 	////ELEMENTOS BATALLA////
 	ETSIDI::Sprite barraVida;
-	
-	Obstaculo* listaObstaculos[7];
-	int numObstaculos;
 
 	void recortarBarra(float vida, float x, float y, float ancho, float alto);
 	
@@ -49,11 +47,10 @@ public:
 	// Método para conectar el tablero si el motor se creó vacío
 	void setTablero(Tablero* t) { tablero = t; }
 
-	void inicializarBatalla();
 	void dibujarPared(const Pared& p);
 	void dibujarCursor(Cursor cursor) const;
 	void dibujarObstaculo(const Obstaculo& obs);
-	void dibujarCaja(const Caja& c);
+	void dibujarCaja(const Caja& c, Batalla& b);
 	
 	void dibujarDisparo(Disparo* disparo);
 	void dibujarHechizo(Hechizo* hechizo);
@@ -68,8 +65,4 @@ public:
 	//nuevos mios de dibujo de instrucciones
 	void dibujarMensajeBando(const std::string& textoBando);
 	void dibujarInstruccionesTablero();
-
-	/////////METODOS////////////
-	//DIRECCION QUE APUNTA A OTRA DIRECCION
-	Obstaculo* (&obtenerObstaculos())[7] {return listaObstaculos;}
 };

@@ -12,9 +12,14 @@
 
 class Batalla
 {
+	friend class MotorGrafico;
+
 	static const int MAX_DISPAROS = 20;
 	Disparo* nDisparos[MAX_DISPAROS];
 	Hechizo* nHechizos[2][3];
+
+	Obstaculo* listaObstaculos[7];
+	int numObstaculos;
 	
 public:
 	Batalla();
@@ -23,6 +28,7 @@ public:
 	Hechizo* (&return_nHechizos())[2][3] { return nHechizos; }
 
 	/////////ACTUALIZACIONES//////////////
+	void inicializarBatalla();
 	void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2);
 	void tecla_especial(int key, Personaje& alien);
 	void actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstaculo* lista[5]);
@@ -44,4 +50,7 @@ public:
 
 	static void limites(Disparo& d, Caja& c);
 	static void limites(Personaje& j, Caja& c);
+
+	//DIRECCION QUE APUNTA A OTRA DIRECCION
+	Obstaculo* (&obtenerObstaculos())[7] {return listaObstaculos;}
 };
