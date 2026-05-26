@@ -5,6 +5,7 @@
 class Casilla
 {
 	friend class Cursor;
+	friend class Juego;
 	//variables para la posicion
 	int fila, columna; //posicion en el espacio
 	InfoCasilla* info;

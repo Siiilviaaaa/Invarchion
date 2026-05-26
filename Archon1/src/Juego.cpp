@@ -132,11 +132,14 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
     atacanteBatalla = atacante;
     defensorBatalla = defensor;
-
+    if (ptrTablero != nullptr) { //
+        origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x); 
+    }
+ 
     atacante->x = 5.0;
     atacante->y = 7.5;
     atacante->direccion(1.0, 0.0); //el atacante siempre va a la izq
-
+    
     defensor->x = 15.0;
     defensor->y = 7.5;
     defensor->direccion(-1.0, 0.0);//el defensor a la derecha
@@ -148,7 +151,9 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
 
 void Juego::cambiarEscenarioATablero(const Personaje& ganador)
 {
-    
+    std::cout << "[SISTEMA] volviendo a tablero" << std::endl;
+
+
 }
 
 
