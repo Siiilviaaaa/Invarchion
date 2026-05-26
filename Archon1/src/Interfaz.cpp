@@ -368,9 +368,9 @@ void OnSpecialKeyboardDown(int key, int x, int y) {
             }
         }
     }
-    if (estado == JUEGO && juego.getTurno() == 1)
+    if (estado == JUEGO )
     {
-        micursor.mover_aliens(key);
+        micursor.mover_aliens(key, juego.getTurno());
 
         if (micursor.obt_contador_selecciones() == 0) {
             micursor.inicializar_tablero(juego.getTurno());

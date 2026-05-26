@@ -6,13 +6,13 @@ class Juego; //declaro clase anticipadamente para eviatr conflictos
 
 class Cursor {
 	int fila, columna;
+	int color_r{}, color_v{}, color_a{};
 	int filaAntes, columnaAntes;
 	InfoCasilla informacion;
 	int contador_selecciones;//indica si se ha dado ya a coger y soltar personajes
 	int movimientos_restantes;
 	Personaje* atacante;
-	Personaje* defensor;
-	int color_r{}, color_v{}, color_a{};
+	Personaje* defensor;	
 	Personaje* personajeSeleccionado; // Guarda el PUNTERO original, no una copia
 	Juego* ptrJuego;//para avisar al juego del cambio de turno
 
@@ -30,7 +30,8 @@ public:
 
 	void inicializar_tablero(int turno);
 	void mover_humanos(unsigned char key, int turno);
-	void mover_aliens(int key);
+	void mover_aliens(int key,int turno);
+	void movimiento(int mov_filas, int mov_columnas, const std::string& mensaje, int turno);
 
 	void seleccion_personaje_tablero(unsigned char key, int turno);
 	int coger(int turno);

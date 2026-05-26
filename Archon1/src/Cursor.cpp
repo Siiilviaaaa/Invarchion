@@ -35,200 +35,161 @@ void Cursor::inicializar_tablero(int turno)
 	}
 }
 
-void Cursor::mover_humanos(unsigned char key,int turno)
+void Cursor::mover_humanos(unsigned char key, int turno)
 {
-	//movimiento exclusivo del cursor 
-	if (turno == 0)//turno de humanos
+	if (turno != 0)
 	{
-		//si presionamos tecla y no estamos en el limite...
-		if ((key == 'a') && (columna > 0))
+		return;
+	}
+
+	int cambioFila = 0;
+	int cambioColumna = 0;
+
+	switch (key)
+	{
+	case 'a':
+		cambioColumna = -1;
+		break;
+
+	case 'd':
+		cambioColumna = 1;
+		break;
+
+	case 's':
+		cambioFila = -1;
+		break;
+
+	case 'w':
+		cambioFila = 1;
+		break;
+
+	default:
+		return;
+	}
+
+	movimiento(cambioFila, cambioColumna, "Humano",turno);
+}
+void Cursor::mover_aliens(int key, int turno)
+{
+	if (turno != 1)
+	{
+		return;
+	}
+
+	int cambioFila = 0;
+	int cambioColumna = 0;
+
+	switch (key)
+	{
+	case GLUT_KEY_LEFT:
+		cambioColumna = -1;
+		break;
+
+	case GLUT_KEY_RIGHT:
+		cambioColumna = 1;
+		break;
+
+	case GLUT_KEY_DOWN:
+		cambioFila = -1;
+		break;
+
+	case GLUT_KEY_UP:
+		cambioFila = 1;
+		break;
+
+	default:
+		return;
+	}
+
+	movimiento(cambioFila, cambioColumna, "Alien",turno);
+}
+void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mensaje, int turno)
+{
+	int desplazamiento_fila = fila + mov_filas;
+	int desplazamiento_columna = columna + mov_columnas;
+	InfoCasilla* casillaDestino = miTablero.getInfoCasilla(desplazamiento_fila, desplazamiento_columna);//para que guarde la casilla actual en cada momento
+
+	if (desplazamiento_fila < 0 || desplazamiento_fila > 4 || desplazamiento_columna < 0 || desplazamiento_columna > 6)
+	{
+		//si nos encontramos en el limite del tablero, salimos de la función
+		return;
+	}
+	if (contador_selecciones == 1)
+	{
+		if (casillaDestino != nullptr && casillaDestino->getPersonaje() != nullptr)
 		{
-			switch (contador_selecciones)
+			Personaje* personajeDestino = casillaDestino->getPersonaje();
+
+			//hay un personaje de nuestro bando, no podemos saltarle
+			if (personajeDestino->return_Bando() == turno)
 			{
-			case 1:
-				if (movimientos_restantes > 0)
-				{
-					columna -= 1;
-					movimientos_restantes -= 1;
-					if (personajeSeleccionado != nullptr) { //asi se teletransporta a medida que se mueve el cursor
-						personajeSeleccionado->setX(columna);
-						personajeSeleccionado->setY(fila);
-					}
-					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes)+ " movimientos");
-				}
-				break;
-
-			case 2:  
-				columna -= 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
-
-			default: break;
+				insertar_mensaje("No puedes pasar por una casilla ocupada por un aliado");
+				return;
 			}
-		}
-		if ((key == 'd') && (columna < 6)) {
-			switch (contador_selecciones)
+
+			//Hay un persoanje del otro equipo, entramos directamente en batalla.
+			if (personajeDestino->return_Bando() != turno)
 			{
-			case 1:
-				if (movimientos_restantes > 0)
+				fila = desplazamiento_fila;
+				columna = desplazamiento_columna;
+
+				if (personajeSeleccionado != nullptr)
 				{
-					columna += 1;
-					movimientos_restantes -= 1;
-					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
+					personajeSeleccionado->setX(columna);
+					personajeSeleccionado->setY(fila);
 				}
-				break;
-			
-			case 2:  columna += 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
 
-			default: break;
-			}
-		}
+				atacante = personajeSeleccionado;
+				defensor = personajeDestino;
 
-		if ((key == 's') && (fila > 0)) {
-			switch (contador_selecciones)
-			{
-			case 1:			
-				if (movimientos_restantes > 0)
+				contador_selecciones = 0;
+				movimientos_restantes = 0;
+				personajeSeleccionado = nullptr;
+
+				if (ptrJuego != nullptr)
 				{
-					fila -=1;
-					movimientos_restantes -= 1;
-					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
+					ptrJuego->cambiarEscenarioABatalla(atacante, defensor);
 				}
-				break;
-			
-			case 2:  fila -= 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
 
-			default: break;
-			}
-		}
-		if ((key == 'w') && (fila < 4)) {
-			switch (contador_selecciones)
-			{
-			case 1:
-				if (movimientos_restantes > 0)
-				{
-					fila += 1;
-					movimientos_restantes -= 1;
-					insertar_mensaje("Humano, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-				} 
-				break;
-
-			case 2:  fila += 1;
-				insertar_mensaje("Selecciona un personaje");
-				break;
-
-			default: break;
+				return;
 			}
 		}
 	}
+	switch (contador_selecciones)
+	{
+	case 1:
+		if (movimientos_restantes > 0)
+		{
+			fila = desplazamiento_fila;
+			columna = desplazamiento_columna;
+			movimientos_restantes--;
+
+			// Actualizar visualmente el personaje en cada movimiento
+			if (personajeSeleccionado != nullptr)
+			{
+				personajeSeleccionado->setX(columna);
+				personajeSeleccionado->setY(fila);
+			}
+
+			insertar_mensaje(
+				mensaje + ", te quedan " +
+				std::to_string(movimientos_restantes) +
+				" movimientos"
+			);
+		}
+		break;
+
+	case 2:
+		fila = desplazamiento_fila;
+		columna = desplazamiento_columna;
+		insertar_mensaje("Selecciona un personaje");
+		break;
+
+	default:
+		break;
+	}
 }
-void Cursor::mover_aliens(int key)
-{
-	
-		switch (key)
-		{
-		case GLUT_KEY_UP: {
-			if (fila < 4)
-			{
-				switch (contador_selecciones)
-				{
-				case 1:
 
-					if (movimientos_restantes > 0)
-					{
-						fila += 1;
-						movimientos_restantes -= 1;
-						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-					}
-					break;
-
-				case 2:  fila += 1;
-					insertar_mensaje("Selecciona un personaje");
-					break;
-
-				default: break;
-				}
-			}break;
-		}
-		case GLUT_KEY_DOWN:
-		{
-			if (fila > 0)
-			{
-				switch (contador_selecciones)
-				{
-				case 1:
-
-					if (movimientos_restantes > 0)
-					{
-						fila -= 1;
-						movimientos_restantes -= 1;
-						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-					}
-					break;
-
-				case 2:  fila -= 1;
-					insertar_mensaje("Selecciona un personaje");
-					break;
-
-				default: break;
-				}
-			}
-			break;
-		}
-		case GLUT_KEY_LEFT:
-		{
-			if (columna > 0)
-			{
-				switch (contador_selecciones)
-				{
-				case 1:
-					if (movimientos_restantes > 0)
-					{
-						columna -= 1;
-						movimientos_restantes -= 1;
-						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-					}
-					break;
-
-				case 2:  columna -= 1;
-					insertar_mensaje("Selecciona un personaje");
-					break;
-
-				default: break;
-				}
-			}
-			break;
-		}
-		case GLUT_KEY_RIGHT:
-		{
-			if (columna < 6)
-			{
-				switch (contador_selecciones)
-				{
-				case 1:
-					if (movimientos_restantes > 0)
-					{
-						columna += 1;
-						movimientos_restantes -= 1;
-						insertar_mensaje("Alien, te quedan " + std::to_string(movimientos_restantes) + " movimientos");
-					}
-					break;
-
-				case 2:  columna += 1;
-					insertar_mensaje("Selecciona un personaje");
-					break;
-
-				default: break;
-				}
-			}
-			break;
-		}
-		}
-}
 void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 {
 	if (turno == 0)
@@ -346,12 +307,11 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			}
 			else
 			{
-				mover_aliens(key);
+				mover_aliens(key,turno);
 			}
 		}
 	}
 }
-
 int Cursor::coger(int turno)
 {
 	//crear variable que llame a elena: tablero.h get y modificar casilla
@@ -372,6 +332,7 @@ int Cursor::coger(int turno)
 		informacion = *infoCasillaActual;//copia la informacion del puntero que apunta al tablero original
 		movimientos_restantes = infoCasillaActual->personajeEncima->movimientos;//copiamos los movimientos
 		//guarda la informacion de la casilla, por si hay que eliminarla luego de aqui, no eliminamos pq no sbemos is la va a soltar
+		personajeSeleccionado = infoCasillaActual->personajeEncima;
 		filaAntes = fila;
 		columnaAntes = columna;
 		
@@ -382,7 +343,6 @@ int Cursor::coger(int turno)
 	}
 	return 0;
 }
-
 int Cursor::soltar(int turno)
 {
 	InfoCasilla* casillaAnterior = miTablero.getInfoCasilla(filaAntes, columnaAntes);
@@ -415,6 +375,8 @@ int Cursor::soltar(int turno)
 
 		casillaActual->personajeEncima = personajeMovido;
 		casillaAnterior->personajeEncima = nullptr;
+
+		personajeSeleccionado = nullptr;
 
 		return 1;
 	}
