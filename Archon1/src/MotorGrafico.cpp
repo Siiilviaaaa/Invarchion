@@ -186,11 +186,11 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//para la transparencia
 		
 		extern Estado estado;
-		double posY = (estado == BATALLA) ? personaje.return_Y() : personaje.getY();
+		double posY = (estado == BATALLA) ? personaje.y : personaje.getY(); //una es la abs y la otra es respecto a las casillas
 		
 		
-		glTranslated(posX, posY, 0.5);
-		SpriteActual->setCenter(0.9, 0.9);
+		glTranslated(personaje.x, posY, 0.5);
+		SpriteActual->setCenter(0, 0);
 		SpriteActual->setSize(1.8, 1.8);
 		switch (estado) {
 		case JUEGO:
@@ -242,22 +242,26 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 
 		
 
-			SpriteActual->flip(true, false); //así miran a la izq
-			glTranslated(1.95, 0, 0);
+		//para la orientacion
+		if (personaje.return_dirX() > 0.01) SpriteActual->flip(false, false);
+		if (personaje.return_dirX() < -0.01) SpriteActual->flip(true, false);
+		int fila = MIRANDO_ABAJO; //fila del spritesheet
+		if (std::abs(personaje.return_dirX()) > std::abs(personaje.return_dirY())) {
+			fila = MIRANDO_HORIZONTALMENTE; 
 		}
-		
-		if (abs(personaje.return_dirX()) < 0.01 && abs(personaje.return_dirY()) < 0.01)
-		{
-			SpriteActual->setState(MIRANDO_ABAJO, true);//QUIETO
+		else if (abs(personaje.return_dirY()) > 0) {
+			if (personaje.return_dirY() < 0) fila = MIRANDO_ABAJO; 
+			if (personaje.return_dirY() > 0) fila = MIRANDO_ARRIBA; 
+		}
+		if (personaje.moviendose) {
+			///SpriteActual -> setState(1, false);
+			//SpriteActual->loop();
+
 		}
 		else {
-			if (SpriteActual->getState() != fila) {
-				SpriteActual->setState(fila, false);
-			}
-			SpriteActual->loop();
+			SpriteActual->setState(0);
 		}
 		SpriteActual->draw();
-		
 		glDisable(GL_BLEND);
 		glEnable(GL_LIGHTING);
 		glPopMatrix();
