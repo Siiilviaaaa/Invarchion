@@ -343,17 +343,17 @@ void Batalla::entrePersonajes(Personaje& j1, Personaje& j2)
 	double radioChoque = 0.7;
 
 	
-	if (dist < radioChoque)
+	if (dist > 0.0 && dist < radioChoque)
 	{
 		double juntos = radioChoque - dist;
 		double normalx = dx / dist;
 		double normaly = dy / dist;
 
-		j1.x = normalx * 0.3;
-		j1.y = normaly * 0.3;
+		j1.x += normalx * (juntos / 2);
+		j1.y += normaly * (juntos / 2);
 
-		j2.x = normalx * 0.3;
-		j2.y = normaly * 0.3;
+		j2.x -= normalx * (juntos / 2);
+		j2.y -= normaly * (juntos / 2);
 	}
 }
 
@@ -420,7 +420,7 @@ bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o)
 	double dist = sqrt(dx * dx + dy * dy);
 
 	//AJUSTAR PA QUE EL OBTACULO NO SE META DENTRO DEL PERSONAJE
-	double radioSuma = o.return_Radio() * 1.1;
+	double radioSuma = (o.return_Radio() * 0.75)+0.3;
 
 	if (dist < radioSuma)
 	{

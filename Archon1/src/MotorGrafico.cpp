@@ -192,20 +192,20 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 			posY = personaje.return_Y();
 		}
 		else {
-			double ladoCasilla = 1.95;
-			posX = personaje.return_X() * ladoCasilla + 0.3;
-			posY = ladoCasilla * (personaje.return_Y()) + 0.3;
+			double ladoCasilla = 2;
+			posX = personaje.return_X() * ladoCasilla + 1;
+			posY = ladoCasilla * (personaje.return_Y()) + 1;
 		}
 		//double posY = (estado == BATALLA) ? personaje.return_Y() : personaje.getY();
 		
 		
 		glTranslated(posX, posY, 0.5);
-		SpriteActual->setCenter(0, 0);
+		SpriteActual->setCenter(0.9, 0.9);
 		SpriteActual->setSize(1.8, 1.8);
 		if (personaje.bando == ALIEN) {
 
 			SpriteActual->flip(true, false); //así miran a la izq
-			glTranslated(1.95, 0, 0);
+			//glTranslated(1.95, 0, 0);
 		}
 		if (personaje.moviendose) {
 			///SpriteActual -> setState(1, false);
@@ -221,7 +221,6 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 		glPopMatrix();
 	}
 }
-
 
 void MotorGrafico::dibujarDisparo(Disparo* disparo)
 {

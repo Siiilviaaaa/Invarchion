@@ -175,8 +175,8 @@ void OnDraw(void) {
 
         if (atacante != nullptr && defensor != nullptr) {
             motor.dibujarPersonaje(*atacante);   
-            std::cout << atacante->return_X();
-            std::cout << atacante->return_Y();
+            //std::cout << atacante->return_X();
+            //std::cout << atacante->return_Y();
             motor.dibujarPersonaje(*defensor);
             miBatalla.actualizarCombate(*atacante, *defensor, miCaja, motor.obtenerObstaculos());
         }
