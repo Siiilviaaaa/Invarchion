@@ -313,7 +313,24 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
             micursor.inicializar_tablero(juego.getTurno());
         }
     }
+    if (estado == BATALLA) {
+       
+        Personaje* p1 = juego.getAtacanteBatalla();
+        Personaje* p2 = juego.getDefensorBatalla();
+        if (p1 != nullptr && p2 != nullptr) {
+            Personaje* humano = nullptr;
 
+            if (p1->return_Bando() == HUMANO)
+            {
+                humano = p1;
+                miBatalla.KeyBatalla(key, *p1, *p2);
+            }
+            else if (p2 && p2->return_Bando() == HUMANO) {
+                humano = p2;
+                miBatalla.KeyBatalla(key, *p2, *p1);
+            }
+        }
+    }
     /*if (key == 'b') {
         std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
         if (estado == JUEGO) {
@@ -336,7 +353,19 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
 void OnSpecialKeyboardDown(int key, int x, int y) {
 
     if (estado == BATALLA) {
-        miBatalla.tecla_especial(key, pj2);
+        Personaje* p1 = juego.getAtacanteBatalla();
+        Personaje* p2 = juego.getDefensorBatalla();
+        if (p1 != nullptr && p2 != nullptr) {
+            Personaje* alien = nullptr;
+
+            if (p1->return_Bando() == ALIEN) alien = p1;
+            else if (p2->return_Bando() == ALIEN) alien = p2;
+
+            if (alien != nullptr) {
+                // Llamamos a tu función de flechas en Batalla.cpp
+                miBatalla.tecla_especial(key, *alien);
+            }
+        }
     }
     if (estado == JUEGO && juego.getTurno() == 1)
     {

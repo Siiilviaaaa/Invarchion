@@ -73,15 +73,17 @@ public:
 	void setV_base(double nuevaVBase) { vel_base = nuevaVBase; }
 	void setX(double nuevaX) 
 	{
-		double ladoCasilla = 1.95;//esto imagino que debería de usar la variable que ya se hayadefinido, solo que no la encuentro
-		double offsetTableroX = nuevaX* ladoCasilla + 0.2;
-		x = offsetTableroX;
+		//double ladoCasilla = 1.95;//esto imagino que debería de usar la variable que ya se hayadefinido, solo que no la encuentro
+		//double offsetTableroX = nuevaX* ladoCasilla + 0.2;
+		//x = offsetTableroX;
+		x = nuevaX;
 	}
 	void setY(double nuevaY)
 	{ 
-		double ladoCasilla = 1.95;//esto imagino que debería de usar la variable que ya se hayadefinido, solo que no la encuentro
-		double offsetTableroY = ladoCasilla * (4 - nuevaY) + 0.2; //creo que las coordenadas empiezan abajo, ashora lo veo, y ns que son filas y que columans
-		y = offsetTableroY;
+		//double ladoCasilla = 1.95;//esto imagino que debería de usar la variable que ya se hayadefinido, solo que no la encuentro
+		//double offsetTableroY = ladoCasilla * (4 - nuevaY) + 0.2; //creo que las coordenadas empiezan abajo, ashora lo veo, y ns que son filas y que columans
+		//y = offsetTableroY;
+		y = nuevaY;
 	}
 	double getY(void) const//para solucionar el prblema de espejo en las y
 	{

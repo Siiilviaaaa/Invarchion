@@ -8,7 +8,7 @@
 extern Juego juego;
 
 MotorGrafico::MotorGrafico() :
-	numObstaculos(7),
+	numObstaculos(5),
 	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	soldado("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	volador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -23,7 +23,7 @@ MotorGrafico::MotorGrafico() :
 
 	barraVida("Recursos/barra.png")
 {
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < 5; i++) {
 		listaObstaculos[i] = nullptr;
 	}
 }
@@ -186,10 +186,20 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//para la transparencia
 		
 		extern Estado estado;
-		double posY = (estado == BATALLA) ? personaje.return_Y() : personaje.getY();
+		double posX, posY;
+		if (estado == BATALLA) {
+			posX = personaje.return_X();
+			posY = personaje.return_Y();
+		}
+		else {
+			double ladoCasilla = 1.95;
+			posX = personaje.return_X() * ladoCasilla + 0.3;
+			posY = ladoCasilla * (personaje.return_Y()) + 0.3;
+		}
+		//double posY = (estado == BATALLA) ? personaje.return_Y() : personaje.getY();
 		
 		
-		glTranslated(personaje.x, posY, 0.5);
+		glTranslated(posX, posY, 0.5);
 		SpriteActual->setCenter(0, 0);
 		SpriteActual->setSize(1.8, 1.8);
 		if (personaje.bando == ALIEN) {
