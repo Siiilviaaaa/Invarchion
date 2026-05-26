@@ -9,7 +9,6 @@
 #include "MotorGrafico.h"
 extern MotorGrafico motor;
 extern Estado estado;
-extern Cursor micursor;
 Juego::Juego(Tablero* t) :
     ptrTablero(t)
 {
@@ -120,21 +119,6 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     atacanteBatalla = atacante;
     defensorBatalla = defensor;
 
-    int f = micursor.obt_fila();
-    int c = micursor.obt_columna();
-    InfoCasilla* info = ptrTablero->getInfoCasilla(f, c);
-    
-    if (info != nullptr) {
-        Tipocasilla color = info->getColor();
-        if (casillaFavorable(atacante, color)) {
-            atacante->setVida(atacante->return_Vida() + 20);
-            std::cout << "[BONO] Atacante en terreno aliado: +20 HP" << std::endl;
-        }
-        if (casillaFavorable(defensor, color)) {
-            defensor->setVida(defensor->return_Vida() + 20);
-            std::cout << "[BONO] Defensor en terreno aliado: +20 HP" << std::endl;
-        }
-    }
     atacante->x = 5.0;
     atacante->y = 7.5;
     atacante->direccion(1.0, 0.0); //el atacante siempre va a la izq
@@ -153,14 +137,6 @@ void Juego::finalizarBatalla()
     atacanteBatalla = nullptr;
     defensorBatalla = nullptr;
     std::cout << "fin de batalla, se han borrado los punteros a los personajes" << std::endl;
-}
-
-bool Juego::casillaFavorable(Personaje* p, Tipocasilla colorCasilla)
-{
-    if (p == nullptr) return false;
-    if (p->return_Bando() == HUMANO && colorCasilla == blanca) return true;
-    if (p->return_Bando() == ALIEN && colorCasilla == negra) return true;
-    return false;
 }
 
 

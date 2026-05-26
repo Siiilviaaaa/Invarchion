@@ -186,36 +186,78 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//para la transparencia
 		
 		extern Estado estado;
-		double posX, posY;
-		if (estado == BATALLA) {
-			posX = personaje.return_X();
-			posY = personaje.return_Y();
-		}
-		else {
-			double ladoCasilla = 2;
-			posX = personaje.return_X() * ladoCasilla + 1;
-			posY = ladoCasilla * (personaje.return_Y()) + 1;
-		}
-		//double posY = (estado == BATALLA) ? personaje.return_Y() : personaje.getY();
+		double posY = (estado == BATALLA) ? personaje.return_Y() : personaje.getY();
 		
 		
 		glTranslated(posX, posY, 0.5);
 		SpriteActual->setCenter(0.9, 0.9);
 		SpriteActual->setSize(1.8, 1.8);
-		if (personaje.bando == ALIEN) {
+		switch (estado) {
+		case JUEGO:
+			if (personaje.return_Bando() == HUMANO) {
+				SpriteActual->flip(false, false); // humanos miran a la derecha
+			}
+			else {
+				SpriteActual->flip(true, false);  
+				glTranslated(1.95, 0, 0);         // COMPENSACION porque al girarlo se salen de su casillita
+			}
+			SpriteActual->setState(MIRANDO_HORIZONTALMENTE, true);
+			SpriteActual->draw(); 
+			break;
+		case BATALLA:
+			// 1. Efecto espejo y compensación
+			if (personaje.return_dirX() > 0.01) {
+				SpriteActual->flip(false, false);
+			}
+			else if (personaje.return_dirX() < -0.01) {
+				SpriteActual->flip(true, false);
+				glTranslated(1.8, 0, 0); // COMPENSACIÓN EN BATALLA: Empujarlo para que la 'hitbox' no se desvíe al girar
+			}
+
+			int fila = 1;
+			if (std::abs(personaje.return_dirX()) > std::abs(personaje.return_dirY())) {
+				fila = MIRANDO_HORIZONTALMENTE;
+			}
+			else if (std::abs(personaje.return_dirY()) > 0) {
+				if (personaje.return_dirY() < 0) fila = MIRANDO_ABAJO;
+				if (personaje.return_dirY() > 0) fila = MIRANDO_ARRIBA;
+			}
+
+			int indexInicial = fila * 3; // 3 columnas en los spritesheets por fila
+
+			//  bucle de animacion
+			if (std::abs(personaje.return_dirX()) < 0.01 && std::abs(personaje.return_dirY()) < 0.01) {
+				SpriteActual->setState(indexInicial, true);
+			}
+			else {
+				//// Si está fuera de su fila, lo devolvemos al inicio de la misma
+				//if (SpriteActual->getState() < indexInicial || SpriteActual->getState() >= indexInicial + 3) {
+				//	SpriteActual->setState(indexInicial, false);
+				//}
+				SpriteActual->loop();
+			}
+			SpriteActual->draw(); 
+			break;
+		}
+
+		
 
 			SpriteActual->flip(true, false); //así miran a la izq
-			//glTranslated(1.95, 0, 0);
+			glTranslated(1.95, 0, 0);
 		}
-		if (personaje.moviendose) {
-			///SpriteActual -> setState(1, false);
-			//SpriteActual->loop();
-
+		
+		if (abs(personaje.return_dirX()) < 0.01 && abs(personaje.return_dirY()) < 0.01)
+		{
+			SpriteActual->setState(MIRANDO_ABAJO, true);//QUIETO
 		}
 		else {
-			SpriteActual->setState(0);
+			if (SpriteActual->getState() != fila) {
+				SpriteActual->setState(fila, false);
+			}
+			SpriteActual->loop();
 		}
 		SpriteActual->draw();
+		
 		glDisable(GL_BLEND);
 		glEnable(GL_LIGHTING);
 		glPopMatrix();
