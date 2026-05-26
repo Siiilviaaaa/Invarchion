@@ -185,6 +185,7 @@ void Juego::finalizarBatalla()
     defensorBatalla = nullptr;
     origenAntesDeBatalla = nullptr;
     cambiarTurno();
+    estado = JUEGO;
 }
 
 
