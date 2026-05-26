@@ -12,7 +12,7 @@
 #include <string>
 
 //RELACION DE AMISTAD DE PERSONAJES, HECHIZOS, DISPAROS PARA PODER ACCEDER A SUS ATRIBUTOS PRIVADOS
-
+enum orientacionPersonaje {MIRANDO_HORIZONTALMENTE, MIRANDO_ABAJO, MIRANDO_ARRIBA, ACCION};
 class MotorGrafico
 {
 	const int numColumnasSpritePersonaje{ 3 };
