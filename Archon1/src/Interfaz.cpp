@@ -11,8 +11,6 @@
 #include "Batalla.h"
 #include "Cursor.h"
 
-
-
 //los extern son para q los busque en el main, me ha ayudado la IA en esta parte
 //basicamente es un: "oye usa el [extern] q declare en el main
 extern Estado estado;
@@ -168,7 +166,7 @@ void OnDraw(void) {
         break;
     case BATALLA:
         miCamara.vistaBatalla();
-        motor.dibujarCaja(miCaja);
+        motor.dibujarCaja(miCaja, miBatalla);
 
         Personaje* atacante = juego.getAtacanteBatalla();
         Personaje* defensor = juego.getDefensorBatalla();
@@ -178,7 +176,7 @@ void OnDraw(void) {
             //std::cout << atacante->return_X();
             //std::cout << atacante->return_Y();
             motor.dibujarPersonaje(*defensor);
-            miBatalla.actualizarCombate(*atacante, *defensor, miCaja, motor.obtenerObstaculos());
+            miBatalla.actualizarCombate(*atacante, *defensor, miCaja, miBatalla.obtenerObstaculos());
         }
 
         //motor.dibujarBarraVida(pj1, pj2);
@@ -222,12 +220,12 @@ void OnTimer(int value) {
         Personaje* defensor = juego.getDefensorBatalla();
 
         if (atacante != nullptr && defensor != nullptr) {
-            miBatalla.actualizarCombate(*atacante, *defensor, miCaja, motor.obtenerObstaculos());
+            miBatalla.actualizarCombate(*atacante, *defensor, miCaja, miBatalla.obtenerObstaculos());
 
         }
         if (fin_) {
             estado = JUEGO;
-            juego.finalizarBatalla();
+            //juego.finalizarBatalla();
         }
     }
     glutPostRedisplay();

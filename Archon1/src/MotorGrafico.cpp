@@ -8,7 +8,6 @@
 extern Juego juego;
 
 MotorGrafico::MotorGrafico() :
-	numObstaculos(5),
 	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	soldado("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	volador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -22,59 +21,7 @@ MotorGrafico::MotorGrafico() :
 	mago("Recursos/mago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	barraVida("Recursos/barra.png")
-{
-	for (int i = 0; i < 5; i++) {
-		listaObstaculos[i] = nullptr;
-	}
-}
-
-void MotorGrafico::inicializarBatalla()
-{
-	srand((unsigned int)time(NULL));
-	int aceptados = 0;
-	for (int i = 0; i < numObstaculos; i++) {
-		if (listaObstaculos[i]) delete listaObstaculos[i];
-		listaObstaculos[i] = nullptr;
-	}
-	double r = 1.3;
-	const double limite_max_x = 20.0;
-	const double limite_max_y = 15.0;
-	const double margen_pared = 1.0;
-	const double margen_personaje = 3.5;
-	const float dist_min = 3.5f;
-	double p1x = 5.0, p1y = 7.5, p2x = 15.0, p2y = 7.5;
-	int intentos = 0;
-	while (aceptados < numObstaculos && intentos <1000){
-		intentos++;
-		
-		double rx = (margen_pared + r) + ((double)rand() / RAND_MAX) * (limite_max_x - 2 * (margen_pared + r));
-		double ry = (margen_pared + r) + ((double)rand() / RAND_MAX) * (limite_max_y - 2 * (margen_pared + r));
-		bool colision = false;
-		//posciones iniciales de los personajes en batalla
-		double distP1 = sqrt(pow(rx - p1x, 2) + pow(ry - p1y, 2));
-		double distP2 = sqrt(pow(rx - p2x, 2) + pow(ry - p2y, 2));
-		if (distP1<margen_personaje || distP2<margen_personaje) {
-			colision = true;
-		}
-		if (!colision) {
-			for (int j = 0; j < aceptados; j++) {
-				Obstaculo* existente = listaObstaculos[j];
-				float dx = (float)(rx - existente->return_X());
-				float dy = (float)(ry - existente->return_Y());
-				float distancia = sqrtf(powf(dx, 2) + powf(dy, 2));
-				if (distancia < (r * dist_min)) {
-					colision = true;
-					break;
-				}
-			}
-		}
-		
-		if (!colision) {
-			listaObstaculos[aceptados] = new Obstaculo(rx, ry, r);
-			aceptados++;
-		}
-	}
-}
+{}
 
 void MotorGrafico::dibujarPared(const Pared& p)
 {
@@ -89,7 +36,7 @@ void MotorGrafico::dibujarPared(const Pared& p)
 	glEnable(GL_LIGHTING);
 }
 
-void MotorGrafico::dibujarCaja(const Caja& c)
+void MotorGrafico::dibujarCaja(const Caja& c, Batalla& b)
 {
 	dibujarPared(c.suelo);
 	dibujarPared(c.techo);
@@ -112,11 +59,11 @@ void MotorGrafico::dibujarCaja(const Caja& c)
 	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("Recursos/obstaculo3.png").id);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.1f);
-	for (int i = 0; i < numObstaculos; i++) {
-		if (listaObstaculos[i] != nullptr) {
-			double x = listaObstaculos[i]->return_X();
-			double y = listaObstaculos[i]->return_Y();
-			double r = listaObstaculos[i]->return_Radio();
+	for (int i = 0; i < b.numObstaculos; i++) {
+		if (b.listaObstaculos[i] != nullptr) {
+			double x = b.listaObstaculos[i]->return_X();
+			double y = b.listaObstaculos[i]->return_Y();
+			double r = b.listaObstaculos[i]->return_Radio();
 			//glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
 			glBegin(GL_QUADS);
 			glTexCoord2d(0, 1); glVertex3d(x - r, y - r, 0.1);
@@ -386,15 +333,15 @@ void MotorGrafico::dibujarInstruccionesTablero()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
 	glRasterPos2f(20.0f, 58.0f);
-	for (char c : "ESCENARIO DE TABLERO: Mover el cursor con WASD")
+	for (char c : "TABLERO: Mover el cursor con WASD")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	glRasterPos2f(20.0f, 48.0f);
-	for (char c : "ESCENARIO DE BATALLA - HUMANOS: Mover con WASD | Disparar con ESPACIO")
+	for (char c : "BATALLA - HUMANOS: Mover con WASD | Disparar con ESPACIO | Hechizar con C")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	glRasterPos2f(20.0f, 40.0f);
-	for (char c : "ESCENARIO DE BATALLA - ALIENS: Mover con IJKL | Disparar con ENTER")
+	for (char c : "BATALLA - ALIENS: Mover con IJKL | Disparar con ENTER | Hechizar con N")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	// Mensaje inferior para salir
