@@ -180,8 +180,6 @@ void OnDraw(void) {
             motor.dibujarBarraVida(*atacante, *defensor);
         }
 
-        
-
         for (int i = 0; i < 20; i++) {
             Disparo* d = miBatalla.return_nDisparos()[i];
             if (d) motor.dibujarDisparo(d);

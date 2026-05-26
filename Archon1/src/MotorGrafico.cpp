@@ -363,8 +363,7 @@ void MotorGrafico::dibujarInstruccionesTablero()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
 	glRasterPos2f(20.0f, 58.0f);
-
-  for (char c : "TABLERO - HUMANOS:	Mover con WASD | Seleccionar con Q")
+	for (char c : "TABLERO - HUMANOS:	Mover con WASD | Seleccionar con Q")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	glRasterPos2f(20.0f, 50.0f);

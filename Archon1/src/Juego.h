@@ -32,6 +32,8 @@ private:
 	Personaje* figuras[MAX_PERSONAJES]; //hay 20 figuritas en el tablero
 	Personaje* atacanteBatalla{ nullptr };
 	Personaje* defensorBatalla{ nullptr };
+
+	Casilla* origenAntesDeBatalla{ nullptr };
 public:
 
 	Juego(Tablero* t);
@@ -55,7 +57,7 @@ public:
 	Personaje* getAtacanteBatalla() const { return atacanteBatalla; }
 	Personaje* getDefensorBatalla() const { return defensorBatalla; }
 	void cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor);
-	void cambiarEscenarioATablero(const Personaje& ganador);
+	void finalizarBatalla();
 
 	bool casillaFavorable(Personaje* p, Tipocasilla colorCasilla);
 };

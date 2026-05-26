@@ -115,9 +115,9 @@ void Juego::inicializarPartida()
     spawnPersonaje(HECHICERO, HUMANO, 2, 0);
     spawnPersonaje(EXCAVADOR, HUMANO, 3, 0);
     spawnPersonaje(ARQUERO, HUMANO, 4, 0);
-    for (int i = 0; i < 5;i++) {
+    /*for (int i = 0; i < 5;i++) {
         spawnPersonaje(LUCHADOR, HUMANO, i, 1);
-    }
+    }*/
     //ALIENS
     spawnPersonaje(ARQUERO, ALIEN, 0, 6);
     spawnPersonaje(VOLADOR, ALIEN, 1, 6);
@@ -136,11 +136,14 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
     atacanteBatalla = atacante;
     defensorBatalla = defensor;
-
+    if (ptrTablero != nullptr) { //
+        origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x); 
+    }
+ 
     atacante->x = 5.0;
     atacante->y = 7.5;
     atacante->direccion(1.0, 0.0); //el atacante siempre va a la izq
-
+    
     defensor->x = 15.0;
     defensor->y = 7.5;
     defensor->direccion(-1.0, 0.0);//el defensor a la derecha
@@ -150,9 +153,38 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
 
 }
 
-void Juego::cambiarEscenarioATablero(const Personaje& ganador)
+void Juego::finalizarBatalla()
 {
-    
+    std::cout << "[SISTEMA] volviendo a tablero" << std::endl;
+    if (atacanteBatalla == nullptr || defensorBatalla == nullptr || origenAntesDeBatalla == nullptr) return;
+
+    Personaje* ganador = nullptr;
+    Personaje* perdedor = nullptr;
+
+    if (atacanteBatalla->return_Vida() <= 0) {
+        ganador = defensorBatalla;
+        perdedor = atacanteBatalla;
+    }
+    else {
+        ganador = atacanteBatalla;
+        perdedor = defensorBatalla;
+    }
+
+    if (ganador != nullptr) {
+
+        origenAntesDeBatalla->getInfo()->setPersonaje(ganador);
+        ganador->x = origenAntesDeBatalla->getcolumna();
+        ganador->y = origenAntesDeBatalla->getfila();
+        ganador->direccion(0.0, 0.0);
+
+        perdedor->setVida(0);
+
+    }
+
+    atacanteBatalla = nullptr;
+    defensorBatalla = nullptr;
+    origenAntesDeBatalla = nullptr;
+    cambiarTurno();
 }
 
 

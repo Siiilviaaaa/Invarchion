@@ -7,7 +7,7 @@
 #include "Obstaculo.h"
 #include "Cursor.h"
 #include "tablero.h"
-#include "Batalla.h"
+#include "batalla.h"
 
 #include <string>
 
