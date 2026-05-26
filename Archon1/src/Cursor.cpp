@@ -312,6 +312,50 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 		}
 	}
 }
+bool Cursor::tieneMovimientoPosible(int turno)
+{
+	int direcciones[4][2] = {
+		{ 1, 0 },   // arriba
+		{ -1, 0 },  // abajo
+		{ 0, 1 },   // derecha
+		{ 0, -1 }   // izquierda
+	};
+
+	for (int i = 0; i < 4; i++)
+	{
+		int nuevaFila = fila + direcciones[i][0];
+		int nuevaColumna = columna + direcciones[i][1];
+
+		if (nuevaFila < 0 || nuevaFila > 4 || nuevaColumna < 0 || nuevaColumna > 6)
+		{
+			continue;
+		}
+
+		InfoCasilla* casillaVecina = miTablero.getInfoCasilla(nuevaFila, nuevaColumna);
+
+		if (casillaVecina == nullptr)
+		{
+			continue;
+		}
+
+		Personaje* personajeVecino = casillaVecina->getPersonaje();
+
+		// Si la casilla está vacía, sí puede moverse
+		if (personajeVecino == nullptr)
+		{
+			return true;
+		}
+
+		// Si hay enemigo, también puede moverse porque entraría en batalla
+		if (personajeVecino->return_Bando() != turno)
+		{
+			return true;
+		}
+	}
+
+	// Si todas las casillas válidas están ocupadas por aliados o son bordes, no puede moverse
+	return false;
+}
 int Cursor::coger(int turno)
 {
 	//crear variable que llame a elena: tablero.h get y modificar casilla
@@ -329,6 +373,12 @@ int Cursor::coger(int turno)
 	}
 	if (infoCasillaActual->personajeEncima->return_Bando() == turno)//comprueba que el personaje es de nuestro bando
 	{
+		if (!tieneMovimientoPosible(turno))//verificacmos que no sea un movimiento imposible del que no se pueda salir
+		{
+			insertar_mensaje("Este personaje no tiene por donde escapar...");
+			return 0;
+		}
+
 		informacion = *infoCasillaActual;//copia la informacion del puntero que apunta al tablero original
 		movimientos_restantes = infoCasillaActual->personajeEncima->movimientos;//copiamos los movimientos
 		//guarda la informacion de la casilla, por si hay que eliminarla luego de aqui, no eliminamos pq no sbemos is la va a soltar
