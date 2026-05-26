@@ -254,10 +254,10 @@ void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 	glPopMatrix();
 }
 
-void MotorGrafico::dibujarBarraVida(Personaje& j1, Personaje& j2)
+void MotorGrafico::dibujarBarraVida(Personaje& atacante, Personaje& defensor)
 {
-	float porcentaje1 = (float)j1.return_Vida() / (float)j1.return_VidaMax();
-	float porcentaje2 = (float)j2.return_Vida() / (float)j2.return_VidaMax();
+	float porcentaje1 = (float)atacante.return_Vida() / (float)atacante.return_VidaMax();
+	float porcentaje2 = (float)defensor.return_Vida() / (float)defensor.return_VidaMax();
 	recortarBarra(porcentaje1, 1.0f, 1.0f, 4.5f, 0.8f);
 	recortarBarra(porcentaje2, 14.5f, 1.0f, 4.5f, 0.8f);
 }

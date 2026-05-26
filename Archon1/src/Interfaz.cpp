@@ -181,7 +181,7 @@ void OnDraw(void) {
             miBatalla.actualizarCombate(*atacante, *defensor, miCaja, motor.obtenerObstaculos());
         }
 
-        //motor.dibujarBarraVida(pj1, pj2);
+        motor.dibujarBarraVida(*atacante, *defensor);
 
         for (int i = 0; i < 20; i++) {
             Disparo* d = miBatalla.return_nDisparos()[i];
