@@ -80,7 +80,6 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
 
 void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 {
- 	////Personaje* nuevo = new Personaje(Personaje::crearPieza(t, e, x, y));
     for (int i = 0; i < MAX_PERSONAJES; i++) {
         if (figuras[i] == nullptr) {//si esta posición está vacía
             figuras[i] = new Personaje(Personaje::crearPieza(t, e, 0, 0));
@@ -99,16 +98,31 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 
 void Juego::inicializarPartida()
 {
-    spawnPersonaje(LUCHADOR, HUMANO, 0, 0); // se puede hacer con un bucle, pero bueno asi lo edito mejor
-    spawnPersonaje(ARQUERO, HUMANO, 1, 0);
-    spawnPersonaje(VOLADOR, HUMANO, 2, 0);
+    for (int i = 0; i < MAX_PERSONAJES; i++) { //borro memoria porq si no se llena el vector y no aparece ninguno xd
+        if (figuras[i] != nullptr) {
+            delete figuras[i];
+            figuras[i] = nullptr;
+        }
+    }
+
+    //HUMANOS
+    spawnPersonaje(ARQUERO, HUMANO, 0, 0); // se puede hacer con un bucle, pero bueno asi lo edito mejor
+    spawnPersonaje(VOLADOR, HUMANO, 1, 0);
+    spawnPersonaje(HECHICERO, HUMANO, 2, 0);
     spawnPersonaje(EXCAVADOR, HUMANO, 3, 0);
-    spawnPersonaje(HECHICERO, HUMANO, 4, 0);
-    spawnPersonaje(LUCHADOR, ALIEN, 0, 6);
-    spawnPersonaje(ARQUERO, ALIEN, 1, 6);
-    spawnPersonaje(VOLADOR, ALIEN, 2, 6);
+    spawnPersonaje(ARQUERO, HUMANO, 4, 0);
+    for (int i = 0; i < 5;i++) {
+        spawnPersonaje(LUCHADOR, HUMANO, i, 1);
+    }
+    //ALIENS
+    spawnPersonaje(ARQUERO, ALIEN, 0, 6);
+    spawnPersonaje(VOLADOR, ALIEN, 1, 6);
+    spawnPersonaje(HECHICERO, ALIEN, 2, 6);
     spawnPersonaje(EXCAVADOR, ALIEN, 3, 6);
-    spawnPersonaje(HECHICERO, ALIEN, 4, 6);
+    spawnPersonaje(ARQUERO, ALIEN, 4, 6);
+    for (int i = 0; i < 5;i++) {
+        spawnPersonaje(ARQUERO, ALIEN, i, 5);
+    }
 
 }
 
@@ -132,12 +146,12 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
 
 }
 
-void Juego::finalizarBatalla()
+void Juego::cambiarEscenarioATablero(const Personaje& ganador)
 {
-    atacanteBatalla = nullptr;
-    defensorBatalla = nullptr;
-    std::cout << "fin de batalla, se han borrado los punteros a los personajes" << std::endl;
+    
 }
+
+
 
 
 

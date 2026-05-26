@@ -236,10 +236,10 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 				SpriteActual->setState(indexInicial, true);
 			}
 			else {
-				//// Si está fuera de su fila, lo devolvemos al inicio de la misma
-				//if (SpriteActual->getState() < indexInicial || SpriteActual->getState() >= indexInicial + 3) {
-				//	SpriteActual->setState(indexInicial, false);
-				//}
+				// Si está fuera de su fila, lo devolvemos al inicio de la misma
+				if (SpriteActual->getState() < indexInicial || SpriteActual->getState() >= indexInicial + 3) {
+					SpriteActual->setState(indexInicial, false);
+				}
 				SpriteActual->loop();
 			}
 			SpriteActual->draw(); 

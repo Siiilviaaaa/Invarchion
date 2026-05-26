@@ -55,7 +55,7 @@ public:
 	Personaje* getAtacanteBatalla() const { return atacanteBatalla; }
 	Personaje* getDefensorBatalla() const { return defensorBatalla; }
 	void cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor);
-	void finalizarBatalla();
+	void cambiarEscenarioATablero(const Personaje& ganador);
 
 	bool casillaFavorable(Personaje* p, Tipocasilla colorCasilla);
 };
