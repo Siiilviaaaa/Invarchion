@@ -11,8 +11,6 @@
 #include "Batalla.h"
 #include "Cursor.h"
 
-
-
 //los extern son para q los busque en el main, me ha ayudado la IA en esta parte
 //basicamente es un: "oye usa el [extern] q declare en el main
 extern Estado estado;
@@ -226,7 +224,7 @@ void OnTimer(int value) {
         }
         if (fin_) {
             estado = JUEGO;
-            juego.finalizarBatalla();
+            //juego.finalizarBatalla();
         }
     }
     glutPostRedisplay();

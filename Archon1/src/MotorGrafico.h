@@ -34,7 +34,6 @@ class MotorGrafico
 	
 	////ELEMENTOS BATALLA////
 	ETSIDI::Sprite barraVida;
-
 	void recortarBarra(float vida, float x, float y, float ancho, float alto);
 	
 	////TABLERO////

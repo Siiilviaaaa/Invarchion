@@ -8,11 +8,11 @@
 extern Juego juego;
 
 MotorGrafico::MotorGrafico() :
-	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	soldado("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	volador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	minero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	hechicero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje), //falta
+	soldado("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	volador("Recursos/paracaidista.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	minero("Recursos/minero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	hechicero("Recursos/magohumano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	golem("Recursos/golem.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	arquero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -192,8 +192,6 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 			SpriteActual->draw(); 
 			break;
 		}
-
-		
 
 		glDisable(GL_BLEND);
 		glEnable(GL_LIGHTING);

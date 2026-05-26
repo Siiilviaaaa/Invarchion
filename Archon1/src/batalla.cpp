@@ -89,6 +89,7 @@ void Batalla::inicializarBatalla()
 	}
 }
 
+
 void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 {
 	switch (key)
