@@ -69,7 +69,6 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 	return pieza;
 }
 
-
 void Personaje::direccion(double dx, double dy)
 {
 	if (dx != 0 || dy != 0) { //SOLO ACTUALIZAMOS SI SE MUEVE
@@ -82,6 +81,24 @@ void Personaje::moverEnBatalla()
 {
 	x += dirX * v * 0.05;
 	y += dirY * v * 0.05;
+}
+
+void Personaje::gestionRecarga()
+{
+	if (t_recarga > 0.0) {
+		t_recarga -= 0.02;
+
+		//CUANDO SE AGOTA EL TIEMPO, RECARGE DE MUNICION
+		if (t_recarga <= 0.0) {
+			disparosRealizados = 0;
+			t_recarga = 0.0;
+			std::cout << "Municion recargada!" << std::endl;
+		}
+	}
+	//CUANDO NOS QUEDAMOS SIN BALAS, INICIAMOS EL TIEMPO
+	else if (disparosRealizados >= 10) {
+		t_recarga = 10.0; //TIEMPO
+	}
 }
 
 void Personaje::actualizarEfectos()

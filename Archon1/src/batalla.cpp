@@ -4,6 +4,7 @@
 
 using std::cout, std::cin, std::endl;
 extern bool fin_;
+extern int puntuacion_actual;
 
 Batalla::Batalla()
 {
@@ -111,6 +112,9 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 
 	j1.actualizarEfectos();
 	j2.actualizarEfectos();
+
+	j1.gestionRecarga();
+	j2.gestionRecarga();
 
 	for (int k = 0; k < 5; k++) {
 		if (lista[k] != nullptr) {
@@ -264,7 +268,7 @@ void Batalla::pegar(Personaje& atacante, Personaje& objetivo)
 void Batalla::lanzarDisparo(Personaje& aliado)
 {
 	if (aliado.return_Disparos() >= 10) {
-		std::cout << "Sin municion para esta ronda" << std::endl;
+		std::cout << "Sin municion espera a la recarga" << std::endl;
 		return;
 	}
 	std::cout << "Disparando..." << std::endl;

@@ -24,11 +24,10 @@ class Personaje
 	double dirX, dirY; //DIRECCION
 
 	int disparosRealizados; //CONTADOR DE DISPAROS
+	double t_recarga{ 0.0 };
 	int hechizoUtilizado = 0;
 	int hechizosRestantes = 3;
 	double t_paralisis;
-
-
 
 
 public:
@@ -41,6 +40,7 @@ public:
 	void resetMunicion() { disparosRealizados = 0; }
 	void sumarDisparo() { disparosRealizados++; }
 	int return_Disparos() { return disparosRealizados; }
+	void gestionRecarga();
 
 	//CONTROL DE LOS HECHIZOS
 	int return_HechizosRestantes() { return hechizosRestantes; }
