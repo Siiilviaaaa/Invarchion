@@ -194,7 +194,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 {
 	if (turno == 0)
 	{
-		if (key == 'q'&& contador_selecciones==2)//si equipo humanos presiona "espacio" por primera vez
+		if (key == ' '&& contador_selecciones==2)//si equipo humanos presiona "espacio" por primera vez
 		{
 			int cogerOK = coger(turno);
 			switch (cogerOK)
@@ -211,7 +211,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 		}
 		else
 		{
-			if (key == 'q' && contador_selecciones == 1)
+			if (key == ' ' && contador_selecciones == 1)
 			{
 				int soltarOK = soltar(turno);
 				switch (soltarOK)

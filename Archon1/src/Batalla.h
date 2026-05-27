@@ -20,12 +20,18 @@ class Batalla
 
 	Obstaculo* listaObstaculos[7];
 	int numObstaculos;
+
+	std::string mensaje_batalla = "PREPARADOS... LUCHAD!";
 	
 public:
 	Batalla();
 	~Batalla();
 	Disparo* (&return_nDisparos())[20] { return nDisparos; }
 	Hechizo* (&return_nHechizos())[2][3] { return nHechizos; }
+
+	///////MENSAJES///////
+	std::string getMensaje() const { return mensaje_batalla; }
+	void setMensaje(std::string nuevoMensaje) { mensaje_batalla = nuevoMensaje; }
 
 	/////////ACTUALIZACIONES//////////////
 	void inicializarBatalla();

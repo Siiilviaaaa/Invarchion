@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 class Disparo;
 
@@ -29,7 +30,6 @@ class Personaje
 	int hechizosRestantes = 3;
 	double t_paralisis;
 
-
 public:
 	Personaje() { this->disparosRealizados = 0; }
 	~Personaje();
@@ -41,7 +41,7 @@ public:
 	void resetMunicion() { disparosRealizados = 0; }
 	void sumarDisparo() { disparosRealizados++; }
 	int return_Disparos() { return disparosRealizados; }
-	void gestionRecarga();
+	bool gestionRecarga();
 
 	//CONTROL DE LOS HECHIZOS
 	int return_HechizosRestantes() { return hechizosRestantes; }
@@ -51,7 +51,7 @@ public:
 		hechizoUtilizado++;
 		if (hechizoUtilizado > 2) hechizoUtilizado = 0;
 	}
-	void actualizarEfectos();
+	bool actualizarEfectos();
 
 	//////////METODOS//////////////
 	Tipo_figura return_Tipo() const { return tipo; }
