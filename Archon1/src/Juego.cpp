@@ -168,7 +168,7 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
         defensor->y = 7.5;
         defensor->direccion(1.0, 0.0);//el defensor a la derecha
     }
-
+    cambiarTurno();
     miBatalla.inicializarBatalla();
     estado = BATALLA;
 
