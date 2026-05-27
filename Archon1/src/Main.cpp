@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
     // Estas funciones las he puesto en Interfaz.cpp
     glutMouseFunc(mouse);
     glutPassiveMotionFunc(mousePassive);
-
+    
     glutReshapeFunc(redimensionar);
 
     glutTimerFunc(20, OnTimer, 0);
