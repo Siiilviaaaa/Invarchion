@@ -133,7 +133,23 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     if (ptrTablero != nullptr) { //
         origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x); 
     }
- 
+    int f = micursor.obt_fila();
+    int c = micursor.obt_columna();
+    InfoCasilla* info = ptrTablero->getInfoCasilla(f, c);
+
+    if (info != nullptr) {
+        Tipocasilla color = info->getColor();
+        if (casillaFavorable(atacante, color)) {
+            int danioAnteriorAtac = atacante->return_Danio();
+            atacante->setDanio(danioAnteriorAtac + 5);
+            std::cout << "[BONO] Atacante en terreno aliado: +15 HP" << std::endl;
+        }
+        if (casillaFavorable(defensor, color)) {
+            int danioAnteriorDef = defensor->return_Danio();
+            atacante->setDanio(danioAnteriorDef + 5);
+            std::cout << "[BONO] Defensor en terreno aliado: +15 HP" << std::endl;
+        }
+    }
     atacante->x = 5.0;
     atacante->y = 7.5;
     atacante->direccion(1.0, 0.0); //el atacante siempre va a la izq
@@ -151,7 +167,18 @@ void Juego::finalizarBatalla()
 {
     std::cout << "[SISTEMA] volviendo a tablero" << std::endl;
     if (atacanteBatalla == nullptr || defensorBatalla == nullptr || origenAntesDeBatalla == nullptr) return;
-
+    int f = micursor.obt_fila();
+    int c = micursor.obt_columna();
+    InfoCasilla* info = ptrTablero->getInfoCasilla(f, c);
+    if (info != nullptr) {
+        Tipocasilla color = info->getColor();
+        if (casillaFavorable(atacanteBatalla, color)) {
+            atacanteBatalla->setDanio(atacanteBatalla->return_Danio() - 5);
+        }
+        if (casillaFavorable(defensorBatalla, color)) {
+            defensorBatalla->setDanio(defensorBatalla->return_Danio() - 5);
+        }
+    }
     Personaje* ganador = nullptr;
     Personaje* perdedor = nullptr;
 
@@ -179,4 +206,12 @@ void Juego::finalizarBatalla()
     origenAntesDeBatalla = nullptr;
     cambiarTurno();
     estado = JUEGO;
+}
+
+bool Juego::casillaFavorable(Personaje* p, Tipocasilla colorCasilla)
+{
+    if (p == nullptr) return false;
+    if (p->return_Bando() == HUMANO && colorCasilla == blanca) return true;
+    if (p->return_Bando() == ALIEN && colorCasilla == negra) return true;
+    return false;
 }
