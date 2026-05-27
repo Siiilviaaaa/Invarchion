@@ -365,7 +365,7 @@ void MotorGrafico::dibujarInstruccionesTablero()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
 	glRasterPos2f(20.0f, 58.0f);
-	for (char c : "TABLERO - HUMANOS:	Mover con WASD | Seleccionar con Q")
+	for (char c : "TABLERO - HUMANOS:	Mover con WASD | Seleccionar con V")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	glRasterPos2f(20.0f, 50.0f);
@@ -373,11 +373,11 @@ void MotorGrafico::dibujarInstruccionesTablero()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	glRasterPos2f(20.0f, 42.0f);
-	for (char c : "BATALLA - HUMANOS: Mover con WASD | Disparar con ESPACIO | Hechizar con C")
+	for (char c : "BATALLA - HUMANOS: Mover con WASD | Disparar con V | Hechizar con C")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	glRasterPos2f(20.0f, 34.0f);
-	for (char c : "BATALLA - ALIENS: Mover con Flechas | Disparar con ENTER | Hechizar con N")
+	for (char c : "BATALLA - ALIENS: Mover con Flechas | Disparar con M | Hechizar con N")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	// Mensaje inferior para salir
@@ -388,6 +388,37 @@ void MotorGrafico::dibujarInstruccionesTablero()
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
+
+void MotorGrafico::dibujarMensajesBatalla(const std::string& mensaje)
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, 800, 0, 600);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_TEXTURE_2D);
+
+	//Color del texto
+	ETSIDI::setTextColor(1.0f, 0.8f, 0.0f);
+	ETSIDI::setFont("fuentes/Bitwise.ttf", 20);
+
+	//Posicion del texto -> Parte superior central
+	ETSIDI::printxy(mensaje.c_str(), 250.0f, 530.0f);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);

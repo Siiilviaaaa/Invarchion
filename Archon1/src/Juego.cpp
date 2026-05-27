@@ -1,11 +1,7 @@
-#pragma once
 #include "Juego.h"
-#include "tablero.h"
-#include "Personajes.h"
 #include <iostream>
 #include "MotorGrafico.h"
 #include "casilla.h"
-#include "Cursor.h"
 #include "Batalla.h"
 
 extern MotorGrafico motor;
@@ -23,6 +19,7 @@ Juego::Juego(Tablero* t) :
     inicializarPartida();
 
 }
+
 void Juego::setBandoJugador(bando_jugador b)
 {
     if (b == Bando_jugador_es_Humano) turnoActual =TurnoHumanos;
@@ -78,7 +75,6 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
     }
     if (contador_aliens > 0 && contador_humanos > 0) return AunEnCurso;
 
-
     //condicion de que estan las casillas guays ocuapadas (necesito que se añadan esas casillas)
 }
 
@@ -95,7 +91,6 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
                 c->getInfo()->setPersonaje(figuras[i]); //colocamos el personaje en la casilla correspondiente
             }
 			return; //salimos del bucle una vez que hemos colocado el personaje, que si no solo se pinta uno
-
         }
     }
 }
@@ -127,7 +122,6 @@ void Juego::inicializarPartida()
     for (int i = 0; i < 5;i++) {
         spawnPersonaje(ARQUERO, ALIEN, i, 5);
     }
-
 }
 
 void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
@@ -178,32 +172,11 @@ void Juego::finalizarBatalla()
         ganador->direccion(0.0, 0.0);
 
         perdedor->setVida(0);
-
     }
 
     atacanteBatalla = nullptr;
     defensorBatalla = nullptr;
     origenAntesDeBatalla = nullptr;
     cambiarTurno();
+    estado = JUEGO;
 }
-
-
-
-
-
-
-
-
-//JULI NO SE DONDE PONER QUE LA BATALLA SIGUE EN CURSO, TE LO DEJO POR AQUI
-//int estado = batalla.FinCombate(jugador1, jugador2);
-//
-//if (estado == 1) {
-//    // Ganan humanos y sumar puntos extra por victoria
-//    jugador1.sumarPuntos(100);
-//        // Cambiar estado del juego a "TABLERO"
-//}
-//else if (estado == 2) {
-//    // Ganan aliens y sumar puntos
-//    jugador2.sumarPuntos(100);
-//        // Cambiar estado del juego a "TABLERO"
-//}

@@ -40,7 +40,6 @@
     <ClCompile Include="..\src\Juego.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="Batalla.cpp" />
-    <ClCompile Include="Caja.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Disparos.cpp" />
     <ClCompile Include="Hechizos.cpp" />

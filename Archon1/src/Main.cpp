@@ -1,21 +1,10 @@
-//////////  TODAS LAS DECLARACIONES, PUEDE QUE SOBRE ALGUNA  ///////////
-
 #include <iostream>
-#include "freeglut.h"
-#include "ETSIDI.h"      
+#include "freeglut.h"    
 #include "Interfaz.h"
 #include "menu.h"        
 #include "vista.h"       
-#include "MotorGrafico.h"
-#include "tablero.h"     
-#include "Batalla.h"     
-#include "Juego.h"  
-#include "Cursor.h"
-#include <chrono>
-
-using namespace std::chrono;
-
-//cuidado he quitado el using std::
+#include "MotorGrafico.h"    
+#include "Batalla.h"      
 
 ///////////////////  TODAS LAS INICIALIZACIONES  ///////////////////////////////
 Estado estado = MENU;
@@ -26,18 +15,16 @@ MotorGrafico motor;
 Caja miCaja;
 Juego juego(&miTablero);
 Cursor micursor;
-//PRUEBAS
 Batalla miBatalla;
 Personaje pj1, pj2;
 bool fin_ = false;
 
-//////////  SOLO EL MAIN COMO ME TOCABA LIMPIARLO LO HE LIMPIADO  /////////////////
 int main(int argc, char** argv) {
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(800, 600);
-    glutCreateWindow("Invarchion"); //le cambié el nombre
+    glutCreateWindow("Invarchion");
 
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glEnable(GL_LIGHT0);
@@ -49,7 +36,6 @@ int main(int argc, char** argv) {
     gluPerspective(40.0, 800.0 / 600.0, 0.1, 150);
 
     ////////  INICIALIZACIÓN DE OBJETOS //////
-    //he movido esto aqui abajo para q este lo otro todo juntito
     miMenu.inicializa_menu();
     miTablero.inicializa();  // Configuramos las vistas de Elena y Diego que son las hechas hasta ahora
     motor.setTablero(&miTablero);
@@ -59,13 +45,13 @@ int main(int argc, char** argv) {
     //esto todo habrá q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
     std::cout << "Reproduciendo..." << std::endl;
     // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
-    //ETSIDI::play("extra/mi_musica.mp3");
+    ETSIDI::play("extra/mi_musica.mp3");
 
     // --- REGISTRO DE CALLBACKS ---
     // Estas funciones las he puesto en Interfaz.cpp
     glutMouseFunc(mouse);
     glutPassiveMotionFunc(mousePassive);
-
+    
     glutReshapeFunc(redimensionar);
 
     glutTimerFunc(20, OnTimer, 0);
@@ -77,23 +63,3 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-
-//void OnTimer(int value) 
-//{ 
-//	// calcular dt real entre llamadas usando std::chrono 
-//	static auto last = high_resolution_clock::now(); 
-//	auto now = high_resolution_clock::now(); 
-//	duration<double> elapsed = now - last; 
-//	double dt = elapsed.count(); 
-//	last = now; 
-//	
-//	std::cout << "dt=" << dt << "\n";
-//
-//	// código de animacion usando dt en segundos 
-//	// no borrar estas líneas.indicamos que se vuelva a dibujar la  
-//	//pantalla, para que se vean los cambios 
-//	glutPostRedisplay(); 
-//	// recursivamente, le decimos que dentro de 25ms vuelva a llamar a  
-//	//esta funcion, para que se siga animando 
-//	glutTimerFunc(10, OnTimer, 0); 
-//}
