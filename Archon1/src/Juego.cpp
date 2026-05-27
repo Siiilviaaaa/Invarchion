@@ -139,7 +139,7 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     if (ptrTablero != nullptr) { //
         origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x); 
     }
-    
+ 
     if (atacante->return_Bando() == HUMANO) {
         atacante->x = 5.0;
         atacante->y = 7.5;
@@ -160,8 +160,6 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
         defensor->direccion(1.0, 0.0);//el defensor a la derecha
         //
     }
-    
-   
 
     miBatalla.inicializarBatalla();
     estado = BATALLA;
