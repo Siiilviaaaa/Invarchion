@@ -220,6 +220,8 @@ void OnTimer(int value) {
         }
         if (fin_) {
             estado = JUEGO;
+            juego.cambiarTurno();
+            micursor.inicializar_tablero(juego.getTurno());
             juego.finalizarBatalla();
         }
     }
