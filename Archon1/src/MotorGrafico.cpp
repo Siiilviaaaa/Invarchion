@@ -17,7 +17,7 @@ MotorGrafico::MotorGrafico() :
 	golem("Recursos/golem.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	arquero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	murcielago("Recursos/murcielago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	gusano("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	gusano("Recursos/gusano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	mago("Recursos/magoalien.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	barraVida("Recursos/barra.png")

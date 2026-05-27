@@ -130,9 +130,8 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
     atacanteBatalla = atacante;
     defensorBatalla = defensor;
-    if (ptrTablero != nullptr) { //
-        origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x); 
-    }
+    
+   
     int f = micursor.obt_fila();
     int c = micursor.obt_columna();
     InfoCasilla* info = ptrTablero->getInfoCasilla(f, c);
@@ -149,6 +148,27 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
             atacante->setDanio(danioAnteriorDef + 5);
             std::cout << "[BONO] Defensor en terreno aliado: +15 HP" << std::endl;
         }
+    }
+
+    if (ptrTablero != nullptr) {
+        origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x);
+
+        for (int fila = 0; fila < 5; fila++) {
+            for (int col = 0; col < 7; col++) {
+                Casilla* cas = ptrTablero->casillaModificable(fila, col);
+                if (cas != nullptr && cas->getInfo() != nullptr) {
+                    if (cas->getInfo()->getPersonaje() == atacante) {
+                        cas->getInfo()->setPersonaje(nullptr);
+                    }
+                }
+            }
+        }
+    }
+
+    if (origenAntesDeBatalla != nullptr) {
+        origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x);
+        origenAntesDeBatalla->getInfo()->setPersonaje(nullptr);
+
     }
     if (atacante->return_Bando() == HUMANO) {
         atacante->x = 5.0;
@@ -168,6 +188,7 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
         defensor->y = 7.5;
         defensor->direccion(1.0, 0.0);//el defensor a la derecha
     }
+   
     cambiarTurno();
     miBatalla.inicializarBatalla();
     estado = BATALLA;
@@ -181,6 +202,8 @@ void Juego::finalizarBatalla()
     int f = micursor.obt_fila();
     int c = micursor.obt_columna();
     InfoCasilla* info = ptrTablero->getInfoCasilla(f, c);
+
+
     if (info != nullptr) {
         Tipocasilla color = info->getColor();
         if (casillaFavorable(atacanteBatalla, color)) {
@@ -203,13 +226,13 @@ void Juego::finalizarBatalla()
     }
 
     if (ganador != nullptr) {
-
         origenAntesDeBatalla->getInfo()->setPersonaje(ganador);
         ganador->x = origenAntesDeBatalla->getcolumna();
         ganador->y = origenAntesDeBatalla->getfila();
         ganador->direccion(0.0, 0.0);
 
         perdedor->setVida(0);
+        perdedor->setX(-5);
     }
 
     atacanteBatalla = nullptr;
