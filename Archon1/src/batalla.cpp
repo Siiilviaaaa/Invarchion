@@ -102,7 +102,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 	case 'a': j1.direccion(-1, 0); j1.moverEnBatalla(); break;
 	case 'd': j1.direccion(1, 0);  j1.moverEnBatalla(); break;
 
-	case ' ': //PELEAN/DISPARAN
+	case 'v': //PELEAN/DISPARAN
 		if (j1.return_Tipo() == ARQUERO) {
 			lanzarDisparo(j1);
 			std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;

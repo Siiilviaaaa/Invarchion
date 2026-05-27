@@ -365,7 +365,7 @@ void MotorGrafico::dibujarInstruccionesTablero()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
 	glRasterPos2f(20.0f, 58.0f);
-	for (char c : "TABLERO - HUMANOS:	Mover con WASD | Seleccionar con ESPACIO")
+	for (char c : "TABLERO - HUMANOS:	Mover con WASD | Seleccionar con V")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	glRasterPos2f(20.0f, 50.0f);
@@ -373,7 +373,7 @@ void MotorGrafico::dibujarInstruccionesTablero()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	glRasterPos2f(20.0f, 42.0f);
-	for (char c : "BATALLA - HUMANOS: Mover con WASD | Disparar con ESPACIO | Hechizar con C")
+	for (char c : "BATALLA - HUMANOS: Mover con WASD | Disparar con V | Hechizar con C")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	glRasterPos2f(20.0f, 34.0f);
