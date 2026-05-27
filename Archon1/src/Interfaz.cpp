@@ -219,10 +219,12 @@ void OnTimer(int value) {
 
         }
         if (fin_) {
-            estado = JUEGO;
+            juego.finalizarBatalla();
             juego.cambiarTurno();
             micursor.inicializar_tablero(juego.getTurno());
-            juego.finalizarBatalla();
+           
+            estado = JUEGO;
+            glutPostRedisplay();
         }
     }
     glutPostRedisplay();
