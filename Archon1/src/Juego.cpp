@@ -150,13 +150,24 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
             std::cout << "[BONO] Defensor en terreno aliado: +15 HP" << std::endl;
         }
     }
-    atacante->x = 5.0;
-    atacante->y = 7.5;
-    atacante->direccion(1.0, 0.0); //el atacante siempre va a la izq
-    
-    defensor->x = 15.0;
-    defensor->y = 7.5;
-    defensor->direccion(-1.0, 0.0);//el defensor a la derecha
+    if (atacante->return_Bando() == HUMANO) {
+        atacante->x = 5.0;
+        atacante->y = 7.5;
+        atacante->direccion(1.0, 0.0); //el atacante siempre va a la izq
+
+        defensor->x = 15.0;
+        defensor->y = 7.5;
+        defensor->direccion(-1.0, 0.0);//el defensor a la derecha
+    }
+    else {
+        atacante->x = 15.0;
+        atacante->y = 7.5;
+        atacante->direccion(-1.0, 0.0); //el atacante siempre va a la izq
+
+        defensor->x = 5.0;
+        defensor->y = 7.5;
+        defensor->direccion(1.0, 0.0);//el defensor a la derecha
+    }
 
     miBatalla.inicializarBatalla();
     estado = BATALLA;
