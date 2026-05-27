@@ -330,7 +330,7 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 {
 	if (aliado.return_Disparos() >= 10) {
 		std::cout << "Sin municion" << std::endl;
-		setMensaje("SIN MUNUCION Espera a la recarga");
+		setMensaje("SIN MUNUCION. Espera a la recarga");
 		return;
 	}
 	std::cout << "Disparando..." << std::endl;
