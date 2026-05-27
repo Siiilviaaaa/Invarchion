@@ -191,6 +191,8 @@ void OnDraw(void) {
                 if (h != nullptr)
                     motor.dibujarHechizo(h);
             }
+
+		motor.dibujarMensajesBatalla(miBatalla.getMensaje());
         break;
     }
     //no borrar esta linea ni poner nada despues

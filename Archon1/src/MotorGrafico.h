@@ -64,4 +64,5 @@ public:
 	//nuevos mios de dibujo de instrucciones
 	void dibujarMensajeBando(const std::string& textoBando);
 	void dibujarInstruccionesTablero();
+	void dibujarMensajesBatalla(const std::string& mensaje);
 };

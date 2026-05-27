@@ -83,7 +83,7 @@ void Personaje::moverEnBatalla()
 	y += dirY * v * 0.05;
 }
 
-void Personaje::gestionRecarga()
+bool Personaje::gestionRecarga()
 {
 	if (t_recarga > 0.0) {
 		t_recarga -= 0.02;
@@ -93,15 +93,17 @@ void Personaje::gestionRecarga()
 			disparosRealizados = 0;
 			t_recarga = 0.0;
 			std::cout << "Municion recargada!" << std::endl;
+			return true;
 		}
 	}
 	//CUANDO NOS QUEDAMOS SIN BALAS, INICIAMOS EL TIEMPO
 	else if (disparosRealizados >= 10) {
 		t_recarga = 10.0; //TIEMPO
 	}
+	return false;
 }
 
-void Personaje::actualizarEfectos()
+bool Personaje::actualizarEfectos()
 {
 	if (t_paralisis > 0) //SIGUE CONGELADO
 	{
@@ -115,7 +117,8 @@ void Personaje::actualizarEfectos()
 			this->v = this->vel_base; //DESCONGELAR
 
 			std::cout << "JUGADOR DESCONGELADO" << std::endl;
+			return true;
 		}
 	}
+	return false;
 }
-

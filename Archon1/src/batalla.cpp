@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <string>
 #include "Batalla.h"
 
 using std::cout, std::cin, std::endl;
@@ -105,6 +106,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 		if (j1.return_Tipo() == ARQUERO) {
 			lanzarDisparo(j1);
 			std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
+			setMensaje("Humanos llevan " + std::to_string(j1.return_Disparos()) + " disparos");
 		}
 		else
 		{
@@ -123,10 +125,11 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 	///////////////ALIENS////////////////
 	////MOVIMIENTO EN CON TECLA ESPECIAL (FLECHAS)
 
-	case 13: //PELEAN/DISPARAN
+	case 'm': //PELEAN/DISPARAN
 		if (j2.return_Tipo() == ARQUERO) {
 			lanzarDisparo(j2);
 			std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
+			setMensaje("Aliens llevan " + std::to_string(j2.return_Disparos()) + " disparos");
 		}
 		else
 		{
@@ -163,11 +166,11 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 
 	entrePersonajes(j1, j2);
 
-	j1.actualizarEfectos();
-	j2.actualizarEfectos();
+	if (j1.actualizarEfectos()) setMensaje("Humano DESCONGELADO");
+	if (j2.actualizarEfectos()) setMensaje("Alien DESCONGELADO");
 
-	j1.gestionRecarga();
-	j2.gestionRecarga();
+	if (j1.gestionRecarga()) setMensaje("Humanos: Municion recargada");
+	if (j2.gestionRecarga()) setMensaje("Aliens: Municion recargada");
 
 	for (int k = 0; k < 5; k++) {
 		if (lista[k] != nullptr) {
@@ -235,16 +238,19 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 					switch (tipo) {
 					case 0: { //PARALISIS
 						std::cout << "Efecto: Personaje congelado" << std::endl;
+						setMensaje("Efecto: Personaje congelado");
 						victima->setVelocidad(0);
-						victima->set_paralisis(5.0);
+						victima->set_paralisis(10.0);
 						break;
 					}
-					case 1://DAÑO EXTRA
+					case 1: //DAÑO EXTRA
 						std::cout << "Efecto: Mitad de la vida" << std::endl;
+						setMensaje("Efecto: Mitad de la vida");
 						victima->setVida(victima->return_Vida() / 2);
 						break;
-					case 2: {//TELETRANSPORTE
+					case 2: { //TELETRANSPORTE
 						std::cout << "Efecto: Teletransporte aleatorio" << std::endl;
+						setMensaje("Efecto: Teletransporte aleatorio");
 						double nuevaX = 1.5f + (float)(rand() % 170) / 10.0f;
 						double nuevaY = 1.5f + (float)(rand() % 120) / 10.0f;
 
@@ -281,11 +287,13 @@ int Batalla::FinCombate(Personaje& humanos, Personaje& aliens)
 	if (aliens.return_Vida() <= 0)
 	{
 		cout << "HUMANS WIN!" << endl;
+		setMensaje("HUMANS WIN");
 		return 1;
 	}
 	else if (humanos.return_Vida() <= 0)
 	{
 		cout << "ALIENS WIN!" << endl;
+		setMensaje("ALIENS WIN");
 		return 2;
 	}
 
@@ -321,7 +329,8 @@ void Batalla::pegar(Personaje& atacante, Personaje& objetivo)
 void Batalla::lanzarDisparo(Personaje& aliado)
 {
 	if (aliado.return_Disparos() >= 10) {
-		std::cout << "Sin municion espera a la recarga" << std::endl;
+		std::cout << "Sin municion" << std::endl;
+		setMensaje("SIN MUNUCION Espera a la recarga");
 		return;
 	}
 	std::cout << "Disparando..." << std::endl;
@@ -365,6 +374,7 @@ void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int 
 
 	if (mago.return_HechizosRestantes() <= 0) {
 		std::cout << "No te quedan hechizos en esta ronda" << std::endl;
+		setMensaje("Sin hechizos para esta ronda");
 		return;
 	}
 
