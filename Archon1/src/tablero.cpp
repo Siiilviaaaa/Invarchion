@@ -2,7 +2,8 @@
 #include "tablero.h"
 #include "freeglut.h"
 #include "Juego.h"
-#include"ETSIDI.h"
+#include "ETSIDI.h"
+
 //declaracion matriz, constructor y funciones
 int matrizArchon[5][7] = {
     {0, 1, 2, 2, 2, 0, 1}, // Fila 0 (Superior)
@@ -11,8 +12,8 @@ int matrizArchon[5][7] = {
     {1, 2, 0, 2, 1, 2, 0}, // Fila 3
     {0, 1, 2, 2, 2, 0, 1}, // Fila 4 (Cruz Central)
 
-
 };
+
 Tablero::Tablero() {
   
     inicializa();//llamamos a q se inicialice la casilla
@@ -61,16 +62,3 @@ int Tablero::getTurno(Juego* juego) const
 //{
 //    nueva = matriz[x][y]; //pensar si hace copia o borra lo q habia 
 //}
-
-
-//INICIALIZAR POSICIONES PIEZAS
-//void Tablero::inicializarPiezas() 
-// {
-// 
-// CREAR PIEZAS Y POSICONARLAS [][] --> COORDENADAS
-// pieza [][] = Personajes_carac::craerPieza(SOLDADO);
-// pieza [][] = Personajes_carac::craerPieza(ARQUERO);
-// pieza [][] = Personajes_carac::craerPieza(VOLADOR);
-// pieza [][] = Personajes_carac::craerPieza(EXCAVADOR);
-// pieza [][] = Personajes_carac::craerPieza(HECHICERO);
-// }

@@ -1,15 +1,10 @@
 #include "Interfaz.h"
 #include <iostream>
 #include <cctype>
-#include "ETSIDI.h"
 #include "freeglut.h"
-#include "Juego.h"
 #include "menu.h"
 #include "vista.h"      
 #include "MotorGrafico.h"
-#include "tablero.h"
-#include "Batalla.h"
-#include "Cursor.h"
 
 //los extern son para q los busque en el main, me ha ayudado la IA en esta parte
 //basicamente es un: "oye usa el [extern] q declare en el main
@@ -31,7 +26,6 @@ std::string textoBando = "";
 bool mostrandoInstruccionesTablero = false;
 float tiempoInstruccionesTablero = 0.0f;
 int puntuacion_actual = 0;
-//Variables globales para controlar el hover
 bool hoverSalir = false;
 bool hoverSeleccion = false;
 bool hoverRanking = false;

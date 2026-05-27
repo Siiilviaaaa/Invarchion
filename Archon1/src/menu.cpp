@@ -94,7 +94,6 @@ void Menu::dibuja_menu(bool hJugar, bool hRanking, bool hSalir) {
 
 void Menu::dibuja_capa_seleccion()
 {
-
     glPushMatrix();
 
     //traslado igual que el menú para que coincidan los ejes
@@ -103,8 +102,6 @@ void Menu::dibuja_capa_seleccion()
     _seleccion.draw();
 
     glPopMatrix();
-
-    
 }
 
 void Menu::dibuja_ranking()
@@ -132,7 +129,6 @@ void Menu::dibuja_ranking()
     glColor3f(0.1f, 0.0f, 0.0f);
     glVertex3f(-15.0f, -9.0f, -0.1f);
     glEnd();
-
 
     //Reset de color para no teñir la textura
     glColor3f(1.0f, 1.0f, 1.0f);
@@ -194,7 +190,6 @@ void Menu::cargar_ranking() {
         _lineas_ranking.push_back("Error: extra/ranking.txt no encontrado");//caso de ausencia de fichero contemplado
     }
 }
-
 
 void Menu::actualizar_ranking(std::string nombre) {
 

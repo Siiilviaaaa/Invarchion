@@ -3,7 +3,6 @@
 #include "Caja.h"
 #include "freeglut.h"
 #include "Juego.h"
-#include "ETSIDI.h"
 #include "Disparos.h"
 #include "Hechizos.h"
 #include "Obstaculo.h"

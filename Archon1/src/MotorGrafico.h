@@ -1,14 +1,8 @@
 #pragma once
 #include "ETSIDI.h"
-#include "Disparos.h"
-#include "Hechizos.h"
-#include "Personajes.h"
-#include "Caja.h"
-#include "Obstaculo.h"
 #include "Cursor.h"
 #include "tablero.h"
 #include "batalla.h"
-
 #include <string>
 
 //RELACION DE AMISTAD DE PERSONAJES, HECHIZOS, DISPAROS PARA PODER ACCEDER A SUS ATRIBUTOS PRIVADOS
