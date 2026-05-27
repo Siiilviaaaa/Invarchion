@@ -234,10 +234,20 @@ void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 
 void MotorGrafico::dibujarBarraVida(Personaje& atacante, Personaje& defensor)
 {
-	float porcentaje1 = (float)atacante.return_Vida() / (float)atacante.return_VidaMax();
-	float porcentaje2 = (float)defensor.return_Vida() / (float)defensor.return_VidaMax();
-	recortarBarra(porcentaje1, 1.0f, 1.0f, 4.5f, 0.8f);
-	recortarBarra(porcentaje2, 14.5f, 1.0f, 4.5f, 0.8f);
+	float porcentajeAtacante = (float)atacante.return_Vida() / (float)atacante.return_VidaMax(); 
+	float porcentajeDefensor = (float)defensor.return_Vida() / (float)defensor.return_VidaMax(); 
+
+	float posIzq = 1.0f;
+	float posDcha = 14.5f;
+
+	if (atacante.return_Bando() == HUMANO) { 
+		recortarBarra(porcentajeAtacante, posIzq, 1.0f, 4.5f, 0.8f);
+		recortarBarra(porcentajeDefensor, posDcha, 1.0f, 4.5f, 0.8f);
+	}
+	else {
+		recortarBarra(porcentajeAtacante, posDcha, 1.0f, 4.5f, 0.8f);
+		recortarBarra(porcentajeDefensor, posIzq, 1.0f, 4.5f, 0.8f);
+	}
 }
 
 
