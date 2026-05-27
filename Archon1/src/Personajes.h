@@ -32,6 +32,7 @@ class Personaje
 
 public:
 	Personaje() { this->disparosRealizados = 0; }
+	~Personaje();
 	static Personaje crearPieza(Tipo_figura tipo, Bando b, double posX, double posY);
 	void direccion(double dx, double dy);
 	void moverEnBatalla();

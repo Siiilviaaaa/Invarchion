@@ -177,9 +177,8 @@ void OnDraw(void) {
             //std::cout << atacante->return_Y();
             motor.dibujarPersonaje(*defensor);
             miBatalla.actualizarCombate(*atacante, *defensor, miCaja, miBatalla.obtenerObstaculos());
+            motor.dibujarBarraVida(*atacante, *defensor);
         }
-
-        //motor.dibujarBarraVida(pj1, pj2);
 
         for (int i = 0; i < 20; i++) {
             Disparo* d = miBatalla.return_nDisparos()[i];
@@ -227,7 +226,7 @@ void OnTimer(int value) {
         }
         if (fin_) {
             estado = JUEGO;
-            //juego.finalizarBatalla();
+            juego.finalizarBatalla();
         }
     }
     glutPostRedisplay();
@@ -367,9 +366,9 @@ void OnSpecialKeyboardDown(int key, int x, int y) {
             }
         }
     }
-    if (estado == JUEGO && juego.getTurno() == 1)
+    if (estado == JUEGO )
     {
-        micursor.mover_aliens(key);
+        micursor.mover_aliens(key, juego.getTurno());
 
         if (micursor.obt_contador_selecciones() == 0) {
             micursor.inicializar_tablero(juego.getTurno());

@@ -32,6 +32,8 @@ private:
 	Personaje* figuras[MAX_PERSONAJES]; //hay 20 figuritas en el tablero
 	Personaje* atacanteBatalla{ nullptr };
 	Personaje* defensorBatalla{ nullptr };
+
+	Casilla* origenAntesDeBatalla{ nullptr };
 public:
 
 	Juego(Tablero* t);

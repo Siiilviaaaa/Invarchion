@@ -4,6 +4,9 @@
 #include <iostream>
 #include "Juego.h"
 
+Personaje::~Personaje()
+{}
+
 Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double posY)
 {
 	Personaje pieza;
@@ -13,17 +16,6 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 	pieza.setX(posX);
 	pieza.setY(posY);
 
-	//SPRITES
-	/*if (tipo == LUCHADOR)
-		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/luchador.png", 5) : ETSIDI::SpriteSequence("Recursos/golem.png", 5);
-	else if (tipo == ARQUERO)
-		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/soldado.png", 5) : ETSIDI::SpriteSequence("Recursos/arquero.png", 5);
-	else if (tipo == VOLADOR)
-		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/volador.png", 5) : ETSIDI::SpriteSequence("Recursos/murcielago.png", 5);
-	else if (tipo == EXCAVADOR)
-		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/minero.png", 5) : ETSIDI::SpriteSequence("Recursos/gusano.png", 5);
-	else if (tipo == HECHICERO)
-		pieza.sprite = (b == HUMANO) ? ETSIDI::SpriteSequence("Recursos/hechicero.png", 5) : ETSIDI::SpriteSequence("Recursos/mago.png", 5);*/
 	
 	//CARACTERISTICAS
 	switch (tipo)
@@ -33,7 +25,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 		pieza.setVidaMax(100);
 		pieza.setDanio(15);
 		pieza.setV_base(2);
-		pieza.setMovimientos(1);
+		pieza.setMovimientos(10);
 		break;
 	case ARQUERO:
 		pieza.setVida(80);
@@ -47,7 +39,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 		pieza.setVidaMax(120);
 		pieza.setDanio(20);
 		pieza.setV_base(3.1);
-		pieza.setMovimientos(10); //momentaneamente para hacer pruebas
+		pieza.setMovimientos(3); //momentaneamente para hacer pruebas
 		break;
 	case EXCAVADOR:
 		pieza.setVida(200);
@@ -61,7 +53,7 @@ Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double p
 		pieza.setVidaMax(90);
 		pieza.setDanio(10);
 		pieza.setV_base(1.7);
-		pieza.setMovimientos(1);
+		pieza.setMovimientos(10);
 		break;
 	}
 	pieza.setVelocidad(pieza.return_Vbase());

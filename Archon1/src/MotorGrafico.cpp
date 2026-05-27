@@ -8,17 +8,17 @@
 extern Juego juego;
 
 MotorGrafico::MotorGrafico() :
-	luchador("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	soldado("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	volador("Recursos/pruebacolor.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	minero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	hechicero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	luchador("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	soldado("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	volador("Recursos/paracaidista.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	minero("Recursos/minero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	hechicero("Recursos/magohumano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	golem("Recursos/golem.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	arquero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	murcielago("Recursos/murcielago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	gusano("Recursos/gusano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	mago("Recursos/mago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	gusano("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	mago("Recursos/magoalien.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	barraVida("Recursos/barra.png")
 {}
@@ -143,26 +143,58 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 			posX = personaje.return_X() * ladoCasilla + 1;
 			posY = ladoCasilla * (personaje.return_Y()) + 1;
 		}
-		//double posY = (estado == BATALLA) ? personaje.return_Y() : personaje.getY();
-		
 		
 		glTranslated(posX, posY, 0.5);
 		SpriteActual->setCenter(0.9, 0.9);
 		SpriteActual->setSize(1.8, 1.8);
-		if (personaje.bando == ALIEN) {
+		switch (estado) {
+		case JUEGO:
+			if (personaje.return_Bando() == HUMANO) {
+				SpriteActual->flip(false, false); // humanos miran a la derecha
+			}
+			else {
+				SpriteActual->flip(true, false);  
+			}
+			SpriteActual->setState(MIRANDO_HORIZONTALMENTE, true);
+			SpriteActual->draw();
+			break;
+		case BATALLA:
+			// se ponen en espejo dependiendo de si va a la derecha o a la izq
+			if (personaje.return_dirX() > 0.01) {
+				SpriteActual->flip(false, false);
+			}
+			else if (personaje.return_dirX() < -0.01) {
+				SpriteActual->flip(true, false);
+			}
 
-			SpriteActual->flip(true, false); //así miran a la izq
-			//glTranslated(1.95, 0, 0);
-		}
-		if (personaje.moviendose) {
-			///SpriteActual -> setState(1, false);
-			//SpriteActual->loop();
+			int fila = MIRANDO_ABAJO;
+			if (abs(personaje.return_dirX()) > abs(personaje.return_dirY())) {
+				fila = MIRANDO_HORIZONTALMENTE;
+			}
+			else if (abs(personaje.return_dirY()) > 0) {
+				if (personaje.return_dirY() < 0) fila = MIRANDO_ABAJO;
+				if (personaje.return_dirY() > 0) fila = MIRANDO_ARRIBA;
+			}
 
+			int indexInicial = fila * 3; // 3 columnas en los spritesheets por fila
+
+			//  bucle de animacion
+			if (personaje.return_dirX() == 0 && personaje.return_dirY() == 0) {
+				SpriteActual->setState(indexInicial, true);
+			}
+			else {
+				// Si está fuera de su fila lo devolvemos al inicio 
+				if (SpriteActual->getState() < indexInicial || SpriteActual->getState() >= indexInicial + 3) {
+					SpriteActual->setState(indexInicial, false);
+				}
+				SpriteActual->loop();
+			}
+			SpriteActual->draw(); 
+			break;
 		}
-		else {
-			SpriteActual->setState(0);
-		}
-		SpriteActual->draw();
+
+		
+
 		glDisable(GL_BLEND);
 		glEnable(GL_LIGHTING);
 		glPopMatrix();
@@ -200,10 +232,10 @@ void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 	glPopMatrix();
 }
 
-void MotorGrafico::dibujarBarraVida(Personaje& j1, Personaje& j2)
+void MotorGrafico::dibujarBarraVida(Personaje& atacante, Personaje& defensor)
 {
-	float porcentaje1 = (float)j1.return_Vida() / (float)j1.return_VidaMax();
-	float porcentaje2 = (float)j2.return_Vida() / (float)j2.return_VidaMax();
+	float porcentaje1 = (float)atacante.return_Vida() / (float)atacante.return_VidaMax();
+	float porcentaje2 = (float)defensor.return_Vida() / (float)defensor.return_VidaMax();
 	recortarBarra(porcentaje1, 1.0f, 1.0f, 4.5f, 0.8f);
 	recortarBarra(porcentaje2, 14.5f, 1.0f, 4.5f, 0.8f);
 }
@@ -333,15 +365,19 @@ void MotorGrafico::dibujarInstruccionesTablero()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
 	glRasterPos2f(20.0f, 58.0f);
-	for (char c : "TABLERO: Mover el cursor con WASD")
+	for (char c : "TABLERO - HUMANOS:	Mover con WASD | Seleccionar con Q")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
-	glRasterPos2f(20.0f, 48.0f);
+	glRasterPos2f(20.0f, 50.0f);
+	for (char c : "TABLERO - ALIENS: Mover con Flechas | Seleccionar con M")
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+	glRasterPos2f(20.0f, 42.0f);
 	for (char c : "BATALLA - HUMANOS: Mover con WASD | Disparar con ESPACIO | Hechizar con C")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
-	glRasterPos2f(20.0f, 40.0f);
-	for (char c : "BATALLA - ALIENS: Mover con IJKL | Disparar con ENTER | Hechizar con N")
+	glRasterPos2f(20.0f, 34.0f);
+	for (char c : "BATALLA - ALIENS: Mover con Flechas | Disparar con ENTER | Hechizar con N")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	// Mensaje inferior para salir
