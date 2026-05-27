@@ -158,7 +158,7 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
         defensor->x = 5.0;
         defensor->y = 7.5;
         defensor->direccion(1.0, 0.0);//el defensor a la derecha
-
+        //
     }
     
    
