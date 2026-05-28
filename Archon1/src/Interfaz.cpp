@@ -102,38 +102,39 @@ void OnDraw(void) {
         fin_ = false;
         motor.dibujarCursor(micursor);
 
-        //dibujar mensajes del cursor
-        glDisable(GL_LIGHTING);
-        glDisable(GL_TEXTURE_2D);
+        motor.dibujarMensajesTablero(micursor.obt_mensaje());//imprime los mensajes de seleccion y turno en el tablero
+       
+        //glDisable(GL_LIGHTING);
+        //glDisable(GL_TEXTURE_2D);
 
      
-        glMatrixMode(GL_PROJECTION);//para no estropear los otros dibujos 
-        glPushMatrix();
-        glLoadIdentity();
-        
-        gluOrtho2D(0, 800, 0, 600);//plano fij de lo que ocupa la pantalla para localizar el mensaje
+        //glMatrixMode(GL_PROJECTION);//para no estropear los otros dibujos 
+        //glPushMatrix();
+        //glLoadIdentity();
+        //
+        //gluOrtho2D(0, 800, 0, 600);//plano fij de lo que ocupa la pantalla para localizar el mensaje
 
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadIdentity();
+        //glMatrixMode(GL_MODELVIEW);
+        //glPushMatrix();
+        //glLoadIdentity();
 
-        glColor3ub(153, 50, 204);
+        //glColor3ub(153, 50, 204);
 
-        std::string mensajeTablero = micursor.obt_mensaje();//varia en funcion de la situacion del tablero actual
+        //std::string mensajeTablero = micursor.obt_mensaje();//varia en funcion de la situacion del tablero actual
      
-        glRasterPos2i(240, 43);//colocacion del mensaje
+        //glRasterPos2i(240, 43);//colocacion del mensaje
 
-        for (char c : mensajeTablero) {//imprime el texto letra a letra
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-        }
+        //for (char c : mensajeTablero) {//imprime el texto letra a letra
+        //    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+        //}
 
-        glMatrixMode(GL_PROJECTION);
-        glPopMatrix();
-        glMatrixMode(GL_MODELVIEW);
-        glPopMatrix();
+        //glMatrixMode(GL_PROJECTION);
+        //glPopMatrix();
+        //glMatrixMode(GL_MODELVIEW);
+        //glPopMatrix();
 
-        glEnable(GL_TEXTURE_2D);
-        glEnable(GL_LIGHTING);
+        //glEnable(GL_TEXTURE_2D);
+        //glEnable(GL_LIGHTING);
               
 
         if (tiempoMensajeSelecciondeBando > 0) {//dibuja mensaje de bando

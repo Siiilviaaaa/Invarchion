@@ -60,4 +60,5 @@ public:
 	void dibujarInstruccionesTablero();
 	void dibujarMensajesBatalla(const std::string& mensaje, const std::string& MensajeBonus);
 	void dibujarPuntuaciones(int puntuacion_humanos, int puntuacion_aliens);
+	void dibujarMensajesTablero(const std::string& mensaje);
 };

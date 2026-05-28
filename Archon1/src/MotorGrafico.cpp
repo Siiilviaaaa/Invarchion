@@ -473,6 +473,43 @@ void MotorGrafico::dibujarPuntuaciones(int puntuacion_humanos, int puntuacion_al
 	glPopMatrix();
 }
 
+void MotorGrafico::dibujarMensajesTablero(const std::string& mensaje)
+{
+	   glDisable(GL_LIGHTING);
+	   glDisable(GL_TEXTURE_2D);
+
+	   glMatrixMode(GL_PROJECTION);
+	   glPushMatrix();
+	   glLoadIdentity();
+	   gluOrtho2D(0, 800, 0, 600);
+
+	   glMatrixMode(GL_MODELVIEW);
+	   glPushMatrix();
+	   glLoadIdentity();
+
+	   glDisable(GL_LIGHTING);
+	   glDisable(GL_DEPTH_TEST);
+	   glDisable(GL_TEXTURE_2D);
+
+	   //Color del texto
+	   ETSIDI::setTextColor(0.6f, 0.196f, 0.8f);
+	   ETSIDI::setFont("fuentes/Bitwise.ttf", 20);
+
+	   //Posicion del texto -> Parte superior central
+	   ETSIDI::printxy(mensaje.c_str(), 250.0f, 33.0f);
+	  
+	   glEnable(GL_DEPTH_TEST);
+	   glEnable(GL_LIGHTING);
+
+	   glMatrixMode(GL_PROJECTION);
+	   glPopMatrix();
+	   glMatrixMode(GL_MODELVIEW);
+	   glPopMatrix();
+
+	   glEnable(GL_TEXTURE_2D);
+	   glEnable(GL_LIGHTING);
+}
+
 void MotorGrafico::dibujarTablero() {
 	// SEGURIDAD: Si no hay tablero, no intentamos leer datos (evita el crash)
 	if (tablero == nullptr) return;
