@@ -178,17 +178,15 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 
 			int indexInicial = fila * 3; // 3 columnas en los spritesheets por fila
 			//por como estan puestas las imagenes de los sprites, tiene que ir de la columna 1 a la 2, a la 1 a la 3 y asi
+			int patronMovientoSprites[4] = {0, 1, 0, 2};
 
 			//  bucle de animacion
 			if (personaje.return_dirX() == 0 && personaje.return_dirY() == 0) {
-				SpriteActual->setState(indexInicial, true);
+				SpriteActual->setState(indexInicial, true); //no se mueve
 			}
 			else {
-				// Si está fuera de su fila lo devolvemos al inicio 
-				if (SpriteActual->getState() < indexInicial || SpriteActual->getState() >= indexInicial + 3) {
-					SpriteActual->setState(indexInicial, false);
-				}
-				SpriteActual->loop();
+				int fotoActual = (glutGet(GLUT_ELAPSED_TIME) / 150) % 4;
+				SpriteActual->setState(indexInicial + patronMovientoSprites[fotoActual]);
 			}
 			SpriteActual->draw(); 
 			break;
