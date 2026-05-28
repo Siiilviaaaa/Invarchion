@@ -238,7 +238,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			//HECHIZO EN TABLERO HUMANO
 			else if (key == 'c' && contador_selecciones == 1)
 			{
-				Personaje* mago = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje();
+				Personaje* mago = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje(); //OBTENER PERSONAJE SELCCIONADO
 				aplicarCuracionMasiva(turno, mago);
 				std::cout << "Curacion masiva aplicada. Cambio de turno: " << std::endl;
 				insertar_mensaje("HUMANO CURACION MASIVA");
@@ -297,7 +297,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			//HECHIZO EN TABLERO ALIENS
 			else if (key == 'n' && contador_selecciones == 1)
 			{
-				Personaje* mago = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje();
+				Personaje* mago = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje(); //OBTENER PERSONAJE SELCCIONADO
 				aplicarCuracionMasiva(turno, mago);
 				std::cout << "Curacion masiva aplicada. Cambio de turno: " << std::endl;
 				insertar_mensaje("ALIEN CURACION MASIVA");
@@ -336,13 +336,11 @@ bool Cursor::tieneMovimientoPosible(int turno) const
 		}
 
 		Personaje* personajeVecino = casillaVecina->getPersonaje();
-
 		
 		if (personajeVecino == nullptr)//Casilla libre, hay un camino posible 
 		{
 			return true;
 		}
-
 		
 		if (personajeVecino->return_Bando() != turno)//Casilla con enemigo, asiq entraria en batalla si es la unica opcion
 		{
@@ -445,13 +443,13 @@ int Cursor::soltar(int turno)
 
 void Cursor::aplicarCuracionMasiva(int turno, Personaje* mago)
 {
-	if (mago != nullptr && mago->return_Tipo() == HECHICERO) {
-		if (mago->return_HechizosRestantes() > 0) {
+	if (mago != nullptr && mago->return_Tipo() == HECHICERO) { //VERIFICAMOS QUE EL PERSONAJE SELECCIONADO SEA UN HECHICERO
+		if (mago->return_HechizosRestantes() > 0) { //VERIFICAMOS QUE TENGA HECHIZOS DISPONIBLES
 
 			//RECORREMOS LOS PERSONAJES BUSCANDO ALIADOS
 			for (int i = 0; i < 20; i++) {
-				Personaje* aliado = ptrJuego->getPersonaje(i);
-				if (aliado != nullptr && aliado->return_Bando() == turno && aliado->return_Vida() > 0) {
+				Personaje* aliado = ptrJuego->getPersonaje(i); //OBTENEMOS EL PERSONAJE DE LA CASILLA i, SI NO HAY PERSONAJE DEVUELVE NULLPTR
+				if (aliado != nullptr && aliado->return_Bando() == turno && aliado->return_Vida() > 0) { //SI EL PERSONAJE EXISTE Y ES UN ALIADO
 
 					//CURAMOS UN TERCIO DE LA VIDA
 					int cura = aliado->return_VidaMax() / 3;
@@ -464,14 +462,13 @@ void Cursor::aplicarCuracionMasiva(int turno, Personaje* mago)
 					aliado->setVida(nuevaVida);
 				}
 			}
-			mago->usarHechizo();
+			mago->usarHechizo(); //RESTAMOS UN HECHIZO AL MAGO
 			insertar_mensaje("Curacion masiva! Turno finalizado.");
 
 			//RESET CURSOR Y CAMBIO DE TURNO
 			contador_selecciones = 0;
 			movimientos_restantes = 0;
 			if (ptrJuego != nullptr) ptrJuego->cambiarTurno();
-
 		}
 	}
 }

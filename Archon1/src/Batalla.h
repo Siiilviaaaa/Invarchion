@@ -15,13 +15,13 @@ class Batalla
 	friend class Juego;
 
 	static const int MAX_DISPAROS = 20;
-	Disparo* nDisparos[MAX_DISPAROS];
-	Hechizo* nHechizos[2][3];
+	Disparo* nDisparos[MAX_DISPAROS]; //LISTA DE DISPAROS, SE INICIALIZA EN EL CONSTRUCTOR Y LO LLENAMOS EN LANZAR DISPARO
+	Hechizo* nHechizos[2][3]; //EL PRIMER INDICE ES PARA EL BANDO, EL SEGUNDO PARA EL TIPO DE HECHIZO
 
-	Obstaculo* listaObstaculos[7];
+	Obstaculo* listaObstaculos[7]; //LISTA DE OBSTACULOS, SE INICIALIZA EN EL CONSTRUCTOR Y LO LLENAMOS EN INICIALIZAR_BATALLA
 	int numObstaculos;
 
-	std::string mensaje_batalla = "PREPARADOS... LUCHAD!";
+	std::string mensaje_batalla = "PREPARADOS... LUCHAD!"; //INICIALIZADO CON UNMENSAJE POR DEFECTO PARA QUE NO APAREZCA BASURA EN PANTALLA
 	std::string mensaje_bonus = " ";
 	
 public:
@@ -35,6 +35,7 @@ public:
 	std::string getMensajeBonus()const { return mensaje_bonus; }
 	void setMensaje(std::string nuevoMensaje) {	mensaje_batalla = nuevoMensaje;	}
 	void setMensajeBonus(std::string MensajeBonus) { mensaje_bonus = MensajeBonus; }
+
 	/////////ACTUALIZACIONES//////////////
 	void inicializarBatalla();
 	void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2);

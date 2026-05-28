@@ -4,12 +4,16 @@
 #include "Batalla.h"
 
 using std::cout, std::cin, std::endl;
+
+//VARIABLES DEFINIDAS EN INTERFACE.CPP
 extern bool fin_;
 extern int puntuacion_humanos;
 extern int puntuacion_aliens;
 
 Batalla::Batalla():numObstaculos(5)
 {
+	//INICIALIZAR PARA EVITAR QUE SEAN BASURA
+
 	for (int i = 0;i < MAX_DISPAROS;i++)
 		nDisparos[i] = nullptr;
 
@@ -17,9 +21,8 @@ Batalla::Batalla():numObstaculos(5)
 		for (int j = 0; j < 3; j++)
 			nHechizos[i][j] = nullptr;
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 5; i++)
 		listaObstaculos[i] = nullptr;
-	}
 }
 
 Batalla::~Batalla()
@@ -33,14 +36,12 @@ Batalla::~Batalla()
 			nDisparos[i] = nullptr;   //VACIAR
 		}
 
-	for (int b = 0; b < 2; b++) {        //RECORRE 2 BANDOS
-		for (int i = 0; i < 3; i++) {    //RECORRE 3 HECHIZOS
+	for (int b = 0; b < 2; b++)        //RECORRE 2 BANDOS
+		for (int i = 0; i < 3; i++)    //RECORRE 3 HECHIZOS
 			if (nHechizos[b][i] != nullptr) {
 				delete nHechizos[b][i];
 				nHechizos[b][i] = nullptr;
 			}
-		}
-	}
 }
 
 void Batalla::inicializarBatalla()
@@ -141,7 +142,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 	case'n': //HECHIZAN
 		if (j2.return_Tipo() == HECHICERO) {
 			lanzarHechizo(j2, j1, j2.HechizoUtilizado(), j2.return_Bando());
-			j2.siguienteHechizo();
+			j2.siguienteHechizo(); //CAMBIA LA POSICION EN EL ARRAYS DE HECHIZOS
 			std::cout << "J2 lanza hechizo: " << std::endl;
 		}
 		break;
@@ -150,6 +151,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 
 void Batalla::tecla_especial(int key, Personaje& alien)
 {
+	//DEFINIDA EN EL ONSPECIALKEYDOWN DE INTERFAZ-> SOLO SE LLAMA CUANDO EL ALIEN ESTA EN BATALLA
 	switch (key)
 	{
 		case GLUT_KEY_UP: alien.direccion(0, 1);  alien.moverEnBatalla(); break;
@@ -164,58 +166,59 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 	////////////////PERSONAJES//////////////////
 	limites(j1, caja);
 	limites(j2, caja);
-
 	entrePersonajes(j1, j2);
 
-	if (j1.actualizarEfectos()) setMensaje("Humano DESCONGELADO");
-	if (j2.actualizarEfectos()) setMensaje("Alien DESCONGELADO");
+	//DEVUELVE TRUE SI SE DESCONGELA Y SI SE ACABA LA MUNICION -> ESCRIBE EL MENSAJE POR PANTALLA DE JUEGO
+	if (j1.actualizarEfectos())
+		setMensaje("Humano DESCONGELADO");
 
-	if (j1.gestionRecarga()) setMensaje("Humanos: Municion recargada");
-	if (j2.gestionRecarga()) setMensaje("Aliens: Municion recargada");
+	if (j2.actualizarEfectos())
+		setMensaje("Alien DESCONGELADO");
 
-	for (int k = 0; k < 5; k++) {
+	if (j1.gestionRecarga())
+		setMensaje("Humanos: Municion recargada");
+
+	if (j2.gestionRecarga())
+		setMensaje("Aliens: Municion recargada");
+
+	for (int k = 0; k < 5; k++) //PARA EVITAR ARRAYS VACIOS
 		if (lista[k] != nullptr) {
 			choqueObstaculo(j1, *lista[k]);
 			choqueObstaculo(j2, *lista[k]);
 		}
-	}
 
 	//////////////// DISPAROS //////////////////
 	//CHOQUE ENTRE DISPAROS:
 	for (int i = 0; i < MAX_DISPAROS; i++) {
-		if (nDisparos[i] == nullptr || !nDisparos[i]->return_Activo()) continue;
+		if (nDisparos[i] == nullptr || !nDisparos[i]->return_Activo()) continue; //PARA EVITAR ARRAYS VACIOS
 			for (int j = i + 1; j < MAX_DISPAROS; j++)
-				if (nDisparos[j] != nullptr && nDisparos[j]->return_Activo())
-					entreDisparos(*nDisparos[i], *nDisparos[j]);
+				if (nDisparos[j] != nullptr && nDisparos[j]->return_Activo()) //PARA EVITAR ARRAYS VACIOS
+					entreDisparos(*nDisparos[i], *nDisparos[j]); //AMBOS JUGADORES
 	}
-	//DEMAS CHOQUES
+
+	//RESTO DE CHOQUES
 	for (int i = 0; i < MAX_DISPAROS; i++)
 	{
-		if (nDisparos[i] == nullptr) continue;
+		if (nDisparos[i] == nullptr) continue; //PARA EVITAR ARRAYS VACIOS
 
 		if (nDisparos[i]->return_Activo())
 		{
 			nDisparos[i]->moverDisparo();
 			limites(*nDisparos[i], caja); //CON LA CAJA
 
-			for (int k = 0; k < 5; k++) {
-				if (lista[k] != nullptr)
+			for (int k = 0; k < 5; k++)
+				if (lista[k] != nullptr) //PARA EVITAR ARRAYS VACIOS
 					choqueObstaculo(*nDisparos[i], *lista[k]); //CON LOS OBSTACULOS
-			}
-		
-			if (nDisparos[i]->return_Bando() == HUMANO) {
-				//SI ES HUMANO, SOLO DAÑAR ALIEN
-				nDisparos[i]->Impacto(j2, true);
-				nDisparos[i]->Impacto(j1, false);
-			}
-			else {
-				//SI ES ALIEN, SOLO DAÑAR HUMANO
-				nDisparos[i]->Impacto(j1, true);
-				nDisparos[i]->Impacto(j2, false);
-			}
+
+		//ASEGURARSE DE QUE SE DEFINEN BIEN EN BATALLA
+			bool j1_enemigo = (nDisparos[i]->return_Bando() != j1.return_Bando());
+			bool j2_enemigo = (nDisparos[i]->return_Bando() != j2.return_Bando());
+
+			nDisparos[i]->Impacto(j1, j1_enemigo);
+			nDisparos[i]->Impacto(j2, j2_enemigo);
 		}
   
-		if (!nDisparos[i]->return_Activo())
+		if (!nDisparos[i]->return_Activo()) //BORRAR DISPAROS INACTIVOS
 		{
 			delete nDisparos[i];
 			nDisparos[i] = nullptr;
@@ -226,10 +229,10 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 	for (int b = 0; b < 2; b++) {
 		for (int i = 0; i < 3; i++) {
 
-			if (nHechizos[b][i] != nullptr) {
+			if (nHechizos[b][i] != nullptr) { //PARA EVITAR ARRAYS VACIOS
 				nHechizos[b][i]->mover();
 
-				Personaje* victima = nHechizos[b][i]->return_Obj();
+				Personaje* victima = nHechizos[b][i]->return_Obj(); //OBTENER OBJETIVO DEL HECHIZO
 
 				if (victima != nullptr && nHechizos[b][i]->Impacta(victima->return_X(), victima->return_Y(), 0.1)) {
 
@@ -273,7 +276,7 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 					else
 						puntuacion_aliens += puntosHechizo;
 
-					delete nHechizos[b][i];
+					delete nHechizos[b][i]; //BORRAR HECHIZO
 					nHechizos[b][i] = nullptr;
 				}
 			}
@@ -283,11 +286,11 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 	////////////////FINAL//////////////////
 	int resultado = FinCombate(j1, j2);
 	if (resultado != 0) {
-		j1.resetMunicion();
+		j1.resetMunicion(); //PA QUE SE VUELVA A CERO AL INICIO DE BATALLA
 		j2.resetMunicion();
 
 		this->~Batalla();
-		fin_ = true;
+		fin_ = true; //INDICAMOS QUE SE HA TERMINADO LA BATALLA PARA QEL PASO AL TABLERO
 	}
 }
 
@@ -328,27 +331,27 @@ void Batalla::pegar(Personaje& atacante, Personaje& objetivo)
 	int nuevaVida = objetivo.return_Vida() - danio;
 	int vidaAntes = objetivo.return_Vida();
 
+	//VIDA NO NEGATIVA
 	if (nuevaVida < 0)
 		nuevaVida = 0;
 
-	////////////PUNTOS///////
+	////////PUNTOS///////
 	int puntosGanados = 10;
 	if (nuevaVida <= 0) puntosGanados += 50; //BONUS POR KILL
 
 	if (atacante.return_Bando() == HUMANO) puntuacion_humanos += puntosGanados;
 	else puntuacion_aliens += puntosGanados;
 
-
-	std::cout << "Vida antes=" << vidaAntes << " | Nueva=" << nuevaVida << std::endl;
+	std::cout << "Vida antes =" << vidaAntes << " | Nueva =" << nuevaVida << std::endl;
 
 	objetivo.setVida(nuevaVida);
 
-	std::cout << "[COMBATE] " << (atacante.return_Bando() == 0 ? "HUMANO" : "ALIEN")
-		<< " asesta un golpe de " << danio << " de danio." << std::endl;
+	std::cout << "[COMBATE] " << (atacante.return_Bando() == 0 ? "HUMANO" : "ALIEN") << " golpea ";
 }
 
 void Batalla::lanzarDisparo(Personaje& aliado)
 {
+	//COMPROBAR QUE NO SE HA ALCANZADO EL MAXIMO DE DISPAROS
 	if (aliado.return_Disparos() >= 10) {
 		std::cout << "Sin municion" << std::endl;
 		setMensaje("SIN MUNUCION. Espera a la recarga");
@@ -359,7 +362,7 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 	bool hueco = false; //PARA VER SI HAY CAPACIDAD EN EL ARRAY
 	for (int i = 0; i < MAX_DISPAROS; i++)
 	{
-		if (nDisparos[i] == nullptr)
+		if (nDisparos[i] == nullptr) //PARA EVITAR ARRAYS VACIOS
 		{
 			nDisparos[i] = new Disparo();
 			aliado.sumarDisparo();
@@ -368,10 +371,12 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 			double dX = aliado.return_dirX();
 			double dY = aliado.return_dirY();
 
+			//SI NO SE HA MOVIDO, DISPARA HACIA LA DERECHA SI ES HUMANO O HACIA LA IZQUIERDA SI ES ALIEN
 			if (dX == 0 && dY == 0) {
 				dX = (aliado.return_Bando() == HUMANO) ? 1.0 : -1.0;
 			}
 
+			//EVITAR EL SUICIDIO POR IMPACTO INTERNO, PORQUE SALE DEL INTERIOR DEL PERSONAJE
 			double margen = 1.2;
 			nDisparos[i]->setX(aliado.return_X() + dX * margen);
 			nDisparos[i]->setY(aliado.return_Y() + dY * margen);
@@ -391,8 +396,9 @@ void Batalla::lanzarDisparo(Personaje& aliado)
 
 void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int equipo)
 {
-	if (equipo < 0 || equipo > 1) return;
+	if (equipo < 0 || equipo > 1) return; //VALIDAR EQUIPO
 
+	//COMPROBAR QUE EL MAGO TIENE HECHIZOS DISPONIBLES
 	if (mago.return_HechizosRestantes() <= 0) {
 		std::cout << "No te quedan hechizos en esta ronda" << std::endl;
 		setMensaje("Sin hechizos para esta ronda");
@@ -402,15 +408,16 @@ void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int 
 	bool hueco = false;
 	for (int i = 0; i < 3; i++)
 	{
-		if (nHechizos[equipo][i] == nullptr) {
+		if (nHechizos[equipo][i] == nullptr) { //PARA EVITAR ARRAYS VACIOS
 			nHechizos[equipo][i] = new Hechizo((Hechizo::TipoHechizo)tipo, mago.return_Bando());
 
+			//EL HECHIZO PERSIGUE AL OBJETIVO, AUNQUE ESTE SE MUEVA -> NO TIENE ESCAPATORIA
 			nHechizos[equipo][i]->setObj(&objetivo);
 
 			double dX = objetivo.return_X() - mago.return_X();
 			double dY = objetivo.return_Y() - mago.return_Y();
 
-			nHechizos[equipo][i]->activar(mago.return_X(), mago.return_Y(), dX, dY);
+			nHechizos[equipo][i]->activar(mago.return_X(), mago.return_Y(), dX, dY); //SE ACTIVA EL HECHIZO CON LA DIRECCION HACIA EL OBJETIVO
 
 			mago.usarHechizo();
 
@@ -423,14 +430,14 @@ void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int 
 	}
 }
 
-void Batalla::entrePersonajes(Personaje& j1, Personaje& j2)
+void Batalla::entrePersonajes(Personaje& j1, Personaje& j2) //COLISION ENTRE PERSONAJES
 {
 	double dx = j1.return_X() - j2.return_X();
 	double dy = j1.return_Y() - j2.return_Y();
 	double dist = sqrt(dx * dx + dy * dy);
 	double radioChoque = 0.7;
 
-	
+	//PARA QUE NO SE METAN EL UNO DENTRO DEL OTRO, SE SEPARAN EN LA DIRECCION NORMAL AL CHOQUE
 	if (dist > 0.0 && dist < radioChoque)
 	{
 		double juntos = radioChoque - dist;
@@ -445,15 +452,16 @@ void Batalla::entrePersonajes(Personaje& j1, Personaje& j2)
 	}
 }
 
-bool Batalla::entreDisparos(Disparo& d1, Disparo& d2)
+bool Batalla::entreDisparos(Disparo& d1, Disparo& d2) //COLISION ENTRE DISPAROS
 {
-	//SI SON DEL MISMO BANDO
+	//SI SON DEL MISMO BANDO, NO PASA NADA
 	if (d1.return_Bando() == d2.return_Bando()) return false;
 
 	double dx = d1.return_X() - d2.return_X();
 	double dy = d1.return_Y() - d2.return_Y();
 	double dist = sqrt(dx * dx + dy * dy);
 
+	//SI SE CHOCAN, SE DESACTIVAN AMBOS DISPAROS Y SE ELIMINAN
 	if (dist < 0.3)
 	{
 		d1.setActivo(false);
@@ -464,14 +472,14 @@ bool Batalla::entreDisparos(Disparo& d1, Disparo& d2)
 	return false;
 }
 
-bool Batalla::NoMover(Personaje& j, const Pared& p)
+bool Batalla::NoMover(Personaje& j, const Pared& p) //TRUE SI EL PERSONAJE ESTA A MENOS DE 1 DE LA PARED, Y POR TANTO NO LO ATRAVIESA
 {
 	if (p.distancia(j.return_X(), j.return_Y()) < 1.0)
 		return true; //CHOCA
 	return false;
 }
 
-bool Batalla::reboteDisparos(Disparo& d, const Pared& p)
+bool Batalla::reboteDisparos(Disparo& d, const Pared& p) //TRUE SI HAY REBOTE, Y SE REALIZA EL REBOTE
 {
 	if (p.distancia(d.return_X(), d.return_Y()) < 0.5)
 	{
@@ -482,7 +490,7 @@ bool Batalla::reboteDisparos(Disparo& d, const Pared& p)
 		else if (std::abs(p.return_X1() - p.return_X2()) < 0.1)
 			d.setVX(-d.return_VX()); //REBOTE HORIZONTAL
 
-		//MAX 2 REBOTES
+		//MAX 2 REBOTES, AL TERCERO SE ANULA
 		d.setRebotes(d.return_Rebotes() + 1);
 		std::cout << "Rebote (caja). TOTAL: " << d.return_Rebotes() << "/2" << std::endl;
 
@@ -491,8 +499,7 @@ bool Batalla::reboteDisparos(Disparo& d, const Pared& p)
 			std::cout << "[SISTEMA] Disparo agotado (caja)" << std::endl;
 
 		}
-
-		//PA QUE NO SE QUEDE UNIDO A LA PARED
+		//PA QUE NO SE QUEDE PEGADO A LA PARED, LO MOVEMOS UN POCO EN LA DIRECCION DEL REBOTE
 		d.setX(d.return_X() + d.return_VX() * 2);
 		d.setY(d.return_Y() + d.return_VY() * 2);
 
@@ -501,13 +508,13 @@ bool Batalla::reboteDisparos(Disparo& d, const Pared& p)
 	return false;
 }
 
-bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o)
+bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o) //TRUE SI HAY CHOQUE
 {
 	double dx = j.return_X() - o.return_X();
 	double dy = j.return_Y() - o.return_Y();
 	double dist = sqrt(dx * dx + dy * dy);
 
-	//AJUSTAR PA QUE EL OBTACULO NO SE META DENTRO DEL PERSONAJE
+	//AJUSTAR PA QUE EL RADIO DE IMPACTO DEL OBTACULO NO SE META DENTRO DEL PERSONAJE
 	double radioSuma = (o.return_Radio() * 0.75)+0.3;
 
 	if (dist < radioSuma)
@@ -516,7 +523,7 @@ bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o)
 		double normalx = dx / dist;
 		double normaly = dy / dist;
 
-		//POSICIONAMIENTO
+		//POSICIONAMIENTO DEL PERSONAJE FUERA DEL RADIO DE IMPACTO
 		j.x += normalx * juntos;
 		j.y += normaly * juntos;
 
@@ -527,15 +534,15 @@ bool Batalla::choqueObstaculo(Personaje& j, const Obstaculo& o)
 	return false;
 }
 
-bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o)
+bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o) //TRUE SI HAY CHOQUE
 {
-	if (!d.return_Activo()) return false;
+	if (!d.return_Activo()) return false; //SI EL DISPARO ESTA INACTIVO-> NO HAY CHOQUE
 
     double dx = d.return_X() - o.return_X();
     double dy = d.return_Y() - o.return_Y();
     double dist = sqrt(dx * dx + dy * dy);
 
-    if (dist < o.return_Radio()*0.5)
+	if (dist < o.return_Radio() * 0.5) //RADIO DE IMPACTO AJUSTADO PARA QUE NO SE META DENTRO DEL DISPARO, COMO CON LOS PERSONAJES
     {
         if (std::abs(dx) > std::abs(dy)) d.setVX(-d.return_VX());
         else d.setVY(-d.return_VY());
@@ -548,6 +555,7 @@ bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o)
             d.setActivo(false);
         }
 
+		//PA QUE NO SE QUEDE PEGADO AL OBSTACULO, LO MOVEMOS UN POCO EN LA DIRECCION DEL REBOTE
         d.setX(d.return_X() + d.return_VX() * 2);
         d.setY(d.return_Y() + d.return_VY() * 2);
         return true;
@@ -557,6 +565,7 @@ bool Batalla::choqueObstaculo(Disparo& d, const Obstaculo& o)
 
 void Batalla::limites(Disparo& d, Caja& c)
 {
+	//REBOTE CON LAS CUATRO PAREDES DE LA CAJA
 	reboteDisparos(d, c.return_suelo());
 	reboteDisparos(d, c.return_techo());
 	reboteDisparos(d, c.return_izq());
@@ -567,11 +576,9 @@ void Batalla::limites(Personaje& j, Caja& c)
 {
 	double radio = 1.0;
 
-	//COMPROBAR CADA PARED
-	//SI NOMOVER ES TRUE, LIMITE
+	//COMPROBAR LAS CUATRO PAREDES DE LA CAJA
 	j.x = NoMover(j, c.return_izq()) ? radio : j.x;
 	j.x = NoMover(j, c.return_dcha()) ? 20.0 - radio : j.x;
 	j.y = NoMover(j, c.return_suelo()) ? radio : j.y;
 	j.y = NoMover(j, c.return_techo()) ? 15.0 - radio : j.y;
-
 }

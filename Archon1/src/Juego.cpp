@@ -78,6 +78,29 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
     //condicion de que estan las casillas guays ocuapadas (necesito que se añadan esas casillas)
 }
 
+HanGanado Juego::victoriaPuntosPoder()
+{
+    int puntosHumanos = 0;
+    int puntosAliens = 0;
+    const int puntos_totales = 5;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            InfoCasilla* info = ptrTablero->getInfoCasilla(i, j);
+            if (info && info->getPuntoPoder() && info->estaOcupada()) {
+                if (info->getPersonaje()->return_Bando() == HUMANO) {
+                    puntosHumanos++;
+                }
+                if (info->getPersonaje()->return_Bando() == ALIEN) {
+                    puntosAliens++;
+                }
+            }
+        }
+    }
+    if (puntosAliens == puntos_totales)return GanaronAliens;
+    if (puntosHumanos == puntos_totales)return GanaronHumanos;
+    return AunEnCurso;
+}
+
 void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 {
     for (int i = 0; i < MAX_PERSONAJES; i++) {
@@ -214,17 +237,18 @@ void Juego::finalizarBatalla()
     int f = micursor.obt_fila();
     int c = micursor.obt_columna();
     InfoCasilla* info = ptrTablero->getInfoCasilla(f, c);
-
-
-    if (info != nullptr) {
+    /*if (info != nullptr) {
         Tipocasilla color = info->getColor();
         if (casillaFavorable(atacanteBatalla, color)) {
             atacanteBatalla->setDanio(atacanteBatalla->return_Danio() - 5);
+            std::cout << "Daño restablecido" << std::endl;
         }
         if (casillaFavorable(defensorBatalla, color)) {
             defensorBatalla->setDanio(defensorBatalla->return_Danio() - 5);
+            std::cout << "Daño restablecido" << std::endl;
         }
-    }
+
+    }*/
     Personaje* ganador = nullptr;
     Personaje* perdedor = nullptr;
 
@@ -239,14 +263,34 @@ void Juego::finalizarBatalla()
 
     if (ganador != nullptr) {
         origenAntesDeBatalla->getInfo()->setPersonaje(ganador);
+        InfoCasilla* info = origenAntesDeBatalla->getInfo();
+        if (info != nullptr) {
+            Tipocasilla color = info->getColor();
+            if (casillaFavorable(atacanteBatalla, color)) {
+                atacanteBatalla->setDanio(atacanteBatalla->return_Danio() - 5);
+                std::cout << "Daño restablecido" << std::endl;
+            }
+            if (casillaFavorable(defensorBatalla, color)) {
+                defensorBatalla->setDanio(defensorBatalla->return_Danio() - 5);
+                std::cout << "Daño restablecido" << std::endl;
+            }
+
+        }
         ganador->x = origenAntesDeBatalla->getcolumna();
         ganador->y = origenAntesDeBatalla->getfila();
         ganador->direccion(0.0, 0.0);
 
+        InfoCasilla* casillaActual = ptrTablero->getInfoCasilla(ganador->return_X(), ganador->return_Y());
+        if (casillaActual != nullptr&&casillaActual->getPuntoPoder()) {
+            ganador->setVida(ganador->return_VidaMax());
+            std::cout << "¡Ganador curado en Punto de Poder ("
+                << ganador->return_X() << "," << ganador->return_Y() << ")! Nueva vida: "
+                << ganador->return_Vida() << std::endl;
+        }
         perdedor->setVida(0);
         perdedor->setX(-5);
     }
-
+    
     atacanteBatalla = nullptr;
     defensorBatalla = nullptr;
     origenAntesDeBatalla = nullptr;
@@ -260,4 +304,21 @@ bool Juego::casillaFavorable(Personaje* p, Tipocasilla colorCasilla)
     if (p->return_Bando() == HUMANO && colorCasilla == blanca) return true;
     if (p->return_Bando() == ALIEN && colorCasilla == negra) return true;
     return false;
+}
+
+void Juego::reiniciarJuego()
+{
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            InfoCasilla* info = ptrTablero->getInfoCasilla(i, j);
+            if (info) info->setPersonaje(nullptr);
+        }
+    }
+    for (int i = 0; i < MAX_PERSONAJES; i++) {
+        if (figuras[i] != nullptr) {
+            delete figuras[i];
+            figuras[i] = nullptr;
+        }
+    }
+    inicializarPartida();
 }
