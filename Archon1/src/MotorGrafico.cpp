@@ -435,6 +435,41 @@ void MotorGrafico::dibujarMensajesBatalla(const std::string& mensaje)
 	glPopMatrix();
 }
 
+void MotorGrafico::dibujarPuntuaciones(int puntuacion_humanos, int puntuacion_aliens)
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, 800, 0, 600);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_TEXTURE_2D);
+
+	//HUMANOS: ESQUINA SUPERIOR IZQUIERDA
+	ETSIDI::setTextColor(250.0f, 0.0f, 0.0f);
+	ETSIDI::setFont("fuentes/Bitwise.ttf", 15);
+	std::string Humanos = "HUMANOS: " + std::to_string(puntuacion_humanos);
+	ETSIDI::printxy(Humanos.c_str(), 50.0f, 530.0f);
+
+	//ALIENS: ESQUINA SUPERIOR DERECHA
+	ETSIDI::setTextColor(250.0f, 0.0f, 0.0f);
+	std::string Aliens = "ALIENS: " + std::to_string(puntuacion_aliens);
+	ETSIDI::printxy(Aliens.c_str(), 630.0f, 530.0f);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
+
 void MotorGrafico::dibujarTablero() {
 	// SEGURIDAD: Si no hay tablero, no intentamos leer datos (evita el crash)
 	if (tablero == nullptr) return;
