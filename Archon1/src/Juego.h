@@ -34,6 +34,7 @@ private:
 	Personaje* defensorBatalla{ nullptr };
 
 	Casilla* origenAntesDeBatalla{ nullptr };
+
 public:
 
 	Juego(Tablero* t);
@@ -60,4 +61,5 @@ public:
 	void finalizarBatalla();
 
 	bool casillaFavorable(Personaje* p, Tipocasilla colorCasilla);
+	
 };

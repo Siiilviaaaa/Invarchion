@@ -151,12 +151,14 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
         if (casillaFavorable(atacante, color)) {
             int danioAnteriorAtac = atacante->return_Danio();
             atacante->setDanio(danioAnteriorAtac + 5);
-            std::cout << "[BONO] Atacante en terreno aliado: +15 HP" << std::endl;
+            std::cout << "[BONO] Atacante en terreno aliado: +5 HP" << std::endl;
+            miBatalla.setMensajeBonus("ATACANTE +5 ATAQUE");
         }
         if (casillaFavorable(defensor, color)) {
             int danioAnteriorDef = defensor->return_Danio();
             atacante->setDanio(danioAnteriorDef + 5);
-            std::cout << "[BONO] Defensor en terreno aliado: +15 HP" << std::endl;
+            std::cout << "[BONO] Defensor en terreno aliado: +5 HP" << std::endl;
+            miBatalla.setMensajeBonus("DEFENSOR +5 ATAQUE");
         }
     }
 

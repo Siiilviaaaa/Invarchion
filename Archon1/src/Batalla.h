@@ -12,6 +12,7 @@
 class Batalla
 {
 	friend class MotorGrafico;
+	friend class Juego;
 
 	static const int MAX_DISPAROS = 20;
 	Disparo* nDisparos[MAX_DISPAROS];
@@ -21,6 +22,7 @@ class Batalla
 	int numObstaculos;
 
 	std::string mensaje_batalla = "PREPARADOS... LUCHAD!";
+	std::string mensaje_bonus = " ";
 	
 public:
 	Batalla();
@@ -30,8 +32,9 @@ public:
 
 	///////MENSAJES///////
 	std::string getMensaje() const { return mensaje_batalla; }
-	void setMensaje(std::string nuevoMensaje) { mensaje_batalla = nuevoMensaje; }
-
+	std::string getMensajeBonus()const { return mensaje_bonus; }
+	void setMensaje(std::string nuevoMensaje) {	mensaje_batalla = nuevoMensaje;	}
+	void setMensajeBonus(std::string MensajeBonus) { mensaje_bonus = MensajeBonus; }
 	/////////ACTUALIZACIONES//////////////
 	void inicializarBatalla();
 	void KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2);

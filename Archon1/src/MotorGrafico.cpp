@@ -405,7 +405,7 @@ void MotorGrafico::dibujarInstruccionesTablero()
 	glPopMatrix();
 }
 
-void MotorGrafico::dibujarMensajesBatalla(const std::string& mensaje)
+void MotorGrafico::dibujarMensajesBatalla(const std::string& mensaje, const std::string& MensajeBonus)
 {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -426,6 +426,8 @@ void MotorGrafico::dibujarMensajesBatalla(const std::string& mensaje)
 
 	//Posicion del texto -> Parte superior central
 	ETSIDI::printxy(mensaje.c_str(), 250.0f, 530.0f);
+	//Posicion del texto-> Parte inferior central
+	ETSIDI::printxy(MensajeBonus.c_str(), 245.0f, 75.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);

@@ -182,8 +182,9 @@ void OnDraw(void) {
                     motor.dibujarHechizo(h);
             }
 
-		motor.dibujarMensajesBatalla(miBatalla.getMensaje());
+		motor.dibujarMensajesBatalla(miBatalla.getMensaje(),miBatalla.getMensajeBonus());
         motor.dibujarPuntuaciones(puntuacion_humanos, puntuacion_aliens);
+
         break;
     }
     //no borrar esta linea ni poner nada despues
