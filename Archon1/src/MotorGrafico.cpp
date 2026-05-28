@@ -178,17 +178,15 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 
 			int indexInicial = fila * 3; // 3 columnas en los spritesheets por fila
 			//por como estan puestas las imagenes de los sprites, tiene que ir de la columna 1 a la 2, a la 1 a la 3 y asi
+			int patronMovientoSprites[4] = {0, 1, 0, 2};
 
 			//  bucle de animacion
 			if (personaje.return_dirX() == 0 && personaje.return_dirY() == 0) {
-				SpriteActual->setState(indexInicial, true);
+				SpriteActual->setState(indexInicial, true); //no se mueve
 			}
 			else {
-				// Si está fuera de su fila lo devolvemos al inicio 
-				if (SpriteActual->getState() < indexInicial || SpriteActual->getState() >= indexInicial + 3) {
-					SpriteActual->setState(indexInicial, false);
-				}
-				SpriteActual->loop();
+				int fotoActual = (glutGet(GLUT_ELAPSED_TIME) / 150) % 4;
+				SpriteActual->setState(indexInicial + patronMovientoSprites[fotoActual]);
 			}
 			SpriteActual->draw(); 
 			break;
@@ -250,7 +248,6 @@ void MotorGrafico::dibujarBarraVida(Personaje& atacante, Personaje& defensor)
 		recortarBarra(porcentajeDefensor, posIzq, 1.0f, 4.5f, 0.8f);
 	}
 }
-
 
 void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho, float alto)
 {
@@ -457,12 +454,12 @@ void MotorGrafico::dibujarPuntuaciones(int puntuacion_humanos, int puntuacion_al
 	ETSIDI::setTextColor(250.0f, 0.0f, 0.0f);
 	ETSIDI::setFont("fuentes/Bitwise.ttf", 15);
 	std::string Humanos = "HUMANOS: " + std::to_string(puntuacion_humanos);
-	ETSIDI::printxy(Humanos.c_str(), 50.0f, 530.0f);
+	ETSIDI::printxy(Humanos.c_str(), 20.0f, 105.0f);
 
 	//ALIENS: ESQUINA SUPERIOR DERECHA
 	ETSIDI::setTextColor(250.0f, 0.0f, 0.0f);
 	std::string Aliens = "ALIENS: " + std::to_string(puntuacion_aliens);
-	ETSIDI::printxy(Aliens.c_str(), 630.0f, 530.0f);
+	ETSIDI::printxy(Aliens.c_str(), 650.0f, 105.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
@@ -513,6 +510,8 @@ void MotorGrafico::dibujarMensajesTablero(const std::string& mensaje)
 void MotorGrafico::dibujarTablero() {
 	// SEGURIDAD: Si no hay tablero, no intentamos leer datos (evita el crash)
 	if (tablero == nullptr) return;
+
+	
 
 	dibujarFondo();
 	dibujarBordeTurno();

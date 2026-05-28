@@ -12,7 +12,7 @@ Menu::Menu() :
     _seleccion("extra/menu_seleccion.png"),
     _ranking("extra/ranking_fondo.png")
 {
-    // Una vez inicializados los objetos, llamamos a la configuración de tamaño/posición
+    
     inicializa_menu();
 }
 
@@ -43,6 +43,7 @@ void Menu::inicializa_menu() {
 }
 
 void Menu::dibuja_menu(bool hJugar, bool hRanking, bool hSalir) {
+    
     glDisable(GL_LIGHTING);
 
     glPushMatrix();
@@ -297,7 +298,7 @@ void Menu::dibuja_fin() {
     ETSIDI::printxy("ENHORABUENA", 210.0f, 400.0f);
 
     ETSIDI::setFont("fuentes/Bitwise.ttf", 14);
-    ETSIDI::printxy("HAS GANADO", 300.0f, 250.0f); // VE A LA CMD PARA DEJAR TU NOMBRE GRABADO EN LA HISTORIA
+    ETSIDI::printxy("GANADOR!", 300.0f, 250.0f); // VE A LA CMD PARA DEJAR TU NOMBRE GRABADO EN LA HISTORIA
     ETSIDI::printxy(" PRESIONA ENTER Y", 200.0f, 120.0f);
     ETSIDI::printxy(" VE A LA CMD PARA DEJAR TU NOMBRE GRABADO EN LA HISTORIA", 50.0f, 100.0f);
 

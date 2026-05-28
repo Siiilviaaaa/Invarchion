@@ -41,10 +41,6 @@ int main(int argc, char** argv) {
     juego.inicializarPartida();
     micursor.inicializar_tablero(juego.getTurno());//iniciliza colores y sitios del cursor
     micursor.setJuego(&juego);//actualiza de quien es el turno
-    //esto todo habrá q modificarlo si quereis distintas musicas en las distintas pantallas, prioridad de ajuste fino, dejar para el final
-    std::cout << "Reproduciendo..." << std::endl;
-    // Asegraros de que el nombre del archivo y la carpeta coincidan letra por letra
-    ETSIDI::play("extra/mi_musica.mp3");
 
     // --- REGISTRO DE CALLBACKS ---
     // Estas funciones las he puesto en Interfaz.cpp
