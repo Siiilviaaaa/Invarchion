@@ -34,7 +34,7 @@ public:
 	void movimiento(int mov_filas, int mov_columnas, const std::string& mensaje, int turno);
 
 	void seleccion_personaje_tablero(unsigned char key, int turno);
-	bool tieneMovimientoPosible(int turno);
+	bool tieneMovimientoPosible(int turno) const;
 	int coger(int turno);
 	int soltar(int turno);
 
