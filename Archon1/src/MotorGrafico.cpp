@@ -200,8 +200,9 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 
 void MotorGrafico::dibujarDisparo(Disparo* disparo)
 {
-	if (disparo == nullptr)return;
+	if (disparo == nullptr)return; //SI NO EXISTE NO SE DIBUJA
 
+	//DIBUJAR DISPARO COMO UNA ESFERA, EL COLOR DEPENDE DEL BANDO
 	glPushMatrix();
 	glTranslated(disparo->x, disparo->y, 0.5);
 	glDisable(GL_LIGHTING);
@@ -214,8 +215,9 @@ void MotorGrafico::dibujarDisparo(Disparo* disparo)
 
 void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 {
-	if (hechizo == nullptr)return;
+	if (hechizo == nullptr)return; //SI NO EXISTE NO SE DIBUJA
 
+	//DIBUJAR HECHIZO COMO UNA ESFERA, EL COLOR DEPENDE DEL TIPO DE HECHIZO
 	glPushMatrix();
 	glTranslated(hechizo->posX, hechizo->posY, 0.5);
 	glDisable(GL_LIGHTING);
@@ -405,7 +407,7 @@ void MotorGrafico::dibujarMensajesBatalla(const std::string& mensaje, const std:
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-	gluOrtho2D(0, 800, 0, 600);
+	gluOrtho2D(0, 800, 0, 600); //TEXTO EN 2D -> COORDENADAS DE PANTALLA
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
@@ -415,13 +417,13 @@ void MotorGrafico::dibujarMensajesBatalla(const std::string& mensaje, const std:
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_TEXTURE_2D);
 
-	//Color del texto
+	//COLOR
 	ETSIDI::setTextColor(1.0f, 0.8f, 0.0f);
 	ETSIDI::setFont("fuentes/Bitwise.ttf", 20);
 
-	//Posicion del texto -> Parte superior central
+	//POSICION -> PARTE SUPERIOR CENTRO
 	ETSIDI::printxy(mensaje.c_str(), 250.0f, 530.0f);
-	//Posicion del texto-> Parte inferior central
+	//POSICION -> PARTE INFERIOR CENTRO
 	ETSIDI::printxy(MensajeBonus.c_str(), 245.0f, 75.0f);
 
 	glEnable(GL_DEPTH_TEST);
@@ -438,7 +440,7 @@ void MotorGrafico::dibujarPuntuaciones(int puntuacion_humanos, int puntuacion_al
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-	gluOrtho2D(0, 800, 0, 600);
+	gluOrtho2D(0, 800, 0, 600); //TEXTO EN 2D -> COORDENADAS DE PANTALLA
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();

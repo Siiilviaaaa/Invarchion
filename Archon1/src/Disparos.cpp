@@ -2,6 +2,7 @@
 #include "Disparos.h"
 #include "Personajes.h"
 
+//VARIABLES DEFINIDAS EN INTERFAZ.CPP
 extern int puntuacion_humanos;
 extern int puntuacion_aliens;
 
@@ -18,19 +19,19 @@ Disparo::Disparo()
 
 void Disparo::moverDisparo()
 {
-	if (!activo) return;
+	if (!activo) return; // SI NO ESTA ACTIVO, NO SE MUEVE
 	x += velo_x;
 	y += velo_y;
 }
 
 bool Disparo::Impacto(Personaje& objetivo, bool haceDano)
 {
-	if (!activo) return false;
+	if (!activo) return false; // SI NO ESTA ACTIVO, NO HAY IMPACTO
 
 	double dx = x - objetivo.return_X();
 	double dy = y - objetivo.return_Y();
 
-	if (sqrt(dx * dx + dy * dy) < 0.6)
+	if (sqrt(dx * dx + dy * dy) < 0.6) //RADIO DE IMPACTO AJUSTADO PARA QUE LO DETECTE CUANDO ESTA CERCA
 	{
 		if (haceDano == true && objetivo.return_Vida() > 0)
 		{

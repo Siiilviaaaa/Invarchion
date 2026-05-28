@@ -32,7 +32,6 @@ int puntuacion_actual = 0;
 int puntuacion_humanos = 0;
 int puntuacion_aliens = 0;
 
-//HE MOVIDO AQUI LOS CALLBACKSSS MIRADLO PORFII
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         //Obtener dimensiones actuales de la ventana
@@ -144,7 +143,7 @@ void OnDraw(void) {
             motor.dibujarInstruccionesTablero();
         }
 
-        motor.dibujarPuntuaciones(puntuacion_humanos, puntuacion_aliens);
+        motor.dibujarPuntuaciones(puntuacion_humanos, puntuacion_aliens); //PUNTUACIONES EN TABLERO
        
         break;
     }
@@ -183,6 +182,7 @@ void OnDraw(void) {
         miCamara.vistaBatalla();
         motor.dibujarCaja(miCaja, miBatalla);
 
+		//DIBUJAR PERSONAJES, DISPAROS, HECHIZOS, BARRA DE VIDA Y MENSAJES DE BATALLA
         Personaje* atacante = juego.getAtacanteBatalla();
         Personaje* defensor = juego.getDefensorBatalla();
 
@@ -193,11 +193,11 @@ void OnDraw(void) {
             motor.dibujarBarraVida(*atacante, *defensor);
         }
 
-        for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 20; i++) { //RECORREMOS LA LISTA DE DISPAROS Y LOS DIBUJAMOS SI ESTAN ACTIVOS
             Disparo* d = miBatalla.return_nDisparos()[i];
             if (d) motor.dibujarDisparo(d);
         }
-        for (int b = 0; b < 2; b++)
+		for (int b = 0; b < 2; b++) //RECORREMOS LA MATRIZ DE HECHIZOS Y LOS DIBUJAMOS SI ESTAN ACTIVOS
             for (int i = 0; i < 3; i++) {
                 Hechizo* h = miBatalla.return_nHechizos()[b][i];
                 if (h != nullptr)
@@ -235,16 +235,16 @@ void OnTimer(int value) {
         Personaje* atacante = juego.getAtacanteBatalla();
         Personaje* defensor = juego.getDefensorBatalla();
 
-        if (atacante != nullptr && defensor != nullptr) {
+		if (atacante != nullptr && defensor != nullptr) //VERIFICAMOS QUE LOS PERSONAJES EXISTAN ANTES DE ACTUALIZAR
             miBatalla.actualizarCombate(*atacante, *defensor, miCaja, miBatalla.obtenerObstaculos());
-
-        }
+  
         if (fin_) {
             juego.finalizarBatalla();
             
             //DETERMINAR QUIEN HA GANADO
 			HanGanado estado_fin = juego.DeterminarSiJuegoHaTerminado();
-           //GUARDAR LA PUNTUACION DEL GANADOR PARA EL RANKING
+
+           //GUARDAR SOLO LA PUNTUACION DEL GANADOR PARA EL RANKING
             if (estado_fin == GanaronHumanos) {
                 puntuacion_actual = puntuacion_humanos;
                 estado = FIN_PARTIDA;
@@ -253,7 +253,7 @@ void OnTimer(int value) {
                 puntuacion_actual = puntuacion_aliens;
                 estado = FIN_PARTIDA;
             }
-            else {
+            else { //SI NO PUES, SE SIGUE LA PARTIDA
                 juego.cambiarTurno();
                 micursor.inicializar_tablero(juego.getTurno());
                 estado = JUEGO;
@@ -271,7 +271,8 @@ void OnTimer(int value) {
     glutTimerFunc(20, OnTimer, 0);
 }
 
-void OnKeyboardDown(unsigned char key, int x, int y) {
+void OnKeyboardDown(unsigned char key, int x, int y)
+{
     unsigned char c = std::tolower(key);
 
     // NUEVO BLOQUE: Control estricto de entrada durante las instrucciones
@@ -348,10 +349,11 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
        
         Personaje* p1 = juego.getAtacanteBatalla();
         Personaje* p2 = juego.getDefensorBatalla();
-        if (p1 != nullptr && p2 != nullptr) {
-            Personaje* humano = nullptr;
 
-            if (p1->return_Bando() == HUMANO)
+        if (p1 != nullptr && p2 != nullptr) { //VERIFICAMOS QUE LOS PERSONAJES EXISTAN
+            Personaje* humano = nullptr; //IDENTIFICAR JUGADOR ACTUAL SI ES HUMANO
+
+            if (p1->return_Bando() == HUMANO) //SI ERES HUMANO CON AWSD, V Y C, IMDEPENDIENTEMENTE DEL JUGADOR
             {
                 humano = p1;
                 miBatalla.KeyBatalla(key, *p1, *p2);
@@ -362,27 +364,29 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
             }
         }
     }
-
     glutPostRedisplay();
 }
 
-void OnSpecialKeyboardDown(int key, int x, int y) {
+void OnSpecialKeyboardDown(int key, int x, int y)
+{
+    //HACEMOS LO MISMO PARA LOS ALIENS
 
     if (estado == BATALLA) {
+
         Personaje* p1 = juego.getAtacanteBatalla();
         Personaje* p2 = juego.getDefensorBatalla();
-        if (p1 != nullptr && p2 != nullptr) {
+
+        if (p1 != nullptr && p2 != nullptr) {//VERIFICAMOS QUE LOS PERSONAJES EXISTAN
             Personaje* alien = nullptr;
 
             if (p1->return_Bando() == ALIEN) alien = p1;
             else if (p2->return_Bando() == ALIEN) alien = p2;
 
-            if (alien != nullptr) {
-                // Llamamos a tu función de flechas en Batalla.cpp
+            if (alien != nullptr)
                 miBatalla.tecla_especial(key, *alien);
-            }
         }
     }
+
     if (estado == JUEGO )
     {
         micursor.mover_aliens(key, juego.getTurno());
