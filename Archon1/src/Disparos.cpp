@@ -26,8 +26,8 @@ void Disparo::moverDisparo()
 
 bool Disparo::Impacto(Personaje& objetivo, bool haceDano)
 {
-	if (!activo) return false; // SI NO ESTA ACTIVO, NO HAY IMPACTO
-
+	if (!activo) return false;
+	if (this->bando == objetivo.return_Bando()) return false;
 	double dx = x - objetivo.return_X();
 	double dy = y - objetivo.return_Y();
 
@@ -35,9 +35,10 @@ bool Disparo::Impacto(Personaje& objetivo, bool haceDano)
 	{
 		if (haceDano == true && objetivo.return_Vida() > 0)
 		{
+			
 			int vidaAntes = objetivo.return_Vida();
 			objetivo.setVida(vidaAntes - danio);
-
+			std::cout << "Impacto detectado. Vida actual: " << objetivo.return_Vida() << std::endl;
 			//////PUNTOS//////
 			int puntosGanados = 15;
 			if (objetivo.return_Vida() <= 0) puntosGanados += 50; //BONUS POR KILL
