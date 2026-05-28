@@ -87,8 +87,8 @@ void OnDraw(void) {
         miCamara.vistaJuego();
         motor.dibujarTablero();
 
-        for (int f = 0; f < 5; f++) {
-            for (int c = 0; c < 7; c++) {
+        for (int f = 0; f < 9; f++) {
+            for (int c = 0; c < 9; c++) {
                 InfoCasilla* info = miTablero.getInfoCasilla(f, c);
 
                 if (info != nullptr && info->getPersonaje() != nullptr) {
