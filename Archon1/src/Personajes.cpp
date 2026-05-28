@@ -27,48 +27,47 @@ Personaje::~Personaje()
 Luchador::Luchador(Bando b, double posX, double posY) : Personaje(LUCHADOR, b, posX, posY) {
 	vida = 100; 
 	vida_max = 100;
-	danio = 15; 
-	vel_base = 2.0; 
-	movimientos = 10; 
+	danio = 25; 
+	vel_base = 12.0; 
+	movimientos = 2; 
 	v = vel_base;
 }
 
 Arquero::Arquero(Bando b, double posX, double posY) : Personaje(ARQUERO, b, posX, posY) {
-	vida = 80; 
-	vida_max = 80; 
-	danio = 15; 
-	vel_base = 2.6; 
-	movimientos = 2; 
+	vida = 110; 
+	vida_max = 110; 
+	danio = 25; 
+	vel_base = 12.6; 
+	movimientos = 3; 
 	v = vel_base;
 }
 
 Volador::Volador(Bando b, double posX, double posY) : Personaje(VOLADOR, b, posX, posY) {
 	vida = 120; 
 	vida_max = 120; 
-	danio = 20; 
-	vel_base = 3.1; 
+	danio = 30; 
+	vel_base = 13.1; 
 	movimientos = 3; 
 	v = vel_base;
 }
 
 Excavador::Excavador(Bando b, double posX, double posY) : Personaje(EXCAVADOR, b, posX, posY) {
-	vida = 200; 
-	vida_max = 200; 
-	danio = 40; 
-	vel_base = 1.2; 
-	movimientos = 3; 
+	vida = 150; 
+	vida_max = 150; 
+	danio = 35; 
+	vel_base = 11.2; 
+	movimientos = 4; 
 	v = vel_base;
 }
 
 Hechicero::Hechicero(Bando b, double posX, double posY) : Personaje(HECHICERO, b, posX, posY) {
-	vida = 90; 
-	vida_max = 90; 
-	danio = 10; 
-	vel_base = 1.7; 
-	movimientos = 10; 
+	vida = 200; 
+	vida_max = 200; 
+	danio = 30; 
+	vel_base = 11.7; 
+	movimientos = 5; 
 	v = vel_base;
 }
-
 
 Personaje* Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double posY)
 {
@@ -99,8 +98,8 @@ void Personaje::direccion(double dx, double dy)
 
 void Personaje::moverEnBatalla()
 {
-	x += dirX * v * 0.05;
-	y += dirY * v * 0.05;
+	x += dirX * v * 0.1;
+	y += dirY * v * 0.1;
 }
 
 bool Personaje::gestionRecarga()

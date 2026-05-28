@@ -19,7 +19,6 @@ extern Batalla miBatalla;
 extern Cursor micursor;
 extern Personaje pj1, pj2;
 
-
 //variables globales
 float tiempoMensajeSelecciondeBando = 0.0f;
 std::string textoBando = "";
@@ -76,7 +75,6 @@ void OnDraw(void) {
     static bool ini_ranking = false;
     static bool ini_fin = false;
 
-
     switch (estado) { 
     case FIN_PARTIDA:
         if (!ini_fin) {
@@ -91,7 +89,6 @@ void OnDraw(void) {
         miCamara.vistaRanking();
         miMenu.dibuja_fin();
         break;
-    
     
     case MENU:
         if (!ini_menu) {
@@ -137,40 +134,7 @@ void OnDraw(void) {
         fin_ = false;
         motor.dibujarCursor(micursor);
 
-        motor.dibujarMensajesTablero(micursor.obt_mensaje());//imprime los mensajes de seleccion y turno en el tablero
-       
-        //glDisable(GL_LIGHTING);
-        //glDisable(GL_TEXTURE_2D);
-
-     
-        //glMatrixMode(GL_PROJECTION);//para no estropear los otros dibujos 
-        //glPushMatrix();
-        //glLoadIdentity();
-        //
-        //gluOrtho2D(0, 800, 0, 600);//plano fij de lo que ocupa la pantalla para localizar el mensaje
-
-        //glMatrixMode(GL_MODELVIEW);
-        //glPushMatrix();
-        //glLoadIdentity();
-
-        //glColor3ub(153, 50, 204);
-
-        //std::string mensajeTablero = micursor.obt_mensaje();//varia en funcion de la situacion del tablero actual
-     
-        //glRasterPos2i(240, 43);//colocacion del mensaje
-
-        //for (char c : mensajeTablero) {//imprime el texto letra a letra
-        //    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-        //}
-
-        //glMatrixMode(GL_PROJECTION);
-        //glPopMatrix();
-        //glMatrixMode(GL_MODELVIEW);
-        //glPopMatrix();
-
-        //glEnable(GL_TEXTURE_2D);
-        //glEnable(GL_LIGHTING);
-              
+        motor.dibujarMensajesTablero(micursor.obt_mensaje());//imprime los mensajes de seleccion y turno en el tablero              
 
         if (tiempoMensajeSelecciondeBando > 0) {//dibuja mensaje de bando
             motor.dibujarMensajeBando(textoBando);
@@ -398,21 +362,6 @@ void OnKeyboardDown(unsigned char key, int x, int y) {
             }
         }
     }
-    /*if (key == 'b') {
-        std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
-        if (estado == JUEGO) {
-        estado = BATALLA;
-        }
-        pj1 = Personaje::crearPieza(ARQUERO, HUMANO, 5.0, 7.5);
-        pj1.direccion(1.0, 0.0);
-        pj2 = Personaje::crearPieza(HECHICERO, ALIEN, 15.0, 7.5);
-        pj2.direccion(-1.0, 0.0);
-        motor.inicializarBatalla();
-    }*/
-
-        /*if (estado == BATALLA) {
-            miBatalla.KeyBatalla(key, pj1, pj2);
-        }*/
 
     glutPostRedisplay();
 }

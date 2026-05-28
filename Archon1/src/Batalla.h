@@ -55,7 +55,6 @@ public:
 	static bool choqueObstaculo(Personaje& j, const Obstaculo& o);
 	static bool choqueObstaculo(Disparo& d, const Obstaculo& o);
 
-
 	static void limites(Disparo& d, Caja& c);
 	static void limites(Personaje& j, Caja& c);
 

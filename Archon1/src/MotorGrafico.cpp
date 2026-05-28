@@ -192,8 +192,6 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 			break;
 		}
 
-		
-
 		glDisable(GL_BLEND);
 		glEnable(GL_LIGHTING);
 		glPopMatrix();
@@ -373,11 +371,11 @@ void MotorGrafico::dibujarInstruccionesTablero()
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
 	glRasterPos2f(20.0f, 58.0f);
-	for (char c : "TABLERO - HUMANOS:	Mover con WASD | Seleccionar con V")
+	for (char c : "TABLERO - HUMANOS:	Mover con WASD | Seleccionar con V | Curar con C")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	glRasterPos2f(20.0f, 50.0f);
-	for (char c : "TABLERO - ALIENS: Mover con Flechas | Seleccionar con M")
+	for (char c : "TABLERO - ALIENS: Mover con Flechas | Seleccionar con M | Curar con N")
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
 
 	glRasterPos2f(20.0f, 42.0f);
@@ -511,18 +509,8 @@ void MotorGrafico::dibujarTablero() {
 	// SEGURIDAD: Si no hay tablero, no intentamos leer datos (evita el crash)
 	if (tablero == nullptr) return;
 
-	
-
 	dibujarFondo();
 	dibujarBordeTurno();
-	//if (juego != nullptr) {
-	//	dibujarBordeTurno(juego->getTurno());
-	//}
-	//else {
-	//	// Color por defecto (gris o azul) si el juego aún no ha empezado
-	//	glColor3f(0.5f, 0.5f, 0.5f);
-	//	dibujarBordeTurno(0);
-	//}
 
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 9; j++) {
