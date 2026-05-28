@@ -33,5 +33,6 @@ public:
 	void setActivo(bool nuevoActivo) { activo = nuevoActivo; }
 	void setRebotes(int r) { rebotes = r; }
 	void setBando(Bando nuevo) { bando = nuevo; }
+	Bando getBando() const { return bando; }
 };
 
