@@ -5,13 +5,16 @@
 #include "ETSIDI.h"
 
 //declaracion matriz, constructor y funciones
-int matrizArchon[5][7] = {
-    {0, 1, 2, 2, 2, 0, 1}, // Fila 0 (Superior)
-    {1, 2, 1, 2, 0, 2, 0}, // Fila 1
-    {0, 2, 2, 2, 2, 2, 1}, // Fila 2
-    {1, 2, 0, 2, 1, 2, 0}, // Fila 3
-    {0, 1, 2, 2, 2, 0, 1}, // Fila 4 (Cruz Central)
-
+int matrizArchon[9][9] = {
+    {0, 1, 0,2, 2, 2, 1, 0,1}, // Fila 0 (Superior)
+    {1, 0, 2,1, 2, 0, 2, 1,0}, // Fila 1
+    {0, 2, 1,0, 2, 1, 0, 2,1}, // Fila 2
+    {2, 1, 0, 1,2, 0, 1, 0,2}, // Fila 3
+    {1, 2, 2, 2,2, 2, 2, 2,0}, // Fila 4 (Cruz Central)
+    {2, 1, 0, 1,2, 0, 1, 0,2}, // Fila 5 
+    {0, 2, 1, 0,2, 1, 0, 2,1}, // Fila 6 
+    {1, 0, 2, 1,2, 0, 2, 2,0}, // Fila 7 
+    {0, 1, 0, 2,2, 2, 1, 0,1}, // Fila 8 
 };
 
 Tablero::Tablero() {
@@ -20,8 +23,8 @@ Tablero::Tablero() {
 }
 
 void Tablero::inicializa() {
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 7; j++) {
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
             Tipocasilla tipo;
             int valor = matrizArchon[i][j];
             switch (valor) {

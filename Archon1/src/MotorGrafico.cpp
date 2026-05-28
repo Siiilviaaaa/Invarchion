@@ -450,8 +450,8 @@ void MotorGrafico::dibujarTablero() {
 	//	dibujarBordeTurno(0);
 	//}
 
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 7; j++) {
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
 			const Casilla* c = tablero->getCasilla(i, j);
 			dibujarCasilla(c);
 		}
@@ -469,15 +469,16 @@ void MotorGrafico::dibujarFondo() {
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
 
-	float m = 2.0f;
-	float ancho = 7 * lado;
-	float alto = 5 * lado;
+	float m_x = 10.0f;
+	float m_y = 4.0f;
+	float ancho = 9 * lado;
+	float alto = 9 * lado;
 
 	glBegin(GL_POLYGON);
-	glTexCoord2d(1, 1); glVertex3f(-m, -m, -0.1f);
-	glTexCoord2d(0, 1); glVertex3f(ancho + m, -m, -0.1f);
-	glTexCoord2d(0, 0); glVertex3f(ancho + m, alto + m, -0.1f);
-	glTexCoord2d(1, 0); glVertex3f(-m, alto + m, -0.1f);
+	glTexCoord2d(1, 1); glVertex3f(-m_x, -m_y, -0.1f);
+	glTexCoord2d(0, 1); glVertex3f(ancho + m_x, -m_y, -0.1f);
+	glTexCoord2d(0, 0); glVertex3f(ancho + m_x, alto + m_y, -0.1f);
+	glTexCoord2d(1, 0); glVertex3f(-m_x, alto + m_y, -0.1f);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
@@ -493,8 +494,8 @@ void MotorGrafico::dibujarBordeTurno() {
 	else
 		glColor3f(0.6f, 0.0f, 0.0f);
 
-	float anchoTotal = 7 * lado;
-	float altoTotal = 5 * lado;
+	float anchoTotal = 9 * lado;
+	float altoTotal = 9 * lado;
 	glLineWidth(7.0f);
 	glBegin(GL_LINE_LOOP);
 	glVertex3f(0, 0, 0.05f);
