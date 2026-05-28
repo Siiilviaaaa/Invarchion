@@ -25,14 +25,14 @@ public:
         return &matriz[f][c];
     }
     InfoCasilla* getInfoCasilla(int fila, int columna) {
-        if (fila >= 0 && fila < 9 && columna >= 0 && columna < 9) {
+        if (fila >= 0 && fila < 8 && columna >= 0 && columna < 8) {
             return &datos[fila][columna];
         }
       return nullptr;
     }
     void setInfoCasilla(int fila, int columna,  Personaje* personaje)
     {
-        if (fila >= 0 && fila < 9 && columna >= 0 && columna < 9) {
+        if (fila >= 0 && fila < 8 && columna >= 0 && columna < 8) {
             datos[fila][columna].setPersonaje(personaje);
         }
     }

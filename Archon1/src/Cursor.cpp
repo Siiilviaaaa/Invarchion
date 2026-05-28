@@ -10,7 +10,7 @@ void Cursor::inicializar_tablero(int turno)
 {
 	if (turno == 0)//turno de los humanos
 	{
-		fila = 4;
+		fila = 8;
 		columna = 0;
 		contador_selecciones = 2;
 		movimientos_restantes = 0;
@@ -23,8 +23,8 @@ void Cursor::inicializar_tablero(int turno)
 	{
 		if (turno == 1)//turno de los aliens
 		{
-			fila = 4;
-			columna = 6;
+			fila = 8;
+			columna = 8;
 			contador_selecciones = 2;
 			movimientos_restantes = 0;
 			color_r = 255;//color galaxia para alines
@@ -109,7 +109,7 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 	int desplazamiento_columna = columna + mov_columnas;
 	InfoCasilla* casillaDestino = miTablero.getInfoCasilla(desplazamiento_fila, desplazamiento_columna);//para que guarde la casilla actual en cada momento
 
-	if (desplazamiento_fila < 0 || desplazamiento_fila > 4 || desplazamiento_columna < 0 || desplazamiento_columna > 6)
+	if (desplazamiento_fila < 0 || desplazamiento_fila > 8 || desplazamiento_columna < 0 || desplazamiento_columna > 8)
 	{
 		//si nos encontramos en el limite del tablero, salimos de la función
 		return;
@@ -326,7 +326,7 @@ bool Cursor::tieneMovimientoPosible(int turno)
 		int nuevaFila = fila + direcciones[i][0];
 		int nuevaColumna = columna + direcciones[i][1];
 
-		if (nuevaFila < 0 || nuevaFila > 4 || nuevaColumna < 0 || nuevaColumna > 6)
+		if (nuevaFila < 0 || nuevaFila > 8 || nuevaColumna < 0 || nuevaColumna > 8)
 		{
 			continue;
 		}
