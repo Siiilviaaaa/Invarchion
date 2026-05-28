@@ -2,6 +2,9 @@
 #include "Disparos.h"
 #include "Personajes.h"
 
+extern int puntuacion_humanos;
+extern int puntuacion_aliens;
+
 Disparo::Disparo()
 {
 	x = 0.0;
@@ -29,8 +32,18 @@ bool Disparo::Impacto(Personaje& objetivo, bool haceDano)
 
 	if (sqrt(dx * dx + dy * dy) < 0.6)
 	{
-		if (haceDano == true)  //SOLO QUITAMOS VIDA AL ENEMIGO
-			objetivo.setVida(objetivo.return_Vida() - danio);
+		if (haceDano == true && objetivo.return_Vida() > 0)
+		{
+			int vidaAntes = objetivo.return_Vida();
+			objetivo.setVida(vidaAntes - danio);
+
+			//////PUNTOS//////
+			int puntosGanados = 15;
+			if (objetivo.return_Vida() <= 0) puntosGanados += 50; //BONUS POR KILL
+
+			if (this->bando == HUMANO) puntuacion_humanos += puntosGanados;
+			else puntuacion_aliens += puntosGanados;
+		}
 
 		//DESAPARECER
 		this->activo = false;

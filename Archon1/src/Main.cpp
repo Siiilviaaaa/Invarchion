@@ -17,7 +17,6 @@ Juego juego(&miTablero);
 Cursor micursor;
 Batalla miBatalla;
 Personaje pj1, pj2;
-bool fin_ = false;
 
 int main(int argc, char** argv) {
 
