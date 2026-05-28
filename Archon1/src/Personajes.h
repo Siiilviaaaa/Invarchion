@@ -13,6 +13,7 @@ class Personaje
 	friend class Juego;
 	friend class Batalla;
 
+protected:
 	Tipo_figura tipo;
 	Bando bando;
 	int movimientos;
@@ -24,16 +25,19 @@ class Personaje
 	bool moviendose{ false };
 	double dirX, dirY; //DIRECCION
 
-	int disparosRealizados; //CONTADOR DE DISPAROS
+	int disparosRealizados{ 0 }; //CONTADOR DE DISPAROS
 	double t_recarga{ 0.0 };
 	int hechizoUtilizado = 0;
 	int hechizosRestantes = 3;
 	double t_paralisis;
 
 public:
-	Personaje() { this->disparosRealizados = 0; }
-	~Personaje();
-	static Personaje crearPieza(Tipo_figura tipo, Bando b, double posX, double posY);
+	Personaje() = default;
+	Personaje(Tipo_figura t, Bando b, double posX, double posY);
+	virtual ~Personaje();
+
+	//crearPieza tiene que devolver un puntero por polimorfismo
+	static Personaje* crearPieza(Tipo_figura tipo, Bando b, double posX, double posY);
 	void direccion(double dx, double dy);
 	void moverEnBatalla();
 
@@ -97,4 +101,29 @@ public:
 	void setBando(Bando nuevo) { bando = nuevo; }
 	void set_paralisis(double tiempo) { t_paralisis = tiempo; }
 
+};
+
+class Luchador : public Personaje {
+public:
+	Luchador(Bando b, double posX, double posY);
+};
+
+class Arquero : public Personaje {
+public:
+	Arquero(Bando b, double posX, double posY);
+};
+
+class Volador : public Personaje {
+public:
+	Volador(Bando b, double posX, double posY);
+};
+
+class Excavador : public Personaje {
+public:
+	Excavador(Bando b, double posX, double posY);
+};
+
+class Hechicero : public Personaje {
+public:
+	Hechicero(Bando b, double posX, double posY);
 };

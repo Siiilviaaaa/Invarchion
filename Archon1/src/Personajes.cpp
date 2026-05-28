@@ -4,61 +4,89 @@
 #include <iostream>
 #include "Juego.h"
 
+Personaje::Personaje(Tipo_figura t, Bando b, double posX, double posY)
+{
+	tipo = t;
+	bando = b;
+	x = posX;
+	y = posY;
+	disparosRealizados = 0;
+	t_recarga = 0.0;
+	hechizoUtilizado = 0;
+	hechizosRestantes = 3;
+	t_paralisis = 0;
+	dirX = 0;
+	dirY = 0;
+	moviendose = false;
+}
+
 Personaje::~Personaje()
 {}
 
-Personaje Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double posY)
+//constructores de las clases hijo:
+Luchador::Luchador(Bando b, double posX, double posY) : Personaje(LUCHADOR, b, posX, posY) {
+	vida = 100; 
+	vida_max = 100;
+	danio = 15; 
+	vel_base = 2.0; 
+	movimientos = 10; 
+	v = vel_base;
+}
+
+Arquero::Arquero(Bando b, double posX, double posY) : Personaje(ARQUERO, b, posX, posY) {
+	vida = 80; 
+	vida_max = 80; 
+	danio = 15; 
+	vel_base = 2.6; 
+	movimientos = 2; 
+	v = vel_base;
+}
+
+Volador::Volador(Bando b, double posX, double posY) : Personaje(VOLADOR, b, posX, posY) {
+	vida = 120; 
+	vida_max = 120; 
+	danio = 20; 
+	vel_base = 3.1; 
+	movimientos = 3; 
+	v = vel_base;
+}
+
+Excavador::Excavador(Bando b, double posX, double posY) : Personaje(EXCAVADOR, b, posX, posY) {
+	vida = 200; 
+	vida_max = 200; 
+	danio = 40; 
+	vel_base = 1.2; 
+	movimientos = 3; 
+	v = vel_base;
+}
+
+Hechicero::Hechicero(Bando b, double posX, double posY) : Personaje(HECHICERO, b, posX, posY) {
+	vida = 90; 
+	vida_max = 90; 
+	danio = 10; 
+	vel_base = 1.7; 
+	movimientos = 10; 
+	v = vel_base;
+}
+
+
+Personaje* Personaje::crearPieza(Tipo_figura tipo, Bando b, double posX, double posY)
 {
-	Personaje pieza;
-
-	pieza.setTipo(tipo);
-	pieza.setBando(b);
-	pieza.setX(posX);
-	pieza.setY(posY);
-
-	
-	//CARACTERISTICAS
 	switch (tipo)
 	{
-	case LUCHADOR:
-		pieza.setVida(100);
-		pieza.setVidaMax(100);
-		pieza.setDanio(15);
-		pieza.setV_base(2);
-		pieza.setMovimientos(10);
-		break;
-	case ARQUERO:
-		pieza.setVida(80);
-		pieza.setVidaMax(80);
-		pieza.setDanio(15);
-		pieza.setV_base(2.6);
-		pieza.setMovimientos(2);
-		break;
-	case VOLADOR:
-		pieza.setVida(120);
-		pieza.setVidaMax(120);
-		pieza.setDanio(20);
-		pieza.setV_base(3.1);
-		pieza.setMovimientos(3); //momentaneamente para hacer pruebas
-		break;
-	case EXCAVADOR:
-		pieza.setVida(200);
-		pieza.setVidaMax(200);
-		pieza.setDanio(40);
-		pieza.setV_base(1.2);
-		pieza.setMovimientos(3);
-		break;
-	case HECHICERO:
-		pieza.setVida(90);
-		pieza.setVidaMax(90);
-		pieza.setDanio(10);
-		pieza.setV_base(1.7);
-		pieza.setMovimientos(10);
-		break;
+	case LUCHADOR: 
+		return new Luchador(b, posX, posY);
+	case ARQUERO:   
+		return new Arquero(b, posX, posY);
+	case VOLADOR:   
+		return new Volador(b, posX, posY);
+	case EXCAVADOR: 
+		return new Excavador(b, posX, posY);
+	case HECHICERO: 
+		return new Hechicero(b, posX, posY);
+	default:        
+		return nullptr;
 	}
-	pieza.setVelocidad(pieza.return_Vbase());
-
-	return pieza;
 }
 
 void Personaje::direccion(double dx, double dy)
