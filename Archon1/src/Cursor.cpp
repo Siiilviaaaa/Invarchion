@@ -125,32 +125,26 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 			//puntero al personaje de la casilla destino
 			Personaje* personajeDestino = casillaDestino->getPersonaje();
 
-			//hay un personaje de nuestro bando 
-			if (personajeDestino->return_Bando() == turno)
+			if (personajeDestino->return_Bando() == turno)//si es de nuestro equipo
 			{
-				if((personajeSeleccionado->tipo==VOLADOR&& movimientos_restantes <=1)|| personajeSeleccionado->tipo != VOLADOR)//si osy un volador con 1 solo movimiento o menos, O no soy un volador, entonces no puedo moverme
-				{
-					//if (personajeSeleccionado->tipo == VOLADOR&&movimientos_restantes>1)//si soy un volador y tengo mas de 1 movimiento
-				//{
-				//	//desplazar el cursor y el personaje seleccionado a esa casilla
-				//	fila = fila_final;
-				//	columna = columna_final;
-				//	movimientos_restantes--;//REVISAR SI MEJOR PONERLO EN EL SWITCH DE ABAJO!
-				//	if (personajeSeleccionado != nullptr)
-				//	{
-				//		personajeSeleccionado->setX(columna);
-				//		personajeSeleccionado->setY(fila);
-				//	}
-				//}
-				//else//si el personaje no es volador, o es un volador con 1 solo movimiento restante
-				//{
-					//tendran que buscar una ruta posible que les sirva, o plantarse donde estan 
+				if(personajeSeleccionado->return_Tipo() != VOLADOR)//si no soy un volador, no puedo moverme
+				{ 
 					insertar_mensaje("Casilla ocupada por un aliado");
 					return;
 				}
+				if (personajeSeleccionado->return_Tipo() == VOLADOR && movimientos_restantes-1 <= 0)//si soy un volador, que cuando me mueva y resten un movimiento, sean 0 los que me queden, no puedo moverme ahi pq no tendre escapatoria
+				{
+					insertar_mensaje("Casilla ocupada por un aliado");
+					return;
+				}
+				if (!tieneMovimientoPosible(fila_final, columna_final, turno, movimientos_restantes-1))//si n esa casilla no va a tener un camino valido, no puede caer ahi
+				{
+					insertar_mensaje("Camino bloqueado");
+					return;
+				}
+				//si el personaje no ha netrado en ningun if, es que es un volador que puede seguir circulando por el tablero pq le quedan recorridos validos
 			}
-			//Hay un persoanje del otro equipo, entramos directamente en batalla.
-			if (personajeDestino->return_Bando() != turno)
+			else//Hay un persoanje del otro equipo, entramos directamente en batalla.
 			{
 				//actualizamos la posicion del cursor
 				fila = fila_final;
@@ -173,7 +167,6 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 				{//si el juego existe, entramos en batalla con esos persoanjes
 					ptrJuego->cambiarEscenarioABatalla(atacante, defensor);
 				}
-				return;
 			}
 		}
 	}
@@ -314,16 +307,8 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 		}
 	}
 }
-bool Cursor::tieneMovimientoPosible(int turno,int movimientos) const
+bool Cursor::tieneMovimientoPosible(int filaOrigen, int columnaOrigen, int turno, int movimientos) const
 {
-	int direcciones[4][2] = {
-		{ 1, 0 },   // arriba
-		{ -1, 0 },  // abajo
-		{ 0, 1 },   // derecha
-		{ 0, -1 }   // izquierda
-	};
-	//se podria poner el 4 como una variable dependiendo de los movimientos del volador tmb para incluirlos?
-
 	for (int diferencia_filas = -movimientos; diferencia_filas <=movimientos; diferencia_filas++)//para evaluar la cantidad de filas a las que puede llegar con esos movimientos 
 	{
 		for (int diferencia_columnas=-movimientos; diferencia_columnas<=movimientos;diferencia_columnas++)//para evaluar la cantidad de columans a las que puede llegar con esos movimientos
@@ -332,9 +317,9 @@ bool Cursor::tieneMovimientoPosible(int turno,int movimientos) const
 			if (movimientos_requeridos == 0 || movimientos_requeridos > movimientos)continue;//si son 0 o mas de los qu eme puedo permitir, siguiente iteracion
 
 
-			//las variables que deciden que casilla evaluar en cada movimiento 
-			int nuevaFila = fila + diferencia_filas;
-			int nuevaColumna = columna + diferencia_columnas;
+			//las variables que deciden que casilla evaluar en cada movimiento, desde el origen en el que se encuentra 
+			int nuevaFila = filaOrigen + diferencia_filas;
+			int nuevaColumna = columnaOrigen + diferencia_columnas;
 
 			if (nuevaFila < 0 || nuevaFila > 8 || nuevaColumna < 0 || nuevaColumna > 8)//si no nos encontramos en los limites del tablero
 			{
@@ -382,7 +367,7 @@ int Cursor::coger(int turno)
 		if (infoCasillaActual->personajeEncima->tipo == VOLADOR)
 		{
 			//verificamos que EXISTE alguna casilla posible a la que el volador con sus moivimientos sea capaz de llegar 
-			if (!tieneMovimientoPosible(turno, infoCasillaActual->personajeEncima->movimientos))//le pasamos los movimientos del personaje volador
+			if (!tieneMovimientoPosible(fila,columna,turno, infoCasillaActual->personajeEncima->movimientos))//le pasamos los movimientos del personaje volador
 			{//si no puede, no se podra seleccionar nunca
 				insertar_mensaje("Camino bloqueado");
 				return 0;
@@ -391,7 +376,7 @@ int Cursor::coger(int turno)
 		else
 		{
 		//aqui se verifica solo las casillas de los alrededores, puesto que los perosanjes SOLO andan (exceptuando el volador)
-			if (!tieneMovimientoPosible(turno,1))//le pasamos solo 1 movimiento, pq auqnue el perosnaj etenga mas, como solo puede andar se evalua SOLO el movimiento inmediato que va a realizar 
+			if (!tieneMovimientoPosible(fila,columna,turno,1))//le pasamos solo 1 movimiento, pq auqnue el perosnaj etenga mas, como solo puede andar se evalua SOLO el movimiento inmediato que va a realizar 
 			{//verificacmos que no sea un movimiento imposible del que no se pueda salir
 				insertar_mensaje("Camino bloqueado");
 				return 0;
