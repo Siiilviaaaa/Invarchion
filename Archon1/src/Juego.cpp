@@ -237,7 +237,7 @@ void Juego::finalizarBatalla()
     int f = micursor.obt_fila();
     int c = micursor.obt_columna();
     InfoCasilla* info = ptrTablero->getInfoCasilla(f, c);
-    if (info != nullptr) {
+    /*if (info != nullptr) {
         Tipocasilla color = info->getColor();
         if (casillaFavorable(atacanteBatalla, color)) {
             atacanteBatalla->setDanio(atacanteBatalla->return_Danio() - 5);
@@ -248,7 +248,7 @@ void Juego::finalizarBatalla()
             std::cout << "Daño restablecido" << std::endl;
         }
 
-    }
+    }*/
     Personaje* ganador = nullptr;
     Personaje* perdedor = nullptr;
 
@@ -263,6 +263,19 @@ void Juego::finalizarBatalla()
 
     if (ganador != nullptr) {
         origenAntesDeBatalla->getInfo()->setPersonaje(ganador);
+        InfoCasilla* info = origenAntesDeBatalla->getInfo();
+        if (info != nullptr) {
+            Tipocasilla color = info->getColor();
+            if (casillaFavorable(atacanteBatalla, color)) {
+                atacanteBatalla->setDanio(atacanteBatalla->return_Danio() - 5);
+                std::cout << "Daño restablecido" << std::endl;
+            }
+            if (casillaFavorable(defensorBatalla, color)) {
+                defensorBatalla->setDanio(defensorBatalla->return_Danio() - 5);
+                std::cout << "Daño restablecido" << std::endl;
+            }
+
+        }
         ganador->x = origenAntesDeBatalla->getcolumna();
         ganador->y = origenAntesDeBatalla->getfila();
         ganador->direccion(0.0, 0.0);
