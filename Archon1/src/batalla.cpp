@@ -5,7 +5,8 @@
 
 using std::cout, std::cin, std::endl;
 extern bool fin_;
-extern int puntuacion_actual;
+extern int puntuacion_humanos;
+extern int puntuacion_aliens;
 
 Batalla::Batalla():numObstaculos(5)
 {
@@ -232,6 +233,8 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 
 				if (victima != nullptr && nHechizos[b][i]->Impacta(victima->return_X(), victima->return_Y(), 0.1)) {
 
+					int puntosHechizo = 20;
+
 					//IDENTIFICAMOS EL TIPO
 					int tipo = nHechizos[b][i]->return_Tipo();
 
@@ -259,6 +262,16 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 						break;
 						}
 					}
+
+					//BONUS POR KILL
+					if (victima->return_Vida() <= 0)
+						puntosHechizo += 50;
+
+					//SUMAR PUNTOS AL ATACANTE
+					if (nHechizos[b][i]->return_Bando() == HUMANO)
+						puntuacion_humanos += puntosHechizo;
+					else
+						puntuacion_aliens += puntosHechizo;
 
 					delete nHechizos[b][i];
 					nHechizos[b][i] = nullptr;
@@ -317,6 +330,14 @@ void Batalla::pegar(Personaje& atacante, Personaje& objetivo)
 
 	if (nuevaVida < 0)
 		nuevaVida = 0;
+
+	////////////PUNTOS///////
+	int puntosGanados = 10;
+	if (nuevaVida <= 0) puntosGanados += 50; //BONUS POR KILL
+
+	if (atacante.return_Bando() == HUMANO) puntuacion_humanos += puntosGanados;
+	else puntuacion_aliens += puntosGanados;
+
 
 	std::cout << "Vida antes=" << vidaAntes << " | Nueva=" << nuevaVida << std::endl;
 

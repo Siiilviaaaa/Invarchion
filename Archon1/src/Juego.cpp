@@ -71,7 +71,7 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
     }
     if (contador_aliens == 0) {
         std::cout << "ganaron humanos por exterminio >:o";
-        return GanaronAliens;
+        return GanaronHumanos;
     }
     if (contador_aliens > 0 && contador_humanos > 0) return AunEnCurso;
 

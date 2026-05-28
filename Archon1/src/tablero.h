@@ -8,8 +8,8 @@ class Juego;
 //#include "Personajes.h" //PARA PODER POSICIONAR LAS PIEZAS
 
 class Tablero {
-    InfoCasilla datos[5][7]; //para la informacion
-    Casilla matriz[5][7]; 
+    InfoCasilla datos[9][9]; //para la informacion
+    Casilla matriz[9][9]; 
     
 
 public:
