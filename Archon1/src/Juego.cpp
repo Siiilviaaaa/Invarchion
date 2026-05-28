@@ -82,7 +82,7 @@ void Juego::spawnPersonaje(Tipo_figura t, Bando e, int fila, int columna)
 {
     for (int i = 0; i < MAX_PERSONAJES; i++) {
         if (figuras[i] == nullptr) {//si esta posición está vacía
-            figuras[i] = new Personaje(Personaje::crearPieza(t, e, 0, 0));
+            figuras[i] = Personaje::crearPieza(t, e, 0, 0);
             figuras[i]->setX(columna);
 			figuras[i]->setY(fila);
 			Casilla* c = ptrTablero->casillaModificable(fila, columna);
