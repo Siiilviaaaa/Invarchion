@@ -10,9 +10,10 @@ void Cursor::inicializar_tablero(int turno)
 {
 	if (turno == 0)//turno de los humanos
 	{
+		//inicializar la posicion del cursor en la esquina superior izq
 		fila = 8;
 		columna = 0;
-		contador_selecciones = 2;
+		contador_selecciones = 2;//para contabilizar las veces que se presiona la tecla de coger
 		movimientos_restantes = 0;
 		color_r = 0;//color verde para humanos
 		color_v = 250;
@@ -23,11 +24,12 @@ void Cursor::inicializar_tablero(int turno)
 	{
 		if (turno == 1)//turno de los aliens
 		{
+			//inicializar la posicion del cursor en la esquina superior dch
 			fila = 8;
 			columna = 8;
-			contador_selecciones = 2;
+			contador_selecciones = 2;//para contabilizar las veces que se presiona la tecla de coger
 			movimientos_restantes = 0;
-			color_r = 255;//color galaxia para alines
+			color_r = 255;//color rosa para aliens
 			color_v = 106;
 			color_a = 180;
 			insertar_mensaje("ALIENS");
@@ -37,11 +39,11 @@ void Cursor::inicializar_tablero(int turno)
 
 void Cursor::mover_humanos(unsigned char key, int turno)
 {
-	if (turno != 0)
+	if (turno != 0)//siempre que sea el turno de los humanos
 	{
 		return;
 	}
-
+	//variables qu indican cuanto debe varias la fila o la columna dependiendo de la tecla presionada
 	int cambioFila = 0;
 	int cambioColumna = 0;
 
@@ -67,7 +69,7 @@ void Cursor::mover_humanos(unsigned char key, int turno)
 		return;
 	}
 
-	movimiento(cambioFila, cambioColumna, "HUMANO",turno);
+	movimiento(cambioFila, cambioColumna, "HUMANO",turno);//llamamos a la funcion generalizada para mover
 }
 void Cursor::mover_aliens(int key, int turno)
 {
@@ -75,7 +77,7 @@ void Cursor::mover_aliens(int key, int turno)
 	{
 		return;
 	}
-
+	//variables para indicar si hay que cmabiar fila o columna dependiendo de las teclas 
 	int cambioFila = 0;
 	int cambioColumna = 0;
 
@@ -101,85 +103,103 @@ void Cursor::mover_aliens(int key, int turno)
 		return;
 	}
 
-	movimiento(cambioFila, cambioColumna, "ALIEN",turno);
+	movimiento(cambioFila, cambioColumna, "ALIEN",turno);//llamamos a la funcion generalizada de movimiento
 }
 void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mensaje, int turno)
 {
-	int desplazamiento_fila = fila + mov_filas;
-	int desplazamiento_columna = columna + mov_columnas;
-	InfoCasilla* casillaDestino = miTablero.getInfoCasilla(desplazamiento_fila, desplazamiento_columna);//para que guarde la casilla actual en cada momento
+	//variables que indican la posicion final del cursor tras presionar las teclas (la posicion en la que etsabamos y el cambio agregado por la tecla)
+	int fila_final = fila + mov_filas;
+	int columna_final = columna + mov_columnas;
+	//puntero a la casilla del tablero a la que vamos 
+	InfoCasilla* casillaDestino = miTablero.getInfoCasilla(fila_final, columna_final);//para que guarde la casilla actual en cada momento
 
-	if (desplazamiento_fila < 0 || desplazamiento_fila > 8 || desplazamiento_columna < 0 || desplazamiento_columna > 8)
+	if (fila_final < 0 || fila_final > 8 || columna_final < 0 || columna_final > 8)
 	{
 		//si nos encontramos en el limite del tablero, salimos de la función
 		return;
 	}
-	if (contador_selecciones == 1)
+	if (contador_selecciones == 1)//si se selecciona 1 vez hay que ir restando movimientos si se puede
 	{
-		if (casillaDestino != nullptr && casillaDestino->getPersonaje() != nullptr)
+		if (casillaDestino != nullptr && casillaDestino->getPersonaje() != nullptr)//si la casilla guarda informacion correcta de persoanje (para comprobar que lo seleccionado es un persoanje de nuestro bando)
 		{
+			//puntero al personaje de la casilla destino
 			Personaje* personajeDestino = casillaDestino->getPersonaje();
 
-			//hay un personaje de nuestro bando, no podemos saltarle
-			//REVISAR LOS QUE VUELAN 
+			//hay un personaje de nuestro bando 
 			if (personajeDestino->return_Bando() == turno)
 			{
-				insertar_mensaje("Casilla ocupada por un aliado");
-				return;
+				if((personajeSeleccionado->tipo==VOLADOR&& movimientos_restantes <=1)|| personajeSeleccionado->tipo != VOLADOR)//si osy un volador con 1 solo movimiento o menos, O no soy un volador, entonces no puedo moverme
+				{
+					//if (personajeSeleccionado->tipo == VOLADOR&&movimientos_restantes>1)//si soy un volador y tengo mas de 1 movimiento
+				//{
+				//	//desplazar el cursor y el personaje seleccionado a esa casilla
+				//	fila = fila_final;
+				//	columna = columna_final;
+				//	movimientos_restantes--;//REVISAR SI MEJOR PONERLO EN EL SWITCH DE ABAJO!
+				//	if (personajeSeleccionado != nullptr)
+				//	{
+				//		personajeSeleccionado->setX(columna);
+				//		personajeSeleccionado->setY(fila);
+				//	}
+				//}
+				//else//si el personaje no es volador, o es un volador con 1 solo movimiento restante
+				//{
+					//tendran que buscar una ruta posible que les sirva, o plantarse donde estan 
+					insertar_mensaje("Casilla ocupada por un aliado");
+					return;
+				}
 			}
-
 			//Hay un persoanje del otro equipo, entramos directamente en batalla.
 			if (personajeDestino->return_Bando() != turno)
 			{
-				fila = desplazamiento_fila;
-				columna = desplazamiento_columna;
+				//actualizamos la posicion del cursor
+				fila = fila_final;
+				columna = columna_final;
 
-				if (personajeSeleccionado != nullptr)
+				if (personajeSeleccionado != nullptr)//si el personaje seleccionado existe le modificamos la posicion
 				{
 					personajeSeleccionado->setX(columna);
 					personajeSeleccionado->setY(fila);
 				}
-
+				//declaramos quien ataca y quien defiende
 				atacante = personajeSeleccionado;
 				defensor = personajeDestino;
-
+				//restablecemos las variables del cursor
 				contador_selecciones = 0;
 				movimientos_restantes = 0;
-				personajeSeleccionado = nullptr;
+				personajeSeleccionado = nullptr;//quitamos el personaje seleccionado
 
 				if (ptrJuego != nullptr)
-				{
+				{//si el juego existe, entramos en batalla con esos persoanjes
 					ptrJuego->cambiarEscenarioABatalla(atacante, defensor);
 				}
-
 				return;
 			}
 		}
 	}
 	switch (contador_selecciones)
 	{
-	case 1:
+	case 1://se ha pulsado la tecla de coger, hay que ir restando movimientos
 		if (movimientos_restantes > 0)
 		{
-			fila = desplazamiento_fila;
-			columna = desplazamiento_columna;
+			fila = fila_final;
+			columna = columna_final;
 			movimientos_restantes--;
 
-			// Actualizar visualmente el personaje en cada movimiento
+			//Actualizar el personaje de forma grafica modificando sus propias coordenadas
 			if (personajeSeleccionado != nullptr)
 			{
 				personajeSeleccionado->setX(columna);
 				personajeSeleccionado->setY(fila);
 			}
 
-			insertar_mensaje(mensaje + " Movilidad: " +	std::to_string(movimientos_restantes));
+			insertar_mensaje(mensaje + " Movilidad: " +	std::to_string(movimientos_restantes));//indica en cada momento cuantos movs le quedan 
 		}
 		break;
 
-	case 2:
-		fila = desplazamiento_fila;
-		columna = desplazamiento_columna;
-		//insertar_mensaje("Selecciona un personaje");
+	case 2://no se ha pulsado la tecla de coger 
+		fila = fila_final;
+		columna = columna_final;
 		break;
 
 	default:
@@ -189,33 +209,32 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 
 void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 {
-	if (turno == 0)
+	if (turno == 0)//si somos humanos
 	{
-		if (key == 'v'&& contador_selecciones==2)
+		if (key == 'v'&& contador_selecciones==2)//pulsamos v y no hemos cogido antes
 		{
-			int cogerOK = coger(turno);
+			int cogerOK = coger(turno);//llamamos a la funcion coger
 			switch (cogerOK)
 			{
-			case 1:
+			case 1://hemos cogido un personaje de nuestro bando
 			{
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
 				insertar_mensaje("HUMANO Movilidad: " + std::to_string(movimientos_restantes));
-				contador_selecciones = 1;
+				contador_selecciones = 1;//indicamos que la accion de coger la hicimos ya
 			}break;
 			default: break;
-			
 			}
 		}
 		else
 		{
-			if (key == 'v' && contador_selecciones == 1)
+			if (key == 'v' && contador_selecciones == 1)//pulsamos v y ya habiamos cogido, toca soltar
 			{
-				int soltarOK = soltar(turno);
+				int soltarOK = soltar(turno);//llamamos a la funcion soltar
 				switch (soltarOK)
 				{
-				case 0: 
+				case 0: //no se pudo soltar por imposibilidad
 					std::cout << "no se ha podido soltar" << std::endl;break;
-				case 1:
+				case 1://no habia nadie asiq ocupamos esa casilla vacia
 					std::cout << "casilla libre_nos hemos movido ahi" << std::endl;
 					contador_selecciones = 0;//para no poder volver a entrar ni a soltar ni cogr si no cambia el turno
 					movimientos_restantes = 0;//para no poder movernos
@@ -223,14 +242,6 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					if (ptrJuego != nullptr) {
 						ptrJuego->cambiarTurno();//cambaimos el turno de la partida
 					}
-
-					break;
-				case 2:
-					std::cout << "hay un enemigo, avisamos a batalla" << std::endl;
-					contador_selecciones = 0;
-					movimientos_restantes = 0;
-					ptrJuego->cambiarEscenarioABatalla(atacante, defensor);
-					//llamada a batalla pasandole mi personaje y el personaje actual de la casilla del tablero
 					break;
 				default: break;
 				}
@@ -245,18 +256,18 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			}
 			else
 			{
-				mover_humanos(key, turno);
+				mover_humanos(key, turno);//si no se pulsa la v, se mueve normal 
 			}
 		}
 	}
-	if (turno == 1)
+	if (turno == 1)//siendo el turno de aliens
 	{
-		if (key == 'm' && contador_selecciones == 2)//si equipo humanos presiona "espacio" por primera vez
+		if (key == 'm' && contador_selecciones == 2)//si se pulsa m y no hemos cogido 
 		{
-			int cogerOK = coger(turno);
+			int cogerOK = coger(turno);//llamamos a coger
 			switch (cogerOK)
 			{
-			case 1:
+			case 1://hemos cogido a uno de nuetsro equipo
 			{
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
 				insertar_mensaje("ALIEN Movilidad: " + std::to_string(movimientos_restantes));
@@ -268,29 +279,23 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 		}
 		else
 		{
-			if (key == 'm' && contador_selecciones == 1)
+			if (key == 'm' && contador_selecciones == 1)//si se pulsa m y ya habiamos cogido antes
 			{
-				int soltarOK=soltar(turno);
+				int soltarOK=soltar(turno);//llamamos a soltar
 				switch (soltarOK)
 				{
-				case 0: std::cout << "no se ha podido soltar" << std::endl; break;
-				case 1: { 
+				case 0: std::cout << "no se ha podido soltar" << std::endl; break;//imposibilidad de soltar
+				case 1://casilla vacia asiq se ocupa
+				{ 
 					std::cout << "casilla libre_nos hemos movido ahi" << std::endl; 
 					contador_selecciones = 0;
 					movimientos_restantes = 0;
 					
-					if (ptrJuego != nullptr) {
+					if (ptrJuego != nullptr) {//avisamos a que se cambie de turno
 						ptrJuego->cambiarTurno();
 					}
-
 					break; 
 				}
-				case 2: std::cout << "hay un enemigo, avisamos a batalla" << std::endl;
-					contador_selecciones = 0;
-					movimientos_restantes = 0;
-					ptrJuego->cambiarEscenarioABatalla(atacante, defensor);
-					//llamada a batalla pasandole mi personaje y el personaje actual de la casilla del tablero
-					break;
 				default: break;
 				}
 			}
@@ -304,12 +309,12 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			}
 			else
 			{
-				mover_aliens(key,turno);
+				mover_aliens(key,turno);//si no se pulso la m, se juega con las otras teclas normal 
 			}
 		}
 	}
 }
-bool Cursor::tieneMovimientoPosible(int turno) const
+bool Cursor::tieneMovimientoPosible(int turno,int movimientos) const
 {
 	int direcciones[4][2] = {
 		{ 1, 0 },   // arriba
@@ -317,37 +322,43 @@ bool Cursor::tieneMovimientoPosible(int turno) const
 		{ 0, 1 },   // derecha
 		{ 0, -1 }   // izquierda
 	};
+	//se podria poner el 4 como una variable dependiendo de los movimientos del volador tmb para incluirlos?
 
-	for (int i = 0; i < 4; i++)
+	for (int diferencia_filas = -movimientos; diferencia_filas <=movimientos; diferencia_filas++)//para evaluar la cantidad de filas a las que puede llegar con esos movimientos 
 	{
-		int nuevaFila = fila + direcciones[i][0];
-		int nuevaColumna = columna + direcciones[i][1];
-
-		if (nuevaFila < 0 || nuevaFila > 8 || nuevaColumna < 0 || nuevaColumna > 8)
+		for (int diferencia_columnas=-movimientos; diferencia_columnas<=movimientos;diferencia_columnas++)//para evaluar la cantidad de columans a las que puede llegar con esos movimientos
 		{
-			continue;//como esa casilla no es valida, salta directo a la siguiente iteracion
-		}
+			int movimientos_requeridos = abs(diferencia_filas) + abs(diferencia_columnas);//calcula para la casilla que se esta evaluando cuantos moviminetos necesitaria
+			if (movimientos_requeridos == 0 || movimientos_requeridos > movimientos)continue;//si son 0 o mas de los qu eme puedo permitir, siguiente iteracion
 
-		InfoCasilla* casillaVecina = miTablero.getInfoCasilla(nuevaFila, nuevaColumna);
 
-		if (casillaVecina == nullptr)
-		{
-			continue;//como esa casilla no es valida, salta directo a la siguiente iteracion
-		}
+			//las variables que deciden que casilla evaluar en cada movimiento 
+			int nuevaFila = fila + diferencia_filas;
+			int nuevaColumna = columna + diferencia_columnas;
 
-		Personaje* personajeVecino = casillaVecina->getPersonaje();
-		
-		if (personajeVecino == nullptr)//Casilla libre, hay un camino posible 
-		{
-			return true;
-		}
-		
-		if (personajeVecino->return_Bando() != turno)//Casilla con enemigo, asiq entraria en batalla si es la unica opcion
-		{
-			return true;
+			if (nuevaFila < 0 || nuevaFila > 8 || nuevaColumna < 0 || nuevaColumna > 8)//si no nos encontramos en los limites del tablero
+			{
+				continue;//como esa casilla no es valida, salta directo a la siguiente iteracion
+			}
+			//puntero a una casilla vecina que se evlaua en esta iteracion
+			InfoCasilla* casillaVecina = miTablero.getInfoCasilla(nuevaFila, nuevaColumna);
+
+			if (casillaVecina == nullptr)//la casilla no guarda informacion
+			{
+				continue;//como esa casilla no es valida, salta directo a la siguiente iteracion
+			}
+			//piuntero perosnaje de dicha casilla vecina 
+			Personaje* personajeVecino = casillaVecina->getPersonaje();
+
+			if (personajeVecino == nullptr)//Casilla vacia, hay un camino posible de alternativa de juego 
+			{
+				return true;
+			}
+
+			if (personajeVecino->return_Bando() != turno)//Casilla con enemigo, hay una alternativa de juego 
+				return true;
 		}
 	}
-
 	//Si no hay casillas vacias o para entrar a batalla, no puede moverse, debera seleccionar otro personaje
 	return false;
 }
@@ -368,12 +379,24 @@ int Cursor::coger(int turno)
 	}
 	if (infoCasillaActual->personajeEncima->return_Bando() == turno)//comprueba que el personaje es de nuestro bando
 	{
-		if (!tieneMovimientoPosible(turno))//verificacmos que no sea un movimiento imposible del que no se pueda salir
+		if (infoCasillaActual->personajeEncima->tipo == VOLADOR)
 		{
-			insertar_mensaje("Camino bloqueado");
-			return 0;
+			//verificamos que EXISTE alguna casilla posible a la que el volador con sus moivimientos sea capaz de llegar 
+			if (!tieneMovimientoPosible(turno, infoCasillaActual->personajeEncima->movimientos))//le pasamos los movimientos del personaje volador
+			{//si no puede, no se podra seleccionar nunca
+				insertar_mensaje("Camino bloqueado");
+				return 0;
+			}
 		}
-
+		else
+		{
+		//aqui se verifica solo las casillas de los alrededores, puesto que los perosanjes SOLO andan (exceptuando el volador)
+			if (!tieneMovimientoPosible(turno,1))//le pasamos solo 1 movimiento, pq auqnue el perosnaj etenga mas, como solo puede andar se evalua SOLO el movimiento inmediato que va a realizar 
+			{//verificacmos que no sea un movimiento imposible del que no se pueda salir
+				insertar_mensaje("Camino bloqueado");
+				return 0;
+			}
+		}
 		informacion = *infoCasillaActual;//copia la informacion del puntero que apunta al tablero original
 		movimientos_restantes = infoCasillaActual->personajeEncima->movimientos;//copiamos los movimientos
 		//guarda la informacion de la casilla, por si hay que eliminarla luego de aqui, no eliminamos pq no sbemos is la va a soltar
@@ -413,32 +436,14 @@ int Cursor::soltar(int turno)
 
 		casillaActual->personajeEncima = personajeMovido;
 		casillaAnterior->personajeEncima = nullptr;
-		
+
 
 		personajeSeleccionado = nullptr;
 
 		return 1;
 	}
-
-	// CASO 2: la casilla actual tiene un personaje de mi mismo bando
-	if (casillaActual->personajeEncima->bando == turno)
-	{
-		return 3;
-	}
-
-	// CASO 3: la casilla actual tiene un personaje enemigo
-	if (casillaActual->personajeEncima->bando != turno)
-	{
-		//copiamos en perosnaje mio el de la casilla anterior
-		atacante = casillaAnterior->personajeEncima;
-		//copiamos en prsonaje batalla el de la casilla nueva
-		defensor = casillaActual->personajeEncima;
-		//y eso son los que se pasan a la batlla, esos punteros
-		std::cout << "Atacante: " << atacante->return_Tipo() << " Defensor: " << defensor->return_Tipo() << std::endl;
-		return 2;
-	}
 	casillaAnterior->setPersonaje(nullptr); //no estaba borrando bien la posicion del personaje antes
-	return 0;
+	return 2;
 }
 
 void Cursor::aplicarCuracionMasiva(int turno, Personaje* mago)
