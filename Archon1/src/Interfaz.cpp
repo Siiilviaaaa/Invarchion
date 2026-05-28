@@ -87,6 +87,7 @@ void OnDraw(void) {
         }
         miCamara.vistaRanking();
         miMenu.dibuja_fin();
+        juego.reiniciarJuego();
         break;
     
     case MENU:
@@ -243,13 +244,13 @@ void OnTimer(int value) {
             
             //DETERMINAR QUIEN HA GANADO
 			HanGanado estado_fin = juego.DeterminarSiJuegoHaTerminado();
-
-           //GUARDAR SOLO LA PUNTUACION DEL GANADOR PARA EL RANKING
-            if (estado_fin == GanaronHumanos) {
+            HanGanado estado_fin2 = juego.victoriaPuntosPoder();
+           //GUARDAR LA PUNTUACION DEL GANADOR PARA EL RANKING
+            if (estado_fin == GanaronHumanos||estado_fin2==GanaronHumanos) {
                 puntuacion_actual = puntuacion_humanos;
                 estado = FIN_PARTIDA;
             }
-            else if (estado_fin == GanaronAliens) {
+            else if (estado_fin == GanaronAliens||estado_fin2==GanaronAliens) {
                 puntuacion_actual = puntuacion_aliens;
                 estado = FIN_PARTIDA;
             }
@@ -260,6 +261,18 @@ void OnTimer(int value) {
             }
             glutPostRedisplay();
         }
+    }
+    if (estado == JUEGO) {
+        HanGanado estado_fin3 = juego.victoriaPuntosPoder();
+        if (estado_fin3 == GanaronHumanos) {
+            puntuacion_actual = puntuacion_humanos;
+            estado = FIN_PARTIDA;
+        }
+        else if (estado_fin3 == GanaronAliens) {
+            puntuacion_actual = puntuacion_aliens;
+            estado = FIN_PARTIDA;
+        }
+        glutPostRedisplay();
     }
     glutPostRedisplay();
 

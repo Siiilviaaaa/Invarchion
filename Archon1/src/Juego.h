@@ -50,6 +50,7 @@ public:
 
 
 	HanGanado DeterminarSiJuegoHaTerminado();
+	HanGanado victoriaPuntosPoder();
 
 	void spawnPersonaje(Tipo_figura t, Bando e, int x, int y);
 	void inicializarPartida();
@@ -62,4 +63,5 @@ public:
 
 	bool casillaFavorable(Personaje* p, Tipocasilla colorCasilla);
 	
+	void reiniciarJuego();
 };

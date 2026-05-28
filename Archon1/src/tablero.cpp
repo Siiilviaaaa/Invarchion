@@ -31,11 +31,14 @@ void Tablero::inicializa() {
             case 0: tipo = negra; break;
             case 1: tipo = blanca; break;
             case 2: tipo = lila; break;
-            default: tipo = blanca;
+            default: tipo = lila;
             }
             datos[i][j] = InfoCasilla(tipo);
             matriz[i][j] = Casilla(i, j, &datos[i][j]);
-                        
+            //defino las coordenadas de los puntos de poder
+            if ((i == 4 && j == 4) || (i == 0 && j == 4) || (i == 8 && j == 4) || (i == 4 && j == 0) || (i == 4 && j == 8)) {
+                datos[i][j].setPuntoPoder(true);
+            }
         }
     }
 }
