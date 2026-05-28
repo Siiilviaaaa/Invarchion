@@ -17,7 +17,7 @@ void Cursor::inicializar_tablero(int turno)
 		color_r = 0;//color verde para humanos
 		color_v = 250;
 		color_a = 154;
-		insertar_mensaje("Turno HUMANOS");
+		insertar_mensaje("HUMANOS");
 	}
 	else 
 	{
@@ -30,7 +30,7 @@ void Cursor::inicializar_tablero(int turno)
 			color_r = 255;//color galaxia para alines
 			color_v = 106;
 			color_a = 180;
-			insertar_mensaje("Turno ALIENS");
+			insertar_mensaje("ALIENS");
 		}
 	}
 }
@@ -67,7 +67,7 @@ void Cursor::mover_humanos(unsigned char key, int turno)
 		return;
 	}
 
-	movimiento(cambioFila, cambioColumna, "Humano",turno);
+	movimiento(cambioFila, cambioColumna, "HUMANO",turno);
 }
 void Cursor::mover_aliens(int key, int turno)
 {
@@ -101,7 +101,7 @@ void Cursor::mover_aliens(int key, int turno)
 		return;
 	}
 
-	movimiento(cambioFila, cambioColumna, "Alien",turno);
+	movimiento(cambioFila, cambioColumna, "ALIEN",turno);
 }
 void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mensaje, int turno)
 {
@@ -121,9 +121,10 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 			Personaje* personajeDestino = casillaDestino->getPersonaje();
 
 			//hay un personaje de nuestro bando, no podemos saltarle
+			//REVISAR LOS QUE VUELAN 
 			if (personajeDestino->return_Bando() == turno)
 			{
-				insertar_mensaje("No puedes pasar por una casilla ocupada por un aliado");
+				insertar_mensaje("Casilla ocupada por un aliado");
 				return;
 			}
 
@@ -171,18 +172,14 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 				personajeSeleccionado->setY(fila);
 			}
 
-			insertar_mensaje(
-				mensaje + ", te quedan " +
-				std::to_string(movimientos_restantes) +
-				" movimientos"
-			);
+			insertar_mensaje(mensaje + " Movilidad: " +	std::to_string(movimientos_restantes));
 		}
 		break;
 
 	case 2:
 		fila = desplazamiento_fila;
 		columna = desplazamiento_columna;
-		insertar_mensaje("Selecciona un personaje");
+		//insertar_mensaje("Selecciona un personaje");
 		break;
 
 	default:
@@ -202,7 +199,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			case 1:
 			{
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
-				insertar_mensaje("Personaje seleccionado. Movimientos limitados a: " + std::to_string(movimientos_restantes));
+				insertar_mensaje("HUMANO Movilidad: " + std::to_string(movimientos_restantes));
 				contador_selecciones = 1;
 			}break;
 			default: break;
@@ -235,10 +232,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					ptrJuego->cambiarEscenarioABatalla(atacante, defensor);
 					//llamada a batalla pasandole mi personaje y el personaje actual de la casilla del tablero
 					break;
-				case 3:
-					std::cout << "Sois del mismo equipo, movimiento extra por compasión" << std::endl;
-					insertar_mensaje("Movimiento Extra 'por compasion'");
-					movimientos_restantes = 1;
+				default: break;
 				}
 			}
 			//HECHIZO EN TABLERO HUMANO
@@ -264,7 +258,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			case 1:
 			{
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
-				insertar_mensaje("SELECCIONASTE Movimientos: " + std::to_string(movimientos_restantes));
+				insertar_mensaje("ALIEN Movilidad: " + std::to_string(movimientos_restantes));
 				contador_selecciones = 1;
 			}break;
 			default:  
@@ -296,6 +290,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					ptrJuego->cambiarEscenarioABatalla(atacante, defensor);
 					//llamada a batalla pasandole mi personaje y el personaje actual de la casilla del tablero
 					break;
+				default: break;
 				}
 			}
 			//HECHIZO EN TABLERO ALIENS
@@ -312,7 +307,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 		}
 	}
 }
-bool Cursor::tieneMovimientoPosible(int turno)
+bool Cursor::tieneMovimientoPosible(int turno) const
 {
 	int direcciones[4][2] = {
 		{ 1, 0 },   // arriba
@@ -328,32 +323,32 @@ bool Cursor::tieneMovimientoPosible(int turno)
 
 		if (nuevaFila < 0 || nuevaFila > 8 || nuevaColumna < 0 || nuevaColumna > 8)
 		{
-			continue;
+			continue;//como esa casilla no es valida, salta directo a la siguiente iteracion
 		}
 
 		InfoCasilla* casillaVecina = miTablero.getInfoCasilla(nuevaFila, nuevaColumna);
 
 		if (casillaVecina == nullptr)
 		{
-			continue;
+			continue;//como esa casilla no es valida, salta directo a la siguiente iteracion
 		}
 
 		Personaje* personajeVecino = casillaVecina->getPersonaje();
 
-		// Si la casilla está vacía, sí puede moverse
-		if (personajeVecino == nullptr)
+		
+		if (personajeVecino == nullptr)//Casilla libre, hay un camino posible 
 		{
 			return true;
 		}
 
-		// Si hay enemigo, también puede moverse porque entraría en batalla
-		if (personajeVecino->return_Bando() != turno)
+		
+		if (personajeVecino->return_Bando() != turno)//Casilla con enemigo, asiq entraria en batalla si es la unica opcion
 		{
 			return true;
 		}
 	}
 
-	// Si todas las casillas válidas están ocupadas por aliados o son bordes, no puede moverse
+	//Si no hay casillas vacias o para entrar a batalla, no puede moverse, debera seleccionar otro personaje
 	return false;
 }
 int Cursor::coger(int turno)
@@ -375,7 +370,7 @@ int Cursor::coger(int turno)
 	{
 		if (!tieneMovimientoPosible(turno))//verificacmos que no sea un movimiento imposible del que no se pueda salir
 		{
-			insertar_mensaje("Este personaje no tiene por donde escapar...");
+			insertar_mensaje("Camino bloqueado");
 			return 0;
 		}
 
@@ -411,13 +406,6 @@ int Cursor::soltar(int turno)
 	// CASO 1: la casilla actual está vacía
 	if (casillaActual->personajeEncima == nullptr)
 	{
-		//modifcamos la posicion del perosnaje para q dibuje (TELETRANSPORTE) donde debe
-	/*	casillaAnterior->personajeEncima->setX(columna);
-		casillaAnterior->personajeEncima->setY(fila);
-		std::cout << "teoricamente personaje en:" << casillaAnterior->personajeEncima->x <<"," <<casillaAnterior->personajeEncima->y;
-		casillaActual->personajeEncima = casillaAnterior->personajeEncima;
-		casillaAnterior->personajeEncima = nullptr;*/
-
 		Personaje* personajeMovido = casillaAnterior->personajeEncima;
 
 		personajeMovido->setX(columna);
