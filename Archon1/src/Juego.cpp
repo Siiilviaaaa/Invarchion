@@ -110,9 +110,9 @@ void Juego::inicializarPartida()
     spawnPersonaje(HECHICERO, HUMANO, 2, 0);
     spawnPersonaje(EXCAVADOR, HUMANO, 3, 0);
     spawnPersonaje(ARQUERO, HUMANO, 4, 0);
-    /*for (int i = 0; i < 5;i++) {
+    for (int i = 0; i < 5;i++) {
         spawnPersonaje(LUCHADOR, HUMANO, i, 1);
-    }*/
+    }
     //ALIENS
     spawnPersonaje(ARQUERO, ALIEN, 0, 6);
     spawnPersonaje(VOLADOR, ALIEN, 1, 6);
@@ -120,7 +120,7 @@ void Juego::inicializarPartida()
     spawnPersonaje(EXCAVADOR, ALIEN, 3, 6);
     spawnPersonaje(ARQUERO, ALIEN, 4, 6);
     for (int i = 0; i < 5;i++) {
-        spawnPersonaje(ARQUERO, ALIEN, i, 5);
+        spawnPersonaje(LUCHADOR, ALIEN, i, 5);
     }
 }
 
@@ -153,7 +153,7 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     if (ptrTablero != nullptr) {
         origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x);
 
-        for (int fila = 0; fila < 5; fila++) {
+        for (int fila = 0; fila < 5; fila++) { //esto me lo ha hecho la ia, no consegui hacerlo sin mirar todas las casillas ns porqué
             for (int col = 0; col < 7; col++) {
                 Casilla* cas = ptrTablero->casillaModificable(fila, col);
                 if (cas != nullptr && cas->getInfo() != nullptr) {

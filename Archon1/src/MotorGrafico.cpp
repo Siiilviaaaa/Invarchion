@@ -8,7 +8,7 @@
 extern Juego juego;
 
 MotorGrafico::MotorGrafico() :
-	luchador("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	luchador("Recursos/boxeador.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	soldado("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	volador("Recursos/paracaidista.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	minero("Recursos/minero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
