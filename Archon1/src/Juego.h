@@ -2,7 +2,7 @@
 #include "Personajes.h"
 #include "tablero.h"
 
-#define MAX_PERSONAJES 20
+#define MAX_PERSONAJES 36
 enum Estado { MENU, SELECCION, JUEGO, RANKING, BATALLA, FIN_PARTIDA };
 
 enum Turno : int {

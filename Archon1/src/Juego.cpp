@@ -107,20 +107,30 @@ void Juego::inicializarPartida()
     //HUMANOS
     spawnPersonaje(ARQUERO, HUMANO, 0, 0); // se puede hacer con un bucle, pero bueno asi lo edito mejor
     spawnPersonaje(VOLADOR, HUMANO, 1, 0);
-    spawnPersonaje(HECHICERO, HUMANO, 2, 0);
+    spawnPersonaje(ARQUERO, HUMANO, 2, 0);
     spawnPersonaje(EXCAVADOR, HUMANO, 3, 0);
-    spawnPersonaje(ARQUERO, HUMANO, 4, 0);
-    for (int i = 0; i < 5;i++) {
+    spawnPersonaje(HECHICERO, HUMANO, 4, 0);
+    spawnPersonaje(EXCAVADOR, HUMANO, 5, 0);
+    spawnPersonaje(ARQUERO, HUMANO, 6, 0);
+    spawnPersonaje(VOLADOR, HUMANO, 7, 0);
+    spawnPersonaje(ARQUERO, HUMANO, 8, 0);
+ 
+    for (int i = 0; i < 9;i++) {
         spawnPersonaje(LUCHADOR, HUMANO, i, 1);
     }
     //ALIENS
-    spawnPersonaje(ARQUERO, ALIEN, 0, 6);
-    spawnPersonaje(VOLADOR, ALIEN, 1, 6);
-    spawnPersonaje(HECHICERO, ALIEN, 2, 6);
-    spawnPersonaje(EXCAVADOR, ALIEN, 3, 6);
-    spawnPersonaje(ARQUERO, ALIEN, 4, 6);
-    for (int i = 0; i < 5;i++) {
-        spawnPersonaje(LUCHADOR, ALIEN, i, 5);
+    spawnPersonaje(ARQUERO, ALIEN, 0, 8);
+    spawnPersonaje(VOLADOR, ALIEN, 1, 8);
+    spawnPersonaje(ARQUERO, ALIEN, 2, 8);
+    spawnPersonaje(EXCAVADOR, ALIEN, 3, 8);
+    spawnPersonaje(HECHICERO, ALIEN, 4, 8);
+    spawnPersonaje(EXCAVADOR, ALIEN, 5, 8);
+    spawnPersonaje(ARQUERO, ALIEN, 6, 8);
+    spawnPersonaje(VOLADOR, ALIEN, 7, 8);
+    spawnPersonaje(ARQUERO, ALIEN, 8, 8);
+    
+    for (int i = 0; i < 9;i++) {
+        spawnPersonaje(LUCHADOR, ALIEN, i, 7);
     }
 }
 
@@ -153,8 +163,8 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     if (ptrTablero != nullptr) {
         origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x);
 
-        for (int fila = 0; fila < 5; fila++) { //esto me lo ha hecho la ia, no consegui hacerlo sin mirar todas las casillas ns porqué
-            for (int col = 0; col < 7; col++) {
+        for (int fila = 0; fila < 9; fila++) { //esto me lo ha hecho la ia, no consegui hacerlo sin mirar todas las casillas ns porqué
+            for (int col = 0; col < 9; col++) {
                 Casilla* cas = ptrTablero->casillaModificable(fila, col);
                 if (cas != nullptr && cas->getInfo() != nullptr) {
                     if (cas->getInfo()->getPersonaje() == atacante) {
