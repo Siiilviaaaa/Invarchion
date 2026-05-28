@@ -16,19 +16,22 @@ extern MotorGrafico motor;
 extern Caja miCaja;
 extern Juego juego;
 extern Batalla miBatalla;
-extern Personaje pj1, pj2;
-extern bool fin_;
 extern Cursor micursor;
+extern Personaje pj1, pj2;
+
 
 //variables globales
 float tiempoMensajeSelecciondeBando = 0.0f;
 std::string textoBando = "";
 bool mostrandoInstruccionesTablero = false;
 float tiempoInstruccionesTablero = 0.0f;
-int puntuacion_actual = 0;
 bool hoverSalir = false;
 bool hoverSeleccion = false;
 bool hoverRanking = false;
+bool fin_ = false;
+int puntuacion_actual = 0;
+int puntuacion_humanos = 0;
+int puntuacion_aliens = 0;
 
 //HE MOVIDO AQUI LOS CALLBACKSSS MIRADLO PORFII
 void mouse(int button, int state, int x, int y) {
@@ -147,6 +150,9 @@ void OnDraw(void) {
         if (mostrandoInstruccionesTablero) {
             motor.dibujarInstruccionesTablero();
         }
+
+        motor.dibujarPuntuaciones(puntuacion_humanos, puntuacion_aliens);
+       
         break;
     }
     case RANKING:
@@ -166,9 +172,7 @@ void OnDraw(void) {
         Personaje* defensor = juego.getDefensorBatalla();
 
         if (atacante != nullptr && defensor != nullptr) {
-            motor.dibujarPersonaje(*atacante);   
-            //std::cout << atacante->return_X();
-            //std::cout << atacante->return_Y();
+            motor.dibujarPersonaje(*atacante);
             motor.dibujarPersonaje(*defensor);
             miBatalla.actualizarCombate(*atacante, *defensor, miCaja, miBatalla.obtenerObstaculos());
             motor.dibujarBarraVida(*atacante, *defensor);
@@ -186,6 +190,7 @@ void OnDraw(void) {
             }
 
 		motor.dibujarMensajesBatalla(miBatalla.getMensaje());
+        motor.dibujarPuntuaciones(puntuacion_humanos, puntuacion_aliens);
         break;
     }
     //no borrar esta linea ni poner nada despues
@@ -219,8 +224,25 @@ void OnTimer(int value) {
 
         }
         if (fin_) {
-            estado = JUEGO;
             juego.finalizarBatalla();
+            
+            //DETERMINAR QUIEN HA GANADO
+			HanGanado estado_fin = juego.DeterminarSiJuegoHaTerminado();
+           //GUARDAR LA PUNTUACION DEL GANADOR PARA EL RANKING
+            if (estado_fin == GanaronHumanos) {
+                puntuacion_actual = puntuacion_humanos;
+                estado = FIN_PARTIDA;
+            }
+            else if (estado_fin == GanaronAliens) {
+                puntuacion_actual = puntuacion_aliens;
+                estado = FIN_PARTIDA;
+            }
+            else {
+                juego.cambiarTurno();
+                micursor.inicializar_tablero(juego.getTurno());
+                estado = JUEGO;
+            }
+            glutPostRedisplay();
         }
     }
     glutPostRedisplay();

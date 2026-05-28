@@ -71,7 +71,7 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
     }
     if (contador_aliens == 0) {
         std::cout << "ganaron humanos por exterminio >:o";
-        return GanaronAliens;
+        return GanaronHumanos;
     }
     if (contador_aliens > 0 && contador_humanos > 0) return AunEnCurso;
 
@@ -110,9 +110,9 @@ void Juego::inicializarPartida()
     spawnPersonaje(HECHICERO, HUMANO, 2, 0);
     spawnPersonaje(EXCAVADOR, HUMANO, 3, 0);
     spawnPersonaje(ARQUERO, HUMANO, 4, 0);
-    /*for (int i = 0; i < 5;i++) {
+    for (int i = 0; i < 5;i++) {
         spawnPersonaje(LUCHADOR, HUMANO, i, 1);
-    }*/
+    }
     //ALIENS
     spawnPersonaje(ARQUERO, ALIEN, 0, 6);
     spawnPersonaje(VOLADOR, ALIEN, 1, 6);
@@ -120,7 +120,7 @@ void Juego::inicializarPartida()
     spawnPersonaje(EXCAVADOR, ALIEN, 3, 6);
     spawnPersonaje(ARQUERO, ALIEN, 4, 6);
     for (int i = 0; i < 5;i++) {
-        spawnPersonaje(ARQUERO, ALIEN, i, 5);
+        spawnPersonaje(LUCHADOR, ALIEN, i, 5);
     }
 }
 
@@ -130,18 +130,66 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     std::cout << "[SISTEMA] Abriendo escenario de batalla..." << std::endl;
     atacanteBatalla = atacante;
     defensorBatalla = defensor;
-    if (ptrTablero != nullptr) { //
-        origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x); 
-    }
- 
-    atacante->x = 5.0;
-    atacante->y = 7.5;
-    atacante->direccion(1.0, 0.0); //el atacante siempre va a la izq
     
-    defensor->x = 15.0;
-    defensor->y = 7.5;
-    defensor->direccion(-1.0, 0.0);//el defensor a la derecha
+   
+    int f = micursor.obt_fila();
+    int c = micursor.obt_columna();
+    InfoCasilla* info = ptrTablero->getInfoCasilla(f, c);
 
+    if (info != nullptr) {
+        Tipocasilla color = info->getColor();
+        if (casillaFavorable(atacante, color)) {
+            int danioAnteriorAtac = atacante->return_Danio();
+            atacante->setDanio(danioAnteriorAtac + 5);
+            std::cout << "[BONO] Atacante en terreno aliado: +15 HP" << std::endl;
+        }
+        if (casillaFavorable(defensor, color)) {
+            int danioAnteriorDef = defensor->return_Danio();
+            atacante->setDanio(danioAnteriorDef + 5);
+            std::cout << "[BONO] Defensor en terreno aliado: +15 HP" << std::endl;
+        }
+    }
+
+    if (ptrTablero != nullptr) {
+        origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x);
+
+        for (int fila = 0; fila < 5; fila++) { //esto me lo ha hecho la ia, no consegui hacerlo sin mirar todas las casillas ns porqué
+            for (int col = 0; col < 7; col++) {
+                Casilla* cas = ptrTablero->casillaModificable(fila, col);
+                if (cas != nullptr && cas->getInfo() != nullptr) {
+                    if (cas->getInfo()->getPersonaje() == atacante) {
+                        cas->getInfo()->setPersonaje(nullptr);
+                    }
+                }
+            }
+        }
+    }
+
+    if (origenAntesDeBatalla != nullptr) {
+        origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x);
+        origenAntesDeBatalla->getInfo()->setPersonaje(nullptr);
+
+    }
+    if (atacante->return_Bando() == HUMANO) {
+        atacante->x = 5.0;
+        atacante->y = 7.5;
+        atacante->direccion(1.0, 0.0); //el atacante siempre va a la izq
+
+        defensor->x = 15.0;
+        defensor->y = 7.5;
+        defensor->direccion(-1.0, 0.0);//el defensor a la derecha
+    }
+    else {
+        atacante->x = 15.0;
+        atacante->y = 7.5;
+        atacante->direccion(-1.0, 0.0); //el atacante siempre va a la izq
+
+        defensor->x = 5.0;
+        defensor->y = 7.5;
+        defensor->direccion(1.0, 0.0);//el defensor a la derecha
+    }
+   
+    cambiarTurno();
     miBatalla.inicializarBatalla();
     estado = BATALLA;
 
@@ -151,7 +199,20 @@ void Juego::finalizarBatalla()
 {
     std::cout << "[SISTEMA] volviendo a tablero" << std::endl;
     if (atacanteBatalla == nullptr || defensorBatalla == nullptr || origenAntesDeBatalla == nullptr) return;
+    int f = micursor.obt_fila();
+    int c = micursor.obt_columna();
+    InfoCasilla* info = ptrTablero->getInfoCasilla(f, c);
 
+
+    if (info != nullptr) {
+        Tipocasilla color = info->getColor();
+        if (casillaFavorable(atacanteBatalla, color)) {
+            atacanteBatalla->setDanio(atacanteBatalla->return_Danio() - 5);
+        }
+        if (casillaFavorable(defensorBatalla, color)) {
+            defensorBatalla->setDanio(defensorBatalla->return_Danio() - 5);
+        }
+    }
     Personaje* ganador = nullptr;
     Personaje* perdedor = nullptr;
 
@@ -165,13 +226,13 @@ void Juego::finalizarBatalla()
     }
 
     if (ganador != nullptr) {
-
         origenAntesDeBatalla->getInfo()->setPersonaje(ganador);
         ganador->x = origenAntesDeBatalla->getcolumna();
         ganador->y = origenAntesDeBatalla->getfila();
         ganador->direccion(0.0, 0.0);
 
         perdedor->setVida(0);
+        perdedor->setX(-5);
     }
 
     atacanteBatalla = nullptr;
@@ -179,4 +240,12 @@ void Juego::finalizarBatalla()
     origenAntesDeBatalla = nullptr;
     cambiarTurno();
     estado = JUEGO;
+}
+
+bool Juego::casillaFavorable(Personaje* p, Tipocasilla colorCasilla)
+{
+    if (p == nullptr) return false;
+    if (p->return_Bando() == HUMANO && colorCasilla == blanca) return true;
+    if (p->return_Bando() == ALIEN && colorCasilla == negra) return true;
+    return false;
 }

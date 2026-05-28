@@ -8,7 +8,7 @@
 extern Juego juego;
 
 MotorGrafico::MotorGrafico() :
-	luchador("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	luchador("Recursos/boxeador.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	soldado("Recursos/soldado.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	volador("Recursos/paracaidista.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	minero("Recursos/minero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
@@ -17,7 +17,7 @@ MotorGrafico::MotorGrafico() :
 	golem("Recursos/golem.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	arquero("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	murcielago("Recursos/murcielago.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
-	gusano("Recursos/arquero.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
+	gusano("Recursos/gusano.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 	mago("Recursos/magoalien.png", numColumnasSpritePersonaje, numFilasSpritePersonaje),
 
 	barraVida("Recursos/barra.png")
@@ -234,10 +234,20 @@ void MotorGrafico::dibujarHechizo(Hechizo* hechizo)
 
 void MotorGrafico::dibujarBarraVida(Personaje& atacante, Personaje& defensor)
 {
-	float porcentaje1 = (float)atacante.return_Vida() / (float)atacante.return_VidaMax();
-	float porcentaje2 = (float)defensor.return_Vida() / (float)defensor.return_VidaMax();
-	recortarBarra(porcentaje1, 1.0f, 1.0f, 4.5f, 0.8f);
-	recortarBarra(porcentaje2, 14.5f, 1.0f, 4.5f, 0.8f);
+	float porcentajeAtacante = (float)atacante.return_Vida() / (float)atacante.return_VidaMax(); 
+	float porcentajeDefensor = (float)defensor.return_Vida() / (float)defensor.return_VidaMax(); 
+
+	float posIzq = 1.0f;
+	float posDcha = 14.5f;
+
+	if (atacante.return_Bando() == HUMANO) { 
+		recortarBarra(porcentajeAtacante, posIzq, 1.0f, 4.5f, 0.8f);
+		recortarBarra(porcentajeDefensor, posDcha, 1.0f, 4.5f, 0.8f);
+	}
+	else {
+		recortarBarra(porcentajeAtacante, posDcha, 1.0f, 4.5f, 0.8f);
+		recortarBarra(porcentajeDefensor, posIzq, 1.0f, 4.5f, 0.8f);
+	}
 }
 
 
@@ -425,6 +435,41 @@ void MotorGrafico::dibujarMensajesBatalla(const std::string& mensaje)
 	glPopMatrix();
 }
 
+void MotorGrafico::dibujarPuntuaciones(int puntuacion_humanos, int puntuacion_aliens)
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, 800, 0, 600);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_TEXTURE_2D);
+
+	//HUMANOS: ESQUINA SUPERIOR IZQUIERDA
+	ETSIDI::setTextColor(250.0f, 0.0f, 0.0f);
+	ETSIDI::setFont("fuentes/Bitwise.ttf", 15);
+	std::string Humanos = "HUMANOS: " + std::to_string(puntuacion_humanos);
+	ETSIDI::printxy(Humanos.c_str(), 50.0f, 530.0f);
+
+	//ALIENS: ESQUINA SUPERIOR DERECHA
+	ETSIDI::setTextColor(250.0f, 0.0f, 0.0f);
+	std::string Aliens = "ALIENS: " + std::to_string(puntuacion_aliens);
+	ETSIDI::printxy(Aliens.c_str(), 630.0f, 530.0f);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
+
 void MotorGrafico::dibujarTablero() {
 	// SEGURIDAD: Si no hay tablero, no intentamos leer datos (evita el crash)
 	if (tablero == nullptr) return;
@@ -440,8 +485,8 @@ void MotorGrafico::dibujarTablero() {
 	//	dibujarBordeTurno(0);
 	//}
 
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 7; j++) {
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
 			const Casilla* c = tablero->getCasilla(i, j);
 			dibujarCasilla(c);
 		}
@@ -459,15 +504,16 @@ void MotorGrafico::dibujarFondo() {
 	glDisable(GL_LIGHTING);
 	glColor3f(1, 1, 1);
 
-	float m = 2.0f;
-	float ancho = 7 * lado;
-	float alto = 5 * lado;
+	float m_x = 10.0f;
+	float m_y = 4.0f;
+	float ancho = 9 * lado;
+	float alto = 9 * lado;
 
 	glBegin(GL_POLYGON);
-	glTexCoord2d(1, 1); glVertex3f(-m, -m, -0.1f);
-	glTexCoord2d(0, 1); glVertex3f(ancho + m, -m, -0.1f);
-	glTexCoord2d(0, 0); glVertex3f(ancho + m, alto + m, -0.1f);
-	glTexCoord2d(1, 0); glVertex3f(-m, alto + m, -0.1f);
+	glTexCoord2d(1, 1); glVertex3f(-m_x, -m_y, -0.1f);
+	glTexCoord2d(0, 1); glVertex3f(ancho + m_x, -m_y, -0.1f);
+	glTexCoord2d(0, 0); glVertex3f(ancho + m_x, alto + m_y, -0.1f);
+	glTexCoord2d(1, 0); glVertex3f(-m_x, alto + m_y, -0.1f);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
@@ -483,8 +529,8 @@ void MotorGrafico::dibujarBordeTurno() {
 	else
 		glColor3f(0.6f, 0.0f, 0.0f);
 
-	float anchoTotal = 7 * lado;
-	float altoTotal = 5 * lado;
+	float anchoTotal = 9 * lado;
+	float altoTotal = 9 * lado;
 	glLineWidth(7.0f);
 	glBegin(GL_LINE_LOOP);
 	glVertex3f(0, 0, 0.05f);
