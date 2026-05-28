@@ -587,7 +587,16 @@ void MotorGrafico::dibujarCasilla(const Casilla* c) {
 		glVertex3f(x, y + lado, 0.0f);
 		glEnd();
 	}
-
+	//si es punto de poder se dibuja un anillo encima
+	if (c->getInfo() && c->getInfo()->getPuntoPoder()) {
+		glPushMatrix();
+		glTranslatef(c->getcolumna() * lado + lado / 2, c->getfila() * lado + lado / 2, 0.05f);
+		glDisable(GL_LIGHTING);
+		glColor3ub(255, 215, 0);
+		glutSolidTorus(0.08, 0.4, 10, 15);
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+	}
 	glColor3f(0.2f, 0.2f, 0.2f);
 	glLineWidth(2.0f);
 	glBegin(GL_LINE_LOOP);
