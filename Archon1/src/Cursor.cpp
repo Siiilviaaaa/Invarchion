@@ -387,7 +387,7 @@ int Cursor::coger(int turno)
 		columnaAntes = columna;
 		
 		InfoCasilla* casillaOrigen = miTablero.getInfoCasilla(filaAntes, columnaAntes);
-
+		
 		std::cout << "inicialmente personaje en:" << infoCasillaActual->personajeEncima->x <<"," << infoCasillaActual->personajeEncima->y;
 		return 1;
 	}
@@ -425,6 +425,7 @@ int Cursor::soltar(int turno)
 
 		casillaActual->personajeEncima = personajeMovido;
 		casillaAnterior->personajeEncima = nullptr;
+		
 
 		personajeSeleccionado = nullptr;
 
@@ -448,7 +449,7 @@ int Cursor::soltar(int turno)
 		std::cout << "Atacante: " << atacante->return_Tipo() << " Defensor: " << defensor->return_Tipo() << std::endl;
 		return 2;
 	}
-
+	casillaAnterior->setPersonaje(nullptr); //no estaba borrando bien la posicion del personaje antes
 	return 0;
 }
 
