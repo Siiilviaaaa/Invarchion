@@ -251,7 +251,6 @@ void MotorGrafico::dibujarBarraVida(Personaje& atacante, Personaje& defensor)
 	}
 }
 
-
 void MotorGrafico::recortarBarra(float porcentaje, float x, float y, float ancho, float alto)
 {
 	glDisable(GL_LIGHTING);
@@ -455,12 +454,12 @@ void MotorGrafico::dibujarPuntuaciones(int puntuacion_humanos, int puntuacion_al
 	ETSIDI::setTextColor(250.0f, 0.0f, 0.0f);
 	ETSIDI::setFont("fuentes/Bitwise.ttf", 15);
 	std::string Humanos = "HUMANOS: " + std::to_string(puntuacion_humanos);
-	ETSIDI::printxy(Humanos.c_str(), 50.0f, 530.0f);
+	ETSIDI::printxy(Humanos.c_str(), 20.0f, 105.0f);
 
 	//ALIENS: ESQUINA SUPERIOR DERECHA
 	ETSIDI::setTextColor(250.0f, 0.0f, 0.0f);
 	std::string Aliens = "ALIENS: " + std::to_string(puntuacion_aliens);
-	ETSIDI::printxy(Aliens.c_str(), 630.0f, 530.0f);
+	ETSIDI::printxy(Aliens.c_str(), 650.0f, 105.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
@@ -474,6 +473,8 @@ void MotorGrafico::dibujarPuntuaciones(int puntuacion_humanos, int puntuacion_al
 void MotorGrafico::dibujarTablero() {
 	// SEGURIDAD: Si no hay tablero, no intentamos leer datos (evita el crash)
 	if (tablero == nullptr) return;
+
+	
 
 	dibujarFondo();
 	dibujarBordeTurno();

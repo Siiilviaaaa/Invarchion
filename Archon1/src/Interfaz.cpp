@@ -69,15 +69,40 @@ void OnDraw(void) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    
+    // Interruptores estáticos para controlar que la música se dispare una sola vez por estado
+    static bool ini_menu = false;
+    static bool ini_juego = false;
+    static bool ini_batalla = false;
+    static bool ini_ranking = false;
+    static bool ini_fin = false;
+
+
     switch (estado) { 
     case FIN_PARTIDA:
+        if (!ini_fin) {
+            ETSIDI::stopMusica();
+            ETSIDI::playMusica("extra/musica_fin.mp3", false);
+            ini_fin = true;
+            ini_menu = false;
+            ini_juego = false;
+            ini_batalla = false;
+            ini_ranking = false;
+        }
         miCamara.vistaRanking();
         miMenu.dibuja_fin();
         break;
     
     
     case MENU:
+        if (!ini_menu) {
+            ETSIDI::stopMusica();
+            ETSIDI::playMusica("extra/mi_musica.mp3", true);
+            ini_menu = true;
+            ini_juego = false;
+            ini_batalla = false;
+            ini_ranking = false;
+            ini_fin = false;
+        }
         miCamara.vistaMenu();
         // Mapeamos las variables en orden: hJugar (hoverSeleccion), hRanking (hoverRanking), hSalir (hoverSalir)
         miMenu.dibuja_menu(hoverSeleccion, hoverRanking, hoverSalir);
@@ -86,6 +111,16 @@ void OnDraw(void) {
     {
         miCamara.vistaJuego();
         motor.dibujarTablero();
+
+        if (!ini_juego) {
+            ETSIDI::stopMusica();
+            ETSIDI::playMusica("extra/Tablero.mp3", true);
+            ini_juego = true;
+            ini_menu = false;
+            ini_batalla = false;
+            ini_ranking = false;
+            ini_fin = false;
+        }
 
         for (int f = 0; f < 9; f++) {
             for (int c = 0; c < 9; c++) {
@@ -149,6 +184,17 @@ void OnDraw(void) {
         break;
     }
     case RANKING:
+
+        if (!ini_ranking) {
+            ETSIDI::stopMusica();
+            ETSIDI::playMusica("extra/Ranking.mp3", true);
+            ini_ranking = true;
+            ini_menu = false;
+            ini_juego = false;
+            ini_batalla = false;
+            ini_fin = false;
+        }
+
         miCamara.vistaRanking();
         miMenu.dibuja_ranking();
         break;
@@ -158,6 +204,17 @@ void OnDraw(void) {
         miMenu.dibuja_capa_seleccion();
         break;
     case BATALLA:
+        
+        if (!ini_batalla) {
+            ETSIDI::stopMusica();
+            ETSIDI::playMusica("extra/Batalla.mp3", true);
+            ini_batalla = true;
+            ini_juego = false;
+            ini_menu = false;
+            ini_ranking = false;
+            ini_fin = false;
+        }
+
         miCamara.vistaBatalla();
         motor.dibujarCaja(miCaja, miBatalla);
 
