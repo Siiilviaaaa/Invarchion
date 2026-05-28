@@ -17,8 +17,8 @@ public:
 	void vistaJuego() {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		gluLookAt(7.0, 5.0, 20.0,
-			7.0, 5.0, 0.0,
+		gluLookAt(9.0, 9.0, 35.0,
+			9.0, 9.0, 0.0,
 			0.0, 1.0, 0.0);
 	}
 	void vistaBatalla() {
