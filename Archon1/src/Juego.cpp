@@ -8,6 +8,9 @@ extern MotorGrafico motor;
 extern Estado estado;
 extern Cursor micursor;
 extern Batalla miBatalla;
+extern int puntuacion_humanos;
+extern int puntuacion_aliens;
+extern int puntuacion_actual;
 
 Juego::Juego(Tablero* t) :
     ptrTablero(t)
@@ -320,5 +323,11 @@ void Juego::reiniciarJuego()
             figuras[i] = nullptr;
         }
     }
+
+    //RESET DE PUNTUACIONES PARA NUEVA PARTIDA
+    puntuacion_actual = 0;
+    puntuacion_aliens = 0;
+    puntuacion_humanos = 0;
+
     inicializarPartida();
 }
