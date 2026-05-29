@@ -115,6 +115,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 			pegar(j1, j2);
 			std::cout << "J1 pegando... " << std::endl;
 		}
+		j1.activarAtaque();
 		break;
 	case 'c': //HECHIZAN
 		if (j1.return_Tipo() == HECHICERO) {
@@ -138,6 +139,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 			pegar(j2, j1);
 			std::cout << "J2 pegando... " << std::endl;
 		}
+		j2.activarAtaque();
 		break;
 	case'n': //HECHIZAN
 		if (j2.return_Tipo() == HECHICERO) {
@@ -318,6 +320,13 @@ HanGanado Batalla::FinCombate(Personaje& humanos, Personaje& aliens)
 
 void Batalla::pegar(Personaje& atacante, Personaje& objetivo)
 {
+	if (objetivo.return_Tipo() == EXCAVADOR) {
+		Excavador* exc = dynamic_cast<Excavador*>(&objetivo);
+		if (exc != nullptr && exc->estaBajoTierra()) {
+			std::cout << "el objetivo esta bajo tierra" << std::endl;
+			return;
+		}
+	}
 	double dx = atacante.return_X() - objetivo.return_X();
 	double dy = atacante.return_Y() - objetivo.return_Y();
 

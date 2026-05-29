@@ -188,6 +188,23 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 				int fotoActual = (glutGet(GLUT_ELAPSED_TIME) / 150) % 4;
 				SpriteActual->setState(indexInicial + patronMovientoSprites[fotoActual]);
 			}
+			if (personaje.return_Tipo() == EXCAVADOR) {
+				const Excavador* exc = dynamic_cast<const Excavador*>(&personaje);
+				if (exc != nullptr && exc->getFaseExcavacion() > 0) {
+					int fase = exc->getFaseExcavacion();
+					if (fase == 1) {
+						SpriteActual->setState(9, true); // animacion de meterse en la tierra
+					}
+					else if (fase == 2) {
+						SpriteActual->setState(10, true); // Aes un sprite vacio asi sale invisible
+					}
+				}
+				
+			}
+			else if (personaje.estaAtacando()) {
+				SpriteActual->setState(9, true); // Ataque normal para el resto
+			}
+
 			SpriteActual->draw(); 
 			break;
 		}
