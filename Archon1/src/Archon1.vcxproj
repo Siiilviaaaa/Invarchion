@@ -25,6 +25,7 @@
     <ClInclude Include="casilla.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="Disparos.h" />
+    <ClInclude Include="gesionArchivos.h" />
     <ClInclude Include="Hechizos.h" />
     <ClInclude Include="Informacion Casilla.h" />
     <ClInclude Include="Interfaz.h" />
@@ -42,6 +43,7 @@
     <ClCompile Include="Batalla.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Disparos.cpp" />
+    <ClCompile Include="GesionArchivos.cpp" />
     <ClCompile Include="Hechizos.cpp" />
     <ClCompile Include="Interfaz.cpp" />
     <ClCompile Include="menu.cpp" />
