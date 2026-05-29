@@ -312,7 +312,6 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 						insertar_mensaje("ALIENS CURACION MASIVA");
 					}
 				}
-				
 			}
 			else
 			{
@@ -329,7 +328,6 @@ bool Cursor::tieneMovimientoPosible(int filaOrigen, int columnaOrigen, int turno
 		{
 			int movimientos_requeridos = abs(diferencia_filas) + abs(diferencia_columnas);//calcula para la casilla que se esta evaluando cuantos moviminetos necesitaria
 			if (movimientos_requeridos == 0 || movimientos_requeridos > movimientos)continue;//si son 0 o mas de los qu eme puedo permitir, siguiente iteracion
-
 
 			//las variables que deciden que casilla evaluar en cada movimiento, desde el origen en el que se encuentra 
 			int nuevaFila = filaOrigen + diferencia_filas;

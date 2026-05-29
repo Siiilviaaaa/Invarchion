@@ -82,7 +82,6 @@ void MotorGrafico::dibujarCaja(const Caja& c, Batalla& b)
 
 void MotorGrafico::dibujarCursor(Cursor cursor) const
 {
-
 	float x = cursor.obt_columna() * lado;
 	float y = cursor.obt_fila() * lado;
 
@@ -199,7 +198,6 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 						SpriteActual->setState(10, true); // Aes un sprite vacio asi sale invisible
 					}
 				}
-				
 			}
 			else if (personaje.estaAtacando()) {
 				SpriteActual->setState(9, true); // Ataque normal para el resto

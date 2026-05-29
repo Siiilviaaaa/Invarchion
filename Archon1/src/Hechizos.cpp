@@ -79,6 +79,5 @@ void Hechizo::aplicarCuracionMasiva(int turno, Hechicero* hech, Juego* ptrJuego)
 			}
 		}
 		hech->usarHechizo(); //RESTAMOS UN HECHIZO AL MAGO
-
 	}
 }
