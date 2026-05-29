@@ -99,8 +99,14 @@ HanGanado Juego::victoriaPuntosPoder()
             }
         }
     }
-    if (puntosAliens == puntos_totales)return GanaronAliens;
-    if (puntosHumanos == puntos_totales)return GanaronHumanos;
+    if (puntosAliens == puntos_totales) {
+        puntuacion_aliens += 500;
+        return GanaronAliens;
+    }
+    if (puntosHumanos == puntos_totales) {
+        puntuacion_humanos += 500;
+        return GanaronHumanos;
+    }
     return AunEnCurso;
 }
 
@@ -240,18 +246,6 @@ void Juego::finalizarBatalla()
     int f = micursor.obt_fila();
     int c = micursor.obt_columna();
     InfoCasilla* info = ptrTablero->getInfoCasilla(f, c);
-    /*if (info != nullptr) {
-        Tipocasilla color = info->getColor();
-        if (casillaFavorable(atacanteBatalla, color)) {
-            atacanteBatalla->setDanio(atacanteBatalla->return_Danio() - 5);
-            std::cout << "Daño restablecido" << std::endl;
-        }
-        if (casillaFavorable(defensorBatalla, color)) {
-            defensorBatalla->setDanio(defensorBatalla->return_Danio() - 5);
-            std::cout << "Daño restablecido" << std::endl;
-        }
-
-    }*/
     Personaje* ganador = nullptr;
     Personaje* perdedor = nullptr;
 
@@ -324,10 +318,7 @@ void Juego::reiniciarJuego()
         }
     }
 
-    //RESET DE PUNTUACIONES PARA NUEVA PARTIDA
-    puntuacion_actual = 0;
-    puntuacion_aliens = 0;
-    puntuacion_humanos = 0;
+    
 
     inicializarPartida();
 }
