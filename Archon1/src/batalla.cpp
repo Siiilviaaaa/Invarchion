@@ -112,7 +112,6 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 				std::cout << "J1 lleva: " << arq->return_Disparos() << std::endl;
 				setMensaje("Humanos llevan " + std::to_string(arq->return_Disparos()) + " disparos");
 			}
-			
 		}
 		else
 		{
@@ -129,7 +128,6 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 				hech1->siguienteHechizo();
 				std::cout << "J1 lanza hechizo: " << std::endl;
 			}
-			
 		}
 		break;
 
@@ -144,7 +142,6 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 				std::cout << "J2 lleva: " << arq2->return_Disparos() << std::endl;
 				setMensaje("Aliens llevan " + std::to_string(arq2->return_Disparos()) + " disparos");
 			}
-
 		}
 		else
 		{
@@ -155,13 +152,12 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 		break;
 	case'n': //HECHIZAN
 		if (j2.return_Tipo() == HECHICERO) {
-			Hechicero* hech2 = dynamic_cast<Hechicero*>(&j1);
+			Hechicero* hech2 = dynamic_cast<Hechicero*>(&j2);
 			if (hech2 != nullptr) {
-				lanzarHechizo(*hech2, j2, hech2->HechizoUtilizado(), j1.return_Bando());
+				lanzarHechizo(*hech2, j1, hech2->HechizoUtilizado(), j2.return_Bando());
 				hech2->siguienteHechizo();
 				std::cout << "J2 lanza hechizo: " << std::endl;
 			}
-			
 		}
 		break;
 	}
@@ -206,7 +202,6 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 				setMensaje("Aliens: Municion recargada");
 		}
 	}
-	
 
 	for (int k = 0; k < 5; k++) //PARA EVITAR ARRAYS VACIOS
 		if (lista[k] != nullptr) {
@@ -440,7 +435,7 @@ void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int 
 				std::cout << "No te quedan hechizos en esta ronda" << std::endl;
 				setMensaje("Sin hechizos para esta ronda");
 				return;
-			}
+		}
 		bool hueco = false;
 		for (int i = 0; i < 3; i++)
 		{
@@ -464,11 +459,8 @@ void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int 
 		if (!hueco) {
 			std::cout << "Maximo de hechizos alcanzado" << std::endl;
 		}
-
 	}
-	
 	return;
-	
 }
 
 void Batalla::entrePersonajes(Personaje& j1, Personaje& j2) //COLISION ENTRE PERSONAJES

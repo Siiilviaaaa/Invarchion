@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include "Hechizos.h"
+#include "Juego.h"
 
 Hechizo::Hechizo(TipoHechizo t, Bando b)
 {
@@ -54,4 +55,29 @@ bool Hechizo::Impacta(double Obx, double Oby, double Obr)
 	double dx = posX - Obx;
 	double dy = posY - Oby;
 	return (sqrt(dx * dx + dy * dy) < Obr);
+}
+
+void Hechizo::aplicarCuracionMasiva(int turno, Hechicero* hech, Juego* ptrJuego)
+{
+	if (hech == nullptr || ptrJuego == nullptr) return;
+	if (hech->return_HechizosRestantes() > 0) { //VERIFICAMOS QUE TENGA HECHIZOS DISPONIBLES
+
+		//RECORREMOS LOS PERSONAJES BUSCANDO ALIADOS
+		for (int i = 0; i < 20; i++) {
+			Personaje* aliado = ptrJuego->getPersonaje(i); //OBTENEMOS EL PERSONAJE DE LA CASILLA i, SI NO HAY PERSONAJE DEVUELVE NULLPTR
+			if (aliado != nullptr && aliado->return_Bando() == turno && aliado->return_Vida() > 0) { //SI EL PERSONAJE EXISTE Y ES UN ALIADO
+
+				//CURAMOS UN TERCIO DE LA VIDA
+				int cura = aliado->return_VidaMax() / 3;
+				int nuevaVida = aliado->return_Vida() + cura;
+
+				//SIN SUPERAR EL MAXIMO
+				if (nuevaVida > aliado->return_VidaMax()) {
+					nuevaVida = aliado->return_VidaMax();
+				}
+				aliado->setVida(nuevaVida);
+			}
+		}
+		hech->usarHechizo(); //RESTAMOS UN HECHIZO AL MAGO
+	}
 }

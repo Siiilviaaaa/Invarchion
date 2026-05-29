@@ -106,7 +106,6 @@ bool Excavador::estaBajoTierra() const
 	else {
 		return false;
 	}
-	
 }
 
 int Excavador::getFaseExcavacion() const
@@ -156,8 +155,6 @@ void Personaje::direccion(double dx, double dy)
 
 void Personaje::moverEnBatalla()
 {
-	
-
 	x += dirX * v * 0.1;
 	y += dirY * v * 0.1;
 }
@@ -179,7 +176,6 @@ bool Personaje::estaAtacando() const
 	else {
 		return false;
 	}
-	
 }
 
 bool Personaje::actualizarEfectos()

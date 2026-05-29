@@ -1,5 +1,6 @@
 #pragma once
 #include "Personajes.h"
+class Juego;
 
 class Hechizo
 {
@@ -28,6 +29,7 @@ public:
 	double return_Y() const { return posY; }
 	Personaje* return_Obj() const { return objetivo; }
 	Bando return_Bando() const { return bando; }
+	static void aplicarCuracionMasiva(int turno, Hechicero* mago, Juego* ptrJuego);
 
 	void setActivo(bool estado) { activo = estado; }
 	void setX(double nuevaX) { posX = nuevaX; }

@@ -162,6 +162,10 @@ void OnDraw(void) {
 
         miCamara.vistaRanking();
         miMenu.dibuja_ranking();
+        //RESET DE PUNTUACIONES PARA NUEVA PARTIDA
+        puntuacion_actual = 0;
+        puntuacion_aliens = 0;
+        puntuacion_humanos = 0;
         break;
     case SELECCION:
         miCamara.vistaMenu();
