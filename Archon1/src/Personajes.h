@@ -25,9 +25,6 @@ protected:
 	bool moviendose{ false };
 	int temporizadorAtaque{ 0 };
 	double dirX, dirY; //DIRECCION
-
-	int disparosRealizados{ 0 }; //CONTADOR DE DISPAROS
-	double t_recarga{ 0.0 };
 	
 	double t_paralisis;
 
@@ -41,19 +38,14 @@ public:
 	void direccion(double dx, double dy);
 	void moverEnBatalla();
 
-	//CONTROL DE LOS DISPAROS
-	void resetMunicion() { disparosRealizados = 0; }
-	void sumarDisparo() { disparosRealizados++; }
-	int return_Disparos() { return disparosRealizados; }
-	bool gestionRecarga();
-
+	//CONTROL DE ATAQUES
 	virtual void activarAtaque();
 	virtual bool estaAtacando() const;
 
 	//CONTROL DE LOS HECHIZOS
-	
 	virtual bool actualizarEfectos();
 
+	virtual void resetTrasBatalla(){}//lo dejo vacio pq ninigun personaje tiene que hacer nada excepto el arquero
 	//////////METODOS//////////////
 	Tipo_figura return_Tipo() const { return tipo; }
 	Bando return_Bando()const { return bando; }
@@ -106,8 +98,15 @@ public:
 };
 
 class Arquero : public Personaje {
+	int disparosRealizados{ 0 }; //CONTADOR DE DISPAROS
+	double t_recarga{ 0.0 };
 public:
 	Arquero(Bando b, double posX, double posY);
+	void resetMunicion() { disparosRealizados = 0; }
+	void sumarDisparo() { disparosRealizados++; }
+	int return_Disparos() { return disparosRealizados; }
+	bool gestionRecarga();
+	void resetTrasBatalla() override;
 };
 
 class Volador : public Personaje {

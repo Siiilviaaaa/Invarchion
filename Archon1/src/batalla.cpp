@@ -108,9 +108,9 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 		if (j1.return_Tipo() == ARQUERO) {
 			Arquero* arq = dynamic_cast<Arquero*>(&j1);
 			if (arq != nullptr) {
-				lanzarDisparo(j1);
-				std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
-				setMensaje("Humanos llevan " + std::to_string(j1.return_Disparos()) + " disparos");
+				lanzarDisparo(*arq);
+				std::cout << "J1 lleva: " << arq->return_Disparos() << std::endl;
+				setMensaje("Humanos llevan " + std::to_string(arq->return_Disparos()) + " disparos");
 			}
 			
 		}
@@ -138,9 +138,13 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 
 	case 'm': //PELEAN/DISPARAN
 		if (j2.return_Tipo() == ARQUERO) {
-			lanzarDisparo(j2);
-			std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
-			setMensaje("Aliens llevan " + std::to_string(j2.return_Disparos()) + " disparos");
+			Arquero* arq2 = dynamic_cast<Arquero*>(&j2);
+			if (arq2 != nullptr) {
+				lanzarDisparo(*arq2);
+				std::cout << "J2 lleva: " << arq2->return_Disparos() << std::endl;
+				setMensaje("Aliens llevan " + std::to_string(arq2->return_Disparos()) + " disparos");
+			}
+
 		}
 		else
 		{
@@ -188,12 +192,21 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 
 	if (j2.actualizarEfectos())
 		setMensaje("Alien DESCONGELADO");
-
-	if (j1.gestionRecarga())
-		setMensaje("Humanos: Municion recargada");
-
-	if (j2.gestionRecarga())
-		setMensaje("Aliens: Municion recargada");
+	if (j1.return_Tipo() == ARQUERO) {
+		Arquero* arq1 = dynamic_cast<Arquero*>(&j1);
+		if (arq1 != nullptr) {
+			if (arq1->gestionRecarga())
+				setMensaje("Humanos: Municion recargada");
+		}
+	}
+	if (j2.return_Tipo() == ARQUERO) {
+		Arquero* arq2 = dynamic_cast<Arquero*>(&j2);
+		if (arq2 != nullptr) {
+			if (arq2->gestionRecarga())
+				setMensaje("Aliens: Municion recargada");
+		}
+	}
+	
 
 	for (int k = 0; k < 5; k++) //PARA EVITAR ARRAYS VACIOS
 		if (lista[k] != nullptr) {
@@ -299,9 +312,10 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 
 	////////////////FINAL//////////////////
 	int resultado = FinCombate(j1, j2);
+	
 	if (resultado != 0) {
-		j1.resetMunicion(); //PA QUE SE VUELVA A CERO AL INICIO DE BATALLA
-		j2.resetMunicion();
+		j1.resetTrasBatalla(); //PA QUE SE VUELVA A CERO AL INICIO DE BATALLA
+		j2.resetTrasBatalla();
 
 		this->~Batalla();
 		fin_ = true; //INDICAMOS QUE SE HA TERMINADO LA BATALLA PARA QEL PASO AL TABLERO
@@ -370,7 +384,7 @@ void Batalla::pegar(Personaje& atacante, Personaje& objetivo)
 	std::cout << "[COMBATE] " << (atacante.return_Bando() == 0 ? "HUMANO" : "ALIEN") << " golpea ";
 }
 
-void Batalla::lanzarDisparo(Personaje& aliado)
+void Batalla::lanzarDisparo(Arquero& aliado)
 {
 	//COMPROBAR QUE NO SE HA ALCANZADO EL MAXIMO DE DISPAROS
 	if (aliado.return_Disparos() >= 10) {
