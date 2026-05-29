@@ -26,15 +26,15 @@ Luchador::Luchador(Bando b, double posX, double posY) : Personaje(LUCHADOR, b, p
 	vida_max = 100;
 	danio = 25; 
 	vel_base = 12.0; 
-	movimientos = 10; //cambiar
+	movimientos = 3;
 	v = vel_base;
 }
 
 Arquero::Arquero(Bando b, double posX, double posY) : Personaje(ARQUERO, b, posX, posY) {
-	vida = 110; 
-	vida_max = 110; 
-	danio = 25; 
-	vel_base = 12.6; 
+	vida = 75; 
+	vida_max = 75; 
+	danio = 20; 
+	vel_base = 12.0; 
 	movimientos = 3; 
 	v = vel_base;
 }
@@ -65,20 +65,20 @@ void Arquero::resetTrasBatalla()
 }
 
 Volador::Volador(Bando b, double posX, double posY) : Personaje(VOLADOR, b, posX, posY) {
-	vida = 120; 
-	vida_max = 120; 
+	vida = 125; 
+	vida_max = 125; 
 	danio = 30; 
-	vel_base = 13.1; 
-	movimientos = 3; 
+	vel_base = 12.0; 
+	movimientos = 5; 
 	v = vel_base;
 }
 
 Excavador::Excavador(Bando b, double posX, double posY) : Personaje(EXCAVADOR, b, posX, posY) {
-	vida = 150; 
-	vida_max = 150; 
-	danio = 35; 
-	vel_base = 11.2; 
-	movimientos = 4; 
+	vida = 100; 
+	vida_max = 100; 
+	danio = 20; 
+	vel_base = 12.0; 
+	movimientos = 3; 
 	v = vel_base;
 }
 
@@ -118,10 +118,10 @@ int Excavador::getFaseExcavacion() const
 }
 
 Hechicero::Hechicero(Bando b, double posX, double posY) : Personaje(HECHICERO, b, posX, posY) {
-	vida = 200; 
-	vida_max = 200; 
-	danio = 30; 
-	vel_base = 11.7; 
+	vida = 150; 
+	vida_max = 150; 
+	danio = 25; 
+	vel_base = 8.0; 
 	movimientos = 5; 
 	v = vel_base;
 }
@@ -158,8 +158,6 @@ void Personaje::moverEnBatalla()
 	x += dirX * v * 0.1;
 	y += dirY * v * 0.1;
 }
-
-
 
 void Personaje::activarAtaque()
 {
