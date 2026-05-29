@@ -188,6 +188,12 @@ void MotorGrafico::dibujarPersonaje(const Personaje& personaje)
 				int fotoActual = (glutGet(GLUT_ELAPSED_TIME) / 150) % 4;
 				SpriteActual->setState(indexInicial + patronMovientoSprites[fotoActual]);
 			}
+			if (personaje.estaAtacando()) {
+				SpriteActual->setState(9, true);
+				//si esta atacando, ponemos la foto de ataque
+			}
+
+
 			SpriteActual->draw(); 
 			break;
 		}

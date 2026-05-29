@@ -115,6 +115,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 			pegar(j1, j2);
 			std::cout << "J1 pegando... " << std::endl;
 		}
+		j1.activarAtaque();
 		break;
 	case 'c': //HECHIZAN
 		if (j1.return_Tipo() == HECHICERO) {
@@ -138,6 +139,7 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 			pegar(j2, j1);
 			std::cout << "J2 pegando... " << std::endl;
 		}
+		j2.activarAtaque();
 		break;
 	case'n': //HECHIZAN
 		if (j2.return_Tipo() == HECHICERO) {

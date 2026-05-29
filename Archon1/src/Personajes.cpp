@@ -29,7 +29,7 @@ Luchador::Luchador(Bando b, double posX, double posY) : Personaje(LUCHADOR, b, p
 	vida_max = 100;
 	danio = 25; 
 	vel_base = 12.0; 
-	movimientos = 2; 
+	movimientos = 10; //cambiar
 	v = vel_base;
 }
 
@@ -98,6 +98,8 @@ void Personaje::direccion(double dx, double dy)
 
 void Personaje::moverEnBatalla()
 {
+	
+
 	x += dirX * v * 0.1;
 	y += dirY * v * 0.1;
 }
@@ -122,8 +124,31 @@ bool Personaje::gestionRecarga()
 	return false;
 }
 
+void Personaje::activarAtaque()
+{
+	temporizadorAtaque = 15; //reseteo el tempporizador
+	std::cout << "ataqueactivado"<<std::endl;
+}
+
+bool Personaje::estaAtacando() const
+{
+	if (temporizadorAtaque > 0) {//no puedo restarle al temp aqui porq en la llamada a la funcion el personaje es const, entonces esto tiene que ser const tmb
+		//std::cout << temporizadorAtaque << std::endl;
+		return true;
+	}
+	else {
+		return false;
+	}
+	
+}
+
 bool Personaje::actualizarEfectos()
 {
+	if (temporizadorAtaque > 0) {
+		temporizadorAtaque--;
+		std::cout << temporizadorAtaque << std::endl;
+	}
+
 	if (t_paralisis > 0) //SIGUE CONGELADO
 	{
 		t_paralisis -= 0.02;

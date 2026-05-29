@@ -23,6 +23,7 @@ protected:
 	double vel_base;
 	double x, y;
 	bool moviendose{ false };
+	int temporizadorAtaque{ 0 };
 	double dirX, dirY; //DIRECCION
 
 	int disparosRealizados{ 0 }; //CONTADOR DE DISPAROS
@@ -46,6 +47,9 @@ public:
 	void sumarDisparo() { disparosRealizados++; }
 	int return_Disparos() { return disparosRealizados; }
 	bool gestionRecarga();
+
+	void activarAtaque();
+	bool estaAtacando() const;
 
 	//CONTROL DE LOS HECHIZOS
 	int return_HechizosRestantes() { return hechizosRestantes; }
