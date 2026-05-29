@@ -38,7 +38,7 @@ public:
 	int coger(int turno);
 	int soltar(int turno);
 
-	void aplicarCuracionMasiva(int turno, Personaje* mago);
+	
 
 	void setJuego(Juego* j) { ptrJuego = j; }
 	void insertar_mensaje(std::string nuevo_msg) { mensaje = nuevo_msg; }

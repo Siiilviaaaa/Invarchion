@@ -155,9 +155,9 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 		break;
 	case'n': //HECHIZAN
 		if (j2.return_Tipo() == HECHICERO) {
-			Hechicero* hech2 = dynamic_cast<Hechicero*>(&j1);
+			Hechicero* hech2 = dynamic_cast<Hechicero*>(&j2);
 			if (hech2 != nullptr) {
-				lanzarHechizo(*hech2, j2, hech2->HechizoUtilizado(), j1.return_Bando());
+				lanzarHechizo(*hech2, j1, hech2->HechizoUtilizado(), j2.return_Bando());
 				hech2->siguienteHechizo();
 				std::cout << "J2 lanza hechizo: " << std::endl;
 			}

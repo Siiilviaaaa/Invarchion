@@ -5,6 +5,7 @@
 #include "tablero.h"
 #include "Juego.h"
 #include "ETSIDI.h"
+#include "Hechizos.h"
 
 void Cursor::inicializar_tablero(int turno)
 {
@@ -202,7 +203,7 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 
 void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 {
-	if (turno == 0)//si somos humanos
+	if (turno == TurnoHumanos)//si somos humanos
 	{
 		if (key == 'v'&& contador_selecciones==2)//pulsamos v y no hemos cogido antes
 		{
@@ -235,6 +236,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					if (ptrJuego != nullptr) {
 						ptrJuego->cambiarTurno();//cambaimos el turno de la partida
 					}
+
 					break;
 				default: break;
 				}
@@ -242,10 +244,16 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			//HECHIZO EN TABLERO HUMANO
 			else if (key == 'c' && contador_selecciones == 1)
 			{
-				Personaje* mago = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje(); //OBTENER PERSONAJE SELCCIONADO
-				aplicarCuracionMasiva(turno, mago);
-				std::cout << "Curacion masiva aplicada. Cambio de turno: " << std::endl;
-				insertar_mensaje("HUMANO CURACION MASIVA");
+				Personaje* p1 = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje(); //OBTENER PERSONAJE SELCCIONADO
+				if (p1 != nullptr && p1->return_Tipo() == HECHICERO) {
+					Hechicero* mago1 = dynamic_cast<Hechicero*>(p1);
+					if (mago1 != nullptr) {
+						Hechizo::aplicarCuracionMasiva(turno, mago1, ptrJuego);
+						std::cout << "Curacion masiva aplicada. Cambio de turno: " << std::endl;
+						insertar_mensaje("HUMANO CURACION MASIVA");
+					}
+				}
+				
 			}
 			else
 			{
@@ -253,7 +261,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			}
 		}
 	}
-	if (turno == 1)//siendo el turno de aliens
+	if (turno == TurnoAliens)//siendo el turno de aliens
 	{
 		if (key == 'm' && contador_selecciones == 2)//si se pulsa m y no hemos cogido 
 		{
@@ -295,10 +303,16 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			//HECHIZO EN TABLERO ALIENS
 			else if (key == 'n' && contador_selecciones == 1)
 			{
-				Personaje* mago = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje(); //OBTENER PERSONAJE SELCCIONADO
-				aplicarCuracionMasiva(turno, mago);
-				std::cout << "Curacion masiva aplicada. Cambio de turno: " << std::endl;
-				insertar_mensaje("ALIEN CURACION MASIVA");
+				Personaje* p2 = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje(); //OBTENER PERSONAJE SELCCIONADO
+				if (p2 != nullptr && p2->return_Tipo() == HECHICERO) {
+					Hechicero* mago2 = dynamic_cast<Hechicero*>(p2);
+					if (mago2 != nullptr) {
+						Hechizo::aplicarCuracionMasiva(turno, mago2, ptrJuego);
+						std::cout << "Curacion masiva aplicada. Cambio de turno: " << std::endl;
+						insertar_mensaje("ALIENS CURACION MASIVA");
+					}
+				}
+				
 			}
 			else
 			{
@@ -431,38 +445,3 @@ int Cursor::soltar(int turno)
 	return 2;
 }
 
-void Cursor::aplicarCuracionMasiva(int turno, Personaje* mago)
-{
-	if (mago != nullptr && mago->return_Tipo() == HECHICERO) { //VERIFICAMOS QUE EL PERSONAJE SELECCIONADO SEA UN HECHICERO
-		Hechicero* hech = dynamic_cast<Hechicero*>(mago);
-		if (hech != nullptr) {
-			if (hech->return_HechizosRestantes() > 0) { //VERIFICAMOS QUE TENGA HECHIZOS DISPONIBLES
-
-				//RECORREMOS LOS PERSONAJES BUSCANDO ALIADOS
-				for (int i = 0; i < 20; i++) {
-					Personaje* aliado = ptrJuego->getPersonaje(i); //OBTENEMOS EL PERSONAJE DE LA CASILLA i, SI NO HAY PERSONAJE DEVUELVE NULLPTR
-					if (aliado != nullptr && aliado->return_Bando() == turno && aliado->return_Vida() > 0) { //SI EL PERSONAJE EXISTE Y ES UN ALIADO
-
-						//CURAMOS UN TERCIO DE LA VIDA
-						int cura = aliado->return_VidaMax() / 3;
-						int nuevaVida = aliado->return_Vida() + cura;
-
-						//SIN SUPERAR EL MAXIMO
-						if (nuevaVida > aliado->return_VidaMax()) {
-							nuevaVida = aliado->return_VidaMax();
-						}
-						aliado->setVida(nuevaVida);
-					}
-				}
-				hech->usarHechizo(); //RESTAMOS UN HECHIZO AL MAGO
-				insertar_mensaje("Curacion masiva! Turno finalizado.");
-
-				//RESET CURSOR Y CAMBIO DE TURNO
-				contador_selecciones = 0;
-				movimientos_restantes = 0;
-				if (ptrJuego != nullptr) ptrJuego->cambiarTurno();
-			}
-		}
-		
-	}
-}
