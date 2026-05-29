@@ -7,6 +7,6 @@ class GesionArchivos
 {
 public: 
 	static void guardarPartida(const Juego& j);
-	void ejecutarPartidaGuardada();
+	static void ejecutarPartidaGuardada(Juego& juego);
 };
 

@@ -42,6 +42,7 @@ private:
 public:
 
 	Juego(Tablero* t);
+	~Juego();
 
 	//getters
 	int getTurno();

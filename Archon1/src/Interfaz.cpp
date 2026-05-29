@@ -363,7 +363,10 @@ void OnKeyboardDown(unsigned char key, int x, int y)
         if (key == 'g') { //guardar partida
             GesionArchivos::guardarPartida(juego);
         }
-
+        if (key == 'h') { //abrir partida guardada
+            GesionArchivos::ejecutarPartidaGuardada(juego);
+        }
+           
         micursor.seleccion_personaje_tablero(c, juego.getTurno());
         
         if (micursor.obt_contador_selecciones() == 0) {
