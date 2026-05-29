@@ -320,6 +320,13 @@ HanGanado Batalla::FinCombate(Personaje& humanos, Personaje& aliens)
 
 void Batalla::pegar(Personaje& atacante, Personaje& objetivo)
 {
+	if (objetivo.return_Tipo() == EXCAVADOR) {
+		Excavador* exc = dynamic_cast<Excavador*>(&objetivo);
+		if (exc != nullptr && exc->estaBajoTierra()) {
+			std::cout << "el objetivo esta bajo tierra" << std::endl;
+			return;
+		}
+	}
 	double dx = atacante.return_X() - objetivo.return_X();
 	double dy = atacante.return_Y() - objetivo.return_Y();
 

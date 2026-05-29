@@ -28,6 +28,13 @@ bool Disparo::Impacto(Personaje& objetivo, bool haceDano)
 {
 	if (!activo) return false;
 	if (this->bando == objetivo.return_Bando()) return false;
+	if (objetivo.return_Tipo() == EXCAVADOR) {
+		Excavador* exc = dynamic_cast<Excavador*>(&objetivo);
+		if (exc != nullptr && exc->estaBajoTierra()) {
+			return false; // el disparo pasa de largo porque está enterrado
+		}
+	}
+	
 	double dx = x - objetivo.return_X();
 	double dy = y - objetivo.return_Y();
 

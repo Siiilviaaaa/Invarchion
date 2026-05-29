@@ -48,8 +48,8 @@ public:
 	int return_Disparos() { return disparosRealizados; }
 	bool gestionRecarga();
 
-	void activarAtaque();
-	bool estaAtacando() const;
+	virtual void activarAtaque();
+	virtual bool estaAtacando() const;
 
 	//CONTROL DE LOS HECHIZOS
 	int return_HechizosRestantes() { return hechizosRestantes; }
@@ -59,7 +59,7 @@ public:
 		hechizoUtilizado++;
 		if (hechizoUtilizado > 2) hechizoUtilizado = 0;
 	}
-	bool actualizarEfectos();
+	virtual bool actualizarEfectos();
 
 	//////////METODOS//////////////
 	Tipo_figura return_Tipo() const { return tipo; }
@@ -123,8 +123,13 @@ public:
 };
 
 class Excavador : public Personaje {
+	int temporizadorExcavacion{ 0 };
 public:
 	Excavador(Bando b, double posX, double posY);
+	void activarAtaque() override;
+	bool actualizarEfectos() override;
+	bool estaBajoTierra() const;
+	int getFaseExcavacion()const;
 };
 
 class Hechicero : public Personaje {

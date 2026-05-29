@@ -60,6 +60,42 @@ Excavador::Excavador(Bando b, double posX, double posY) : Personaje(EXCAVADOR, b
 	v = vel_base;
 }
 
+void Excavador::activarAtaque()
+{
+	Personaje::activarAtaque(); 
+	temporizadorExcavacion = 250; // 5 segundos bajo tierra
+}
+
+bool Excavador::actualizarEfectos()
+{
+	Personaje::actualizarEfectos(); //para tmb tener la congelacion
+	if (temporizadorExcavacion > 0) {
+		temporizadorExcavacion--;
+		std::cout << "excavando" << std::endl;
+	}
+	return 1;
+}
+
+bool Excavador::estaBajoTierra() const
+{
+	if (temporizadorExcavacion > 0) {
+		return true;
+	}
+	else {
+		return false;
+	}
+	
+}
+
+int Excavador::getFaseExcavacion() const
+{
+	if (temporizadorExcavacion == 0)
+		return 0; //no esta excavando
+	if (temporizadorExcavacion > 230)
+		return 1; //para el frame de meterse en la tierra
+	return 2; //bajo tierra
+}
+
 Hechicero::Hechicero(Bando b, double posX, double posY) : Personaje(HECHICERO, b, posX, posY) {
 	vida = 200; 
 	vida_max = 200; 
