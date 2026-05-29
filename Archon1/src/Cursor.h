@@ -35,6 +35,7 @@ public:
 
 	void seleccion_personaje_tablero(unsigned char key, int turno);
 	bool tieneMovimientoPosible(int filaOrigen, int columnaOrigen, int turno, int movimientos) const;
+	void colorearMovimientosPosibles(int filaOrigen, int columnaOrigen, int turno, int movimientos);
 	int coger(int turno);
 	int soltar(int turno);
 
