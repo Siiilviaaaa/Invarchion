@@ -43,7 +43,6 @@
     <ClCompile Include="Batalla.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Disparos.cpp" />
-    <ClCompile Include="GesionArchivos.cpp" />
     <ClCompile Include="gestionArchivos.cpp" />
     <ClCompile Include="Hechizos.cpp" />
     <ClCompile Include="Interfaz.cpp" />

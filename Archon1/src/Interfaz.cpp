@@ -363,7 +363,7 @@ void OnKeyboardDown(unsigned char key, int x, int y)
         if (key == 'g') { //guardar partida
             GesionArchivos::guardarPartida(juego);
         }
-        if (key == 'h') { //abrir partida guardada
+        if (key == 'p') { //abrir partida guardada
             GesionArchivos::ejecutarPartidaGuardada(juego);
         }
            
