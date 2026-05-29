@@ -10,10 +10,7 @@ Personaje::Personaje(Tipo_figura t, Bando b, double posX, double posY)
 	bando = b;
 	x = posX;
 	y = posY;
-	disparosRealizados = 0;
-	t_recarga = 0.0;
-	hechizoUtilizado = 0;
-	hechizosRestantes = 3;
+
 	t_paralisis = 0;
 	dirX = 0;
 	dirY = 0;
@@ -40,6 +37,31 @@ Arquero::Arquero(Bando b, double posX, double posY) : Personaje(ARQUERO, b, posX
 	vel_base = 12.6; 
 	movimientos = 3; 
 	v = vel_base;
+}
+
+bool Arquero::gestionRecarga()
+{
+	if (t_recarga > 0.0) {
+		t_recarga -= 0.02;
+
+		//CUANDO SE AGOTA EL TIEMPO, RECARGE DE MUNICION
+		if (t_recarga <= 0.0) {
+			disparosRealizados = 0;
+			t_recarga = 0.0;
+			std::cout << "Municion recargada!" << std::endl;
+			return true;
+		}
+	}
+	//CUANDO NOS QUEDAMOS SIN BALAS, INICIAMOS EL TIEMPO
+	else if (disparosRealizados >= 10) {
+		t_recarga = 10.0; //TIEMPO
+	}
+	return false;
+}
+
+void Arquero::resetTrasBatalla()
+{
+	resetMunicion();
 }
 
 Volador::Volador(Bando b, double posX, double posY) : Personaje(VOLADOR, b, posX, posY) {
@@ -140,25 +162,7 @@ void Personaje::moverEnBatalla()
 	y += dirY * v * 0.1;
 }
 
-bool Personaje::gestionRecarga()
-{
-	if (t_recarga > 0.0) {
-		t_recarga -= 0.02;
 
-		//CUANDO SE AGOTA EL TIEMPO, RECARGE DE MUNICION
-		if (t_recarga <= 0.0) {
-			disparosRealizados = 0;
-			t_recarga = 0.0;
-			std::cout << "Municion recargada!" << std::endl;
-			return true;
-		}
-	}
-	//CUANDO NOS QUEDAMOS SIN BALAS, INICIAMOS EL TIEMPO
-	else if (disparosRealizados >= 10) {
-		t_recarga = 10.0; //TIEMPO
-	}
-	return false;
-}
 
 void Personaje::activarAtaque()
 {

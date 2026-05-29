@@ -434,31 +434,35 @@ int Cursor::soltar(int turno)
 void Cursor::aplicarCuracionMasiva(int turno, Personaje* mago)
 {
 	if (mago != nullptr && mago->return_Tipo() == HECHICERO) { //VERIFICAMOS QUE EL PERSONAJE SELECCIONADO SEA UN HECHICERO
-		if (mago->return_HechizosRestantes() > 0) { //VERIFICAMOS QUE TENGA HECHIZOS DISPONIBLES
+		Hechicero* hech = dynamic_cast<Hechicero*>(mago);
+		if (hech != nullptr) {
+			if (hech->return_HechizosRestantes() > 0) { //VERIFICAMOS QUE TENGA HECHIZOS DISPONIBLES
 
-			//RECORREMOS LOS PERSONAJES BUSCANDO ALIADOS
-			for (int i = 0; i < 20; i++) {
-				Personaje* aliado = ptrJuego->getPersonaje(i); //OBTENEMOS EL PERSONAJE DE LA CASILLA i, SI NO HAY PERSONAJE DEVUELVE NULLPTR
-				if (aliado != nullptr && aliado->return_Bando() == turno && aliado->return_Vida() > 0) { //SI EL PERSONAJE EXISTE Y ES UN ALIADO
+				//RECORREMOS LOS PERSONAJES BUSCANDO ALIADOS
+				for (int i = 0; i < 20; i++) {
+					Personaje* aliado = ptrJuego->getPersonaje(i); //OBTENEMOS EL PERSONAJE DE LA CASILLA i, SI NO HAY PERSONAJE DEVUELVE NULLPTR
+					if (aliado != nullptr && aliado->return_Bando() == turno && aliado->return_Vida() > 0) { //SI EL PERSONAJE EXISTE Y ES UN ALIADO
 
-					//CURAMOS UN TERCIO DE LA VIDA
-					int cura = aliado->return_VidaMax() / 3;
-					int nuevaVida = aliado->return_Vida() + cura;
+						//CURAMOS UN TERCIO DE LA VIDA
+						int cura = aliado->return_VidaMax() / 3;
+						int nuevaVida = aliado->return_Vida() + cura;
 
-					//SIN SUPERAR EL MAXIMO
-					if (nuevaVida > aliado->return_VidaMax()) {
-						nuevaVida = aliado->return_VidaMax();
+						//SIN SUPERAR EL MAXIMO
+						if (nuevaVida > aliado->return_VidaMax()) {
+							nuevaVida = aliado->return_VidaMax();
+						}
+						aliado->setVida(nuevaVida);
 					}
-					aliado->setVida(nuevaVida);
 				}
-			}
-			mago->usarHechizo(); //RESTAMOS UN HECHIZO AL MAGO
-			insertar_mensaje("Curacion masiva! Turno finalizado.");
+				hech->usarHechizo(); //RESTAMOS UN HECHIZO AL MAGO
+				insertar_mensaje("Curacion masiva! Turno finalizado.");
 
-			//RESET CURSOR Y CAMBIO DE TURNO
-			contador_selecciones = 0;
-			movimientos_restantes = 0;
-			if (ptrJuego != nullptr) ptrJuego->cambiarTurno();
+				//RESET CURSOR Y CAMBIO DE TURNO
+				contador_selecciones = 0;
+				movimientos_restantes = 0;
+				if (ptrJuego != nullptr) ptrJuego->cambiarTurno();
+			}
 		}
+		
 	}
 }

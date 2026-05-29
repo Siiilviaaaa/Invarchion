@@ -106,9 +106,13 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 
 	case 'v': //PELEAN/DISPARAN
 		if (j1.return_Tipo() == ARQUERO) {
-			lanzarDisparo(j1);
-			std::cout << "J1 lleva: " << j1.return_Disparos() << std::endl;
-			setMensaje("Humanos llevan " + std::to_string(j1.return_Disparos()) + " disparos");
+			Arquero* arq = dynamic_cast<Arquero*>(&j1);
+			if (arq != nullptr) {
+				lanzarDisparo(*arq);
+				std::cout << "J1 lleva: " << arq->return_Disparos() << std::endl;
+				setMensaje("Humanos llevan " + std::to_string(arq->return_Disparos()) + " disparos");
+			}
+			
 		}
 		else
 		{
@@ -119,9 +123,13 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 		break;
 	case 'c': //HECHIZAN
 		if (j1.return_Tipo() == HECHICERO) {
-			lanzarHechizo(j1, j2, j1.HechizoUtilizado(), j1.return_Bando());
-			j1.siguienteHechizo();
-			std::cout << "J1 lanza hechizo: " << std::endl;
+			Hechicero* hech1 = dynamic_cast<Hechicero*>(&j1);
+			if (hech1 != nullptr) {
+				lanzarHechizo(*hech1, j2, hech1->HechizoUtilizado(), j1.return_Bando());
+				hech1->siguienteHechizo();
+				std::cout << "J1 lanza hechizo: " << std::endl;
+			}
+			
 		}
 		break;
 
@@ -130,9 +138,13 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 
 	case 'm': //PELEAN/DISPARAN
 		if (j2.return_Tipo() == ARQUERO) {
-			lanzarDisparo(j2);
-			std::cout << "J2 lleva: " << j2.return_Disparos() << std::endl;
-			setMensaje("Aliens llevan " + std::to_string(j2.return_Disparos()) + " disparos");
+			Arquero* arq2 = dynamic_cast<Arquero*>(&j2);
+			if (arq2 != nullptr) {
+				lanzarDisparo(*arq2);
+				std::cout << "J2 lleva: " << arq2->return_Disparos() << std::endl;
+				setMensaje("Aliens llevan " + std::to_string(arq2->return_Disparos()) + " disparos");
+			}
+
 		}
 		else
 		{
@@ -143,9 +155,13 @@ void Batalla::KeyBatalla(unsigned char key, Personaje& j1, Personaje& j2)
 		break;
 	case'n': //HECHIZAN
 		if (j2.return_Tipo() == HECHICERO) {
-			lanzarHechizo(j2, j1, j2.HechizoUtilizado(), j2.return_Bando());
-			j2.siguienteHechizo(); //CAMBIA LA POSICION EN EL ARRAYS DE HECHIZOS
-			std::cout << "J2 lanza hechizo: " << std::endl;
+			Hechicero* hech2 = dynamic_cast<Hechicero*>(&j1);
+			if (hech2 != nullptr) {
+				lanzarHechizo(*hech2, j2, hech2->HechizoUtilizado(), j1.return_Bando());
+				hech2->siguienteHechizo();
+				std::cout << "J2 lanza hechizo: " << std::endl;
+			}
+			
 		}
 		break;
 	}
@@ -176,12 +192,21 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 
 	if (j2.actualizarEfectos())
 		setMensaje("Alien DESCONGELADO");
-
-	if (j1.gestionRecarga())
-		setMensaje("Humanos: Municion recargada");
-
-	if (j2.gestionRecarga())
-		setMensaje("Aliens: Municion recargada");
+	if (j1.return_Tipo() == ARQUERO) {
+		Arquero* arq1 = dynamic_cast<Arquero*>(&j1);
+		if (arq1 != nullptr) {
+			if (arq1->gestionRecarga())
+				setMensaje("Humanos: Municion recargada");
+		}
+	}
+	if (j2.return_Tipo() == ARQUERO) {
+		Arquero* arq2 = dynamic_cast<Arquero*>(&j2);
+		if (arq2 != nullptr) {
+			if (arq2->gestionRecarga())
+				setMensaje("Aliens: Municion recargada");
+		}
+	}
+	
 
 	for (int k = 0; k < 5; k++) //PARA EVITAR ARRAYS VACIOS
 		if (lista[k] != nullptr) {
@@ -287,9 +312,10 @@ void Batalla::actualizarCombate(Personaje& j1, Personaje& j2, Caja& caja, Obstac
 
 	////////////////FINAL//////////////////
 	int resultado = FinCombate(j1, j2);
+	
 	if (resultado != 0) {
-		j1.resetMunicion(); //PA QUE SE VUELVA A CERO AL INICIO DE BATALLA
-		j2.resetMunicion();
+		j1.resetTrasBatalla(); //PA QUE SE VUELVA A CERO AL INICIO DE BATALLA
+		j2.resetTrasBatalla();
 
 		this->~Batalla();
 		fin_ = true; //INDICAMOS QUE SE HA TERMINADO LA BATALLA PARA QEL PASO AL TABLERO
@@ -358,7 +384,7 @@ void Batalla::pegar(Personaje& atacante, Personaje& objetivo)
 	std::cout << "[COMBATE] " << (atacante.return_Bando() == 0 ? "HUMANO" : "ALIEN") << " golpea ";
 }
 
-void Batalla::lanzarDisparo(Personaje& aliado)
+void Batalla::lanzarDisparo(Arquero& aliado)
 {
 	//COMPROBAR QUE NO SE HA ALCANZADO EL MAXIMO DE DISPAROS
 	if (aliado.return_Disparos() >= 10) {
@@ -408,35 +434,41 @@ void Batalla::lanzarHechizo(Personaje& mago, Personaje& objetivo, int tipo, int 
 	if (equipo < 0 || equipo > 1) return; //VALIDAR EQUIPO
 
 	//COMPROBAR QUE EL MAGO TIENE HECHIZOS DISPONIBLES
-	if (mago.return_HechizosRestantes() <= 0) {
-		std::cout << "No te quedan hechizos en esta ronda" << std::endl;
-		setMensaje("Sin hechizos para esta ronda");
-		return;
+	Hechicero* hech = dynamic_cast<Hechicero*>(&mago);
+	if (hech != nullptr) {
+		if (hech->return_HechizosRestantes() <= 0) {
+				std::cout << "No te quedan hechizos en esta ronda" << std::endl;
+				setMensaje("Sin hechizos para esta ronda");
+				return;
+			}
+		bool hueco = false;
+		for (int i = 0; i < 3; i++)
+		{
+			if (nHechizos[equipo][i] == nullptr) { //PARA EVITAR ARRAYS VACIOS
+				nHechizos[equipo][i] = new Hechizo((Hechizo::TipoHechizo)tipo, mago.return_Bando());
+
+				//EL HECHIZO PERSIGUE AL OBJETIVO, AUNQUE ESTE SE MUEVA -> NO TIENE ESCAPATORIA
+				nHechizos[equipo][i]->setObj(&objetivo);
+
+				double dX = objetivo.return_X() - mago.return_X();
+				double dY = objetivo.return_Y() - mago.return_Y();
+
+				nHechizos[equipo][i]->activar(mago.return_X(), mago.return_Y(), dX, dY); //SE ACTIVA EL HECHIZO CON LA DIRECCION HACIA EL OBJETIVO
+
+				hech->usarHechizo();
+
+				hueco = true;
+				break;
+			}
+		}
+		if (!hueco) {
+			std::cout << "Maximo de hechizos alcanzado" << std::endl;
+		}
+
 	}
-
-	bool hueco = false;
-	for (int i = 0; i < 3; i++)
-	{
-		if (nHechizos[equipo][i] == nullptr) { //PARA EVITAR ARRAYS VACIOS
-			nHechizos[equipo][i] = new Hechizo((Hechizo::TipoHechizo)tipo, mago.return_Bando());
-
-			//EL HECHIZO PERSIGUE AL OBJETIVO, AUNQUE ESTE SE MUEVA -> NO TIENE ESCAPATORIA
-			nHechizos[equipo][i]->setObj(&objetivo);
-
-			double dX = objetivo.return_X() - mago.return_X();
-			double dY = objetivo.return_Y() - mago.return_Y();
-
-			nHechizos[equipo][i]->activar(mago.return_X(), mago.return_Y(), dX, dY); //SE ACTIVA EL HECHIZO CON LA DIRECCION HACIA EL OBJETIVO
-
-			mago.usarHechizo();
-
-			hueco = true;
-            break; 
-        }
-    }
-	if (!hueco) {
-		std::cout << "Maximo de hechizos alcanzado" << std::endl;
-	}
+	
+	return;
+	
 }
 
 void Batalla::entrePersonajes(Personaje& j1, Personaje& j2) //COLISION ENTRE PERSONAJES
