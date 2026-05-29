@@ -236,6 +236,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					if (ptrJuego != nullptr) {
 						ptrJuego->cambiarTurno();//cambaimos el turno de la partida
 					}
+
 					break;
 				default: break;
 				}
@@ -243,11 +244,11 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			//HECHIZO EN TABLERO HUMANO
 			else if (key == 'c' && contador_selecciones == 1)
 			{
-				Personaje* p = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje(); //OBTENER PERSONAJE SELCCIONADO
-				if (p != nullptr && p->return_Tipo() == HECHICERO) {
-					Hechicero* mago = dynamic_cast<Hechicero*>(p);
-					if (mago != nullptr) {
-						Hechizo::aplicarCuracionMasiva(turno, mago, ptrJuego);
+				Personaje* p1 = miTablero.getInfoCasilla(filaAntes, columnaAntes)->getPersonaje(); //OBTENER PERSONAJE SELCCIONADO
+				if (p1 != nullptr && p1->return_Tipo() == HECHICERO) {
+					Hechicero* mago1 = dynamic_cast<Hechicero*>(p1);
+					if (mago1 != nullptr) {
+						Hechizo::aplicarCuracionMasiva(turno, mago1, ptrJuego);
 						std::cout << "Curacion masiva aplicada. Cambio de turno: " << std::endl;
 						insertar_mensaje("HUMANO CURACION MASIVA");
 					}
@@ -260,7 +261,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			}
 		}
 	}
-	if (turno == 1)//siendo el turno de aliens
+	if (turno == TurnoAliens)//siendo el turno de aliens
 	{
 		if (key == 'm' && contador_selecciones == 2)//si se pulsa m y no hemos cogido 
 		{
