@@ -214,6 +214,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
 				insertar_mensaje("HUMANO Movilidad: " + std::to_string(movimientos_restantes));
 				contador_selecciones = 1;//indicamos que la accion de coger la hicimos ya
+				colorearMovimientosPosibles(fila, columna, turno, movimientos_restantes);
 			}break;
 			default: break;
 			}
@@ -235,6 +236,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					if (ptrJuego != nullptr) {
 						ptrJuego->cambiarTurno();//cambaimos el turno de la partida
 					}
+					miTablero.reseteoColores();
 					break;
 				default: break;
 				}
@@ -265,6 +267,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 				std::cout << "habia uno de nosotros- le hemos cogido" << std::endl;
 				insertar_mensaje("ALIEN Movilidad: " + std::to_string(movimientos_restantes));
 				contador_selecciones = 1;
+				colorearMovimientosPosibles(fila, columna, turno, movimientos_restantes);
 			}break;
 			default:  
 				break;
@@ -287,6 +290,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 					if (ptrJuego != nullptr) {//avisamos a que se cambie de turno
 						ptrJuego->cambiarTurno();
 					}
+					miTablero.reseteoColores();
 					break; 
 				}
 				default: break;
@@ -339,13 +343,56 @@ bool Cursor::tieneMovimientoPosible(int filaOrigen, int columnaOrigen, int turno
 			{
 				return true;
 			}
-
-			if (personajeVecino->return_Bando() != turno)//Casilla con enemigo, hay una alternativa de juego 
-				return true;
+			else if (personajeVecino->return_Bando() != turno)//Casilla con enemigo, hay una alternativa de juego 
+			{
+				
+			return true;
+			}
 		}
 	}
 	//Si no hay casillas vacias o para entrar a batalla, no puede moverse, debera seleccionar otro personaje
 	return false;
+}
+void Cursor::colorearMovimientosPosibles(int filaOrigen, int columnaOrigen, int turno, int movimientos)
+{
+	for (int diferencia_filas = -movimientos; diferencia_filas <= movimientos; diferencia_filas++)
+	{
+		for (int diferencia_columnas = -movimientos; diferencia_columnas <= movimientos; diferencia_columnas++)
+		{
+			int movimientos_requeridos = abs(diferencia_filas) + abs(diferencia_columnas);
+
+			if (movimientos_requeridos == 0 || movimientos_requeridos > movimientos)
+			{
+				continue;
+			}
+
+			int nuevaFila = filaOrigen + diferencia_filas;
+			int nuevaColumna = columnaOrigen + diferencia_columnas;
+
+			if (nuevaFila < 0 || nuevaFila > 8 || nuevaColumna < 0 || nuevaColumna > 8)
+			{
+				continue;
+			}
+
+			InfoCasilla* casillaVecina = miTablero.getInfoCasilla(nuevaFila, nuevaColumna);
+
+			if (casillaVecina == nullptr)
+			{
+				continue;
+			}
+
+			Personaje* personajeVecino = casillaVecina->getPersonaje();
+
+			if (personajeVecino == nullptr)
+			{
+				casillaVecina->setSeleccion(true);
+			}
+			else if (personajeVecino->return_Bando() != turno)
+			{
+				casillaVecina->setSeleccion(true);
+			}
+		}
+	}
 }
 int Cursor::coger(int turno)
 {

@@ -8,7 +8,9 @@ class InfoCasilla
 	Tipocasilla tipo_color;
 	Personaje* personajeEncima;
 	bool puntoPoder;
+	
 public:
+	bool seleccion{};
 	InfoCasilla(Tipocasilla color = blanca):tipo_color(color), personajeEncima (nullptr), puntoPoder(false) {}
 
 	Tipocasilla getColor() const { return tipo_color; }
@@ -20,4 +22,7 @@ public:
 
 	bool getPuntoPoder() const { return puntoPoder; }
 	void setPuntoPoder(bool p) { puntoPoder = p; }
+
+	void setSeleccion(bool s) { seleccion = s; }
+	bool getSeleccion() const { return seleccion; }
 };

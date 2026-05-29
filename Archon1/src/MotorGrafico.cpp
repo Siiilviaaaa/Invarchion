@@ -616,6 +616,25 @@ void MotorGrafico::dibujarCasilla(const Casilla* c) {
 		glEnable(GL_LIGHTING);
 		glPopMatrix();
 	}
+	if (c->getInfo()->seleccion == true) {
+		float margen = lado * 0.25f;
+
+		glDisable(GL_LIGHTING);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glColor4f(1.0f, 0.50f, 0.0f, 0.35f);
+
+		glBegin(GL_QUADS);
+		glVertex3f(x + margen, y + margen, 0.03f);
+		glVertex3f(x + lado - margen, y + margen, 0.03f);
+		glVertex3f(x + lado - margen, y + lado - margen, 0.03f);
+		glVertex3f(x + margen, y + lado - margen, 0.03f);
+		glEnd();
+
+		glDisable(GL_BLEND);
+		glEnable(GL_LIGHTING);
+	}
 	glColor3f(0.2f, 0.2f, 0.2f);
 	glLineWidth(2.0f);
 	glBegin(GL_LINE_LOOP);

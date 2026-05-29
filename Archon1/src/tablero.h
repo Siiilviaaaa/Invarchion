@@ -18,6 +18,7 @@ public:
 
     // Funciones principales
     void inicializa();
+    void reseteoColores();
     const Casilla* getCasilla(int f, int c) const { 
         return &matriz[f][c];
     }
