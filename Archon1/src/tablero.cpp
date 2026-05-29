@@ -63,20 +63,3 @@ int Tablero::getTurno(Juego* juego) const
    return 0;
 }
 
-
-////le devuelvo a sofia una casilla con todos sus atributos para que los compare
-//Casilla Tablero::datos_casilla(int x, int y)
-//{
-//    Casilla casilla_ = matriz[x][y];
-//    return casilla_;
-//}
-//
-//void Tablero::vacia_casilla(int x, int y)
-//{
-//    matriz[x][y].ocupada = 0;
-//}
-//
-//void Tablero::rellena_casilla(int x, int y, Casilla nueva)
-//{
-//    nueva = matriz[x][y]; //pensar si hace copia o borra lo q habia 
-//}
