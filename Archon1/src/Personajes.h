@@ -28,8 +28,7 @@ protected:
 
 	int disparosRealizados{ 0 }; //CONTADOR DE DISPAROS
 	double t_recarga{ 0.0 };
-	int hechizoUtilizado = 0;
-	int hechizosRestantes = 3;
+	
 	double t_paralisis;
 
 public:
@@ -52,13 +51,7 @@ public:
 	virtual bool estaAtacando() const;
 
 	//CONTROL DE LOS HECHIZOS
-	int return_HechizosRestantes() { return hechizosRestantes; }
-	void usarHechizo() { hechizosRestantes--; }
-	int HechizoUtilizado() { return hechizoUtilizado; }
-	void siguienteHechizo() {
-		hechizoUtilizado++;
-		if (hechizoUtilizado > 2) hechizoUtilizado = 0;
-	}
+	
 	virtual bool actualizarEfectos();
 
 	//////////METODOS//////////////
@@ -133,6 +126,16 @@ public:
 };
 
 class Hechicero : public Personaje {
+	int hechizoUtilizado = 0;
+	int hechizosRestantes = 3;
 public:
 	Hechicero(Bando b, double posX, double posY);
+	int return_HechizosRestantes() { return hechizosRestantes; }
+	void usarHechizo() { hechizosRestantes--; }
+	int HechizoUtilizado() { return hechizoUtilizado; }
+	void siguienteHechizo() {
+		hechizoUtilizado++;
+		if (hechizoUtilizado > 2) hechizoUtilizado = 0;
+	}
+
 };

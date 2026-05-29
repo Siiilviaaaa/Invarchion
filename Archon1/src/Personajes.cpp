@@ -12,8 +12,6 @@ Personaje::Personaje(Tipo_figura t, Bando b, double posX, double posY)
 	y = posY;
 	disparosRealizados = 0;
 	t_recarga = 0.0;
-	hechizoUtilizado = 0;
-	hechizosRestantes = 3;
 	t_paralisis = 0;
 	dirX = 0;
 	dirY = 0;
