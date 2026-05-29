@@ -5,6 +5,7 @@
 #include "menu.h"
 #include "vista.h"      
 #include "MotorGrafico.h"
+#include "gestionArchivos.h"
 
 //los extern son para q los busque en el main, me ha ayudado la IA en esta parte
 //basicamente es un: "oye usa el [extern] q declare en el main
@@ -311,6 +312,9 @@ void OnKeyboardDown(unsigned char key, int x, int y)
         if (estado == MENU) exit(0);
         else estado = MENU;
     }
+
+
+
     if (c == 'r' && estado != FIN_PARTIDA) {
         estado = FIN_PARTIDA;
         glutPostRedisplay(); //Fuerza a OnDraw() a pintar la pantalla negra de dibuja_fin()
@@ -359,12 +363,21 @@ void OnKeyboardDown(unsigned char key, int x, int y)
 
     if (estado == JUEGO)
     {
+        if (key == 'g') { //guardar partida
+            GesionArchivos::guardarPartida(juego);
+        }
+        if (key == 'p') { //abrir partida guardada
+            GesionArchivos::ejecutarPartidaGuardada(juego);
+        }
+           
         micursor.seleccion_personaje_tablero(c, juego.getTurno());
         
         if (micursor.obt_contador_selecciones() == 0) {
             micursor.inicializar_tablero(juego.getTurno());
         }
     }
+
+
     if (estado == BATALLA) {
        
         Personaje* p1 = juego.getAtacanteBatalla();

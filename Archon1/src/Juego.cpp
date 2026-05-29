@@ -23,6 +23,24 @@ Juego::Juego(Tablero* t) :
 
 }
 
+Juego::~Juego()
+{
+    //personajes
+    for (int i = 0; i < MAX_PERSONAJES; i++) {
+        if (figuras[i] != nullptr) {
+            delete figuras[i];
+            figuras[i] = nullptr;
+        }
+    }
+
+    //tablero
+    for (int f = 0; f < 9; f++) {
+        for (int c = 0; c < 9; c++) {
+            ptrTablero->setInfoCasilla(f, c, nullptr);
+        }
+    }
+}
+
 void Juego::setBandoJugador(bando_jugador b)
 {
     if (b == Bando_jugador_es_Humano) turnoActual =TurnoHumanos;

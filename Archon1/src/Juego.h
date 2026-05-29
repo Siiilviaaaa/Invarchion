@@ -1,6 +1,9 @@
 #pragma once
 #include "Personajes.h"
 #include "tablero.h"
+#include "gestionArchivos.h"
+
+class GesionArchivos;
 
 #define MAX_PERSONAJES 36
 enum Estado { MENU, SELECCION, JUEGO, RANKING, BATALLA, FIN_PARTIDA };
@@ -22,6 +25,7 @@ enum HanGanado {
 
 class Juego
 {
+	friend class GesionArchivos;
 private:
 	Tablero* ptrTablero;
 	
@@ -38,6 +42,7 @@ private:
 public:
 
 	Juego(Tablero* t);
+	~Juego();
 
 	//getters
 	int getTurno();
