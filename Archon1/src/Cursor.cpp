@@ -267,7 +267,7 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 			}
 			else
 			{
-				mover_humanos(key, turno);//si no se pulsa la v, se mueve normal 
+			mover_humanos(key, turno);//si no se pulsa la v, se mueve normal 
 			}
 		}
 	}
@@ -324,10 +324,6 @@ void Cursor::seleccion_personaje_tablero(unsigned char key, int turno)
 						insertar_mensaje("ALIENS CURACION MASIVA");
 					}
 				}
-			}
-			else
-			{
-				mover_aliens(key,turno);//si no se pulso la m, se juega con las otras teclas normal 
 			}
 		}
 	}
