@@ -96,7 +96,6 @@ HanGanado Juego::DeterminarSiJuegoHaTerminado() //este se tiene que llamar desp 
     }
     if (contador_aliens > 0 && contador_humanos > 0) return AunEnCurso;
 
-    //condicion de que estan las casillas guays ocuapadas (necesito que se añadan esas casillas)
 }
 
 HanGanado Juego::victoriaPuntosPoder()
@@ -215,7 +214,7 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     if (ptrTablero != nullptr) {
         origenAntesDeBatalla = ptrTablero->casillaModificable(defensor->y, defensor->x);
 
-        for (int fila = 0; fila < 9; fila++) { //esto me lo ha hecho la ia, no consegui hacerlo sin mirar todas las casillas ns porqué
+        for (int fila = 0; fila < 9; fila++) { 
             for (int col = 0; col < 9; col++) {
                 Casilla* cas = ptrTablero->casillaModificable(fila, col);
                 if (cas != nullptr && cas->getInfo() != nullptr) {
@@ -235,20 +234,20 @@ void Juego::cambiarEscenarioABatalla(Personaje* atacante, Personaje* defensor)
     if (atacante->return_Bando() == HUMANO) {
         atacante->x = 5.0;
         atacante->y = 7.5;
-        atacante->direccion(1.0, 0.0); //el atacante siempre va a la izq
+        atacante->direccion(1.0, 0.0); //el humano siempre va a la izq
 
         defensor->x = 15.0;
         defensor->y = 7.5;
-        defensor->direccion(-1.0, 0.0);//el defensor a la derecha
+        defensor->direccion(-1.0, 0.0);//el alien a la derecha
     }
     else {
         atacante->x = 15.0;
         atacante->y = 7.5;
-        atacante->direccion(-1.0, 0.0); //el atacante siempre va a la izq
+        atacante->direccion(-1.0, 0.0); 
 
         defensor->x = 5.0;
         defensor->y = 7.5;
-        defensor->direccion(1.0, 0.0);//el defensor a la derecha
+        defensor->direccion(1.0, 0.0);
     }
    
     cambiarTurno();
@@ -321,22 +320,9 @@ bool Juego::casillaFavorable(Personaje* p, Tipocasilla colorCasilla)
     return false;
 }
 
-void Juego::reiniciarJuego()
+void Juego::reiniciarJuego(Juego* j)
 {
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            InfoCasilla* info = ptrTablero->getInfoCasilla(i, j);
-            if (info) info->setPersonaje(nullptr);
-        }
-    }
-    for (int i = 0; i < MAX_PERSONAJES; i++) {
-        if (figuras[i] != nullptr) {
-            delete figuras[i];
-            figuras[i] = nullptr;
-        }
-    }
-
-    
+    j->~Juego();    
 
     inicializarPartida();
 }

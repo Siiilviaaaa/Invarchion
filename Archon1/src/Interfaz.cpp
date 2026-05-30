@@ -91,7 +91,7 @@ void OnDraw(void) {
         }
         miCamara.vistaRanking();
         miMenu.dibuja_fin();
-        juego.reiniciarJuego();
+        juego.reiniciarJuego(&juego);
         break;
     
     case MENU:

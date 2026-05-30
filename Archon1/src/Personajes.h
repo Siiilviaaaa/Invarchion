@@ -67,16 +67,10 @@ public:
 	void setV_base(double nuevaVBase) { vel_base = nuevaVBase; }
 	void setX(double nuevaX) 
 	{
-		//double ladoCasilla = 1.95;//esto imagino que debería de usar la variable que ya se hayadefinido, solo que no la encuentro
-		//double offsetTableroX = nuevaX* ladoCasilla + 0.2;
-		//x = offsetTableroX;
 		x = nuevaX;
 	}
 	void setY(double nuevaY)
 	{ 
-		//double ladoCasilla = 1.95;//esto imagino que debería de usar la variable que ya se hayadefinido, solo que no la encuentro
-		//double offsetTableroY = ladoCasilla * (4 - nuevaY) + 0.2; //creo que las coordenadas empiezan abajo, ashora lo veo, y ns que son filas y que columans
-		//y = offsetTableroY;
 		y = nuevaY;
 	}
 	double getY(void) const//para solucionar el prblema de espejo en las y
@@ -104,7 +98,7 @@ public:
 	Arquero(Bando b, double posX, double posY);
 	void resetMunicion() { disparosRealizados = 0; }
 	void sumarDisparo() { disparosRealizados++; }
-	int return_Disparos() { return disparosRealizados; }
+	int return_Disparos() const { return disparosRealizados; }
 	bool gestionRecarga();
 	void resetTrasBatalla() override;
 };
@@ -129,9 +123,9 @@ class Hechicero : public Personaje {
 	int hechizosRestantes = 3;
 public:
 	Hechicero(Bando b, double posX, double posY);
-	int return_HechizosRestantes() { return hechizosRestantes; }
+	int return_HechizosRestantes() const { return hechizosRestantes; }
 	void usarHechizo() { hechizosRestantes--; }
-	int HechizoUtilizado() { return hechizoUtilizado; }
+	int HechizoUtilizado() const { return hechizoUtilizado; }
 	void siguienteHechizo() {
 		hechizoUtilizado++;
 		if (hechizoUtilizado > 2) hechizoUtilizado = 0;

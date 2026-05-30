@@ -68,5 +68,5 @@ public:
 
 	bool casillaFavorable(Personaje* p, Tipocasilla colorCasilla);
 	
-	void reiniciarJuego();
+	void reiniciarJuego(Juego* j);
 };
