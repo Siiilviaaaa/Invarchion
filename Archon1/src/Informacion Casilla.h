@@ -1,6 +1,6 @@
 #pragma once
 #include "Personajes.h"
-enum Tipocasilla{blanca, negra, lila, punto_poder};
+enum Tipocasilla{blanca, negra, lila};
 
 class InfoCasilla 
 {
