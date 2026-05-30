@@ -32,7 +32,7 @@ void GesionArchivos::guardarPartida(const Juego& j)
 			archivo << j.figuras[i]->return_Bando() << " ";
 			archivo << j.figuras[i]->return_X() << " ";
 			archivo << j.figuras[i]->return_Y() << " ";
-			archivo << j.figuras[i]->return_Vida() << " ";
+			archivo << j.figuras[i]->return_Vida() << " "; //por si en el futuro se cambia a que no se recupera la vida despues de la batalla
 			archivo << "\n";
 		}
 	}
@@ -64,6 +64,7 @@ void GesionArchivos::ejecutarPartidaGuardada(Juego& juego)
 	int turnoLeido;
 	archivo >> turnoLeido;
 	cout << "turno leido: " << turnoLeido << endl;
+	juego.turnoActual = (Turno)turnoLeido;
 
 	for (int i = 0; i < MAX_PERSONAJES; i++) {
 		int tipo, bando, vida;

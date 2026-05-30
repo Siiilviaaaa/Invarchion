@@ -305,6 +305,7 @@ void OnKeyboardDown(unsigned char key, int x, int y)
     }
 
     if (key == 27) { // ESC es la 27
+
         if (estado == MENU) exit(0);
         else estado = MENU;
     }
