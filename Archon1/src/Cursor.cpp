@@ -538,7 +538,7 @@ int Cursor::soltar(int turno)
 		return 0;
 	}
 
-	if (casillaAnterior->personajeEncima == nullptr) //esto ya lo tienes en la funcion coger
+	if (casillaAnterior->personajeEncima == nullptr) 
 	{
 		return 0;
 	}

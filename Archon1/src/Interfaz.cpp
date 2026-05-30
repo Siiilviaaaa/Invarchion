@@ -250,7 +250,8 @@ void OnTimer(int value) {
   
         if (fin_) {
             juego.finalizarBatalla();
-            
+            miTablero.reseteoColores();//reseta los colores de la casillas posibles 
+
             //DETERMINAR QUIEN HA GANADO
 			HanGanado estado_fin = juego.DeterminarSiJuegoHaTerminado();
             HanGanado estado_fin2 = juego.victoriaPuntosPoder();
