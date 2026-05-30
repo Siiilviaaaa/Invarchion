@@ -4,9 +4,6 @@
 #include "Informacion Casilla.h"
 class Juego;
 
-//ELENA CREO QUE ESTO VA AQUI, LO DEJO TODO COMENTADO POR SI ACASO, SOY SILVIA ;)
-//#include "Personajes.h" //PARA PODER POSICIONAR LAS PIEZAS
-
 class Tablero {
     InfoCasilla datos[9][9]; //para la informacion
     Casilla matriz[9][9]; 
@@ -39,11 +36,7 @@ public:
     }
     
     int getTurno(Juego* juego) const;
-    //INCIALIZAR POSICIONES PIEZAS
-	//void inicializarPiezas();
-
-
-    
+       
 
 };
 extern Tablero miTablero;

@@ -3,7 +3,7 @@
 #include "freeglut.h"
 #include "Juego.h" 
 
-// Prototipos de las funciones
+//Prototipos de las funciones
 void OnDraw();
 void OnTimer(int value);
 void OnKeyboardDown(unsigned char key, int x, int y);

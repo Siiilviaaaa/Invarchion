@@ -4,6 +4,8 @@
 #include <iostream>
 #include <algorithm>
 
+//// constructor ////
+
 Menu::Menu() :
     _fondo("extra/fondo_menu.png"),
     _boton_exit("extra/menu_boton_exit.png"),
@@ -18,6 +20,8 @@ Menu::Menu() :
 
 //Variable global externa
 extern int puntuacion_actual;
+
+//Def el tam y la pos inicial de cada elemento sobre el menu
 void Menu::inicializa_menu() {
 
     _fondo.setPos(0, 0);
@@ -42,21 +46,21 @@ void Menu::inicializa_menu() {
 
 }
 
+//Dibuja el fondo y los botones aplicando transformaciones de escalado local (efecto feedback/hover)
 void Menu::dibuja_menu(bool hJugar, bool hRanking, bool hSalir) {
     
     glDisable(GL_LIGHTING);
 
     glPushMatrix();
-    // Traslación base del menú (fija)
+    // Traslación del menu como se acordó para tenerlo todo pimntadp
     glTranslatef(39.8f, 41.0f, 0.0f);
 
-    // 1. Dibujar el fondo estático primero sin ninguna alteración
     _fondo.draw();
-
-    // Capa ligeramente al frente para evitar Z-fighting
+    
+    //traslacion en z para evitar q se me solapen cosas
     glTranslatef(0.0f, 0.0f, 0.5f);
 
-    // 2. BOTÓN EXIT
+    //exit
     glPushMatrix();
     if (hSalir) {
         // Centro local: pos_x + (width/2) = 2 + 2.5 = 4.5f | pos_y + (height/2) = 9 + 2.25 = 11.25f
@@ -67,7 +71,7 @@ void Menu::dibuja_menu(bool hJugar, bool hRanking, bool hSalir) {
     _boton_exit.draw();
     glPopMatrix();
 
-    // 3. BOTÓN JUGAR (Selección)
+    //jugar y seleccion
     glPushMatrix();
     if (hJugar) {
         // Centro local: 6.25 + 3.5 = 9.75f | 2.9 + 3.25 = 6.15f
@@ -78,7 +82,7 @@ void Menu::dibuja_menu(bool hJugar, bool hRanking, bool hSalir) {
     _boton_jugar.draw();
     glPopMatrix();
 
-    // 4. BOTÓN RANKING
+    //ranking
     glPushMatrix();
     if (hRanking) {
         // Centro local: 12.5 + 2.5 = 15.0f | 9 + 2.25 = 11.25f
@@ -93,6 +97,7 @@ void Menu::dibuja_menu(bool hJugar, bool hRanking, bool hSalir) {
     glEnable(GL_LIGHTING);
 }
 
+//dibujo la seleccion un poco mas arriba en z q menu
 void Menu::dibuja_capa_seleccion()
 {
     glPushMatrix();
@@ -105,16 +110,16 @@ void Menu::dibuja_capa_seleccion()
     glPopMatrix();
 }
 
+// Genera un fondo poligonal con degradado y renderiza el texto almacenado en el búfer mediante fuentes bitmap de GLUT
 void Menu::dibuja_ranking()
 {
     glDisable(GL_LIGHTING);
     glPushMatrix();
 
-    //Posición aislada del Ranking
+    //Posición aislada del Ranking de nuevo para q este tdo pintado
     glTranslatef(200.0f, 200.0f, 1.0f);
 
     glBegin(GL_POLYGON);
-    //Arriba Izquierda: Rojo Neón Oscuro 
     glColor3f(0.35f, 0.0f, 0.0f);
     glVertex3f(-15.0f, 9.0f, -0.1f);
 
@@ -164,6 +169,7 @@ void Menu::dibuja_ranking()
     glEnable(GL_LIGHTING);
 }
 
+//persistencia de los datos
 void Menu::cargar_ranking() {
     //ESTA FUNCIONALIDAD ES PARA Q EL RANKING SE CARGUE DEL FICHERO DE TXT
 
@@ -192,6 +198,7 @@ void Menu::cargar_ranking() {
     }
 }
 
+// Abre el fichero, extrae los datos relacionales mediante subcadenas, inserta el nuevo récord y reescribe el Top ordenado
 void Menu::actualizar_ranking(std::string nombre) {
 
     //LIMPIEZA Y APERTURA DEL FICHERO
@@ -266,6 +273,7 @@ void Menu::actualizar_ranking(std::string nombre) {
     cargar_ranking();
 }
 
+//pantalla de fun de juego
 void Menu::dibuja_fin() {
     glDisable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);

@@ -121,12 +121,21 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 	}
 	if (contador_selecciones == 1)//si se selecciona 1 vez hay que ir restando movimientos si se puede
 	{
+		
 		if (casillaDestino != nullptr && casillaDestino->getPersonaje() != nullptr)//si la casilla guarda informacion correcta de persoanje (para comprobar que lo seleccionado es un persoanje de nuestro bando)
 		{
 			//puntero al personaje de la casilla destino
 			Personaje* personajeDestino = casillaDestino->getPersonaje();
 
-			if (personajeDestino->return_Bando() == turno)//si es de nuestro equipo
+			bool esCasillaInicial = (fila_final == filaAntes && columna_final == columnaAntes);
+
+			// Si vuelvo a la casilla inicial desde la que cogí el personaje, si que puedo volver a ella
+			if (esCasillaInicial)
+			{
+				// No hacemos return.
+				// Dejamos que el switch de abajo mueva normalmente
+			}
+			else if (personajeDestino->return_Bando() == turno)
 			{
 				if(personajeSeleccionado->return_Tipo() != VOLADOR)//si no soy un volador, no puedo moverme
 				{ 
@@ -186,7 +195,7 @@ void Cursor::movimiento(int mov_filas, int mov_columnas, const std::string& mens
 				personajeSeleccionado->setX(columna);
 				personajeSeleccionado->setY(fila);
 			}
-
+			colorearMovimientosPosibles(fila, columna, turno, movimientos_restantes);
 			insertar_mensaje(mensaje + " Movilidad: " +	std::to_string(movimientos_restantes));//indica en cada momento cuantos movs le quedan 
 		}
 		break;
@@ -364,45 +373,112 @@ bool Cursor::tieneMovimientoPosible(int filaOrigen, int columnaOrigen, int turno
 }
 void Cursor::colorearMovimientosPosibles(int filaOrigen, int columnaOrigen, int turno, int movimientos)
 {
-	for (int diferencia_filas = -movimientos; diferencia_filas <= movimientos; diferencia_filas++)
+//	int movimientos = personajeSeleccionado->movimientos;
+	if (personajeSeleccionado == nullptr)//si no hay personaje nos vamos directamente
 	{
-		for (int diferencia_columnas = -movimientos; diferencia_columnas <= movimientos; diferencia_columnas++)
+		return;
+	}
+
+	miTablero.reseteoColores();//reseteamos el tablero por si acaso 
+
+	if (personajeSeleccionado->return_Tipo() == VOLADOR)//si el personaje es tipo volador, podran iluminarse casillas desde las cuales hay que slatarse la barrera de los alieados
+	{
+		//teniendo en cuenta los movimientos 
+		for (int diferencia_filas = -movimientos; diferencia_filas <= movimientos; diferencia_filas++)
 		{
-			int movimientos_requeridos = abs(diferencia_filas) + abs(diferencia_columnas);
-
-			if (movimientos_requeridos == 0 || movimientos_requeridos > movimientos)
+			for (int diferencia_columnas = -movimientos; diferencia_columnas <= movimientos; diferencia_columnas++)
 			{
-				continue;
+				int movimientos_requeridos = abs(diferencia_filas) + abs(diferencia_columnas);
+
+				if (movimientos_requeridos == 0 || movimientos_requeridos > movimientos)//si no hay movimientos necesarios o son mayores q los movs pasamos siguiente iteracion
+				{
+					continue;
+				}
+
+				int nuevaFila = filaOrigen + diferencia_filas;
+				int nuevaColumna = columnaOrigen + diferencia_columnas;
+				//si la posicion a la que queremos llegar esta fuera de los limites pasamos a la siguiente iteracion
+				if (nuevaFila < 0 || nuevaFila > 8 || nuevaColumna < 0 || nuevaColumna > 8)
+				{
+					continue;
+				}
+				//sacamos la inofrmacion de la casilla vecina q evaluamos en esta iteracion
+				InfoCasilla* casillaVecina = miTablero.getInfoCasilla(nuevaFila, nuevaColumna);
+
+				if (casillaVecina == nullptr)//si no guarda nada pasmaos a siguiente iteracion
+				{
+					continue;
+				}
+				//guardamos el personaje de dicha casilla
+				Personaje* personajeVecino = casillaVecina->getPersonaje();
+
+				bool esCasillaInicial =(nuevaFila == filaAntes && nuevaColumna == columnaAntes);
+
+				if (personajeVecino == nullptr)
+				{
+					casillaVecina->setSeleccion(true);
+				}
+				else if (esCasillaInicial)
+				{
+					casillaVecina->setSeleccion(true);
+				}
+				else if (personajeVecino->return_Bando() != turno)
+				{
+					casillaVecina->setSeleccion(true);
+				}
 			}
+		}
+	}
+	else//si no soy de tipo volador 
+	{
+		int direcciones[4][2] = {//estas son las unicas direcciones que se evaluaran 
+			{ 1, 0 },
+			{ -1, 0 },
+			{ 0, 1 },
+			{ 0, -1 }
+		};
 
-			int nuevaFila = filaOrigen + diferencia_filas;
-			int nuevaColumna = columnaOrigen + diferencia_columnas;
-
-			if (nuevaFila < 0 || nuevaFila > 8 || nuevaColumna < 0 || nuevaColumna > 8)
+		for (int i = 0; i < 4; i++)//segun las direcciones que tengo 
+		{
+			for (int paso = 1; paso <= movimientos; paso++)//segun los movimientos que tengo 
 			{
-				continue;
-			}
+				int nuevaFila = filaOrigen + direcciones[i][0] * paso;
+				int nuevaColumna = columnaOrigen + direcciones[i][1] * paso;
 
-			InfoCasilla* casillaVecina = miTablero.getInfoCasilla(nuevaFila, nuevaColumna);
+				if (nuevaFila < 0 || nuevaFila > 8 || nuevaColumna < 0 || nuevaColumna > 8)//comprueba que no estamos en los limites fisicos
+				{
+					break;
+				}
 
-			if (casillaVecina == nullptr)
-			{
-				continue;
-			}
+				InfoCasilla* casillaVecina = miTablero.getInfoCasilla(nuevaFila, nuevaColumna);
 
-			Personaje* personajeVecino = casillaVecina->getPersonaje();
 
-			if (personajeVecino == nullptr)
-			{
-				casillaVecina->setSeleccion(true);
-			}
-			else if (personajeVecino->return_Bando() != turno)
-			{
-				casillaVecina->setSeleccion(true);
+				//guardamos el personaje de dicha casilla
+				Personaje* personajeVecino = casillaVecina->getPersonaje();
+				bool esCasillaInicial =(nuevaFila == filaAntes && nuevaColumna == columnaAntes);
+
+				if (personajeVecino == nullptr)
+				{
+					casillaVecina->setSeleccion(true);
+				}
+				else if (esCasillaInicial)
+				{
+					casillaVecina->setSeleccion(true);
+				}
+				else
+				{
+					if (personajeVecino->return_Bando() != turno)
+					{
+						casillaVecina->setSeleccion(true);
+					}
+
+					break;
+				}
 			}
 		}
 	}
 }
+
 int Cursor::coger(int turno)
 {
 	//crear variable que llame a elena: tablero.h get y modificar casilla
@@ -462,16 +538,30 @@ int Cursor::soltar(int turno)
 		return 0;
 	}
 
-	if (casillaAnterior->personajeEncima == nullptr) //esto ya lo tienes en la funcion coger
+	if (casillaAnterior->personajeEncima == nullptr) 
 	{
 		return 0;
 	}
+	if (fila == filaAntes && columna == columnaAntes)//si la casilla a la que suelto 
+	{
+		Personaje* personajeMovido = casillaAnterior->personajeEncima;//mantiene el mismo personaje q yo soy
+		//ejecutamos la accion de soltar
+		if (personajeMovido != nullptr)
+		{
+			personajeMovido->setX(columnaAntes);
+			personajeMovido->setY(filaAntes);
+		}
 
-	// CASO 1: la casilla actual está vacía
+		personajeSeleccionado = nullptr;
+		miTablero.reseteoColores();//reseteamos los colores del tablero
+
+		return 1;
+	}
+	//la casilla actual está vacía
 	if (casillaActual->personajeEncima == nullptr)
 	{
 		Personaje* personajeMovido = casillaAnterior->personajeEncima;
-
+		//realizamos la accion de soltar
 		personajeMovido->setX(columna);
 		personajeMovido->setY(fila);
 

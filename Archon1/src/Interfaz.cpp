@@ -9,6 +9,7 @@
 
 //los extern son para q los busque en el main, me ha ayudado la IA en esta parte
 //basicamente es un: "oye usa el [extern] q declare en el main
+// --- ENLACE DE INSTANCIAS EXTERNAS (DEFINIDAS EN MAIN.CPP) ---
 extern Estado estado;
 extern Menu miMenu;
 extern Tablero miTablero;
@@ -21,18 +22,19 @@ extern Cursor micursor;
 extern Personaje pj1, pj2;
 
 //variables globales
-float tiempoMensajeSelecciondeBando = 0.0f;
-std::string textoBando = "";
-bool mostrandoInstruccionesTablero = false;
-float tiempoInstruccionesTablero = 0.0f;
-bool hoverSalir = false;
-bool hoverSeleccion = false;
-bool hoverRanking = false;
-bool fin_ = false;
-int puntuacion_actual = 0;
-int puntuacion_humanos = 0;
-int puntuacion_aliens = 0;
+float tiempoMensajeSelecciondeBando = 0.0f; // Temporizador para el banner informativo de facción elegida
+std::string textoBando = "";                 // Cadena de texto del bando seleccionado
+bool mostrandoInstruccionesTablero = false;  // Flag de bloqueo/congelación por lectura de controles
+float tiempoInstruccionesTablero = 0.0f;     // Duración de la pantalla de ayuda técnica (15 segundos)
+bool hoverSalir = false;                     // Estado hover: Botón de cierre
+bool hoverSeleccion = false;                 // Estado hover: Botón de inicio/selección
+bool hoverRanking = false;                   // Estado hover: Botón de clasificaciones
+bool fin_ = false;                           // Flag de sincronización síncrona que decreta la muerte en combate
+int puntuacion_actual = 0;                   // Puntuación de la partida activa traspasada al gestor de persistencia
+int puntuacion_humanos = 0;                  // Registro acumulado de daño/bajas de la facción Terran
+int puntuacion_aliens = 0;                   // Registro acumulado de daño/bajas de la facción Alienígena
 
+// Mapea las coordenadas físicas del puntero en píxeles a regiones normalizadas de pantalla para interactuar con la GUI del menú
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         //Obtener dimensiones actuales de la ventana
@@ -63,12 +65,13 @@ void mouse(int button, int state, int x, int y) {
     }
 }
 
+//callback de ondraw movido y la musica para sincronizar con el dinujado
 void OnDraw(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // Interruptores estáticos para controlar que la música se dispare una sola vez por estado
+    // Interruptores para controlar que la música se dispare una sola vez por estado
     static bool ini_menu = false;
     static bool ini_juego = false;
     static bool ini_batalla = false;
@@ -219,8 +222,9 @@ void OnDraw(void) {
     glutSwapBuffers();
 }
 
+// Procesa temporizadores, subrutinas de colisión y transiciones críticas basadas en condiciones de victoria
 void OnTimer(int value) {
-    // 1. Reducir tiempo de las instrucciones primero (para que no se quede congelado el reloj)
+    //ir restando tiempo de las instrucciones primero (para que no se quede congelado el reloj)
     if (mostrandoInstruccionesTablero && tiempoInstruccionesTablero > 0) {
         tiempoInstruccionesTablero -= 20.0f;
         if (tiempoInstruccionesTablero <= 0) {
@@ -229,14 +233,14 @@ void OnTimer(int value) {
         }
     }
 
-    // 2. CONGELACIÓN DEL JUEGO: Si siguen activas, frena el resto de la lógica
+    // CONGELACIÓN DEL JUEGO: Si siguen activas, frena el resto de la lógica, ayuda de IA
     if (estado == JUEGO && mostrandoInstruccionesTablero) {
         glutPostRedisplay();
         glutTimerFunc(20, OnTimer, 0);
         return;
     }
 
-    // 3. Lógica normal del juego (solo se ejecuta si no hay instrucciones en pantalla)
+    //Lógica normal del juego (solo se ejecuta si no hay instrucciones en pantalla)
     if (estado == BATALLA) {
         Personaje* atacante = juego.getAtacanteBatalla();
         Personaje* defensor = juego.getDefensorBatalla();
@@ -246,7 +250,8 @@ void OnTimer(int value) {
   
         if (fin_) {
             juego.finalizarBatalla();
-            
+            miTablero.reseteoColores();//reseta los colores de la casillas posibles 
+
             //DETERMINAR QUIEN HA GANADO
 			HanGanado estado_fin = juego.DeterminarSiJuegoHaTerminado();
             HanGanado estado_fin2 = juego.victoriaPuntosPoder();
@@ -281,7 +286,7 @@ void OnTimer(int value) {
     }
     glutPostRedisplay();
 
-    // Reducir tiempo del mensaje de bando cuando el juego ya está corriendo
+    //Reducir tiempo del mensaje de bando cuando el juego ya está corriendo
     if (tiempoMensajeSelecciondeBando > 0) {
         tiempoMensajeSelecciondeBando -= 20.0f;
     }
@@ -289,13 +294,13 @@ void OnTimer(int value) {
     glutTimerFunc(20, OnTimer, 0);
 }
 
+//callback de teclado estandar
 void OnKeyboardDown(unsigned char key, int x, int y)
 {
     unsigned char c = std::tolower(key);
 
-    // NUEVO BLOQUE: Control estricto de entrada durante las instrucciones
     if (estado == JUEGO && mostrandoInstruccionesTablero) {
-        if (key == ' ') { // Solo el ESPACIO quita los carteles y descongela
+        if (key == ' ') { //Solo el ESPACIO quita los carteles y descongela
             mostrandoInstruccionesTablero = false;
             tiempoInstruccionesTablero = 0.0f;
             tiempoMensajeSelecciondeBando = 0.0f;
@@ -304,8 +309,7 @@ void OnKeyboardDown(unsigned char key, int x, int y)
         return; // BLOQUEO: Cualquier otra tecla ('b', WASD, etc.) se ignora por completo
     }
 
-    if (key == 27) { // ESC es la 27
-
+    if (key == 27) { //ESC es la 27
         if (estado == MENU) exit(0);
         else estado = MENU;
     }
@@ -314,7 +318,7 @@ void OnKeyboardDown(unsigned char key, int x, int y)
 
     if (c == 'r' && estado != FIN_PARTIDA) {
         estado = FIN_PARTIDA;
-        glutPostRedisplay(); // Fuerza a OnDraw() a pintar la pantalla negra de dibuja_fin()
+        glutPostRedisplay(); //Fuerza a OnDraw() a pintar la pantalla negra de dibuja_fin()
         return;
     }
 
@@ -324,7 +328,6 @@ void OnKeyboardDown(unsigned char key, int x, int y)
 
         std::cout << "\n--- REGISTRO DE PUNTUACION ---" << std::endl;
         std::cin.clear();
-        //std::cin.ignore(1000, '\n');
 
         std::cout << "TRES LETRAS: ";
         std::cin >> nombre;
@@ -351,7 +354,7 @@ void OnKeyboardDown(unsigned char key, int x, int y)
             }
             estado = JUEGO;
             motor.juego = &juego;
-            // Sincronización de tiempos a 15 segundos
+            //Sincronización de tiempos a 15 segundos
             tiempoMensajeSelecciondeBando = 15000.0f;
             mostrandoInstruccionesTablero = true;
             tiempoInstruccionesTablero = 15000.0f;
@@ -398,6 +401,7 @@ void OnKeyboardDown(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
+//callbac de teclado especial
 void OnSpecialKeyboardDown(int key, int x, int y)
 {
     //HACEMOS LO MISMO PARA LOS ALIENS
@@ -429,6 +433,7 @@ void OnSpecialKeyboardDown(int key, int x, int y)
     glutPostRedisplay();
 }
 
+//Evalúa continuamente las regiones normalizadas de la ventana sin requerir pulsaciones para conmutar las flags de hover
 void mousePassive(int x, int y) {
     float width = glutGet(GLUT_WINDOW_WIDTH);
     float height = glutGet(GLUT_WINDOW_HEIGHT);
@@ -437,24 +442,25 @@ void mousePassive(int x, int y) {
     float ny = y / height;
 
     if (estado == MENU) {
-        // Resetear estados
+        //Resetear estados
         hoverSalir = false;
         hoverSeleccion = false;
         hoverRanking = false;
 
-        // Botón Salir
+        //Bot Salir
         if (nx > 0.125f && nx < 0.312f && ny > 0.2f && ny < 0.416f) hoverSalir = true;
 
-        // Botón Selección
+        //Bot Selección
         if (nx > 0.337f && nx < 0.662f && ny > 0.483f && ny < 0.85f) hoverSeleccion = true;
 
-        // Botón Ranking
+        //Bot Ranking
         if (nx > 0.687f && nx < 0.875f && ny > 0.2f && ny < 0.416f) hoverRanking = true;
 
         glutPostRedisplay(); // Forzar redibujado para ver el cambio de color
     }
 }
 
+//Implementa de relación de aspecto rígido de 4:3. Genera barras grises simétricas para evitar estiramientos de texturas
 void redimensionar(int width, int height) {
     float aspect_deseado = 800.0f / 600.0f;
     float aspect_actual = (float)width / (float)height;
@@ -463,7 +469,7 @@ void redimensionar(int width, int height) {
     int vp_width = width;
     int vp_height = height;
 
-    // 1. Calculamos las barras negras según la deformación de la ventana
+    //calcula las barras negras según la deformación de la ventana
     if (aspect_actual >= aspect_deseado) {
         vp_width = (int)(height * aspect_deseado);
         vp_x = (width - vp_width) / 2;
@@ -473,14 +479,14 @@ void redimensionar(int width, int height) {
         vp_y = (height - vp_height) / 2;
     }
 
-    // 2. Aplicamos el Viewport protegido para no deformar nada
+    // a'plica el Viewport protegido para no deformar nada
     glViewport(vp_x, vp_y, vp_width, vp_height);
 
-    // 3. NO forzamos gluOrtho2D aquí. Dejamos que OnDraw aplique la vista necesaria
+    //NO fuerza gluOrtho2D aquí. Dejamos que OnDraw aplique la vista necesaria IA
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    // Dejamos la perspectiva por defecto del Main como base inicial
+    //Dejamos la perspectiva por defecto del Main como base inicial
     gluPerspective(40.0, aspect_deseado, 0.1, 150);
 
     glMatrixMode(GL_MODELVIEW);
