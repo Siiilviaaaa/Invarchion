@@ -64,7 +64,6 @@ void MotorGrafico::dibujarCaja(const Caja& c, Batalla& b)
 			double x = b.listaObstaculos[i]->return_X();
 			double y = b.listaObstaculos[i]->return_Y();
 			double r = b.listaObstaculos[i]->return_Radio();
-			//glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
 			glBegin(GL_QUADS);
 			glTexCoord2d(0, 1); glVertex3d(x - r, y - r, 0.1);
 			glTexCoord2d(1, 1); glVertex3d(x + r, y - r, 0.1);
@@ -75,7 +74,6 @@ void MotorGrafico::dibujarCaja(const Caja& c, Batalla& b)
 	}
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
-	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
 }
