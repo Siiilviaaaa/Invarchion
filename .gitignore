@@ -42,6 +42,7 @@ x86/
 
 # --- EXCEPCIÓN PARA EL PROYECTO ---
 !*.vcxproj
+!*.vcxproj.user
 !*.vcxproj.filters
 !*.slnx
 !/Archon1/lib/*.lib
